@@ -471,7 +471,7 @@ export class ConfirmPage {
       const msg = this.translate.instant(
         'You are trying to send more funds than you have available. Make sure you do not have funds locked by pending transaction proposals.'
       );
-      const title = this.translate.instant('No wallets available');
+      const title = this.translate.instant('No accounts available');
       return Promise.reject({ msg, title });
     }
     return Promise.resolve();

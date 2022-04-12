@@ -1032,13 +1032,13 @@ export class ProfileProvider {
   }
 
   public checkIfCorrectWalletToReImport(keyId, key) {
-    this.logger.info("Checking if it's the correct wallet to re import");
+    this.logger.info("Checking if it's the correct account to re import");
     const keyToReImport = this.keyProvider.getKey(keyId);
     return this.keyProvider.isMatch(keyToReImport, key);
   }
 
   public importExtendedPrivateKey(xPrivKey: string, opts): Promise<any> {
-    this.logger.info('Importing Wallet xPrivKey');
+    this.logger.info('Importing Account xPrivKey');
     opts.xPrivKey = xPrivKey;
     return this.serverAssistedImport(opts).then(data => {
       // If the key already exists, bind the new wallets to it.
@@ -1059,7 +1059,7 @@ export class ProfileProvider {
   }
 
   public importMnemonic(words, opts): Promise<any> {
-    this.logger.info('Importing Wallets Mnemonic');
+    this.logger.info('Importing Accounts Mnemonic');
     words = this.normalizeMnemonic(words);
     opts.words = words;
     return this.serverAssistedImport(opts).then(data => {
@@ -1081,7 +1081,7 @@ export class ProfileProvider {
   }
 
   public syncWallets(words, opts): Promise<any> {
-    this.logger.info('Syncing wallets');
+    this.logger.info('Syncing accounts');
     words = this.normalizeMnemonic(words);
     opts.words = words;
     return this.serverAssistedImport(opts).then(async data => {
@@ -1178,7 +1178,7 @@ export class ProfileProvider {
       opts = opts ? opts : {};
       opts['bp_partner'] = this.appProvider.info.name;
       opts['bp_partner_version'] = this.appProvider.info.version;
-      this.logger.info('Importing Wallet:', opts);
+      this.logger.info('Importing Account:', opts);
       const client = this.bwcProvider.getClient(null, opts);
       let credentials;
       let key;
@@ -1442,7 +1442,7 @@ export class ProfileProvider {
 
   public importWithDerivationPath(opts): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.logger.info('Importing Wallet with derivation path');
+      this.logger.info('Importing Account with derivation path');
       this._importWithDerivationPath(opts)
         .then(data => {
           // Check if wallet exists
@@ -1498,7 +1498,7 @@ export class ProfileProvider {
     if (showOpts.extendedPrivateKey) showOpts.extendedPrivateKey = '[hidden]';
     if (showOpts.mnemonic) showOpts.mnemonic = '[hidden]';
 
-    this.logger.debug('Importing Wallet:', JSON.stringify(showOpts));
+    this.logger.debug('Importing Account:', JSON.stringify(showOpts));
     return this.seedWallet(opts);
   }
 
@@ -1719,7 +1719,7 @@ export class ProfileProvider {
   // joins and stores a wallet
   private _joinWallet(opts): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.logger.info('Joining Wallet...');
+      this.logger.info('Joining Account...');
 
       let walletData;
       try {
@@ -1746,7 +1746,7 @@ export class ProfileProvider {
        */
       opts.n = 2;
 
-      this.logger.debug('Joining Wallet:', opts);
+      this.logger.debug('Joining Account:', opts);
       this.seedWallet(opts)
         .then(data => {
           data.walletClient.joinWallet(
@@ -2331,7 +2331,7 @@ export class ProfileProvider {
       opts = opts ? opts : {};
       const w = this.getWallets(opts);
       if (_.isEmpty(w)) {
-        return reject('No wallets available');
+        return reject('No accounts available');
       }
 
       let txps = [];

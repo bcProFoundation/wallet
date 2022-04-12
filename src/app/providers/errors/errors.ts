@@ -38,7 +38,7 @@ export class ErrorsProvider {
   }
 
   public showNoWalletsAvailableInfo(dismissFunction?) {
-    this.logger.warn('No wallets available');
+    this.logger.warn('No accounts available');
     const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
       'no-wallets-available'
     );

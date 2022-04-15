@@ -5,7 +5,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { IonicModule, IonicRouteStrategy, NavParams } from '@ionic/angular';
 import { MissingTranslationHandler, MissingTranslationHandlerParams, TranslateDefaultParser, TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
-import { env } from 'src/environments';
+import env from 'src/environments';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 

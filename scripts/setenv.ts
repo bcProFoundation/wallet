@@ -35,7 +35,7 @@ if (environment === 'production') {
 }
 let targetPath = `./src/environments/index.ts`;
 let envConfigFile = `
-import { CurrencyProvider } from "src/app/providers/currency/currency";
+import { CurrencyProvider } from "../app/providers/currency/currency";
 /**
  * Environment: '${nameEnv}'
  */
@@ -44,9 +44,11 @@ export const env = {
     enableAnimations: ${enableAnimations},
     ratesAPI: new CurrencyProvider().getRatesApi(),
     activateScanner: ${activateScanner},
-    awsUrl: '${awsUrl}' 
+    awsUrl: '${awsUrl}',
+    production:  ${nameEnv == 'production'}
 };
-    export default env;`
+
+export default env;`
 
 fs.writeFile(targetPath, envConfigFile, (err) => {
     if (err) {

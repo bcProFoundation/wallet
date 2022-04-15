@@ -19,9 +19,11 @@ yalc.lock
 
 # iOS
 build.json
+ios/
 
 # Android
 build-extras.gradle
+android/
 
 # Firebase
 GoogleService-Info.plist

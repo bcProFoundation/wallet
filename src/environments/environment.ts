@@ -2,8 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false
+export const env = { 
+  name: 'development', 
+  enableAnimations: undefined,
+  ratesAPI: '0.01',
+  activateScanner: undefined,
+  awsUrl: 'https://aws.abcpay.cash/bws/api',
+  production:  false
 };
 
 /*

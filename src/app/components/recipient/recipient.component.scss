@@ -59,6 +59,10 @@ recipient-component {
                 --highlight-color-focused: rgba(0, 30, 46, 0.38);
                 --highlight-color-valid: rgba(0, 30, 46, 0.38);
                 --highlight-color-invalid: rgba(0, 30, 46, 0.38);
+                --padding-start: 1rem;
+                --padding-end: 1rem;
+                --inner-padding-start: 0;
+                --inner-padding-end: 0;
 
                 ion-input {
                     --placeholder-color: rgba(0, 30, 46, 0.38);

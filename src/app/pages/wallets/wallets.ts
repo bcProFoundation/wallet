@@ -59,7 +59,6 @@ export class WalletsPage {
   currentTheme;
   totalBalanceKey;
   isShowBalance = true;
-  isEditKeyName = false;
   keySelected = [];
   keyNameSelected;
   
@@ -226,10 +225,6 @@ export class WalletsPage {
         keyId: keyId
       }
     });
-  }
-
-  public editKeyName() {
-    this.isEditKeyName = false;
   }
 
   public getKeySelected(keyId) {

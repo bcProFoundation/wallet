@@ -1547,6 +1547,23 @@
               }
             }
           }
+          .sub-menu {
+            border-color: rgba(112, 129, 138, 0.38);
+            background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), rgb(0, 30, 46) !important;
+          }
+          sub-menu-account {
+            .edit-key-name {
+              ion-input {
+                  border: 2px solid var(--color-primary-abcpay-dark) !important;
+              }
+              ion-button {
+                  border-color: var(--color-primary-abcpay-dark) !important;
+                  ion-icon {
+                      color: #73DAA5 !important;
+                  }
+              }
+            }
+          }
         }
       }
       ion-footer {
@@ -2294,6 +2311,9 @@
   recipient-component {
     .recipient-header {
       color: var(--text-grey);
+      &.lines-top {
+        border-color: rgba(112, 129, 138, 0.38);
+      }
     }
     .recipient-content-wrapper {
       background: var(--bg-color-dark-theme-8);

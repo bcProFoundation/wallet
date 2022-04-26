@@ -87,6 +87,9 @@ export class RecipientComponent implements OnInit {
   amountFromSelectedInput?: number;
 
   @Input()
+  index?: number;
+
+  @Input()
   isShowSelectInput?: boolean;
 
   @Input()

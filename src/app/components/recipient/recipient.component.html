@@ -1,3 +1,8 @@
+<div class="recipient-header" [ngClass]="{'lines-top': index > 0}" *ngIf="index >= 0">
+  <p *ngIf="isShowDelete" [ngClass]="{'first-item': index == 0}" class="recipient-header-title">{{'RECIPIENT ' + (index + 1) | translate}}</p>
+  <img *ngIf="isShowDelete" (click)="informDelete()" class="x-button"
+    src="assets/img/recipient-component/x-{{darkThemeString}}.svg">
+</div>
 <div class="recipient-content-wrapper">
   <div class="recipient-content">
     <div *ngIf="!isDonation" class="transfer-to-header">

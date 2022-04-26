@@ -122,8 +122,8 @@ export class ConfirmTokenPage {
         if (item.isNonSLP) {
           amountXec += item.value;
         } else {
-          if(item.tokenId === this.token.tokenInfo.id)
-          amountToken += item.amountToken;
+          if (item.tokenId === this.token.tokenInfo.id)
+            amountToken += item.amountToken;
         }
       })
       if (amountXec < this.fee * this.precision) this.showErrorInfoSheet(`Not enough ${this.wallet.coin} to send token.`, null, true);

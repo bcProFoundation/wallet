@@ -403,9 +403,6 @@ export class RecipientComponent implements OnInit {
   }
 
   public processAmount(isSendMax?: boolean): void {
-    // if(this.token && isSendMax){
-    //   this.expression = this.token.amountToken;
-    // }
     let formatedValue = this.format(this.expression);
     let result = this.evaluate(formatedValue);
     this.allowSend = this.onlyIntegers
@@ -669,7 +666,7 @@ export class RecipientComponent implements OnInit {
   }
 
   public sendMax(): void {
-      this.sendMaxEvent.emit(!!this.token);
+    this.sendMaxEvent.emit(!!this.token);
   }
 
   public goToAddressBook() {

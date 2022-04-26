@@ -362,9 +362,9 @@ export class SendPage {
     }
   }
 
-  sendMax(isToken:boolean) {
+  sendMax(isToken: boolean) {
     const recipient = this.listRecipient[0];
-    if(!isToken){
+    if (!isToken) {
       this.router.navigate(['/confirm'], {
         state: {
           walletId: this.wallet.credentials.walletId,
@@ -378,7 +378,7 @@ export class SendPage {
           name: recipient.name
         }
       });
-    } else{
+    } else {
       this.goToConfirmToken(true);
     }
   }

@@ -49,9 +49,12 @@
           <ion-icon slot="icon-only" src="assets/img/key-list-{{currentTheme}}.svg"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title class="key-title">
+      <!-- <ion-title class="key-title">
         {{ keyNameSelected }}
-      </ion-title>
+      </ion-title> -->
+      <h2 class="key-title">
+        {{ keyNameSelected }}
+      </h2>
       <ion-buttons slot="end" class="settings-button" *ngIf="walletsGroups && walletsGroups[0]">
         <ion-button class="key-add" (click)="openAddressBookPage()">
           <ion-icon class="address-book" src="assets/img/key-addressbook.svg"></ion-icon>

@@ -30,6 +30,7 @@ export class ConfirmTokenPage {
   wallet;
   token;
   amountTokenToSend;
+  amount;
   selectedTheme;
   hideSlideButton: boolean;
   isCordova: boolean;
@@ -63,7 +64,14 @@ export class ConfirmTokenPage {
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.sendToAddress = this.navPramss.toAddress;
-    this.amountTokenToSend = this.navPramss.amount / Math.pow(10, this.token.tokenInfo.decimals);
+    if (this.navPramss.useSendMax) {
+      this.amountTokenToSend = this.token.amountToken;
+      this.amount = this.token.amountToken * Math.pow(10, this.token.tokenInfo.decimals);
+    }
+    else {
+      this.amount = this.navPramss.amount;
+      this.amountTokenToSend = this.amount / Math.pow(10, this.token.tokenInfo.decimals);
+    }
     this.isCordova = this.platformProvider.isCordova;
     this.hideSlideButton = false;
     this.setButtonText();
@@ -114,11 +122,12 @@ export class ConfirmTokenPage {
         if (item.isNonSLP) {
           amountXec += item.value;
         } else {
+          if(item.tokenId === this.token.tokenInfo.id)
           amountToken += item.amountToken;
         }
       })
       if (amountXec < this.fee * this.precision) this.showErrorInfoSheet(`Not enough ${this.wallet.coin} to send token.`, null, true);
-      if (amountToken < this.navPramss.amount) this.showErrorInfoSheet(`Not enough ${this.token.tokenInfo.symbol} to send.`, null, true);
+      if (amountToken < this.amount) this.showErrorInfoSheet(`Not enough ${this.token.tokenInfo.symbol} to send.`, null, true);
     }).catch(err => {
       this.showErrorInfoSheet(err, null, true);
     })
@@ -148,7 +157,7 @@ export class ConfirmTokenPage {
     };
 
     setTimeout(() => {
-      this.router.navigate(['/tabs/wallets'], { replaceUrl: true},).then(() => {
+      this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
         this.router.navigate(['/token-details'], {
           state: {
             walletId: this.wallet.credentials.walletId,

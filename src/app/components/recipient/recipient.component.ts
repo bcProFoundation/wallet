@@ -200,7 +200,7 @@ export class RecipientComponent implements OnInit {
     }
 
     this.expression = '';
-    this.updateUnitUI(!!isToken, !!isSendMax);
+    this.updateUnitUI(!!isToken);
   }
 
   private updateAddressHandler: any = data => {
@@ -209,7 +209,7 @@ export class RecipientComponent implements OnInit {
     }
   };
 
-  private updateUnitUI(isToken?: boolean, isSendMax?: boolean): void {
+  private updateUnitUI(isToken?: boolean): void {
     this.unit = this.availableUnits[this.unitIndex].shortName;
     this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
     if (!isToken) {
@@ -223,7 +223,7 @@ export class RecipientComponent implements OnInit {
       this.satToUnit = 1 / this.unitToSatoshi;
       this.unitDecimals = unitDecimals;
     }
-    this.processAmount(isSendMax ? true : false);
+    this.processAmount();
     this.logger.debug(
       'Update unit coin @amount unit:' +
       this.unit +
@@ -403,9 +403,9 @@ export class RecipientComponent implements OnInit {
   }
 
   public processAmount(isSendMax?: boolean): void {
-    if(this.token && isSendMax){
-      this.expression = this.token.amountToken;
-    }
+    // if(this.token && isSendMax){
+    //   this.expression = this.token.amountToken;
+    // }
     let formatedValue = this.format(this.expression);
     let result = this.evaluate(formatedValue);
     this.allowSend = this.onlyIntegers
@@ -669,16 +669,7 @@ export class RecipientComponent implements OnInit {
   }
 
   public sendMax(): void {
-    if (this.token) {
-      if (this.availableUnits[this.unitIndex].isFiat) {
-        this.changeUnit(true, true);
-      } else {
-        this.processAmount(true);
-      }
-      this.sendMaxEvent.emit(true);
-    } else {
-      this.sendMaxEvent.emit(false);
-    }
+      this.sendMaxEvent.emit(!!this.token);
   }
 
   public goToAddressBook() {

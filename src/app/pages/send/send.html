@@ -71,10 +71,12 @@
     </div>
     <div *ngIf="!shouldShowZeroState()">
       <p *ngIf="search">{{search}}</p>
-      <recipient-component *ngFor="let recipient of listRecipient" [wallet]="wallet" [recipient]="recipient"
-        (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
-        [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)">
-      </recipient-component>
+      <ng-container *ngFor="let recipient of listRecipient; let i = index">
+        <recipient-component [index]="i" [wallet]="wallet" [recipient]="recipient"
+          (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
+          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)">
+        </recipient-component>
+      </ng-container>
     </div>
   </div>
 </ion-content>

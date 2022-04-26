@@ -17,12 +17,24 @@ recipient-component {
         .x-button {
             cursor: pointer;
         }
+
+        .recipient-header-title {
+            margin: 1rem 0;
+            &.first-item {
+                margin-top: 0;
+            }
+        }
+
+        &.lines-top {
+            border-top: 1px solid rgba(112, 129, 138, 0.16);
+            padding-top: 1rem;
+        }
     }
 
     .recipient-content-wrapper {
         background: #FAFAFB;
         border-radius: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
 
         .recipient-content {
             padding-left: 16px;

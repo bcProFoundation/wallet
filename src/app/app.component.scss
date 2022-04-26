@@ -85,8 +85,8 @@ body {
             --padding-end: 0;
         }
         &.wide-header__title {
-            --padding-start: 1rem;
-            --padding-end: 1rem;
+            --padding-start: 1rem !important;
+            --padding-end: 1rem !important;
             padding: 0;
         }
         .header-container-desktop {

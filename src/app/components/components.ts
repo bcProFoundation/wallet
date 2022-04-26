@@ -16,6 +16,7 @@ import { SliderCaptchaComponent } from './slider-captcha/slider-captcha';
 import { WalletItemContent } from './wallet-item-content/wallet-item-content';
 import { RecipientComponent } from './recipient/recipient.component'
 import { WalletDetailCardComponent } from './wallet-detail-card/wallet-detail-card.component';
+import { SubMenuAccountComponent } from './sub-menu-account/sub-menu-account.component';
 export const COMPONENTS = [
   ActionCardComponent,
   ActionCardV4Component,
@@ -34,5 +35,6 @@ export const COMPONENTS = [
   SliderCaptchaComponent,
   NotificationComponent,
   RecipientComponent,
-  WalletDetailCardComponent
+  WalletDetailCardComponent,
+  SubMenuAccountComponent
 ];

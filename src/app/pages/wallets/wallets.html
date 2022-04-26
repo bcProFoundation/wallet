@@ -10,21 +10,16 @@
   <ion-content class="content-desktop">
     <ion-list lines="none">
       <ion-reorder-group disabled={{showReorder}} (ionItemReorder)="reorderAccounts($event)">
-        <ion-item *ngFor="let walletGroup of walletsGroups" (click)="getKeySelected(walletGroup[0]?.keyId)">
-          <ion-icon [style]="keySelected[0]?.keyId === walletGroup[0]?.keyId ? '' : 'color: transparent;'"
-            name="checkmark-circle" slot="start"></ion-icon>
-          <ion-label>{{ getWalletGroup(walletGroup[0]?.keyId).name }}</ion-label>
-          <ion-buttons slot="end">
-            <ion-button>
-              <ion-icon src="assets/img/key-edit-{{currentTheme}}.svg"></ion-icon>
-            </ion-button>
-            <ion-reorder>
-              <ion-button (click)="closeMenu()">
-                <ion-icon src="assets/img/key-drag-{{currentTheme}}.svg"></ion-icon>
-              </ion-button>
-            </ion-reorder>
-          </ion-buttons>
-        </ion-item>
+        <ng-container *ngFor="let walletGroup of walletsGroups; let i = index">
+          <div class="sub-menu">
+            <sub-menu-account 
+              [value]="getWalletGroup(walletGroup[0]?.keyId).name"
+              [keySelected]="keySelected"
+              [walletGroup]="walletGroup"
+              (getKeySelect)="getKeySelected($event)"
+            ></sub-menu-account>
+          </div>
+        </ng-container>
       </ion-reorder-group>
     </ion-list>
   </ion-content>

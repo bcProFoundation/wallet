@@ -233,25 +233,12 @@ page-wallets {
 
     ion-content {
       --background: var(--bg-color-inner-item-light-theme) !important;
+      width: auto !important;
 
       ion-list {
-        ion-item {
-          --padding-start: 1rem;
-          --padding-top: 0.5rem;
-          --padding-bottom: 0.5rem;
-          --color: var(--color-light-on-background-theme);
-          --background: var(--bg-color-inner-item-light-theme) !important;
+        .sub-menu {
           border-bottom: 1px solid rgba(112, 129, 138, 0.16);
-          font-size: 14px;
-
-          ion-icon {
-            &[name="checkmark-circle"] {
-              width: 20px;
-              height: 20px;
-              color: var(--color-primary);
-              margin-right: 1rem;
-            }
-          }
+          background: var(--bg-color-inner-item-light-theme) !important;
         }
       }
     }

@@ -45,6 +45,7 @@ export class SubMenuAccountComponent implements OnInit {
         value
       );
       this.events.publish('Local/GetData', true);
+      this.getKeySelect.emit(this.walletGroup[0].keyId);
     }
     this.isEditKeyName = !this.isEditKeyName;
   }

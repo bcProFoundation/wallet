@@ -16,6 +16,10 @@ ion-item {
     }
   }
 
+  ion-buttons {
+      margin-right: 0;
+  }
+
   &.edit-key-name {
     --padding-start: 0.5rem;
     --padding-end: 0.5rem;

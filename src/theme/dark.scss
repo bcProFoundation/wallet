@@ -1492,10 +1492,8 @@
       }
     }
 
-    ion-title {
-      &.key-title {
-        color: var(--color-on-primary-container-abcpay-dark) !important;
-      }
+    .key-title {
+      color: var(--color-on-primary-container-abcpay-dark) !important;
     }
 
     .balance {
@@ -1823,7 +1821,7 @@
     }
     .custom-txps-number {
       background: #ffb85d;
-      color: #482a00;
+      color: #482a00 !important;
     }
     .toolbar-background {
       background: var(--bg-color-dark-theme) !important;
@@ -1890,6 +1888,10 @@
             ),
             #001e2e !important;
         }
+      }
+
+      .tx-history-header--large {
+        border-color: rgba(112, 129, 138, 0.38) !important;
       }
 
       ion-item-group {

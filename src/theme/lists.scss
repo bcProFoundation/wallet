@@ -206,18 +206,13 @@
     --inner-padding-top: 1rem !important;
     --inner-padding-end: 1rem !important;
     --inner-padding-bottom: 1rem !important;
+    --inner-border-width: 0 0px 1px 0;
     --border-color: #DAE0E5;
     border-bottom: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-
-    &::part(native) {
-      .item-inner {
-        padding-right: 0 !important;
-      }
-    }
 
     ion-note {
       color: #565d6d;

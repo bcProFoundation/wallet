@@ -288,14 +288,15 @@ export class SendPage {
     this.isShowDelete = this.listRecipient.length > 1;
   }
 
-  private goToConfirmToken() {
+  private goToConfirmToken(isSendMax?: boolean) {
     const recipient = this.listRecipient[0];
     this.router.navigate(['/confirm-token'], {
       state: {
         amount: recipient.amount,
         toAddress: recipient.toAddress,
         token: this.token,
-        walletId: this.wallet.credentials.walletId
+        walletId: this.wallet.credentials.walletId,
+        useSendMax: !!isSendMax
       }
     });
   }
@@ -362,9 +363,9 @@ export class SendPage {
     }
   }
 
-  sendMax(isToken:boolean) {
+  sendMax(isToken: boolean) {
     const recipient = this.listRecipient[0];
-    if(!isToken){
+    if (!isToken) {
       this.router.navigate(['/confirm'], {
         state: {
           walletId: this.wallet.credentials.walletId,
@@ -378,10 +379,9 @@ export class SendPage {
           name: recipient.name
         }
       });
-    } else{
-      this.goToConfirmToken();
+    } else {
+      this.goToConfirmToken(true);
     }
-   
   }
 
   checkBeforeGoToConfirmPage() {

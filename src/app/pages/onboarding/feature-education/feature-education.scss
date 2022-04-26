@@ -25,6 +25,21 @@ page-feature-education {
     --offset-bottom: 0px !important;
   }
   .custom-footer{
+    .term-container{
+      margin-left: 1rem;
+      background-color: transparent !important;
+      ion-item{
+        --background: transparent !important;
+      }
+      .term-title {
+        color: var(--color-light-on-background-theme);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 25px;  
+        margin-bottom: 3px;
+      }
+    }
     ion-button{
       opacity: 0;
     }

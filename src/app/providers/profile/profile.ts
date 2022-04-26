@@ -10,7 +10,7 @@ import { AppProvider } from '../app/app';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
 import { BwcProvider } from '../bwc/bwc';
 import { ConfigProvider } from '../config/config';
-import { CurrencyProvider } from '../currency/currency';
+import { Coin, CurrencyProvider } from '../currency/currency';
 import { ErrorsProvider } from '../errors/errors';
 import { KeyProvider } from '../key/key';
 import { LanguageProvider } from '../language/language';
@@ -51,11 +51,11 @@ export interface WalletBindTypeOpts {
 export class ProfileProvider {
   public keyChange = {
     isDelete: false,
-    isStatus : false,
+    isStatus: false,
     keyId: ''
   };
   public walletChange = {
-    isStatus : false,
+    isStatus: false,
     keyId: ''
   };
   public walletsGroups: WalletGroups = {}; // TODO walletGroups Class
@@ -230,14 +230,14 @@ export class ProfileProvider {
     this.wallet[walletId].needsBackup = false;
   }
 
-  public setTokensWallet(walletId: string, tokens : Token[]): void {
+  public setTokensWallet(walletId: string, tokens: Token[]): void {
     this.wallet[walletId].tokens = tokens;
   }
 
   public setAddressEtoken(walletId: string, etokenAddress: string): void {
     this.wallet[walletId].etokenAddress = etokenAddress;
   }
-  
+
   private requiresGroupBackup(keyId: string) {
     let k = this.keyProvider.getKey(keyId);
     if (!k) return false;
@@ -373,7 +373,7 @@ export class ProfileProvider {
     wallet.balanceHidden = await this.isBalanceHidden(wallet);
     wallet.order = await this.getWalletOrder(wallet.id);
     wallet.hidden = await this.isWalletHidden(wallet);
-    wallet.isSlpToken = wallet.credentials.isSlpToken ; 
+    wallet.isSlpToken = wallet.credentials.isSlpToken;
     wallet.lastAddress = await this.persistenceProvider.getLastAddress(
       walletId
     );
@@ -1534,7 +1534,7 @@ export class ProfileProvider {
               network,
               account: opts.account || 0,
               addressType: opts.addressType,
-              isSlpToken : opts.isSlpToken,
+              isSlpToken: opts.isSlpToken,
               n: opts.n || 1
             })
           );
@@ -1560,7 +1560,7 @@ export class ProfileProvider {
               network,
               account: opts.account || 0,
               n: opts.n || 1,
-              isSlpToken : opts.isSlpToken,
+              isSlpToken: opts.isSlpToken,
             })
           );
           if (opts.duplicateKeyId) {
@@ -1600,7 +1600,7 @@ export class ProfileProvider {
               network,
               account: opts.account || 0,
               n: opts.n || 1,
-              isSlpToken : opts.isSlpToken,
+              isSlpToken: opts.isSlpToken,
             })
           );
         } catch (e) {
@@ -1614,7 +1614,7 @@ export class ProfileProvider {
                 network,
                 account: opts.account || 0,
                 n: opts.n || 1,
-                isSlpToken : opts.isSlpToken,
+                isSlpToken: opts.isSlpToken,
               })
             );
           } else {
@@ -1915,7 +1915,7 @@ export class ProfileProvider {
     return this.addAndBindWalletClient(multisigEthWalletClient);
   }
 
-  public createMultipleWallets(coins: string[], tokens = []): Promise<any> {
+  public createMultipleWallets(coins: string[], tokens = [], isSimpleFlow?: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
       if (tokens && tokens.length && coins.indexOf('eth') < 0) {
         reject('No ethereum wallets for tokens');
@@ -1923,6 +1923,10 @@ export class ProfileProvider {
 
       const defaultOpts = this.getDefaultWalletOpts(coins[0]);
 
+      // Set default for XEC only in simple flow
+      if (coins[0] === 'xec' && !!isSimpleFlow) {
+        defaultOpts.singleAddress = true;
+      }
       this._createWallet(defaultOpts).then(data => {
         const key = data.key;
         const firstWalletData = data;
@@ -1974,6 +1978,63 @@ export class ProfileProvider {
     });
   }
 
+  createDefaultWalletsForSimpleFlow() {
+    return new Promise((resolve, reject) => {
+      const coins = ['xpi', 'xec'];
+      const defaultOptsXpi = this.getDefaultWalletOpts(coins[0]);
+      defaultOptsXpi.name = `${defaultOptsXpi.name} - 1899`
+      defaultOptsXpi.isSlpToken = true;
+      this._createWallet(defaultOptsXpi).then(data => {
+        const key = data.key;
+        const firstWalletData = data;
+        const newOpts: any = {};
+        Object.assign(newOpts, this.getDefaultWalletOpts(coins[1]));
+        newOpts['key'] = key; // Add Key
+        newOpts['keyId'] = key.id;
+        newOpts['name'] += ' - 1899';
+        delete newOpts['mnemonic'];
+        newOpts['isSlpToken'] = true;
+        newOpts['singleAddress'] = true;
+        const create2ndWallets = [this._createWallet(newOpts)];
+        Promise.all(create2ndWallets)
+          .then(walletsData => {
+            walletsData.unshift(firstWalletData);
+            let walletClients = _.map(walletsData, 'walletClient');
+            const data = {
+              key: firstWalletData.key,
+              walletClients
+            }
+            this.addAndBindWalletClients(data)
+              .then(async (boundWalletClients) => {
+                try {
+                  for (let i = 0; i < _.size(boundWalletClients); i++) {
+                    const walletClient = boundWalletClients[i];
+                    this.setWalletBackup(walletClient.id);
+                    const address = await this.setAddress(walletClient);
+                    if (this.isSupportToken(walletClient)) {
+                      const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+                      const etoken = this.addressProvider.encodeAddress('etoken', type, hash, address);
+                      walletClient.etokenAddress = etoken;
+                    }
+                  }
+                  return resolve(boundWalletClients);
+                } catch (error) {
+                  reject(error);
+                }
+              }).catch(e => {
+                reject(e);
+              });
+          }).catch(e => {
+            reject(e);
+          });
+      }).catch(e => {
+        reject(e);
+      });
+    });
+  };
+
+
+
   public createWallet(opts) {
     this.walletChange = {
       isStatus: true,
@@ -2005,25 +2066,27 @@ export class ProfileProvider {
       });
     });
   }
-  
 
-  public createTokenWallets(opts): Promise<any> {
+
+  public createTokenWallets(opts, isSimpleFlow?: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
       this._createWallet(opts).then(data => {
         const key = data.key;
         const firstWalletData = data;
-
-        const newOptsDefault = _.cloneDeep(opts)
-        newOptsDefault.key = key; // Add Key
-
-        const slpOpts = _.cloneDeep(opts)
+        const slpOpts = _.cloneDeep(opts);
         slpOpts.key = key; // Add Key
         slpOpts.keyId = key.id;
-        slpOpts.keyId = key.id;
-        slpOpts.name = `${opts.name} - 1899`
-        delete slpOpts.mnemonic;
-        slpOpts.isSlpToken = true;
         slpOpts.singleAddress = true;
+        slpOpts.isSlpToken = true;
+        delete slpOpts.mnemonic;
+        if (!!isSimpleFlow) {
+          slpOpts.name = `${this.currencyProvider.getCoinName(Coin.XEC)} - 1899`;
+          slpOpts.coin = Coin.XEC;
+        }
+        else {
+          slpOpts.name = `${opts.name} - 1899`
+        }
+
         const create2ndWallets = [this._createWallet(slpOpts)];
         Promise.all(create2ndWallets)
           .then(walletsData => {

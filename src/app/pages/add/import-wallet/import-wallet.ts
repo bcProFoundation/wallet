@@ -58,7 +58,7 @@ export class ImportWalletPage {
   public isSlpToken = false;
   public prevCoin: string;
   public currentTheme: string;
-
+  public isSimpleFlow = false;
   navParamsData;
 
   @ViewChild('textarea', { static: false }) textarea: ElementRef;
@@ -110,6 +110,9 @@ export class ImportWalletPage {
     this.isOnboardingFlow = this.navParamsData?.isOnboardingFlow;
 
     this.keyId = this.navParamsData?.keyId; // re-import option
+    if(this.navParamsData && this.navParamsData.isSimpleFlow){
+      this.isSimpleFlow = this.navParamsData.isSimpleFlow;
+    }
     this.title = !this.keyId
       ? this.translate.instant('Import Key')
       : this.translate.instant('Re-Import Keys');
@@ -140,7 +143,7 @@ export class ImportWalletPage {
     this.events.unsubscribe('Local/BackupScan', this.updateWordsHandler);
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.textarea.nativeElement.focus();
     }, 300);
@@ -160,7 +163,7 @@ export class ImportWalletPage {
   public getCoinName(coin: Coin | any) {
     return this.currencyProvider.getCoinName(coin);
   }
-  
+
   public handleClickAdvanceOption() {
     this.showAdvOpts = !this.showAdvOpts;
   }
@@ -381,23 +384,27 @@ export class ImportWalletPage {
           if (this.importForm.value.derivationPathEnabled) {
             this.setOptsAndCreate(this.importForm.value.coin, this.importForm.value.isSlpToken);
           } else {
-            const modal = await this.modalCtrl.create({
-              component: CoinSelectorPage,
-              componentProps: {
-                description: this.translate.instant(
-                  'Please select the coin of the account to import:'
-                )
-              },
+            if (this.isSimpleFlow) {
+              this.setOptsAndCreate(Coin.XPI, true, true);
+            } else {
+              const modal = await this.modalCtrl.create({
+                component: CoinSelectorPage,
+                componentProps: {
+                  description: this.translate.instant(
+                    'Please select the coin of the account to import:'
+                  )
+                },
 
-              backdropDismiss: false,
-              cssClass: 'fullscreen-modal'
-            });
-            await modal.present();
-            modal.onDidDismiss().then(({ data }) => {
-              if (data.selectedCoin) {
-                this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
-              }
-            });
+                backdropDismiss: false,
+                cssClass: 'fullscreen-modal'
+              });
+              await modal.present();
+              modal.onDidDismiss().then(({ data }) => {
+                if (data.selectedCoin) {
+                  this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
+                }
+              });
+            }
           }
         }
       });
@@ -408,20 +415,47 @@ export class ImportWalletPage {
     this.onGoingProcessProvider.clear();
     return;
   }
-
-  public setOptsAndCreate(coin: Coin, isSlpToken: boolean): void {
+  private getDefaultWalletOpts(coin): Partial<WalletOptions> {
+    const defaults = this.configProvider.getDefaults();
     const opts: Partial<WalletOptions> = {
-      keyId: undefined,
       name: this.currencyProvider.getCoinName(coin),
       m: 1,
       n: 1,
       myName: null,
       networkName: 'livenet',
-      bwsurl: this.importForm.value.bwsURL,
-      singleAddress: isSlpToken ? true : this.currencyProvider.isSingleAddress(coin),
-      coin: Coin[coin.toUpperCase()],
-      isSlpToken: isSlpToken
+      bwsurl: defaults.bws.url,
+      singleAddress: this.currencyProvider.isSingleAddress(coin) || false,
+      coin
     };
+    if (coin === 'btc' || coin === 'ltc') opts.useNativeSegwit = true;
+    return opts;
+  }
+
+  public setOptsAndCreate(coin: Coin, isSlpToken: boolean, isSimpleFlow?: boolean): void {
+
+    let opts: Partial<WalletOptions> = {};
+
+    if (!!isSimpleFlow) {
+      opts = this.getDefaultWalletOpts(Coin.XPI);
+      opts.name = `${opts.name} - 1899`
+      opts.isSlpToken = true;
+      opts.singleAddress = false;
+      coin = Coin.XPI;
+    }
+    else {
+      opts = {
+        keyId: undefined,
+        name: this.currencyProvider.getCoinName(coin),
+        m: 1,
+        n: 1,
+        myName: null,
+        networkName: 'livenet',
+        bwsurl: this.importForm.value.bwsURL,
+        singleAddress: isSlpToken ? true : this.currencyProvider.isSingleAddress(coin),
+        coin: Coin[coin.toUpperCase()],
+        isSlpToken: isSlpToken
+      };
+    }
 
     const words = this.importForm.value.words;
     if (
@@ -435,7 +469,10 @@ export class ImportWalletPage {
     }
 
     let derivationPath;
-    if (this.importForm.value.derivationPathEnabled) {
+    if (!!isSimpleFlow) {
+      derivationPath = this.derivationPathHelperProvider['defaultSlpToken'];
+    }
+    else if (this.importForm.value.derivationPathEnabled) {
       derivationPath = this.importForm.value.derivationPath;
     } else {
       if (this.derivationPathHelperProvider[`default${coin.toUpperCase()}`]) {
@@ -457,7 +494,7 @@ export class ImportWalletPage {
     // set opts.useLegacyPurpose
     if (
       this.derivationPathHelperProvider.parsePath(derivationPath).purpose ==
-        "44'" &&
+      "44'" &&
       opts.n > 1
     ) {
       opts.useLegacyPurpose = true;
@@ -468,7 +505,7 @@ export class ImportWalletPage {
     if (
       coin == 'bch' &&
       this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
-        "0'"
+      "0'"
     ) {
       opts.useLegacyCoinType = true;
       this.logger.debug('Using 0 for BCH creation');
@@ -508,18 +545,18 @@ export class ImportWalletPage {
       return;
     }
     if ((coin == 'xec' || coin == 'xpi') && !this.importForm.value.derivationPathEnabled) {
-      this.createWalletTokensSpecifyingWords(opts);
+      this.createWalletTokensSpecifyingWords(opts, !!isSimpleFlow);
     } else {
       this.createSpecifyingWords(opts);
     }
   }
 
-  private createWalletTokensSpecifyingWords(opts): void {
+  private createWalletTokensSpecifyingWords(opts, isSimpleFlow?: boolean): void {
     this.logger.debug('Creating from import');
     opts.isImport = true;
     this.onGoingProcessProvider.set('creatingWallet');
     this.profileProvider
-      .createTokenWallets(opts)
+      .createTokenWallets(opts, !!isSimpleFlow)
       .then(wallet => {
         this.onGoingProcessProvider.clear();
         if (wallet) this.finish([].concat(wallet));
@@ -619,15 +656,15 @@ export class ImportWalletPage {
       opts.n = this.importForm.value.isMultisig
         ? 2
         : opts.derivationStrategy == 'BIP48'
-        ? 2
-        : 1;
+          ? 2
+          : 1;
 
       opts.coin = this.importForm.value.coin;
 
       // set opts.useLegacyPurpose
       if (
         this.derivationPathHelperProvider.parsePath(derivationPath).purpose ==
-          "44'" &&
+        "44'" &&
         opts.n > 1
       ) {
         opts.useLegacyPurpose = true;
@@ -638,7 +675,7 @@ export class ImportWalletPage {
       if (
         opts.coin == 'bch' &&
         this.derivationPathHelperProvider.parsePath(derivationPath).coinCode ==
-          "0'"
+        "0'"
       ) {
         opts.useLegacyCoinType = true;
         this.logger.debug('Using 0 for BCH creation');

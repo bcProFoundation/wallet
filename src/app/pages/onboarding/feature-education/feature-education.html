@@ -38,6 +38,16 @@
     </ion-button>
   </ion-toolbar>
   <ion-toolbar class="button-group" [ngClass]="{'show-button': slideEnd}" *ngIf="slideEnd">
+     <div class="term-container">
+      <ion-item lines="none" class="custom-checkbox checkbox-no-animation">
+        <ion-checkbox slot="start" [(ngModel)]="acceptedPlayAround"></ion-checkbox>
+        <ion-label class="ion-text-wrap">
+          <div class="term-title">
+            {{'I am just playing around. Show me the wallet.' | translate}}
+          </div>
+        </ion-label>
+      </ion-item>
+    </div>
     <ion-button  class="button-standard ion-no-margin-bottom" (click)="goToNextPage('SelectCurrencyPage')">
       {{'Create a new account' | translate}}
     </ion-button>

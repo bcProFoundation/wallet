@@ -32,7 +32,8 @@ export class FeatureEducationPage {
   slideEnd: boolean = false;
   private params = {
     isOnboardingFlow: true,
-    isZeroState: true
+    isZeroState: true,
+    isSimpleFlow: false
   };
 
   config: SwiperOptions = {
@@ -42,6 +43,8 @@ export class FeatureEducationPage {
     resistanceRatio: 0
   }
   zone;
+  public acceptedPlayAround: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     private logger: Logger,
@@ -78,6 +81,7 @@ export class FeatureEducationPage {
     const config = this.configProvider.get();
     if ((config.lock && config.lock.method) || !this.isCordova) {
       const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
+      this.params.isSimpleFlow = this.acceptedPlayAround;
       this.router.navigate([path], {
         state: this.params
       });

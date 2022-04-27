@@ -802,14 +802,14 @@ export class ProfileProvider {
       });
   }
 
-  private askToEncryptKey(key): Promise<any> {
+  private askToEncryptKey(key, skipEncrypt?:boolean): Promise<any> {
     if (!key) return Promise.resolve();
     // if the key is already encrypted, keep it that way for new wallets
     if (key.isPrivKeyEncrypted()) return Promise.resolve();
 
     // do not request encryption if wallets were already created without it
     const wallets = this.getWalletsFromGroup({ keyId: key.id });
-    if (!key.isPrivKeyEncrypted() && wallets && wallets.length)
+    if (!!skipEncrypt || (!key.isPrivKeyEncrypted() && wallets && wallets.length))
       return Promise.resolve();
     return this.showEncryptPasswordInfoModal().then((password: string) => {
       if (!password) {
@@ -849,7 +849,7 @@ export class ProfileProvider {
         this.logger.warn('Clear Encrypt Password? ', res);
         this.onGoingProcessProvider.pause();
         // Encrypt wallet
-        return this.askToEncryptKey(data.key).then(() => {
+        return this.askToEncryptKey(data.key, !!data.isSimpleFlow).then(() => {
           this.onGoingProcessProvider.resume();
           return this.keyProvider.addKey(data.key).then(async () => {
             const boundWalletClients = [];
@@ -2002,7 +2002,8 @@ export class ProfileProvider {
             let walletClients = _.map(walletsData, 'walletClient');
             const data = {
               key: firstWalletData.key,
-              walletClients
+              walletClients,
+              isSimpleFlow: true
             }
             this.addAndBindWalletClients(data)
               .then(async (boundWalletClients) => {

@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 import { SwiperComponent } from 'swiper/angular';
 import { Pagination, SwiperOptions } from 'swiper';
 import SwiperCore from 'swiper';
-import { ThemeProvider } from 'src/app/providers';
+import { BwcErrorProvider, ErrorsProvider, EventManagerService, LoadingProvider, OnGoingProcessProvider, ProfileProvider, PushNotificationsProvider, ThemeProvider, WalletProvider } from 'src/app/providers';
+import { TranslateService } from '@ngx-translate/core';
 
 SwiperCore.use([Pagination]);
 @Component({
@@ -44,7 +45,6 @@ export class FeatureEducationPage {
   }
   zone;
   public acceptedPlayAround: boolean = false;
-
   constructor(
     public navCtrl: NavController,
     private logger: Logger,
@@ -53,7 +53,16 @@ export class FeatureEducationPage {
     private configProvider: ConfigProvider,
     private platformProvider: PlatformProvider,
     private router: Router,
-    private themeProvider: ThemeProvider
+    private themeProvider: ThemeProvider,
+    private profileProvider: ProfileProvider,
+    private walletProvider: WalletProvider,
+    private pushNotificationsProvider: PushNotificationsProvider,
+    private onGoingProcessProvider: OnGoingProcessProvider,
+    private events: EventManagerService,
+    private translate: TranslateService,
+    private bwcErrorProvider: BwcErrorProvider,
+    private errorsProvider: ErrorsProvider,
+    private loadingProvider: LoadingProvider
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
@@ -78,17 +87,66 @@ export class FeatureEducationPage {
   }
 
   public goToNextPage(nextViewName: string): void {
-    const config = this.configProvider.get();
-    if ((config.lock && config.lock.method) || !this.isCordova) {
-      const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
-      this.params.isSimpleFlow = this.acceptedPlayAround;
-      this.router.navigate([path], {
-        state: this.params
-      });
-    } else {
-      this.goToLockMethodPage(nextViewName);
+    if(this.acceptedPlayAround){
+      this.createSimpleFlow();
+    }  else{
+      const config = this.configProvider.get();
+      if ((config.lock && config.lock.method) || !this.isCordova) {
+        const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
+        this.params.isSimpleFlow = this.acceptedPlayAround;
+        
+        this.router.navigate([path], {
+          state: this.params
+        });
+      } else {
+        this.goToLockMethodPage(nextViewName);
+      }
     }
   }
+
+  private createSimpleFlow() {
+    this.loadingProvider.simpleLoader();
+    this.profileProvider.createDefaultWalletsForSimpleFlow().then(async wallets => {
+      this.walletProvider.updateRemotePreferences(wallets);
+      this.pushNotificationsProvider.updateSubscription(wallets);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      this.profileProvider.setNewWalletGroupOrder(
+        wallets[0].credentials.keyId
+      );
+      this.endProcess(wallets[0].credentials.keyId, true);
+      this.loadingProvider.dismissLoader();
+    })
+      .catch(e => {
+        this.showError(e);
+      });
+  }
+  private showError(err) {
+    this.onGoingProcessProvider.clear();
+    this.logger.error('Create: could not create wallet', err);
+    const title = this.translate.instant('Error');
+    err = this.bwcErrorProvider.msg(err);
+    this.errorsProvider.showDefaultError(err, title);
+  }
+
+  private endProcess(keyId: string, skipRecoveryPhrase?: boolean) {
+    this.onGoingProcessProvider.clear();
+    if (!!skipRecoveryPhrase) {
+      this.profileProvider.setBackupGroupFlag(keyId);
+      const opts = {
+        keyId: keyId,
+        showHidden: true
+      };
+      const wallets = this.profileProvider.getWalletsFromGroup(opts);
+      wallets.forEach(w => {
+        this.profileProvider.setWalletBackup(w.credentials.walletId);
+      });
+      this.router.navigate(['']).then(() => {
+        this.events.publish('Local/FetchWallets');
+      });
+    } 
+  }
+
 
   private goToLockMethodPage(name: string): void {
     let nextView = {

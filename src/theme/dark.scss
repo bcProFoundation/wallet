@@ -3625,4 +3625,10 @@
   .stroke-card {
     border-color: #072335 !important;
   }
+
+  wallet-detail-card {
+    .input-edit-account-name {
+      border-color: var(--color-primary-abcpay-dark) !important;
+    }
+  }
 }

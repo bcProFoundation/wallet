@@ -41,6 +41,7 @@ wallet-detail-card {
             display: flex;
             align-items: baseline;
             .audit-table {
+              margin-top: 5px;
               background: rgba(0, 30, 46, 0.24);
               padding: 0 4px;
               color: rgba(237, 239, 240, 0.6);
@@ -50,6 +51,7 @@ wallet-detail-card {
               margin-right: 5px;
             }
             .secondary-label {
+              margin-top: 5px;
               display: flex;
               align-items: center;
               background: rgba(0, 30, 46, 0.24);
@@ -63,6 +65,30 @@ wallet-detail-card {
                 width: 16px;
                 height: 16px;
               }
+            }
+          }
+          .input-edit-account-name {
+            --padding-end: 0.5rem;
+            --padding-top: 0;
+            --padding-bottom: 5px;
+            border-bottom: 1px solid var(--color-primary);
+            width: 165px;
+          }
+        }
+        .edit-account-name {
+          ion-button {
+            --padding-start: 0.5rem;
+            margin: 0 !important;
+            &.btn-done-edit {
+              --color: var(--color-primary);
+            }
+          }
+          &.wallet-info-is-show {
+            align-self: flex-start;
+            position: relative;
+            top: -5px;
+            .btn-done-edit {
+              margin-top: 5px !important;
             }
           }
         }

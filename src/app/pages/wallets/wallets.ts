@@ -51,6 +51,7 @@ export class WalletsPage {
   public showReorder: boolean = false;
   public currentCurrency;
   public isScroll = false;
+  public isDisableBtnMenu: boolean = false;
   listEToken = ['EAT', 'DoC', 'bcPro'];
   donationSupportCoins = [];
   navParamsData;
@@ -232,6 +233,10 @@ export class WalletsPage {
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
     this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));
     this.loadTokenWallet();
+  }
+
+  public handleBtnSubMenu(isDisable) {
+    return isDisable ? this.isDisableBtnMenu = true : this.isDisableBtnMenu = false;
   }
 
   private getTotalBalanceKey(key) {

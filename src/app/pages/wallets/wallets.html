@@ -17,6 +17,8 @@
               [keySelected]="keySelected"
               [walletGroup]="walletGroup"
               (getKeySelect)="getKeySelected($event)"
+              (disableBtn)="handleBtnSubMenu($event)"
+              [isDisableBtn]="isDisableBtnMenu"
             ></sub-menu-account>
           </div>
         </ng-container>

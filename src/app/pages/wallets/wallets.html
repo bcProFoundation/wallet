@@ -9,7 +9,7 @@
   </ion-header>
   <ion-content class="content-desktop">
     <ion-list lines="none">
-      <ion-reorder-group disabled={{showReorder}} (ionItemReorder)="reorderAccounts($event)">
+      <ion-reorder-group [disabled]="isDisableBtnMenu" (ionItemReorder)="reorderAccounts($event)">
         <ng-container *ngFor="let walletGroup of walletsGroups; let i = index">
           <div class="sub-menu">
             <sub-menu-account 
@@ -100,7 +100,7 @@
         </div>
         <ion-list lines="nones" class="bp-list">
           <div class="wallet-item" *ngFor="let wallet of keySelected; let j = index">
-            <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance"
+            <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance" [symbolCurrency]="symbolCurrency"
               (click)="goToWalletDetails(wallet)">
             </wallet-item-content>
 
@@ -141,10 +141,10 @@
                         </ion-label>
                         <ion-note slot="end">
                           <div>
-                            <ng-container *ngIf="isShowBalance || wallet?.balanceHidden;else noShowBalanceToken">
+                            <ng-container *ngIf="isShowBalance && !wallet?.balanceHidden;else noShowBalanceToken">
                               <div class="main-note">{{DecimalFormatBalance(token?.amountToken)}}</div>
                               <div class="secondary-note" *ngIf="wallet?.cachedStatus">
-                                <span >~</span> {{'$' + DecimalFormatBalance(token.alternativeBalance)}}
+                                <span >~</span> {{symbolCurrency + DecimalFormatBalance(token.alternativeBalance)}}
                               </div>
                             </ng-container>
                             <ng-template #noShowBalanceToken>

@@ -52,6 +52,7 @@ export class WalletsPage {
   public currentCurrency;
   public isScroll = false;
   public isDisableBtnMenu: boolean = false;
+  public symbolCurrency;
   listEToken = ['EAT', 'DoC', 'bcPro'];
   donationSupportCoins = [];
   navParamsData;
@@ -85,13 +86,24 @@ export class WalletsPage {
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider
   ) {
+    let config = this.configProvider.get();
+    const currentCurrency = config.wallet.settings.alternativeIsoCode;
+    switch (currentCurrency) {
+      case 'VND':
+        this.symbolCurrency = '₫';
+        break;
+      case 'HNL':
+        this.symbolCurrency = 'L';
+        break;
+      default:
+        this.symbolCurrency = '$';
+    }
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : undefined;
     }
     const availableChains = this.currencyProvider.getAvailableChains();
-    let config = this.configProvider.get();
     this.currentCurrency = config.wallet.settings.alternativeIsoCode;
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.collapsedGroups = {};

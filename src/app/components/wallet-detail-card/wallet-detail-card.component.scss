@@ -16,8 +16,8 @@ wallet-detail-card {
           position: relative;
           margin-top: 6px;
           img {
-            width: 40px !important;
-            height: 40px !important;
+            width: 40px;
+            height: 40px;
           }
           .audit {
             width: 16px;
@@ -81,14 +81,6 @@ wallet-detail-card {
             margin: 0 !important;
             &.btn-done-edit {
               --color: var(--color-primary);
-            }
-          }
-          &.wallet-info-is-show {
-            align-self: flex-start;
-            position: relative;
-            top: -5px;
-            .btn-done-edit {
-              margin-top: 5px !important;
             }
           }
         }
@@ -294,6 +286,23 @@ wallet-detail-card {
   @media screen and (max-width: 376px) {
     .wallet-name {
       max-width: 200px !important;
+    }
+  }
+
+  .wallet-info-is-show {
+    align-self: flex-start;
+    position: relative;
+    top: -5px;
+    .btn-done-edit {
+      margin-top: 5px !important;
+      height: 20px;
+    }
+    .btn-edit-name {
+      height: 18px;
+    }
+    img {
+      width: 44px !important;
+      height: 44px !important;
     }
   }
 }

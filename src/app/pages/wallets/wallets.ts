@@ -92,6 +92,9 @@ export class WalletsPage {
       case 'VND':
         this.symbolCurrency = '₫';
         break;
+      case 'HNL':
+        this.symbolCurrency = 'L';
+        break;
       default:
         this.symbolCurrency = '$';
     }

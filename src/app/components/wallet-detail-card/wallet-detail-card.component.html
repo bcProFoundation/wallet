@@ -1,5 +1,6 @@
 <ng-container *ngIf="!isToken;else tokenCard">
   <div class="wallet-card" [ngClass]="{ 
+    'bg-btc': wallet.coin == 'btc',
     'bg-bch': wallet.coin == 'bch',
     'bg-xec': wallet.coin == 'xec',
     'bg-xpi': wallet.coin == 'xpi',

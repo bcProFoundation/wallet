@@ -44,7 +44,7 @@ export interface CoinOpts {
 }
 
 export const availableCoins: CoinsMap<CoinOpts> = {
-  
+
   xpi: {
     name: 'Lotus',
     chain: 'XPI',
@@ -118,6 +118,44 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       coinColor: '#016cbf',
       backgroundColor: '#0080CA',
       gradientBackgroundColor: '#0080CA'
+    }
+  },
+
+  btc: {
+    name: 'Bitcoin',
+    chain: 'BTC',
+    coin: 'btc',
+    unitInfo: {
+      unitName: 'BTC',
+      unitToSatoshi: 100000000,
+      unitDecimals: 8,
+      unitCode: 'btc'
+    },
+    properties: {
+      hasMultiSig: true,
+      hasMultiSend: true,
+      isUtxo: true,
+      isERCToken: false,
+      isStableCoin: false,
+      singleAddress: false
+    },
+    paymentInfo: {
+      paymentCode: 'BIP73',
+      protocolPrefix: { livenet: 'bitcoin', testnet: 'bitcoin' },
+      ratesApi: 'https://aws.abcpay.cash/bws/api/v3/fiatrates/xpi',
+      blockExplorerUrls: 'bitpay.com/insight/#/BTC/mainnet/',
+      blockExplorerUrlsTestnet: 'bitpay.com/insight/#/BTC/testnet/'
+    },
+    feeInfo: {
+      feeUnit: 'sat/byte',
+      feeUnitAmount: 1000,
+      blockTime: 10,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      coinColor: '#f7931a',
+      backgroundColor: '#f7921a',
+      gradientBackgroundColor: '#f7921a'
     }
   },
 

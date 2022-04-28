@@ -139,6 +139,10 @@ wallet-detail-card {
       }
     }
     &.bg {
+      &-btc {
+        background: url(../../../assets/img/wallet-details/bg-btc.svg) no-repeat;
+        background-size: cover;
+      }
       &-bch {
         background: url(../../../assets/img/wallet-details/bg-bch.svg) no-repeat;
         background-size: cover;

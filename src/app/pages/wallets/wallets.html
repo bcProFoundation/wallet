@@ -100,7 +100,7 @@
         </div>
         <ion-list lines="nones" class="bp-list">
           <div class="wallet-item" *ngFor="let wallet of keySelected; let j = index">
-            <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance" [symbolCurrency]="symbolCurrency"
+            <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance"
               (click)="goToWalletDetails(wallet)">
             </wallet-item-content>
 

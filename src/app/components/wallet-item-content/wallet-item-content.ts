@@ -27,18 +27,10 @@ export class WalletItemContent {
   @Input()
   isShowBalance: any = true;
 
-  public symbolCurrency;
+  @Input()
+  symbolCurrency: any;
 
-  constructor(private configProvider: ConfigProvider) {
-    let config = this.configProvider.get();
-    const currentCurrency = config.wallet.settings.alternativeIsoCode;
-    switch (currentCurrency) {
-      case 'VND':
-        this.symbolCurrency = '₫';
-        break;
-      default:
-        this.symbolCurrency = '$';
-    }
+  constructor() {
   }
 
   getBalance(wallet, currency) {

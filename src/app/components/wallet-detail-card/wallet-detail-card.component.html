@@ -7,7 +7,8 @@
     'bg-ltc': wallet.coin == 'ltc'
     }">
     <div class="wallet-card-header">
-      <div class="wallet-icon">
+      <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+      class="wallet-icon">
         <div class="icon">
           <img src="assets/img/currencies/{{wallet.coin}}.svg" alt="">
         </div>

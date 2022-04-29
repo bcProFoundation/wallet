@@ -25,13 +25,12 @@ When your development environment is ready, run the `start:ios` package script.
 
 - Rename '.env.example' file to .env and change AWS_URL_CONFIG variable value, which points to correct the backend API service. 
 
-```sh
-npm run prepare:abcpay
-npm run env:dev // update AWS_URL_CONFIG
-npm run apply // update pinfo.list
-npm run start:ios
-Build and run with Xcode
-```
+1. npm run prepare:abcpay
+2. npm run env:dev // update AWS_URL_CONFIG
+3. npm run apply // update pinfo.list
+4. npm run start:ios
+5. Build and run with Xcode
+
 _Note: if build returns error. Run to fix : "npx jetify" then "run npm run start:ios" again._
 
 Additional iOS configuration steps require in order to enable notification feature during build. Please refer to: https://capacitorjs.com/docs/guides/push-notifications-firebase#prerequisites for detail:

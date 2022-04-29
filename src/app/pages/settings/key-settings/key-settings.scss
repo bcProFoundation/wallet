@@ -51,4 +51,23 @@ page-key-settings {
   .color-danger {
     color: var(--color-danger) !important;
   }
+
+  ion-reorder-group {
+    ion-item {
+      min-height: 62px;
+    }
+  }
+
+  .btn-drag {
+    margin: 0;
+    height: 22px;
+    --padding-end: 5px;
+    --padding-start: 5px;
+    ion-icon {
+      padding: 0;
+      margin: 0;
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
 }

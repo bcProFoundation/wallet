@@ -59,6 +59,8 @@ export class ImportWalletPage {
   public prevCoin: string;
   public currentTheme: string;
   public isSimpleFlow = false;
+  public isFirstImport = false;
+
   navParamsData;
 
   @ViewChild('textarea', { static: false }) textarea: ElementRef;
@@ -84,7 +86,7 @@ export class ImportWalletPage {
     private bwcErrorProvider: BwcErrorProvider,
     private errorsProvider: ErrorsProvider,
     private router: Router,
-    private appProvider: AppProvider
+    private appProvider: AppProvider,
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state
@@ -110,8 +112,11 @@ export class ImportWalletPage {
     this.isOnboardingFlow = this.navParamsData?.isOnboardingFlow;
 
     this.keyId = this.navParamsData?.keyId; // re-import option
-    if(this.navParamsData && this.navParamsData.isSimpleFlow){
+    if (this.navParamsData && this.navParamsData.isSimpleFlow) {
       this.isSimpleFlow = this.navParamsData.isSimpleFlow;
+    }
+    if (this.navParamsData && this.navParamsData.isFirstImport) {
+      this.isFirstImport = this.navParamsData.isFirstImport;
     }
     this.title = !this.keyId
       ? this.translate.instant('Import Key')
@@ -286,23 +291,28 @@ export class ImportWalletPage {
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.profileProvider.setNewWalletGroupOrder(wallets[0].credentials.keyId);
     }
-    this.profileProvider.isDisclaimerAccepted().then(async onboardingState => {
-      if (onboardingState === 'UNFINISHEDONBOARDING') {
-        const modal = await this.modalCtrl.create({
-          component: DisclaimerModal,
-          backdropDismiss: false,
-          cssClass: 'fixscreen-modal'
-        });
-        await modal.present();
-        modal.onDidDismiss().then(({ data }) => {
-          if (data.isConfirm) {
-            this.goToHomePage(wallets[0].credentials.keyId);
-          }
-        });
-      } else {
-        this.goToHomePage(wallets[0].credentials.keyId);
-      }
-    });
+    if (this.isSimpleFlow) {
+      this.goToHomePage(wallets[0].credentials.keyId);
+    } else {
+      this.profileProvider.isDisclaimerAccepted().then(async onboardingState => {
+        if (onboardingState === 'UNFINISHEDONBOARDING') {
+          const modal = await this.modalCtrl.create({
+            component: DisclaimerModal,
+            backdropDismiss: false,
+            cssClass: 'fixscreen-modal'
+          });
+          await modal.present();
+          modal.onDidDismiss().then(({ data }) => {
+            if (data.isConfirm) {
+              this.goToHomePage(wallets[0].credentials.keyId);
+            }
+          });
+        } else {
+          this.goToHomePage(wallets[0].credentials.keyId);
+        }
+      });
+    }
+
   }
 
   private goToHomePage(keyId) {
@@ -369,50 +379,57 @@ export class ImportWalletPage {
 
   private processError(err?) {
     if (err == 'WALLET_DOES_NOT_EXIST') {
-      const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
-        'import-no-wallet-warning'
-      );
-      noWalletWarningInfoSheet.present();
-      noWalletWarningInfoSheet.onDidDismiss(async option => {
-        if (option || typeof option === 'undefined') {
-          // Go back
-          this.logger.debug('Go back clicked');
-        } else {
-          // Continue anyway
-          this.logger.debug('Continue anyway clicked');
+      if (this.isSimpleFlow) {
+        this.setOptsAndCreate(Coin.XPI, true, true);
+      } else {
+        const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
+          'import-no-wallet-warning'
+        );
 
-          if (this.importForm.value.derivationPathEnabled) {
-            this.setOptsAndCreate(this.importForm.value.coin, this.importForm.value.isSlpToken);
+        noWalletWarningInfoSheet.present();
+        noWalletWarningInfoSheet.onDidDismiss(async option => {
+          if (option || typeof option === 'undefined') {
+            // Go back
+            this.logger.debug('Go back clicked');
           } else {
-            if (this.isSimpleFlow) {
-              this.setOptsAndCreate(Coin.XPI, true, true);
-            } else {
-              const modal = await this.modalCtrl.create({
-                component: CoinSelectorPage,
-                componentProps: {
-                  description: this.translate.instant(
-                    'Please select the coin of the account to import:'
-                  )
-                },
+            // Continue anyway
+            this.logger.debug('Continue anyway clicked');
 
-                backdropDismiss: false,
-                cssClass: 'fullscreen-modal'
-              });
-              await modal.present();
-              modal.onDidDismiss().then(({ data }) => {
-                if (data.selectedCoin) {
-                  this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
-                }
-              });
+            if (this.importForm.value.derivationPathEnabled) {
+              this.setOptsAndCreate(this.importForm.value.coin, this.importForm.value.isSlpToken);
+            } else {
+              if (this.isFirstImport) {
+                this.setOptsAndCreate(Coin.XPI, true, true);
+              }
+              else {
+                const modal = await this.modalCtrl.create({
+                  component: CoinSelectorPage,
+                  componentProps: {
+                    description: this.translate.instant(
+                      'Please select the coin of the account to import:'
+                    )
+                  },
+
+                  backdropDismiss: false,
+                  cssClass: 'fullscreen-modal'
+                });
+                await modal.present();
+                modal.onDidDismiss().then(({ data }) => {
+                  if (data.selectedCoin) {
+                    this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
+                  }
+                });
+              }
             }
           }
-        }
-      });
-    } else {
+        });
+      }
+    }
+    else {
       const title = this.translate.instant('Error');
       this.showErrorInfoSheet(title, this.bwcErrorProvider.msg(err));
+      this.onGoingProcessProvider.clear();
     }
-    this.onGoingProcessProvider.clear();
     return;
   }
   private getDefaultWalletOpts(coin): Partial<WalletOptions> {
@@ -558,7 +575,6 @@ export class ImportWalletPage {
     this.profileProvider
       .createTokenWallets(opts, !!isSimpleFlow)
       .then(wallet => {
-        this.onGoingProcessProvider.clear();
         if (wallet) this.finish([].concat(wallet));
       })
       .catch(err => {
@@ -577,7 +593,6 @@ export class ImportWalletPage {
     this.profileProvider
       .createWallet(opts)
       .then(wallet => {
-        this.onGoingProcessProvider.clear();
         if (wallet) this.finish([].concat(wallet));
       })
       .catch(err => {

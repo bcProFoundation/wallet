@@ -28,6 +28,7 @@ import { Profile } from '../../models/profile/profile.model';
 import { DerivationPathHelperProvider } from '../derivation-path-helper/derivation-path-helper';
 import { AddressProvider } from '../address/address';
 import { Token } from 'src/app/models/tokens/tokens.model';
+import { LoadingProvider } from '../loading/loading';
 
 interface WalletGroups {
   [keyId: string]: {
@@ -802,7 +803,7 @@ export class ProfileProvider {
       });
   }
 
-  private askToEncryptKey(key, skipEncrypt?:boolean): Promise<any> {
+  private askToEncryptKey(key, skipEncrypt?: boolean): Promise<any> {
     if (!key) return Promise.resolve();
     // if the key is already encrypted, keep it that way for new wallets
     if (key.isPrivKeyEncrypted()) return Promise.resolve();
@@ -849,8 +850,7 @@ export class ProfileProvider {
         this.logger.warn('Clear Encrypt Password? ', res);
         this.onGoingProcessProvider.pause();
         // Encrypt wallet
-        return this.askToEncryptKey(data.key, !!data.isSimpleFlow).then(() => {
-          this.onGoingProcessProvider.resume();
+        return this.askToEncryptKey(data.key, !!data.isSkipAskEncrypt).then(() => {
           return this.keyProvider.addKey(data.key).then(async () => {
             const boundWalletClients = [];
             for (const walletClient of data.walletClients) {
@@ -871,10 +871,12 @@ export class ProfileProvider {
             return this.storeProfileIfDirty()
               .then(() => {
                 this.checkIfAlreadyExist(boundWalletClients);
+                this.onGoingProcessProvider.resume();
                 return Promise.resolve(_.compact(boundWalletClients));
               })
               .catch(err => {
                 return Promise.reject('failed to bind wallets:' + err);
+                this.onGoingProcessProvider.resume();
               });
           });
         });
@@ -1978,7 +1980,7 @@ export class ProfileProvider {
     });
   }
 
-  createDefaultWalletsForSimpleFlow() {
+  createDefaultWalletsForSimpleFlow(isSkipAskEncrypt?: boolean) {
     return new Promise((resolve, reject) => {
       const coins = ['xpi', 'xec'];
       const defaultOptsXpi = this.getDefaultWalletOpts(coins[0]);
@@ -2003,7 +2005,7 @@ export class ProfileProvider {
             const data = {
               key: firstWalletData.key,
               walletClients,
-              isSimpleFlow: true
+              isSkipAskEncrypt: !!isSkipAskEncrypt
             }
             this.addAndBindWalletClients(data)
               .then(async (boundWalletClients) => {
@@ -2070,6 +2072,7 @@ export class ProfileProvider {
 
 
   public createTokenWallets(opts, isSimpleFlow?: boolean): Promise<any> {
+    
     return new Promise((resolve, reject) => {
       this._createWallet(opts).then(data => {
         const key = data.key;
@@ -2095,7 +2098,8 @@ export class ProfileProvider {
             let walletClients = _.map(walletsData, 'walletClient');
             const data = {
               key: firstWalletData.key,
-              walletClients
+              walletClients,
+              isSkipAskEncrypt: !!isSimpleFlow
             }
             this.addAndBindWalletClients(data)
               .then(async (boundWalletClients) => {

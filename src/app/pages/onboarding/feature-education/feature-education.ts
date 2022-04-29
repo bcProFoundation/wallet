@@ -21,7 +21,7 @@ SwiperCore.use([Pagination]);
   selector: 'page-feature-education',
   templateUrl: 'feature-education.html',
   styleUrls: ['./feature-education.scss'],
-  encapsulation : ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None
 })
 export class FeatureEducationPage {
 
@@ -34,7 +34,8 @@ export class FeatureEducationPage {
   private params = {
     isOnboardingFlow: true,
     isZeroState: true,
-    isSimpleFlow: false
+    isSimpleFlow: false,
+    isFirstImport: false
   };
 
   config: SwiperOptions = {
@@ -87,14 +88,18 @@ export class FeatureEducationPage {
   }
 
   public goToNextPage(nextViewName: string): void {
-    if(this.acceptedPlayAround){
-      this.createSimpleFlow();
-    }  else{
+    if (this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
+      // set boolean var to true to skip all encrypt password + recovery phrase
+      this.createSimpleFlow(false);
+    } else if (!this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
+      this.createSimpleFlow(true);
+    }
+    else {
       const config = this.configProvider.get();
       if ((config.lock && config.lock.method) || !this.isCordova) {
         const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
         this.params.isSimpleFlow = this.acceptedPlayAround;
-        
+        this.params.isFirstImport = true;
         this.router.navigate([path], {
           state: this.params
         });
@@ -104,9 +109,12 @@ export class FeatureEducationPage {
     }
   }
 
-  private createSimpleFlow() {
-    this.loadingProvider.simpleLoader();
-    this.profileProvider.createDefaultWalletsForSimpleFlow().then(async wallets => {
+  private createSimpleFlow(isFullFlow?: boolean) {
+    if (!(!!isFullFlow)) {
+      this.loadingProvider.simpleLoader();
+    }
+    // if case full flow do not skip ask encrypt password
+    this.profileProvider.createDefaultWalletsForSimpleFlow(!(!!isFullFlow)).then(async wallets => {
       this.walletProvider.updateRemotePreferences(wallets);
       this.pushNotificationsProvider.updateSubscription(wallets);
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -114,11 +122,15 @@ export class FeatureEducationPage {
       this.profileProvider.setNewWalletGroupOrder(
         wallets[0].credentials.keyId
       );
-      this.endProcess(wallets[0].credentials.keyId, true);
-      this.loadingProvider.dismissLoader();
+      // if case full flow do not skip recover phrase
+      this.endProcess(wallets[0].credentials.keyId, !(!!isFullFlow));
+      if (!(!!isFullFlow)) {
+        this.loadingProvider.dismissLoader();
+      }
     })
       .catch(e => {
         this.showError(e);
+        this.loadingProvider.dismissLoader();
       });
   }
   private showError(err) {
@@ -144,7 +156,15 @@ export class FeatureEducationPage {
       this.router.navigate(['']).then(() => {
         this.events.publish('Local/FetchWallets');
       });
-    } 
+    } else {
+      this.router.navigate(['/recovery-key'], {
+        state: {
+          keyId,
+          isOnboardingFlow: this.params.isOnboardingFlow,
+          hideBackButton: true
+        }
+      });
+    }
   }
 
 

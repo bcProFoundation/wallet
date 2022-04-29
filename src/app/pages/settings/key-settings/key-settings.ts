@@ -46,6 +46,7 @@ export class KeySettingsPage {
   public needsBackup: boolean;
   public derivationStrategy: string;
   public isScroll = false;
+  public showReorder: boolean = false;
 
   private keyId: string;
   navParamsData: any;
@@ -317,6 +318,22 @@ export class KeySettingsPage {
         keyId: this.keyId
       }
     });
+  }
+
+  public reorder(): void {
+    this.showReorder = !this.showReorder;
+  }
+
+  public async reorderAccounts(indexes) {
+    const element = this.wallets[indexes.detail.from];
+    this.wallets.splice(indexes.detail.from, 1);
+    this.wallets.splice(indexes.detail.to, 0, element);
+    _.each(this.wallets, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+    this.profileProvider.setOrderedWalletsByGroup(this.keyId);
+    indexes.detail.complete();
+    this.events.publish('Local/GetData', true);
   }
 
   public syncWallets(): void {

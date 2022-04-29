@@ -2143,7 +2143,7 @@ export class ProfileProvider {
     return _.flatten(wallets);
   }
 
-  public setOrderedWalletsByGroup() {
+  public setOrderedWalletsByGroup(keyId?) {
     this.logger.debug('Set Ordered Wallets By Group');
     const wallets = [];
     this.getOrderedWalletsGroups().forEach(walletsGroup => {
@@ -2152,6 +2152,13 @@ export class ProfileProvider {
     this.orderedWalletsByGroup = _.values(
       _.groupBy(_.flatten(wallets), 'keyId')
     );
+    if (keyId) {
+      this.keyChange = {
+        isStatus: true,
+        isDelete: false,
+        keyId: keyId
+      }
+    }
   }
 
   private getOrderedWalletsGroups() {

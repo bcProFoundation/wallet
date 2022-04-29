@@ -281,6 +281,7 @@ export class ImportWalletPage {
   }
 
   private async finish(wallets: any[]) {
+    this.onGoingProcessProvider.clear();
     wallets.forEach(wallet => {
       this.walletProvider.updateRemotePreferences(wallet);
       this.pushNotificationsProvider.updateSubscription(wallet);

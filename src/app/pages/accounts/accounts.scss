@@ -28,6 +28,17 @@ accounts-page {
     color: var(--color-danger);
   }
 
+  wallet-item-content {
+    ion-item {
+      --padding-start: 1rem !important;
+      --inner-padding-end: 0 !important;
+      &.ios {
+          --inner-padding-top: 0.6rem !important;
+          --inner-padding-bottom: 0.6rem !important;
+      }
+    }
+  }
+
   page-wallet-activity,
   page-txp {
     @media (max-width: 350px) {

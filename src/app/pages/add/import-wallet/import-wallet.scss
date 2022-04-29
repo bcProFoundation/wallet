@@ -61,7 +61,6 @@ page-import-wallet {
     margin: 0px 16px;
     border-radius: 0px 0px 8px 8px;
     background: #FAFAFB;
-    padding-bottom: 1rem;
     margin-bottom: 9rem;
   
     ion-list{
@@ -89,6 +88,9 @@ page-import-wallet {
           --padding-end: 10px;
           --inner-padding-end: 0;
           border-radius: 4px;
+          ion-select {
+            max-width: 100vw;
+          }
         }
         &.shared-account-item {
           margin: 0 1rem;

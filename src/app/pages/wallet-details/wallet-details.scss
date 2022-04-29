@@ -3,15 +3,15 @@ page-wallet-details {
   .custom-txps-number {
     display: flex;
     justify-content: center;
-    width: 35px;
-    height: 26px;
-    border-radius: 100px;
+    width: 25px;
+    height: 20px;
     border-radius: 100px;
     font-size: 14px;
     font-weight: 600;
     align-self: center;
     margin-left: 10px;
     background: #ffddb6;
+    color: #000;
     align-items: center;
   }
   .grid-wrapper {
@@ -127,11 +127,6 @@ page-wallet-details {
     }
   }
 
-  .tx-history-multisign {
-    padding: 1rem !important;
-    min-height: auto !important;
-  }
-
   .energized {
     color: var(--color-warning) !important;
   }
@@ -176,7 +171,8 @@ page-wallet-details {
           text-transform: none !important;
           font-weight: 600;
           span {
-            font-size: 20px !important;
+            font-size: 17px !important;
+            letter-spacing: 0.1px;
             color: #001e2e;
           }
           .label-multisign {
@@ -214,7 +210,7 @@ page-wallet-details {
         .item-tx-history {
           width: 100%;
           display: flex;
-          padding-bottom: 1rem;
+          padding-bottom: 0.5rem;
           justify-content: space-between;
           .custom-left-part {
             display: flex;
@@ -331,6 +327,24 @@ page-wallet-details {
       margin-bottom: 0.5rem;
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+
+    &.tx-history-multisign {
+      padding: 1rem !important;
+      min-height: auto !important;
+      margin: 1rem 1rem 2rem 1rem;
+      border-radius: 8px;
+      background: var(--color-inner-item-light-theme);
+      ion-item {
+        --padding-start: 0 !important;
+        --padding-end: 0 !important;
+        --padding-top: 0.5rem !important;
+        padding: 0;
+      }
+      .tx-history-header--large {
+        padding: 0 !important;
+        border-bottom: 1px solid rgba(112, 129, 138, 0.16);
       }
     }
   }

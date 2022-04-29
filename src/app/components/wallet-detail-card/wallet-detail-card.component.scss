@@ -16,8 +16,8 @@ wallet-detail-card {
           position: relative;
           margin-top: 6px;
           img {
-            width: 40px !important;
-            height: 40px !important;
+            width: 40px;
+            height: 40px;
           }
           .audit {
             width: 16px;
@@ -41,6 +41,7 @@ wallet-detail-card {
             display: flex;
             align-items: baseline;
             .audit-table {
+              margin-top: 5px;
               background: rgba(0, 30, 46, 0.24);
               padding: 0 4px;
               color: rgba(237, 239, 240, 0.6);
@@ -50,6 +51,7 @@ wallet-detail-card {
               margin-right: 5px;
             }
             .secondary-label {
+              margin-top: 5px;
               display: flex;
               align-items: center;
               background: rgba(0, 30, 46, 0.24);
@@ -60,9 +62,25 @@ wallet-detail-card {
               letter-spacing: 0.4px;
               img {
                 margin-left: 5px;
-                width: 16px;
-                height: 16px;
+                width: 16px !important;
+                height: 16px !important;
               }
+            }
+          }
+          .input-edit-account-name {
+            --padding-end: 0.5rem;
+            --padding-top: 0;
+            --padding-bottom: 5px;
+            border-bottom: 1px solid var(--color-primary);
+            width: 165px;
+          }
+        }
+        .edit-account-name {
+          ion-button {
+            --padding-start: 0.5rem;
+            margin: 0 !important;
+            &.btn-done-edit {
+              --color: var(--color-primary);
             }
           }
         }
@@ -268,6 +286,23 @@ wallet-detail-card {
   @media screen and (max-width: 376px) {
     .wallet-name {
       max-width: 200px !important;
+    }
+  }
+
+  .wallet-info-is-show {
+    align-self: flex-start;
+    position: relative;
+    top: -5px;
+    .btn-done-edit {
+      margin-top: 5px !important;
+      height: 20px;
+    }
+    .btn-edit-name {
+      height: 18px;
+    }
+    img {
+      width: 44px !important;
+      height: 44px !important;
     }
   }
 }

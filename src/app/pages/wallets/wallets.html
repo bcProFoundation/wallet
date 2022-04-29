@@ -74,7 +74,7 @@
       <div *ngIf="!(!walletsGroups || !walletsGroups[0])" class="balance">
         <div class="balance-str" [style]="!isShowBalance ? 'align-items: baseline' : 'align-items: center'">
           <ion-icon class="eye" [name]="!isShowBalance ? 'eye-outline' : 'eye-off-outline'"
-            (click)="isShowBalance = !isShowBalance"></ion-icon>
+            (click)="changShowBalanceKey()"></ion-icon>
           <span class="balance-alt-str">
             {{isShowBalance ? totalBalanceKey : '******'}}
           </span>

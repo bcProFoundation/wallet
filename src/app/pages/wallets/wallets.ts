@@ -53,6 +53,7 @@ export class WalletsPage {
   public isScroll = false;
   public isDisableBtnMenu: boolean = false;
   public symbolCurrency;
+  public keyHiddenBalanceTemp = [];
   listEToken = ['EAT', 'DoC', 'bcPro'];
   donationSupportCoins = [];
   navParamsData;
@@ -240,7 +241,32 @@ export class WalletsPage {
     });
   }
 
+  public changShowBalanceKey() {
+    let obj = {};
+    this.isShowBalance = !this.isShowBalance;
+    obj = {
+      keyId: this.keySelected[0].keyId,
+      isShowBalanceKey: this.isShowBalance
+    }
+    const keyItemTemp = this.keyHiddenBalanceTemp.find((item) => {
+      return item.keyId === this.keySelected[0].keyId;
+    })
+    if (keyItemTemp) {
+      keyItemTemp.isShowBalanceKey = this.isShowBalance;
+    } else {
+      this.keyHiddenBalanceTemp.push(obj);
+    }
+  }
+
   public getKeySelected(keyId) {
+    const keyItem = this.keyHiddenBalanceTemp.find((item) => {
+      return item.keyId === keyId;
+    })
+    if (keyItem) {
+      this.isShowBalance = keyItem.isShowBalanceKey;
+    } else {
+      this.isShowBalance = true;
+    }
     this.keySelected = this.profileProvider.getWalletsFromGroup({ keyId: keyId });
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
     this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));

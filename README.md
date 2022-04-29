@@ -19,7 +19,7 @@ npm run prepare:abcpay
     + npm run build:android-release (.apk file in android/app/build/outputs/aps/release/app-release-unsigned.apk)
 -- Note: if build error Run --> : "npx jetify" to fix
 
-**### iOS**
+### iOS
 
 When your development environment is ready, run the `start:ios` package script.
 

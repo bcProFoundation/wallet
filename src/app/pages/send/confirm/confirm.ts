@@ -1689,17 +1689,15 @@ export class ConfirmPage {
   }
 
   private navigateBack(_redir?: string, walletId?: string, params?) {
-    this.router.navigate([''], { replaceUrl: true }).then(_ => {
-      if (this.wallet) {
-        this.router.navigate(['/wallet-details'], {
-          state: {
-            walletId: walletId ? walletId : this.wallet.credentials.walletId,
-            donationSupportCoins: this.donationSupportCoins,
-            finishParam: params
-          }
-        });
-      }
-    });
+    if (this.wallet) {
+      this.router.navigate(['/wallet-details'], {
+        state: {
+          walletId: walletId ? walletId : this.wallet.credentials.walletId,
+          donationSupportCoins: this.donationSupportCoins,
+          finishParam: params
+        }
+      });
+    }
   }
 
   public async chooseFeeLevel(): Promise<void> {

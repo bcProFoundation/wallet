@@ -2007,33 +2007,33 @@ export class ProfileProvider {
               walletClients,
               isSkipAskEncrypt: !!isSkipAskEncrypt
             }
-            this.addAndBindWalletClients(data)
-              .then(async (boundWalletClients) => {
-                try {
-                  for (let i = 0; i < _.size(boundWalletClients); i++) {
-                    const walletClient = boundWalletClients[i];
-                    this.setWalletBackup(walletClient.id);
-                    const address = await this.setAddress(walletClient);
-                    if (this.isSupportToken(walletClient)) {
-                      const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
-                      const etoken = this.addressProvider.encodeAddress('etoken', type, hash, address);
-                      walletClient.etokenAddress = etoken;
-                    }
-                  }
-                  return resolve(boundWalletClients);
-                } catch (error) {
-                  reject(error);
+            return data;
+          }).then(data => {
+            return this.addAndBindWalletClients(data)
+          })
+          .then(async (boundWalletClients) => {
+            try {
+              for (let i = 0; i < _.size(boundWalletClients); i++) {
+                const walletClient = boundWalletClients[i];
+                this.setWalletBackup(walletClient.id);
+                const address = await this.setAddress(walletClient);
+                if (this.isSupportToken(walletClient)) {
+                  const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+                  const etoken = this.addressProvider.encodeAddress('etoken', type, hash, address);
+                  walletClient.etokenAddress = etoken;
                 }
-              }).catch(e => {
-                reject(e);
-              });
+              }
+              return resolve(boundWalletClients);
+            } catch (error) {
+              reject(error);
+            }
           }).catch(e => {
             reject(e);
           });
       }).catch(e => {
         reject(e);
       });
-    });
+    })
   };
 
 
@@ -2072,7 +2072,7 @@ export class ProfileProvider {
 
 
   public createTokenWallets(opts, isSimpleFlow?: boolean): Promise<any> {
-    
+
     return new Promise((resolve, reject) => {
       this._createWallet(opts).then(data => {
         const key = data.key;

@@ -155,7 +155,6 @@ export class CustomAmountPage {
   }
 
   public getAmountCustom() {
-
     if (this.amountCustomForm.value.amountCustom === '') return;
     this.walletProvider.getAddress(this.wallet, false).then(addr => {
       this.address = this.walletProvider.getAddressView(
@@ -172,13 +171,16 @@ export class CustomAmountPage {
           this.address
         );
       }
-
-      this.qrAddress =
-        (protoAddr ? protoAddr : this.address) +
-        '?amount=' +
-        this.amountToShow;
+      if (this.amountToShow > 0) {
+        this.qrAddress =
+          (protoAddr ? protoAddr : this.address) +
+          '?amount=' +
+          this.amountToShow;
+      }
+      else {
+        this.qrAddress = this.address;
+      }
     });
-
   }
 
   private format(val: string): string {

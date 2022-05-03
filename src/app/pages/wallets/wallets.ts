@@ -64,7 +64,7 @@ export class WalletsPage {
   isShowBalance = true;
   keySelected = [];
   keyNameSelected;
-  
+
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -109,7 +109,7 @@ export class WalletsPage {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.collapsedGroups = {};
     this.collapsedToken = {};
-    this.zone = new NgZone({ enableLongStackTrace: false });
+    // this.zone = new NgZone({ enableLongStackTrace: false });
   }
 
   async handleScrolling(event) {
@@ -399,9 +399,19 @@ export class WalletsPage {
     }
   }
 
-  private _didEnter() {
-    this.updateTxps();
-    this.walletAudienceEvents();
+  private _didEnter(opts?) {
+      // if (opts && opts.keyId) {
+      //   this.callTest(opts.keyId);
+      // } else {
+       
+      // }
+      this.debounceSetWallets(undefined);
+      this.updateTxps();
+      this.walletAudienceEvents();
+  }
+
+  private onEnter(opts){
+    this.debounceSetWallets(opts);
   }
 
   private walletFocusHandler = opts => {
@@ -444,6 +454,8 @@ export class WalletsPage {
       this.events.subscribe('Local/WalletFocus', this.walletFocusHandler);
 
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
+
+      this.events.subscribe('Local/RefreshWallets', this.onEnter);
     };
     //Detect Change theme
     this.themeProvider.themeChange.subscribe(() => {
@@ -499,27 +511,32 @@ export class WalletsPage {
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
   };
 
-  private debounceSetWallets = _.debounce(
-    async () => {
-      this.profileProvider.setOrderedWalletsByGroup();
-      this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-      this.walletsGroups.forEach(walletArray => {
-        walletArray.forEach(wallet => {
-          this.events.publish('Local/WalletFocus', {
-            walletId: wallet.id,
-            force: true
-          });
-        });
+  private debounceSetWallets(keyId) {
+    console.log(keyId);
+    // _.debounce(
+    //   async () => {
+    //     this.profileProvider.setOrderedWalletsByGroup(keyId);
+    //     this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    //     this.walletsGroups.forEach(walletArray => {
+    //       walletArray.forEach(wallet => {
+    //         this.events.publish('Local/WalletFocus', {
+    //           walletId: wallet.id,
+    //           force: true
+    //         });
+    //       });
 
-      });
-      this.loadTokenWallet();
-    },
-    5000,
-    {
-      leading: true
-    }
-  );
-
+    //     });
+    //     this.loadTokenWallet();
+    //   },
+    //   5000,
+    //   {
+    //     leading: true
+    //   }
+    // );
+  }
+  private callTest(keyId){
+    console.log(keyId);
+  }
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {
       this.logger.error('Error no walletId in update History');
@@ -635,9 +652,9 @@ export class WalletsPage {
         this.events.publish('Local/UpdateTxps', {
           n: data.n
         });
-        this.zone.run(() => {
-          this.txpsN = data.n;
-        });
+        // this.zone.run(() => {
+        //   this.txpsN = data.n;
+        // });
       })
       .catch(err => {
         this.logger.error(err);
@@ -664,7 +681,7 @@ export class WalletsPage {
   }
 
   public doRefresh(refresher): void {
-    this.debounceSetWallets();
+    this.debounceSetWallets(null);
     setTimeout(() => {
       refresher.target.complete();
     }, 2000);

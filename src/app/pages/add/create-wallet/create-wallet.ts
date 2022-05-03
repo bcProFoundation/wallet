@@ -402,6 +402,10 @@ export class CreateWalletPage implements OnInit {
               if (wallet.isComplete()) {
                 this.router.navigate(['/wallet-details'], {
                   state: { walletId: wallet.credentials.walletId }
+                }).then(() => {
+                  this.events.publish('Local/RefreshWallets', {
+                    keyId: this.keyId
+                  });
                 });
               } else {
                 const copayerModal = this.modalCtrl.create({

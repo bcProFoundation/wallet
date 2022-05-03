@@ -183,7 +183,7 @@ export class BackupGamePage {
     );
     infoSheet.present();
     infoSheet.onDidDismiss(async () => {
-      if(this.navParamsData.isNewSharedWallet){
+      if (this.navParamsData.isNewSharedWallet) {
         const copayerModal = await this.modalCtrl.create({
           component: CopayersPage,
           componentProps: {
@@ -192,10 +192,30 @@ export class BackupGamePage {
           cssClass: 'wallet-details-modal'
         });
         await copayerModal.present();
+        copayerModal.onDidDismiss().then(() => {
+          this.router
+            .navigate(['/tabs/wallets'], {
+              replaceUrl: true
+            })
+            .then(() => {
+              this.events.publish('Local/RefreshWallets', {
+                keyId: this.keyId
+              });
+            });
+        }
+        )
       }
-      this.router.navigate(['']).then(() => {
-        this.events.publish('Local/FetchWallets');
-      });
+      else {
+        this.router
+          .navigate(['/tabs/wallets'], {
+            replaceUrl: true
+          })
+          .then(() => {
+            this.events.publish('Local/RefreshWallets', {
+              keyId: this.keyId
+            });
+          });
+      }
     });
   }
 

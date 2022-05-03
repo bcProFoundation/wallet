@@ -78,4 +78,11 @@ wallet-item-content {
     font-size: 14px;
     color: rgba(0, 30, 46, 0.6);
   }
+
+  .is-support-token {
+    margin-bottom: 0 !important;
+    &::part(native) {
+      border-radius: 8px 8px 0 0 !important;
+    }
+  }
 }

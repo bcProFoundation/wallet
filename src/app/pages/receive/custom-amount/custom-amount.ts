@@ -99,7 +99,7 @@ export class CustomAmountPage {
   ngOnInit() {
     this.logger.info('Loaded: CustomAmountPage');
     this.setAvailableUnits();
-    this.updateUnitUI();
+    this.changeUnit();
     this.processAmount();
     this.getAmountCustom();
   }

@@ -76,8 +76,8 @@ body {
     }
    
     ion-toolbar {
-        --padding-start: 2rem;
-        --padding-end: 2rem;
+        --padding-start: 2rem !important;
+        --padding-end: 2rem !important;
         min-height: 72px;
         display: flex;
         &.toolbar-desktop {
@@ -85,8 +85,8 @@ body {
             --padding-end: 0;
         }
         &.wide-header__title {
-            --padding-start: 1rem;
-            --padding-end: 1rem;
+            --padding-start: 1rem !important;
+            --padding-end: 1rem !important;
             padding: 0;
         }
         .header-container-desktop {
@@ -201,6 +201,7 @@ ion-back-button {
     --padding-end: 25px !important;
     margin: 0 !important;
     padding: 10px !important;
+    --background-hover: transparent !important;
     &.ios {
         margin: 0 !important;
         padding: 10px !important;
@@ -511,7 +512,10 @@ ion-header ion-toolbar {
     line-height: 24px;
     letter-spacing: 0.5px;
 }
-
+// Custom header class when scroll
+.add-box-shadow-scroll{
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.04), 0px 2px 6px 2px rgba(0, 0, 0, 0.08);
+}
 // Buttons
 // --------------------------------------------------
 .bottom-absolute {
@@ -2144,62 +2148,66 @@ ion-toolbar.header {
     &.bg {
         &-bch {
             background: url("../assets/img/wallet-details/bg-bch.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-bch.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-xec {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-xpi {
             background: url("../assets/img/wallet-details/bg-xpi.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xpi.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-doge {
             background: url("../assets/img/wallet-details/bg-doge.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-doge.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-ltc {
             background: url("../assets/img/wallet-details/bg-ltc.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-ltc.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-bcPro {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-EAT {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-ABCSLP {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-DoC {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
 
         &-default {
             background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
-            --background: url("../assets/img/wallet-details/bg-xec.svg") no-repeat 10% !important;
+            --background: none !important;
             background-size: cover !important;
         }
     }
+}
+
+.stroke-card {
+    border: 1px solid #e5eff7;
 }

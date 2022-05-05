@@ -117,6 +117,11 @@
   --slider-bg-button: rgba(126, 208, 255, 1);
   @include toolbar-button-color(var(--text-color-dark-theme));
 
+  // Custom header class when scroll
+  .add-box-shadow-scroll{
+    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
   // TODO: Remove text opacity from default styles
   page-bitpay-card ion-title .toolbar-title,
   .wallet-details-header ion-title .toolbar-title,
@@ -434,7 +439,7 @@
 
   ion-alert {
     .alert-wrapper {
-      background: var(--bg-color-dark-theme-2);
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
       color: var(--text-color-dark-theme) !important;
 
       .alert-title {
@@ -459,6 +464,10 @@
 
     .alert-message {
       color: var(--text-color-dark-theme) !important;
+    }
+
+    .alert-button {
+      color: #7ed0ff !important;
     }
   }
 
@@ -983,7 +992,12 @@
 
       info-sheet-template {
         .confirm-sheet {
-          background-color: var(--bg-color-dark-theme-2);
+          background: linear-gradient(
+              0deg,
+              rgba(126, 208, 255, 0.11),
+              rgba(126, 208, 255, 0.11)
+            ),
+            #001e2e;
           color: var(--text-color-dark-theme) !important;
 
           .sheet-title {
@@ -1131,10 +1145,10 @@
 
   pin-dots {
     .filled {
-      background-color: #00FFD3;
+      background-color: #00ffd3;
     }
     .circle {
-      border-color: #00FFD3;
+      border-color: #00ffd3;
     }
   }
 
@@ -1478,10 +1492,8 @@
       }
     }
 
-    ion-title {
-      &.key-title {
-        color: var(--color-on-primary-container-abcpay-dark) !important;
-      }
+    .key-title {
+      color: var(--color-on-primary-container-abcpay-dark) !important;
     }
 
     .balance {
@@ -1530,6 +1542,23 @@
             ion-icon {
               &[name='checkmark-circle'] {
                 color: var(--color-primary-abcpay-dark);
+              }
+            }
+          }
+          .sub-menu {
+            border-color: rgba(112, 129, 138, 0.38);
+            background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), rgb(0, 30, 46) !important;
+          }
+          sub-menu-account {
+            .edit-key-name {
+              ion-input {
+                  border: 2px solid var(--color-primary-abcpay-dark) !important;
+              }
+              ion-button {
+                  border-color: var(--color-primary-abcpay-dark) !important;
+                  ion-icon {
+                      color: #73DAA5 !important;
+                  }
               }
             }
           }
@@ -1626,6 +1655,10 @@
           color: rgba(237, 239, 240, 0.6);
         }
       }
+    }
+
+    .btn-custom {
+      --color: var(--color-primary-abcpay-dark);
     }
   }
 
@@ -1788,7 +1821,7 @@
     }
     .custom-txps-number {
       background: #ffb85d;
-      color: #482a00;
+      color: #482a00 !important;
     }
     .toolbar-background {
       background: var(--bg-color-dark-theme) !important;
@@ -1845,6 +1878,7 @@
     }
 
     .tx-history {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.08), rgba(126, 208, 255, 0.08)), #001e2e !important;
       .tx-history-header {
         &.item {
           background: linear-gradient(
@@ -1854,6 +1888,10 @@
             ),
             #001e2e !important;
         }
+      }
+
+      .tx-history-header--large {
+        border-color: rgba(112, 129, 138, 0.38) !important;
       }
 
       ion-item-group {
@@ -1994,6 +2032,10 @@
         color: var(--slateDark);
       }
     }
+
+    ion-infinite-scroll {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.08), rgba(126, 208, 255, 0.08)), #001e2e;
+    }
   }
 
   page-copayers {
@@ -2114,9 +2156,14 @@
       }
     }
 
-    ion-segment-button {
-      &::part(indicator-background) {
-        border-color: var(--color-primary-abcpay-dark) !important;
+    ion-segment {
+      background: var(--bg-color-dark-theme-8) !important;
+      ion-segment-button {
+        background: var(--bg-color-dark-theme-8) !important;
+        color: var(--text-color-dark-theme) !important;
+        &::part(indicator-background) {
+          border-color: var(--color-primary-abcpay-dark) !important;
+        }
       }
     }
   }
@@ -2246,6 +2293,7 @@
     }
 
     ion-checkbox {
+      --checkmark-color: var(--bg-color-dark-theme);
       .checkbox-icon {
         border-color: var(--color-primary);
         background-color: var(--bg-color-dark-theme);
@@ -2265,6 +2313,9 @@
   recipient-component {
     .recipient-header {
       color: var(--text-grey);
+      &.lines-top {
+        border-color: rgba(112, 129, 138, 0.38);
+      }
     }
     .recipient-content-wrapper {
       background: var(--bg-color-dark-theme-8);
@@ -2643,6 +2694,9 @@
     ion-segment-button {
       &::part(native) {
         color: #edeff0 !important;
+      }
+      &::part(indicator-background) {
+        background: #7ed0ff !important;
       }
     }
     .advance-button {
@@ -3154,6 +3208,7 @@
       background-color: var(--bg-pin-pad) !important;
       ion-item {
         ion-checkbox {
+          --checkmark-color: var(--bg-color-dark-theme);
           --background-checked: var(--color-primary-abcpay-dark);
         }
       }
@@ -3244,6 +3299,7 @@
         --background-checked: rgba(126, 208, 255, 1) !important;
         --border-color-checked: rgba(126, 208, 255, 1) !important;
         --border-color: rgba(237, 239, 240, 0.6) !important;
+        --checkmark-color: var(--bg-color-dark-theme);
       }
     }
   }
@@ -3349,7 +3405,7 @@
     ion-buttons {
       .close-tx-modal {
         ion-icon {
-          color: rgba(28, 55, 69, 0.6);
+          color: rgba(237, 239, 240, 0.6);
         }
       }
     }
@@ -3564,5 +3620,15 @@
   .back-transparent {
     background: transparent !important;
     --background: transparent !important;
-}
+  }
+
+  .stroke-card {
+    border-color: #072335 !important;
+  }
+
+  wallet-detail-card {
+    .input-edit-account-name {
+      border-color: var(--color-primary-abcpay-dark) !important;
+    }
+  }
 }

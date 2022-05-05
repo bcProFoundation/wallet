@@ -22,7 +22,7 @@ import { timer } from 'rxjs';
 import { RecipientModel } from './recipient.model';
 import { FilterProvider } from 'src/app/providers/filter/filter';
 import { RateProvider } from 'src/app/providers/rate/rate';
-import { ClipboardProvider, ThemeProvider } from 'src/app/providers';
+import { AddressBookProvider, ClipboardProvider, ThemeProvider } from 'src/app/providers';
 import { Token } from 'src/app/models/tokens/tokens.model';
 import { TransferToModalPage } from 'src/app/pages/send/transfer-to-modal/transfer-to-modal';
 
@@ -87,6 +87,9 @@ export class RecipientComponent implements OnInit {
   amountFromSelectedInput?: number;
 
   @Input()
+  index?: number;
+
+  @Input()
   isShowSelectInput?: boolean;
 
   @Input()
@@ -137,6 +140,7 @@ export class RecipientComponent implements OnInit {
     private clipboardProvider: ClipboardProvider,
     private themeProvider: ThemeProvider,
     private modalCtrl: ModalController,
+    private addressBookProvider: AddressBookProvider
   ) {
     this.darkThemeString = this.themeProvider.currentAppTheme === 'dark' ? 'dark' : 'light';
     if (this.router.getCurrentNavigation()) {
@@ -165,8 +169,8 @@ export class RecipientComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setAvailableUnits();
-    this.updateUnitUI();
+    this.setAvailableUnits(!!(this.token && this.token.tokenId));
+    this.updateUnitUI(!!(this.token && this.token.tokenId));
     if (this.recipient && this.recipient.toAddress && !this.isDonation) {
       this.searchValue = this.recipient.toAddress;
       this.processInput();
@@ -183,6 +187,24 @@ export class RecipientComponent implements OnInit {
     }
   }
 
+  public changeUnit(isToken?: boolean, isSendMax?: boolean): void {
+    if (this.fixedUnit) return;
+
+    this.unitIndex++;
+    if (this.unitIndex >= this.availableUnits.length) this.unitIndex = 0;
+
+    if (this.availableUnits[this.unitIndex].isFiat) {
+      // Always return to BTC... TODO?
+      this.altUnitIndex = 0;
+    } else {
+      this.altUnitIndex = _.findIndex(this.availableUnits, {
+        isFiat: true
+      });
+    }
+
+    this.expression = '';
+    this.updateUnitUI(!!isToken);
+  }
 
   private updateAddressHandler: any = data => {
     if (data.recipientId === this.recipient.id) {
@@ -190,18 +212,20 @@ export class RecipientComponent implements OnInit {
     }
   };
 
-  private updateUnitUI(): void {
+  private updateUnitUI(isToken?: boolean): void {
     this.unit = this.availableUnits[this.unitIndex].shortName;
     this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
-    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
-      .isFiat
-      ? this.currencyProvider.getPrecision(
-        this.availableUnits[this.altUnitIndex].id
-      )
-      : this.currencyProvider.getPrecision(this.unit.toLowerCase() as Coin);
-    this.unitToSatoshi = unitToSatoshi;
-    this.satToUnit = 1 / this.unitToSatoshi;
-    this.unitDecimals = unitDecimals;
+    if (!isToken) {
+      const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
+        .isFiat
+        ? this.currencyProvider.getPrecision(
+          this.availableUnits[this.altUnitIndex].id
+        )
+        : this.currencyProvider.getPrecision(this.unit.toLowerCase() as Coin);
+      this.unitToSatoshi = unitToSatoshi;
+      this.satToUnit = 1 / this.unitToSatoshi;
+      this.unitDecimals = unitDecimals;
+    }
     this.processAmount();
     this.logger.debug(
       'Update unit coin @amount unit:' +
@@ -211,23 +235,33 @@ export class RecipientComponent implements OnInit {
     );
   }
 
-  private setAvailableUnits(): void {
+  private setAvailableUnits(isToken?: boolean): void {
     this.availableUnits = [];
 
-    const parentWalletCoin = this.navParamsData.wallet
+    const parentWalletCoin = !isToken ? (this.navParamsData.wallet
       ? this.navParamsData.wallet.coin
-      : this.wallet && this.wallet.coin;
+      : this.wallet && this.wallet.coin)
+      : this.token.tokenInfo.coin;
 
-    for (const coin of this.currencyProvider.getAvailableCoins()) {
-      if (parentWalletCoin === coin || !parentWalletCoin) {
-        const { unitName, unitCode } = this.currencyProvider.getPrecision(coin);
-        this.availableUnits.push({
-          name: this.currencyProvider.getCoinName(coin),
-          id: unitCode,
-          shortName: unitName
-        });
+    if (isToken) {
+      this.availableUnits.push({
+        name: this.token.tokenInfo.name,
+        id: this.token.tokenId,
+        shortName: this.token.tokenInfo.symbol
+      });
+    } else {
+      for (const coin of this.currencyProvider.getAvailableCoins()) {
+        if (parentWalletCoin === coin || !parentWalletCoin) {
+          const { unitName, unitCode } = this.currencyProvider.getPrecision(coin);
+          this.availableUnits.push({
+            name: this.currencyProvider.getCoinName(coin),
+            id: unitCode,
+            shortName: unitName
+          });
+        }
       }
     }
+
 
     this.unitIndex = 0;
 
@@ -278,6 +312,11 @@ export class RecipientComponent implements OnInit {
 
     if (this.navParamsData.fixedUnit) {
       this.fixedUnit = true;
+    }
+    if (this.token) {
+      if (!this.rateProvider.getRate(this.fiatCode, this.token.tokenInfo.symbol)) {
+        this.fixedUnit = true;
+      }
     }
   }
 
@@ -332,6 +371,14 @@ export class RecipientComponent implements OnInit {
     );
   }
 
+  private fromFiatToken(val: number, tokenSymbol): number {
+    return parseFloat(
+      (
+        this.rateProvider.fromFiatToken(val, this.fiatCode, tokenSymbol)
+      ).toFixed(2)
+    );
+  }
+
   changeSelectedAmount(event) {
     if (this.isSelectedTotalAmout) {
       this.expression = this.amountFromSelectedInput;
@@ -358,7 +405,7 @@ export class RecipientComponent implements OnInit {
     return parseFloat(rateProvider.toString());
   }
 
-  public processAmount(): void {
+  public processAmount(isSendMax?: boolean): void {
     let formatedValue = this.format(this.expression);
     let result = this.evaluate(formatedValue);
     this.allowSend = this.onlyIntegers
@@ -381,7 +428,7 @@ export class RecipientComponent implements OnInit {
             true
           );
         } else {
-          this.alternativeAmount = result ? 'N/A' : null;
+          this.alternativeAmount = result ? 'N/A' : '0.00';
           this.allowSend = false;
         }
         if (this.isDonation) {
@@ -400,16 +447,24 @@ export class RecipientComponent implements OnInit {
     let amount = result;
     if (this.token) {
       const decimals = _.get(this.token, 'tokenInfo.decimals', undefined);
-      const unit = Math.pow(10, decimals)
-      if (decimals && result > 0) amount = (amount * unit).toFixed(0);
-      this.recipient.amount = parseInt(amount, 10);
-      const alternativeAmount = this.rateProvider.toFiatToken(
-        result,
-        this.wallet.cachedStatus.alternativeIsoCode,
-        this.token.tokenInfo.symbol
-      );
-      this.alternativeAmount = this.filterProvider.formatFiatAmount(alternativeAmount);
-      this.recipient.altAmountStr = this.alternativeAmount;
+      const unitDecimal = Math.pow(10, decimals);
+      if (!unit.isFiat) {
+        if (decimals && result > 0) amount = (amount * unitDecimal).toFixed(0);
+        this.recipient.amount = parseInt(amount, 10);
+        const alternativeAmount = this.rateProvider.toFiatToken(
+          result,
+          this.wallet.cachedStatus.alternativeIsoCode,
+          this.token.tokenInfo.symbol
+        );
+        this.alternativeAmount = this.filterProvider.formatFiatAmount(alternativeAmount);
+        this.recipient.altAmountStr = this.alternativeAmount;
+      }
+      else {
+        amount = this.fromFiatToken(amount, this.token.tokenInfo.symbol);
+        this.recipient.amount = parseInt((amount * unitDecimal).toFixed(0), 10);
+        this.alternativeAmount = this.filterProvider.formatFiatAmount(amount).toString();
+        this.recipient.altAmountStr = this.alternativeAmount;
+      }
     } else {
       amount = unit.isFiat
         ? (this.fromFiat(amount) * this.unitToSatoshi).toFixed(0)
@@ -421,6 +476,9 @@ export class RecipientComponent implements OnInit {
     }
     this.validAmount = result > 0;
     this.checkRecipientValid();
+    if (isSendMax) {
+      this.sendMaxEvent.emit(true);
+    }
   }
 
   public async processInput() {
@@ -448,6 +506,16 @@ export class RecipientComponent implements OnInit {
         const isValid = this.checkCoinAndNetwork(address);
         if (isValid) {
           this.validAddress = true;
+          let addressFinal = tokenAddress.trim().length > 0 ? tokenAddress : address;
+          this.addressBookProvider.get(addressFinal, this.wallet.network).then(
+            contactSelected => {
+              if (contactSelected) {
+                this.recipient.toAddress = contactSelected.address;
+                this.recipient.name = contactSelected.name;
+                this.recipient.recipientType = 'contact';
+              }
+            }
+          );
           this.recipient.toAddress = address;
           if (this.token && this.wallet.coin) this.recipient.toAddress = tokenAddress;
           this.redir();
@@ -562,13 +630,13 @@ export class RecipientComponent implements OnInit {
     });
   }
 
-  public cleanSearch(isSpecificRecipient?:boolean) {
+  public cleanSearch(isSpecificRecipient?: boolean) {
     this.recipient.toAddress = '';
     this.recipient.name = '';
     this.validAddress = false;
     this.recipient.recipientType = '';
     this.searchValue = '';
-    if(isSpecificRecipient){
+    if (isSpecificRecipient) {
       this.recipient.isSpecificAmount = false;
       this.expression = 0;
       this.processAmount();
@@ -601,12 +669,7 @@ export class RecipientComponent implements OnInit {
   }
 
   public sendMax(): void {
-    if (this.token) {
-      this.expression = this.token.amountToken;
-      this.processAmount()
-    } else {
-      this.sendMaxEvent.emit(true);
-    }
+    this.sendMaxEvent.emit(!!this.token);
   }
 
   public goToAddressBook() {

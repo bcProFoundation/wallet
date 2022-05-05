@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
+import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import * as _ from 'lodash';
 import { TokenInforPage } from 'src/app/pages/token-info/token-info';
@@ -46,11 +46,13 @@ export class WalletDetailCardComponent implements OnInit {
   private retryCount: number = 0;
   public bchAddrFormat: string;
   public bchCashAddress: string;
+  public isEditNameFlag: boolean = false;
 
   constructor(
     private appProvider: AppProvider,
     private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
+    private configProvider: ConfigProvider,
     private events: EventManagerService,
     private modalCtrl: ModalController,
     private profileProvider: ProfileProvider,
@@ -251,5 +253,28 @@ export class WalletDetailCardComponent implements OnInit {
       this.bwcErrorProvider.msg(error),
       infoSheetTitle
     );
+  }
+
+  public onClickOutSide(ev) {
+    if (!ev.target.className.includes('btn-edit-name')) {
+      this.isEditNameFlag = false;
+    }
+  }
+
+  public editAccountName() {
+    if (this.isEditNameFlag) {
+      let opts = {
+        aliasFor: {}
+      };
+      opts.aliasFor[
+        this.wallet.credentials.walletId
+      ] = this.wallet.name;
+      this.configProvider.set(opts);
+      this.events.publish('Local/ConfigUpdate', {
+        walletId: this.wallet.credentials.walletId
+      });
+      this.profileProvider.setOrderedWalletsByGroup();
+    }
+    this.isEditNameFlag = !this.isEditNameFlag;
   }
 }

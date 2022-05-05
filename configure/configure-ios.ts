@@ -17,8 +17,9 @@ const updateIos = async() => {
     const appTarget = project.ios?.getAppTarget();
     project.ios.setVersion(appTarget.name, null , configProvider.iOSBuildVersion);
     await project.ios?.updateInfoPlist(appTarget.name, null, {
-      NSCameraUsageDescription: '"AbcPay Wallet" Would Like to Access the Camera',
-      NSFaceIDUsageDescription: 'This allows you to securely sign into "AbcPay Wallet".'
+      NSCameraUsageDescription: 'This app needs Camera Permission to scan QR code.',
+      NSFaceIDUsageDescription: 'This allows you to securely sign into "AbcPay Wallet".',
+      NSUserNotificationsUsageDescription: 'Notification may include alerts, sounds and icon badges. These can be configured in Settings.'
     });
     // project.ios.setDisplayName(appTarget.name, 'Release', '')
     project.commit();

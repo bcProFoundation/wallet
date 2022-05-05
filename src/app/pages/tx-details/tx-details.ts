@@ -20,13 +20,17 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { PersistenceProvider } from 'src/app/providers/persistence/persistence';
-import { AppProvider } from 'src/app/providers';
+import { AddressBookProvider, AppProvider, TokenProvider } from 'src/app/providers';
+import { Router } from '@angular/router';
+import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { Token } from 'src/app/models/tokens/tokens.model';
 
 export interface TokenData {
   amountToken: string,
   tokenId: string,
   symbolToken: string,
-  name: string
+  name: string,
+  addressToShow: string
 }
 
 @Component({
@@ -54,8 +58,13 @@ export class TxDetailsModal {
   public txsUnsubscribedForNotifications: boolean;
   public txMemo: string;
   public tokenData: TokenData;
+  public token: Token;
   public isNegative: boolean;
   public currentTheme;
+  public fiatRateStrToken;
+
+  public addressbook = [];
+
   constructor(
     private configProvider: ConfigProvider,
     private currencyProvider: CurrencyProvider,
@@ -77,6 +86,9 @@ export class TxDetailsModal {
     private viewCtrl: ModalController,
     private persistenceProvider: PersistenceProvider,
     private appProvider: AppProvider,
+    private router: Router,
+    private tokenProvider: TokenProvider,
+    private addressbookProvider: AddressBookProvider,
   ) { }
   
   ngOnInit() {
@@ -87,6 +99,7 @@ export class TxDetailsModal {
     this.title = this.translate.instant('Transaction');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.tokenData = this.navParams.data.tokenData;
+    this.token = this.navParams.data.token;
     this.color = this.wallet.color;
     this.copayerId = this.wallet.credentials.copayerId;
     this.isShared = this.wallet.credentials.n > 1;
@@ -104,6 +117,15 @@ export class TxDetailsModal {
         value: res
       };
     });
+
+    this.addressbookProvider
+      .list(this.wallet.network)
+      .then(ab => {
+        this.addressbook = ab;
+      })
+      .catch(err => {
+        this.logger.error(err);
+      });
 
     this.updateTx();
   }
@@ -316,7 +338,9 @@ export class TxDetailsModal {
         this.initActionList();
 
         this.updateFiatRate();
-
+        if(this.token){
+          this.getFiatRateStrToken();
+        }
         if (this.currencyProvider.isUtxoCoin(this.wallet.coin)) {
           this.walletProvider
             .getLowAmount(this.wallet)
@@ -347,6 +371,33 @@ export class TxDetailsModal {
           );
         }
       });
+  }
+
+  getContactName(address: string) {
+    const existsContact = _.find(this.addressbook, c => c.address === address);
+    if (existsContact) return existsContact.name;
+    return null;
+  }
+
+  public getFiatRateStrToken() {
+    const token = {
+      amountToken: this.btx?.amountToken,
+      tokenInfo: {
+        symbol: this.btx?.symbolToken
+      }
+    }
+    const alternativeBalanceToken = this.tokenProvider.getAlternativeBalanceToken(token, this.wallet);
+    let rate = this.rateProvider.getRate(this.wallet.cachedStatus.alternativeIsoCode, token.tokenInfo.symbol);
+    if (!rate) {
+      rate = 0;
+    }
+    this.fiatRateStrToken =  
+            DecimalFormatBalance(alternativeBalanceToken) +
+            ' ' +
+            this.wallet.cachedStatus.alternativeIsoCode +
+            ' @ ' + DecimalFormatBalance(rate) + ' ' +
+            this.wallet.cachedStatus.alternativeIsoCode + ' per ' +
+            token.tokenInfo.symbol.toUpperCase();
   }
 
   public async saveMemoInfo(): Promise<void> {
@@ -464,5 +515,16 @@ export class TxDetailsModal {
 
   close() {
     this.viewCtrl.dismiss();
+  }
+
+  sendBack(btx) {
+    this.viewCtrl.dismiss();
+    this.router.navigate(['/send-page'], {
+      state: {
+        walletId: this.wallet.id,
+        toAddress: btx.address || (btx.addressTo && btx.addressTo !== 'false') ? btx.addressTo : false || (this.tokenData && this.tokenData.addressToShow !== 'false' ? this.tokenData.addressToShow : btx.inputAddresses[0]) || btx.inputAddresses[0],
+        token: this.token
+      }
+    });
   }
 }

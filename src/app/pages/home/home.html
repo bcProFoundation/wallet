@@ -5,7 +5,7 @@
       <img src="../../../assets/img/abcpay-text.svg" alt="">
     </div>
   </ion-toolbar>
-  <ion-toolbar class="toolbar-icon-view-mobile">
+  <ion-toolbar class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-title>
       <div class="home-icon">
         <img (click)="openSettingPage()" src="assets/img/home-setting-icon-{{currentTheme}}.svg">
@@ -18,7 +18,7 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content scrollEvents="true" #scrollArea>
+<ion-content [scrollEvents]="true" (ionScroll)="handleScrolling($event)" #scrollArea>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -102,7 +102,7 @@
   <!-- TODO: temporary hide the donation feature. Later, adding feature in settings to disable / enable this feature -->
   <!-- <page-lotus-donation-card></page-lotus-donation-card> -->
 
-  <div *ngIf="showTotalBalance" class="total-amount-container">
+  <div *ngIf="showTotalBalance" class="total-amount-container stroke-card">
     <div class="total-amount">
       <div class="section-header" translate>Total cash value</div>
       <div class="total-amount-value">

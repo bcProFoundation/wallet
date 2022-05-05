@@ -1,22 +1,22 @@
 <ion-header class="bp-header">
-  <ion-toolbar>
+  <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref= "/"></ion-back-button>
     </ion-buttons>
     <ion-title>
       <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
-        {{canSign ? ('Key Settings' | translate) : ('Read Only Wallets' | translate) }}
+        {{canSign ? ('Key Settings' | translate) : ('Read Only Accounts' | translate) }}
       </div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollArea scrollEvents="true" forceOverflow="false" class="add-bottom-safe-area">
+<ion-content #scrollArea scrollEvents="true" forceOverflow="false" class="add-bottom-safe-area" (ionScroll)="handleScrolling($event)">
   <div class="wrapper">
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
       <ion-toolbar class="wide-header__title">
         <expandable-header-primary>
-          {{canSign ? ('Key Settings' | translate) : ('Read Only Wallets' | translate) }}
+          {{canSign ? ('Key Settings' | translate) : ('Read Only Accounts' | translate) }}
         </expandable-header-primary>
       </ion-toolbar>
     </expandable-header>
@@ -24,7 +24,7 @@
     <label-tip class="no-arrowhead" *ngIf="!canSign" type="warn">
       <span label-tip-title translate>No Private Key</span>
       <div label-tip-body translate>
-        Read Only wallets don't include the private key.
+        Read Only accounts don't include the private key.
       </div>
     </label-tip>
 
@@ -42,23 +42,34 @@
         <ion-label>
           {{'Contained Accounts' | translate}}
         </ion-label>
-        <ion-icon (click)="openLink('https://givelotus.org')" slot="end" name="help-circle"></ion-icon>
+        <ion-button fill="clear" class="btn-drag" slot="end" *ngIf="!showReorder && wallets?.length > 1" (click)="reorder()">
+          <ion-icon src="assets/img/key-drag-dark.svg"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" class="btn-drag" slot="end" *ngIf="showReorder" (click)="reorder()">
+          {{'Done' | translate}}
+        </ion-button>
       </ion-item-divider>
-      <ion-item button *ngFor="let wallet of wallets" (click)="openWalletSettings(wallet.id)">
-        <coin-icon [coin]="wallet.coin" [network]="wallet.network" [noBackground]="true" slot="start"></coin-icon>
-        <ion-label>
-          <div class="main-label">
-            {{wallet.name}}
-          </div>
-        </ion-label>
-        <ion-note *ngIf="wallet.hidden" slot="end">
-          {{'Hidden'|translate}}
-        </ion-note>
-        <ion-reorder slot="end"></ion-reorder>
-      </ion-item>
+      <ion-reorder-group [disabled]="!showReorder" (ionItemReorder)="reorderAccounts($event)">
+        <ion-item [detail]="showReorder ? false : true" button *ngFor="let wallet of wallets" (click)="openWalletSettings(wallet.id)">
+          <coin-icon [coin]="wallet.coin" [network]="wallet.network" [noBackground]="true" slot="start"></coin-icon>
+          <ion-label>
+            <div class="main-label">
+              {{wallet.name}}
+            </div>
+          </ion-label>
+          <ion-note *ngIf="wallet.hidden" slot="end">
+            {{'Hidden'|translate}}
+          </ion-note>
+          <ion-reorder slot="end">
+            <ion-button fill="clear" class="btn-drag">
+              <ion-icon src="assets/img/key-drag-dark.svg"></ion-icon>
+            </ion-button>
+          </ion-reorder>
+        </ion-item>
+      </ion-reorder-group>
       <ion-item button class="create-button item-end" *ngIf="wallets && wallets[0].canAddNewAccount" (click)="goToAddPage()">
         <ion-label>
-          {{'Create a new wallet' | translate }}
+          {{'Create a new account' | translate }}
         </ion-label>
       </ion-item>
 
@@ -105,7 +116,7 @@
             
       <ion-item detail="false" class="create-button" button *ngIf="!needsBackup" (click)="syncWallets()">
         <ion-label>
-          <span translate>Sync wallets across devices</span>
+          <span translate>Sync accounts across devices</span>
         </ion-label>
       </ion-item>
       

@@ -10,12 +10,16 @@ page-send {
     color: var(--color-light-theme);
   }
 
+  .wide-header__title {
+    --min-height: 72px;
+  }
+
   .content-wrapper {
     padding: 0 1rem 1rem 1rem;
 
     .available-content {
       font-size: 14px;
-      padding-top: 1rem;
+      margin-bottom: 2rem;
 
       .available-letter {
         color: rgba(0, 30, 46, 0.6);
@@ -37,7 +41,7 @@ page-send {
   }
 
   .prompt-user-fullscreen-container {
-    height: 82vh;
+    height: 65vh;
   }
 
   .no-wallet-message {

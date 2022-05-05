@@ -24,6 +24,7 @@ import { TokenInforPage } from "../token-info/token-info";
 import { TxDetailsModal } from "../tx-details/tx-details";
 import { SearchTxModalPage } from "../wallet-details/search-tx-modal/search-tx-modal";
 const HISTORY_SHOW_LIMIT = 10;
+const configProvider = require('src/assets/appConfig.json')
 const MIN_UPDATE_TIME = 1000;
 
 interface UpdateWalletOptsI {
@@ -45,8 +46,8 @@ export class TokenDetailsPage {
   public tokenData;
   public amountToken;
   public selectedTheme;
-  public showNoTransactionsYetMsg;
-  public updateStatusError;
+  public showNoTransactionsYetMsg = false;
+  public updateStatusError = false;
   public zone;
   public currentTheme;
   private currentPage: number = 0;
@@ -57,7 +58,8 @@ export class TokenDetailsPage {
   public updatingTxHistoryProgress: number = 0;
   public addressbook = [];
   public finishParam: any;
-
+  public isScroll = false;
+  public isShowZeroState = false;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -99,7 +101,15 @@ export class TokenDetailsPage {
       .catch(err => {
         this.logger.error(err);
       });
+  }
 
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
   }
 
   ionViewDidEnter() {
@@ -195,12 +205,22 @@ export class TokenDetailsPage {
   }
 
   public goToSendPage() {
-    this.router.navigate(['/send-page'], {
-      state: {
-        walletId: this.wallet.id,
-        token : this.token
-      }
-    });
+    if (this.wallet.cachedStatus.availableBalanceSat === 0 || this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'no-amount-xec',
+        { secondBtnGroup: true,
+          isShowTitle: false
+        }
+      );
+      infoSheet.present();
+    } else {
+      this.router.navigate(['/send-page'], {
+        state: {
+          walletId: this.wallet.id,
+          token : this.token
+        }
+      });
+    }
   }
 
   public async openSearchModal(): Promise<void> {
@@ -398,7 +418,13 @@ export class TokenDetailsPage {
         }
       });
   }
-  
+
+  getContactName(address: string) {
+    const existsContact = _.find(this.addressbook, c => c.address === address);
+    if (existsContact) return existsContact.name;
+    return null;
+  }
+
 
   private showHistory(loading?: boolean) {
     if (!this.wallet.completeHistory) return;
@@ -410,6 +436,7 @@ export class TokenDetailsPage {
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });
+    this.isShowZeroState = true;
     if (loading) this.currentPage++;
   }
 
@@ -478,14 +505,6 @@ export class TokenDetailsPage {
     return new Date(number);
   }
 
-  shouldShowSpinner() {
-    return (
-      (this.updatingTxHistory) &&
-      !this.updateStatusError &&
-      !this.updateTxHistoryError
-    );
-  }
-
   public createdWithinPastDay(time) {
     return this.timeProvider.withinPastDay(time);
   }
@@ -515,8 +534,10 @@ export class TokenDetailsPage {
             amountToken : tx.amountToken,
             tokenId: tx.tokenId,
             symbolToken: tx.symbolToken,
-            name: tx.name
-          }
+            name: tx.name,
+            addressToShow: tx.addressTo
+          },
+          token: this.token,
         }
       }).then(res => {
         res.present();

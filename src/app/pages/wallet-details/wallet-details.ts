@@ -81,6 +81,8 @@ export class WalletDetailsPage {
   public selectedTheme;
   public navPramss: any;
   public finishParam: any;
+  public isScroll = false;
+
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -172,6 +174,15 @@ export class WalletDetailsPage {
     this.blockexplorerUrlTestnet = defaults.blockExplorerUrlTestnet[this.wallet.coin];
   }
 
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
+  }
+
   async presentToast() {
     const toast = await this.toastController.create({
       message: this.finishParam.finishText,
@@ -218,7 +229,7 @@ export class WalletDetailsPage {
   }
 
   ionViewWillEnter() {
-    this.loadingProvider.autoLoader();
+    this.loadingProvider.simpleLoader();
     this.hiddenBalance = this.wallet.balanceHidden;
     this.backgroundColor = this.themeProvider.getThemeInfo().walletDetailsBackgroundStart;
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
@@ -340,6 +351,9 @@ export class WalletDetailsPage {
       this.groupedHistory = this.groupHistory(this.history);
     });
     if (loading) this.currentPage++;
+    setTimeout(() => {
+      this.loadingProvider.dismissLoader();
+    }, 1000);
   }
 
   updateAddressToShowToken(tx) {

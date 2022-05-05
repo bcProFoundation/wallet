@@ -5,7 +5,7 @@
       <img src="../../../assets/img/abcpay-text.svg" alt="">
     </div>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="tabs/wallets"></ion-back-button>
     </ion-buttons>
@@ -15,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
   <div class="wrapper">
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
       <ion-toolbar class="wide-header__title">
@@ -109,10 +109,10 @@
           {{profileProvider.getWalletGroup(walletsGroup[0].keyId).name}}
         </ion-label>
         <ion-note *ngIf="walletsGroup.length == 1" slot="end">
-          {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength: walletsGroup.length} }}
+          {{'{walletsGroupLength} Account' | translate:{walletsGroupLength: walletsGroup.length} }}
         </ion-note>
         <ion-note *ngIf="walletsGroup.length > 1" slot="end">
-          {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength: walletsGroup.length} }}
+          {{'{walletsGroupLength} Accounts' | translate:{walletsGroupLength: walletsGroup.length} }}
         </ion-note>
       </ion-item>
 
@@ -121,10 +121,10 @@
           {{'Read Only' | translate}}
         </ion-label>
         <ion-note *ngIf="readOnlyWalletsGroup.length == 1" slot="end">
-          {{'{walletsGroupLength} Wallet' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
+          {{'{walletsGroupLength} Account' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
         </ion-note>
         <ion-note *ngIf="readOnlyWalletsGroup.length > 1" slot="end">
-          {{'{walletsGroupLength} Wallets' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
+          {{'{walletsGroupLength} Accounts' | translate:{walletsGroupLength: readOnlyWalletsGroup.length} }}
         </ion-note>
       </ion-item>
 

@@ -50,6 +50,10 @@ export class WalletsPage {
   private onPauseSubscription: Subscription;
   public showReorder: boolean = false;
   public currentCurrency;
+  public isScroll = false;
+  public isDisableBtnMenu: boolean = false;
+  public symbolCurrency;
+  public keyHiddenBalanceTemp = [];
   listEToken = ['EAT', 'DoC', 'bcPro'];
   donationSupportCoins = [];
   navParamsData;
@@ -58,9 +62,9 @@ export class WalletsPage {
   currentTheme;
   totalBalanceKey;
   isShowBalance = true;
-  isEditKeyName = false;
   keySelected = [];
   keyNameSelected;
+  
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -83,18 +87,38 @@ export class WalletsPage {
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider
   ) {
+    let config = this.configProvider.get();
+    const currentCurrency = config.wallet.settings.alternativeIsoCode;
+    switch (currentCurrency) {
+      case 'VND':
+        this.symbolCurrency = '₫';
+        break;
+      case 'HNL':
+        this.symbolCurrency = 'L';
+        break;
+      default:
+        this.symbolCurrency = '$';
+    }
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : undefined;
     }
     const availableChains = this.currencyProvider.getAvailableChains();
-    let config = this.configProvider.get();
     this.currentCurrency = config.wallet.settings.alternativeIsoCode;
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.collapsedGroups = {};
     this.collapsedToken = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
+  }
+
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
   }
 
   getWalletGroup(name: string) {
@@ -217,15 +241,40 @@ export class WalletsPage {
     });
   }
 
-  public editKeyName() {
-    this.isEditKeyName = false;
+  public changShowBalanceKey() {
+    let obj = {};
+    this.isShowBalance = !this.isShowBalance;
+    obj = {
+      keyId: this.keySelected[0].keyId,
+      isShowBalanceKey: this.isShowBalance
+    }
+    const keyItemTemp = this.keyHiddenBalanceTemp.find((item) => {
+      return item.keyId === this.keySelected[0].keyId;
+    })
+    if (keyItemTemp) {
+      keyItemTemp.isShowBalanceKey = this.isShowBalance;
+    } else {
+      this.keyHiddenBalanceTemp.push(obj);
+    }
   }
 
   public getKeySelected(keyId) {
+    const keyItem = this.keyHiddenBalanceTemp.find((item) => {
+      return item.keyId === keyId;
+    })
+    if (keyItem) {
+      this.isShowBalance = keyItem.isShowBalanceKey;
+    } else {
+      this.isShowBalance = true;
+    }
     this.keySelected = this.profileProvider.getWalletsFromGroup({ keyId: keyId });
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
     this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));
     this.loadTokenWallet();
+  }
+
+  public handleBtnSubMenu(isDisable) {
+    return isDisable ? this.isDisableBtnMenu = true : this.isDisableBtnMenu = false;
   }
 
   private getTotalBalanceKey(key) {

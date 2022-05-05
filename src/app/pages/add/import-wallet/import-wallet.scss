@@ -22,6 +22,9 @@ page-import-wallet {
       margin: 0;
       --background: transparent !important;
     }
+    mat-form-field{
+      margin-top: 2rem;
+    }
   }
   .final-list-custom{
     border-radius: 24px;
@@ -58,11 +61,7 @@ page-import-wallet {
     margin: 0px 16px;
     border-radius: 0px 0px 8px 8px;
     background: #FAFAFB;
-    padding-bottom: 1rem;
-    margin-bottom: 7rem;
-    &.ios {
-
-    }
+    margin-bottom: 9rem;
   
     ion-list{
       background: #FAFAFB;
@@ -89,6 +88,9 @@ page-import-wallet {
           --padding-end: 10px;
           --inner-padding-end: 0;
           border-radius: 4px;
+          ion-select {
+            max-width: 100vw;
+          }
         }
         &.shared-account-item {
           margin: 0 1rem;
@@ -124,6 +126,9 @@ page-import-wallet {
         letter-spacing: 0.1px;
         &::part(native){
           color: #001E2E;
+        }
+        &::part(indicator-background){
+          background: #00658D;
         }
       }
     }
@@ -169,7 +174,7 @@ page-import-wallet {
     width: 92%;
     top: 0;
     left: 0;
-    margin: 20px 4%;
+    margin: 2rem 4%;
     // height: $upload-box-height - 40px;
     color: #999;
     font-weight: bold;

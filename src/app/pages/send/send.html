@@ -8,7 +8,8 @@
     'bg-EAT': token?.tokenInfo?.symbol == 'EAT',
     'bg-bcPro': token?.tokenInfo?.symbol == 'bcPro',
     'bg-DoC': token?.tokenInfo?.symbol == 'DoC',
-    'bg-ABCSLP': token?.tokenInfo?.symbol == 'ABCSLP'
+    'bg-ABCSLP': token?.tokenInfo?.symbol == 'ABCSLP',
+    'add-box-shadow-scroll': isScroll
     }">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="/">
@@ -26,7 +27,7 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content scrollEvents="true" #scrollArea>
+<ion-content scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
   <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
     <ion-toolbar class="wide-header__title" tappable>
       <expandable-header-primary>
@@ -49,8 +50,8 @@
       <div>
         <div class="prompt-user">
           <div class="title-icon larger-icon">
-            <img *ngIf="wallet.coin !== 'doge'" src="assets/img/ghost-straight-face.svg" />
-            <img *ngIf="wallet.coin === 'doge'" src="assets/img/sad-doge.svg" />
+            <img *ngIf="wallet.coin !== 'xpi'" src="assets/img/wallet-details/ghost-{{currentTheme}}.svg"/>
+            <img *ngIf="wallet.coin === 'xpi'" src="assets/img/wallet-details/pond-{{currentTheme}}.svg" />
           </div>
           <div class="title-info">
             <span translate>Mmm...</span>
@@ -69,11 +70,13 @@
       </div>
     </div>
     <div *ngIf="!shouldShowZeroState()">
-      <p>{{search}}</p>
-      <recipient-component *ngFor="let recipient of listRecipient" [wallet]="wallet" [recipient]="recipient"
-        (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
-        [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax()">
-      </recipient-component>
+      <p *ngIf="search">{{search}}</p>
+      <ng-container *ngFor="let recipient of listRecipient; let i = index">
+        <recipient-component [index]="i" [wallet]="wallet" [recipient]="recipient"
+          (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
+          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)">
+        </recipient-component>
+      </ng-container>
     </div>
   </div>
 </ion-content>

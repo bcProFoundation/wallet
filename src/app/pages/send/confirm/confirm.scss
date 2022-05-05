@@ -57,6 +57,10 @@ page-confirm {
 
       .fee-details {
         color: var(--color-error);
+        ion-icon{
+          margin: unset;
+          padding: unset;
+        }
       }
     }
 
@@ -385,7 +389,7 @@ page-confirm {
   }
 
   coin-icon {
-    ion-icon {
+    img{
       margin: 0;
       width: 20px;
       height: 20px;

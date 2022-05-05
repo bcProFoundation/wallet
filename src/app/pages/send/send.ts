@@ -39,6 +39,7 @@ export class SendPage {
   public invalidAddress: boolean;
   public validDataFromClipboard;
   private onResumeSubscription: Subscription;
+  public isScroll = false;
   private pageMap = {
     AddressbookAddPage: '/address-book-add',
     AmountPage: '/amount',
@@ -49,7 +50,7 @@ export class SendPage {
     PaperWalletPage: '/paper-wallet',
     WalletDetailsPage: '/wallet-details'
   };
-
+  public currentTheme;
   isDonation: boolean;
   titlePage: string;
   dataDonation: any;
@@ -94,6 +95,7 @@ export class SendPage {
       address: 0,
       isValid: false
     }))
+    this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.titlePage = "Send " + (this.wallet.coin as String).toUpperCase();
@@ -118,6 +120,15 @@ export class SendPage {
     this.onResumeSubscription = this.plt.resume.subscribe(() => {
       this.setDataFromClipboard();
     });
+  }
+
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
   }
 
   ngOnInit() {
@@ -277,14 +288,15 @@ export class SendPage {
     this.isShowDelete = this.listRecipient.length > 1;
   }
 
-  private goToConfirmToken() {
+  private goToConfirmToken(isSendMax?: boolean) {
     const recipient = this.listRecipient[0];
     this.router.navigate(['/confirm-token'], {
       state: {
         amount: recipient.amount,
         toAddress: recipient.toAddress,
         token: this.token,
-        walletId: this.wallet.credentials.walletId
+        walletId: this.wallet.credentials.walletId,
+        useSendMax: !!isSendMax
       }
     });
   }
@@ -351,21 +363,25 @@ export class SendPage {
     }
   }
 
-  sendMax() {
+  sendMax(isToken: boolean) {
     const recipient = this.listRecipient[0];
-    this.router.navigate(['/confirm'], {
-      state: {
-        walletId: this.wallet.credentials.walletId,
-        recipientType: recipient.recipientType,
-        amount: recipient.amount,
-        currency: recipient.currency,
-        coin: this.wallet.coin,
-        network: this.wallet.network,
-        useSendMax: true,
-        toAddress: recipient.toAddress,
-        name: recipient.name
-      }
-    });
+    if (!isToken) {
+      this.router.navigate(['/confirm'], {
+        state: {
+          walletId: this.wallet.credentials.walletId,
+          recipientType: recipient.recipientType,
+          amount: recipient.amount,
+          currency: recipient.currency,
+          coin: this.wallet.coin,
+          network: this.wallet.network,
+          useSendMax: true,
+          toAddress: recipient.toAddress,
+          name: recipient.name
+        }
+      });
+    } else {
+      this.goToConfirmToken(true);
+    }
   }
 
   checkBeforeGoToConfirmPage() {

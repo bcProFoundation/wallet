@@ -7,12 +7,14 @@
     'bg-ltc': wallet.coin == 'ltc'
     }">
     <div class="wallet-card-header">
-      <div class="wallet-icon">
+      <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+      class="wallet-icon">
         <div class="icon">
           <img src="assets/img/currencies/{{wallet.coin}}.svg" alt="">
         </div>
-        <div class="wallet-name">
-          <p class="name">{{wallet?.name}}</p>
+        <div (clickOutside)="onClickOutSide($event)" class="wallet-name">
+          <p *ngIf="!isEditNameFlag" class="name">{{wallet?.name}}</p>
+          <ion-input [autofocus]="true" class="input-edit-account-name" *ngIf="isEditNameFlag" [(ngModel)]="wallet.name"></ion-input>
           <div class="wallet-info">
             <span
               *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()"
@@ -27,6 +29,15 @@
               <img src="assets/img/wallet-details/wallet-info-dark.svg">
             </div>
           </div>
+        </div>
+        <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+          class="edit-account-name">
+          <ion-button class="btn-edit-name" *ngIf="!isEditNameFlag" fill="clear" (click)="isEditNameFlag = !isEditNameFlag">
+            <ion-icon src="assets/img/key-edit-dark.svg"></ion-icon>
+          </ion-button>
+          <ion-button class="btn-done-edit" *ngIf="isEditNameFlag" fill="clear" (click)="editAccountName()">
+            <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+          </ion-button>
         </div>
       </div>
       <div (click)="goToReceivePage()" class="ngx-qrcode-address" *ngIf="address">

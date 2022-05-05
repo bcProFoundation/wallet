@@ -1,4 +1,8 @@
 page-create-wallet {
+  .custom-expandable-header-primary{
+    top: 1rem;
+    position: relative;
+  }
   .line-divider {
     margin: 0 !important;
     border: none !important;
@@ -186,5 +190,8 @@ page-create-wallet {
   }
   .last-item {
     margin-left: auto;
+  }
+  .wide-header__title {
+    --min-height: 72px;
   }
 }

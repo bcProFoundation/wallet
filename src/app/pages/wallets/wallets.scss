@@ -233,25 +233,12 @@ page-wallets {
 
     ion-content {
       --background: var(--bg-color-inner-item-light-theme) !important;
+      width: auto !important;
 
       ion-list {
-        ion-item {
-          --padding-start: 1rem;
-          --padding-top: 0.5rem;
-          --padding-bottom: 0.5rem;
-          --color: var(--color-light-on-background-theme);
-          --background: var(--bg-color-inner-item-light-theme) !important;
+        .sub-menu {
           border-bottom: 1px solid rgba(112, 129, 138, 0.16);
-          font-size: 14px;
-
-          ion-icon {
-            &[name="checkmark-circle"] {
-              width: 20px;
-              height: 20px;
-              color: var(--color-primary);
-              margin-right: 1rem;
-            }
-          }
+          background: var(--bg-color-inner-item-light-theme) !important;
         }
       }
     }
@@ -330,5 +317,20 @@ page-wallets {
     --inner-padding-end: 0 !important;
     border: 1px solid #7ED0FF;
     border-radius: 4px;
+  }
+
+  .key-title {
+    margin: 0;
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: break-spaces;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #fff;
   }
 }

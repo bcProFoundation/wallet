@@ -48,7 +48,7 @@ export class JoinWalletPage {
   public isOpenSelector: boolean;
   public pairedWallet;
   public currentTheme: string;
-
+  public isScroll = false;
   private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
   private regex: RegExp;
@@ -123,6 +123,15 @@ export class JoinWalletPage {
     this.events.subscribe('Local/JoinScan', this.updateCodeHandler);
   }
 
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
+  }
+  
   ngOnInit() {
     this.logger.info('Loaded: JoinWalletPage');
   }
@@ -340,7 +349,7 @@ export class JoinWalletPage {
     if (setSeed && !opts.mnemonic && !opts.extendedPrivateKey) {
       const title = this.translate.instant('Error');
       const subtitle = this.translate.instant(
-        'Please enter the wallet recovery phrase'
+        'Please enter the account recovery phrase'
       );
       this.errorsProvider.showDefaultError(subtitle, title);
       return;

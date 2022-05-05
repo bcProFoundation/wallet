@@ -1,4 +1,4 @@
-<ion-list *ngIf="tx.hasMultiplesOutputs" lines="none" class="bp-list tx-detail-list">
+<ion-list *ngIf="tx.hasMultiplesOutputs" lines="none" class="bp-list tx-detail-list stroke-card">
   <ion-item class="no-margin">
     <ion-label class="summary-item" slot="start">Send to</ion-label>
     <ion-label class="summary-item" slot="end">Amount</ion-label>
@@ -34,8 +34,8 @@
   </ion-label>
   <ion-note slot="end">
     <div class="payment-proposal-to" *ngIf="!tx.hasMultiplesOutputs && !tx.misunderstoodOutputs">
-      <div copy-to-clipboard="{{ tx.outputs[0].addressToShow ? tx.outputs[0].addressToShow : tx.outputs[0].address }}">
-        <span *ngIf="!tx.outputs[0].contactName">{{ tx.customData?.toWalletName || ((tx.outputs[0].addressToShow ? tx.outputs[0].addressToShow : tx.outputs[0].address).slice(-8))}}</span>
+      <div copy-to-clipboard="{{ (tx.outputs[0].addressToShow ? ( tx.outputs[0].addressToShow === 'Unparsed address' ? tx.inputAddresses[0] :  tx.outputs[0].addressToShow ) : tx.outputs[0].address ) }}">
+        <span *ngIf="!tx.outputs[0].contactName">{{ tx.customData?.toWalletName || ((tx.outputs[0].addressToShow ? ( tx.outputs[0].addressToShow === 'Unparsed address' ? tx.inputAddresses[0] :  tx.outputs[0].addressToShow ) : tx.outputs[0].address).slice(-8))}}</span>
         <span class="ellipsis" *ngIf="tx.outputs[0].contactName">{{ tx.outputs[0].contactName }}</span>
       </div>
     </div>

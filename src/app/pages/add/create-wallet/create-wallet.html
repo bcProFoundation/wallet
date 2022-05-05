@@ -4,7 +4,8 @@
     'bg-xec': coin == 'xec',
     'bg-xpi': coin == 'xpi',
     'bg-doge': coin == 'doge',
-    'bg-ltc': coin == 'ltc'
+    'bg-ltc': coin == 'ltc',
+    'add-box-shadow-scroll': isScroll
     }">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="/">
@@ -13,28 +14,28 @@
 
     <ion-title class="toolbar-title">
       <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
-        {{ 'Create {coinLabel} Wallet' | translate: {coinLabel: coin.toUpperCase()} }}
+        {{ 'Create {coinLabel} Account' | translate: {coinLabel: coin.toUpperCase()} }}
       </div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
   <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
     <ion-toolbar class="wide-header__title" tappable>
-      <expandable-header-primary>
-        {{ 'Create {coinLabel} Wallet' | translate: {coinLabel: coin.toUpperCase()} }}
+      <expandable-header-primary class="custom-expandable-header-primary">
+        {{ 'Create {coinLabel} Account' | translate: {coinLabel: coin.toUpperCase()} }}
       </expandable-header-primary>
     </ion-toolbar>
   </expandable-header>
 
 
   <form [formGroup]="createForm">
-    <div class="wallet-info-container">
+    <div class="wallet-info-container stroke-card">
 
       <mat-form-field appearance="outline">
-        <mat-label>{{'Wallet name' | translate}}</mat-label>
-        <input matInput type="text" formControlName="walletName" [placeholder]="'Wallet name'" translate>
+        <mat-label>{{'Account name' | translate}}</mat-label>
+        <input matInput type="text" formControlName="walletName" [placeholder]="'Account name'" translate>
       </mat-form-field>
 
       <div *ngIf="isShared">
@@ -80,7 +81,7 @@
         <div class="notification-container">
           <img src="../../../../assets/img/backup-key-game/icon-notification.svg" />
           <div class="notification-content">
-            Multi-user wallet require multiple devices to set up. It takes longer to complete but it's recommended
+            Multi-user account requires multiple devices to set up. It takes longer to complete but it's recommended
             security configuration for long term storage.
           </div>
         </div>
@@ -99,20 +100,27 @@
       </ng-template>
     </ion-button>
 
-    <ion-item lines="none" *ngIf="showAdvOpts &&  coin === 'ltc' && createForm.value.selectedSeed == 'new'">
-      <ion-label>Segwit</ion-label>
-      <ion-toggle formControlName="useNativeSegwit"></ion-toggle>
-    </ion-item>
+   
     <div class="line-divider" *ngIf="showAdvOpts"></div>
 
-    <div *ngIf="showAdvOpts" class="show-advance-option ion-padding-bottom">
+   
+
+    <div *ngIf="showAdvOpts" class="show-advance-option stroke-card ion-padding-bottom">
+
+      <ion-item lines="none" *ngIf="showAdvOpts &&  coin === 'ltc' && createForm.value.selectedSeed == 'new'">
+        <ion-label>Segwit</ion-label>
+        <ion-toggle formControlName="useNativeSegwit"></ion-toggle>
+      </ion-item>
+      
+      <div *ngIf="showAdvOpts &&  coin === 'ltc' && createForm.value.selectedSeed == 'new'" class="line-divider"></div>
+
       <mat-form-field class="wallet-service-url-mat-form-field" appearance="outline">
-        <mat-label>{{'Account Service URL' | translate}}</mat-label>
-        <input matInput type="text" formControlName="bwsURL" [placeholder]="'Account Service URL'" translate>
+        <mat-label>{{'Wallet Service URL' | translate}}</mat-label>
+        <input matInput type="text" formControlName="bwsURL" [placeholder]="'Wallet Service URL'" translate>
       </mat-form-field>
 
       <div class="line-divider"></div>
-
+      
       <ion-item class="wallet-key-ion-item" *ngIf="!keyId"
         [ngClass]="{'set-padding-bottom': createForm.value.selectedSeed == 'set' && !keyId}">
         <ion-label position="stacked">{{'Account key' | translate}}</ion-label>
@@ -172,7 +180,7 @@
           <ion-toggle [disabled]="isSlpToken" [checked]="isSlpToken" formControlName="singleAddress"></ion-toggle>
         </div>
         <div class="option-line-info" *ngIf="createForm.value.singleAddress">
-          <span translate>The single address feature will force the wallet to only use one address rather than
+          <span translate>The single address feature will force the account to only use one address rather than
             generating new addresses.</span>
           <br>
           <a class="label-tip-link" (click)="openSupportSingleAddress()" translate>Learn More</a>

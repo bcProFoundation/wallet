@@ -5,7 +5,7 @@
       <img src="../../../assets/img/abcpay-text.svg" alt="">
     </div>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button>
     </ion-buttons>
@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullMin="90" pullMax="160">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -44,10 +44,9 @@
           </div>
 
         </div>
-        <ion-spinner color="primary" name="crescent" *ngIf="shouldShowSpinner()"></ion-spinner>
       </expandable-header-footer>
     </expandable-header>
-    <div class="prompt-user activity-fix white-card" *ngIf="shouldShowZeroState()">
+    <div class="prompt-user activity-fix white-card" *ngIf="!(history && history[0]) && !updateTxHistoryError && !(updatingTxHistory && (!history[0] || updatingTxHistoryProgress>4)) && isShowZeroState && shouldShowZeroState()">
       <div class="title-icon larger-icon">
         <img *ngIf="wallet.coin !== 'doge' && wallet.coin !== 'xpi'" src="assets/img/wallet-details/ghost-{{currentTheme}}.svg">
         <img *ngIf="wallet.coin === 'xpi'"
@@ -106,18 +105,41 @@
                     {{formatTxAmount(tx.amountToken)}} {{tx.symbolToken}}</span>
                 </div>
                 <ng-container *ngIf="tx.action == 'received'">
-                  <span *ngIf="tx.inputAddresses && tx.inputAddresses[0]" class="tx-action" >{{'From: {address}' | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
-                  <span *ngIf="!tx.inputAddresses || !tx.inputAddresses[0]" class="tx-action" >From : unknown sender</span>
-                </ng-container >
-                <span class="tx-action" *ngIf="tx.action == 'sent' ">{{'To: {address}' | translate: {address: tx.addressTo.slice(-8)} }}</span>
+                  <ng-container *ngIf="tx.inputAddresses && tx.inputAddresses[0]">
+                    <span *ngIf="this.addressbook && getContactName(tx.inputAddresses[0]); else addressFrom" class="tx-action" >{{'From: ' + getContactName(tx.inputAddresses[0]) | translate }}</span>
+                    <ng-template #addressFrom>
+                      <span class="tx-action" >{{'From: {address}' | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
+                    </ng-template>
+                  </ng-container>
+                  <span *ngIf="!tx.inputAddresses || !tx.inputAddresses[0]" class="tx-action" >{{ 'From : unknown sender' | translate }}</span>
+                </ng-container>
+
+                <ng-container *ngIf="tx.action == 'sent' && tx.outputs[0].address !== 'false'">
+                  <span class="tx-action" *ngIf="this.addressbook && getContactName(tx.addressTo); else addressTo">{{'To: ' + getContactName(tx.addressTo) | translate}}</span>
+                  <ng-template #addressTo>
+                    <span class="tx-action" >{{'To: {address}' | translate: {address: tx.addressTo.slice(-8)} }}</span>
+                  </ng-template>
+                </ng-container>
+
+                <ng-container *ngIf="tx.action == 'sent' && tx.outputs[0].address === 'false'">
+                  <span class="tx-action" *ngIf="this.addressbook && getContactName(tx.inputAddresses[0]); else addressTo2">{{'To: ' + getContactName(tx.inputAddresses[0]) | translate}}</span>
+                  <ng-template #addressTo2>
+                    <span class="tx-action">{{'To: {address}' | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
+                  </ng-template>
+                </ng-container>
+
               </div>
 
               <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">
                 <div class="tx-info">
-                  <ng-container *ngIf="tx.confirmations <= 0">
-                    <p class="status" *ngIf="tx.action == 'sent' || tx.action == 'received'">{{'Pending'| translate}}</p>
+                  <ng-container *ngIf="tx.confirmations <= 0 && (tx.action == 'sent' || tx.action == 'received')">
+                    <p class="status" *ngIf="tx.outputs[0].address !== 'false' && !tx.isGenesis">{{'Pending'| translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis">{{'Moving'| translate}}</p>
                   </ng-container>
-                  <p class="status" *ngIf="tx.isGenesis">Genesis</p>
+                  <ng-container *ngIf="tx.confirmations > 0">
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis">{{'Sent to self'| translate}}</p>
+                  </ng-container>
+                  <p class="status" *ngIf="tx.isGenesis">{{'Genesis' | translate}}</p>
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |

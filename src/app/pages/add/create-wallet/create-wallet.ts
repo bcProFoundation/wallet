@@ -82,7 +82,7 @@ export class CreateWalletPage implements OnInit {
   public isOpenSelector: boolean;
   public isSlpToken: boolean;
   navParamsData;
-
+  public isScroll = false;
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
@@ -168,6 +168,15 @@ export class CreateWalletPage implements OnInit {
     }
   }
 
+  async handleScrolling(event) {
+    if (event.detail.currentY > 0) {
+      this.isScroll = true;
+    }
+    else {
+      this.isScroll = false;
+    }
+  }
+  
   public setTotalCopayers(n: number): void {
     this.createForm.controls['totalCopayers'].setValue(n);
   }
@@ -309,7 +318,7 @@ export class CreateWalletPage implements OnInit {
     if (setSeed && !opts.mnemonic && !opts.extendedPrivateKey) {
       const title = this.translate.instant('Error');
       const subtitle = this.translate.instant(
-        'Please enter the wallet recovery phrase'
+        'Please enter the account recovery phrase'
       );
       this.errorsProvider.showDefaultError(subtitle, title);
       return;

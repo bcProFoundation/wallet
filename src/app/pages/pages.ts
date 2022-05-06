@@ -108,6 +108,7 @@ import { ConfirmTokenPage } from './confirm-token/confirm-token';
 import { TokenInforPage } from './token-info/token-info';
 import { AccountsPage } from './accounts/accounts';
 import { SearchContactPage } from './search/search-contact/search-contact.component';
+import { SelectFlowPage } from './onboarding/select-flow/select-flow';
 
 export const PAGES = [
   AddPage,
@@ -140,6 +141,7 @@ export const PAGES = [
   TransferToPage,
   CustomAmountPage,
   AddFundsPage,
+  SelectFlowPage,
   FeatureEducationPage,
   LockMethodPage,
   RecoveryKeyPage,

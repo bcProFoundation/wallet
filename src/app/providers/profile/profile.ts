@@ -1372,13 +1372,19 @@ export class ProfileProvider {
     if (disclaimerAccepted) return Promise.resolve();
     // OLD flag
     let disclaimerFlag;
+    let keyOnboardingFlag;
     try {
       disclaimerFlag = await this.persistenceProvider.getAbcPayDisclaimerFlag();
+      keyOnboardingFlag = await this.persistenceProvider.getKeyOnboardingFlag();
     } catch (error) { }
     if (disclaimerFlag) {
       this.profile.disclaimerAccepted = true;
       return Promise.resolve();
-    } else {
+    } else if (keyOnboardingFlag) {
+      const onboardingState = 'SIMPLEFLOW';
+      return Promise.resolve(onboardingState);
+    }
+    else {
       const onboardingState = 'UNFINISHEDONBOARDING';
       return Promise.resolve(onboardingState);
     }

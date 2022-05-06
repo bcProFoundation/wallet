@@ -1,7 +1,6 @@
 import { Component, NgZone, ViewChild, ViewEncapsulation, AfterContentChecked } from '@angular/core';
 
 // Providers
-import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../../providers/config/config';
 import { Logger } from '../../../providers/logger/logger';
 import { PlatformProvider } from '../../../providers/platform/platform';
@@ -50,7 +49,6 @@ export class FeatureEducationPage {
     public navCtrl: NavController,
     private logger: Logger,
     private externalLinkProvider: ExternalLinkProvider,
-    private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private platformProvider: PlatformProvider,
     private router: Router,

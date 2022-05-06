@@ -73,7 +73,7 @@ export class EncryptPasswordComponent extends ActionSheetParent {
   public confirm(password: string): void {
     this.dismiss(password);
   }
-  public skipPassword(): void{
+  public skipEncryptPass(): void{
     this.dismiss();
   }
 }

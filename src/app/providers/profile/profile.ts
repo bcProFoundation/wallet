@@ -851,6 +851,7 @@ export class ProfileProvider {
         this.onGoingProcessProvider.pause();
         // Encrypt wallet
         return this.askToEncryptKey(data.key, !!data.isSkipAskEncrypt).then(() => {
+          this.onGoingProcessProvider.set('Creating account');
           return this.keyProvider.addKey(data.key).then(async () => {
             const boundWalletClients = [];
             for (const walletClient of data.walletClients) {
@@ -875,8 +876,8 @@ export class ProfileProvider {
                 return Promise.resolve(_.compact(boundWalletClients));
               })
               .catch(err => {
-                return Promise.reject('failed to bind wallets:' + err);
                 this.onGoingProcessProvider.resume();
+                return Promise.reject('failed to bind wallets:' + err);
               });
           });
         });
@@ -2105,7 +2106,7 @@ export class ProfileProvider {
             const data = {
               key: firstWalletData.key,
               walletClients,
-              isSkipAskEncrypt: !!isSimpleFlow
+              isSkipAskEncrypt: false
             }
             this.addAndBindWalletClients(data)
               .then(async (boundWalletClients) => {

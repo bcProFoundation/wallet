@@ -88,9 +88,6 @@ export class SelectCurrencyPage {
     this.coinsSelected.xpi = true;
     this.shouldShowKeyOnboarding();
     this.setTokens();
-    if(!!this.navParamsData.isSimpleFlow){
-      this.createSimpleFlow();
-    }
   }
 
 
@@ -164,21 +161,8 @@ export class SelectCurrencyPage {
   public goToImportWallet(): void {
     this.router.navigate(['/import-wallet']);
   }
-  private createSimpleFlow() {
-    this.profileProvider.createDefaultWalletsForSimpleFlow().then(async wallets => {
-      this.walletProvider.updateRemotePreferences(wallets);
-      this.pushNotificationsProvider.updateSubscription(wallets);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      this.profileProvider.setNewWalletGroupOrder(
-        wallets[0].credentials.keyId
-      );
-      this.endProcess(wallets[0].credentials.keyId, true);
-    })
-      .catch(e => {
-        this.showError(e);
-      });
-  }
-  private _createWallets(coins: Coin[], isSimpleFlow?: boolean): void {
+  
+  private _createWallets(coins: Coin[]): void {
     const selectedCoins = _.keys(_.pickBy(this.coinsSelected)) as Coin[];
     coins = coins || selectedCoins;
     const selectedTokens = _.keys(_.pickBy(this.tokensSelected));

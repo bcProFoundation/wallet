@@ -255,7 +255,7 @@ export class CopayApp {
     this.events.subscribe('OpenWallet', (wallet, params) =>
       this.openWallet(wallet, params)
     );
-
+    let profile;
     this.keyProvider
       .load()
       .then(() => {
@@ -264,15 +264,20 @@ export class CopayApp {
           .loadAndBindProfile()
           .then(onboardingState => {
             switch (onboardingState) {
+              case 'SIMPLEFLOW':
+                this.logger.warn('in Simple Flow');
+                profile = this.profileProvider.profile;
+                this.onProfileLoad(profile);
+                break;
               case 'UNFINISHEDONBOARDING':
                 this.logger.warn('Unfinished onboarding');
-                const path = '/feature-education';
+                const path = '/select-flow';
                 this.navasd.navigateRoot([path], {
                   replaceUrl: true
                 });
                 break;
               default:
-                const profile = this.profileProvider.profile;
+                profile = this.profileProvider.profile;
                 this.onProfileLoad(profile);
             }
           })
@@ -441,7 +446,7 @@ export class CopayApp {
     } else {
       this.logger.info('No profile exists.');
       this.profileProvider.createProfile();
-      const path = '/feature-education';
+      const path = '/select-flow';
       this.router.navigate([path], {
         replaceUrl: true
       });

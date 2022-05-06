@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { SwiperComponent } from 'swiper/angular';
 import { Pagination, SwiperOptions } from 'swiper';
 import SwiperCore from 'swiper';
-import { BwcErrorProvider, ErrorsProvider, EventManagerService, LoadingProvider, OnGoingProcessProvider, ProfileProvider, PushNotificationsProvider, ThemeProvider, WalletProvider } from 'src/app/providers';
+import { BwcErrorProvider, ErrorsProvider, EventManagerService, LoadingProvider, OnGoingProcessProvider, PersistenceProvider, ProfileProvider, PushNotificationsProvider, ThemeProvider, WalletProvider } from 'src/app/providers';
 import { TranslateService } from '@ngx-translate/core';
 
 SwiperCore.use([Pagination]);
@@ -45,26 +45,19 @@ export class FeatureEducationPage {
     resistanceRatio: 0
   }
   zone;
-  public acceptedPlayAround: boolean = false;
+  isSimpleFlow: boolean = false;
+  navParamsData;
+
   constructor(
     public navCtrl: NavController,
     private logger: Logger,
     private externalLinkProvider: ExternalLinkProvider,
-    private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private platformProvider: PlatformProvider,
     private router: Router,
-    private themeProvider: ThemeProvider,
-    private profileProvider: ProfileProvider,
-    private walletProvider: WalletProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
-    private onGoingProcessProvider: OnGoingProcessProvider,
-    private events: EventManagerService,
-    private translate: TranslateService,
-    private bwcErrorProvider: BwcErrorProvider,
-    private errorsProvider: ErrorsProvider,
-    private loadingProvider: LoadingProvider
+    private themeProvider: ThemeProvider
   ) {
+    this.isSimpleFlow = !!this.navParamsData && !!this.navParamsData.isSimpleFlow;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
     this.selectedTheme = this.themeProvider.currentAppTheme;
@@ -74,6 +67,7 @@ export class FeatureEducationPage {
   }
   ngOnInit() {
     this.logger.info('Loaded: FeatureEducationPage');
+
   }
 
   public slideChanged() {
@@ -88,85 +82,17 @@ export class FeatureEducationPage {
   }
 
   public goToNextPage(nextViewName: string): void {
-    if (this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
-      // set boolean var to true to skip all encrypt password + recovery phrase
-      this.createSimpleFlow(false);
-    } else if (!this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
-      this.createSimpleFlow(true);
-    }
-    else {
-      const config = this.configProvider.get();
-      if ((config.lock && config.lock.method) || !this.isCordova) {
-        const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
-        this.params.isSimpleFlow = this.acceptedPlayAround;
-        this.params.isFirstImport = true;
-        this.router.navigate([path], {
-          state: this.params
-        });
-      } else {
-        this.goToLockMethodPage(nextViewName);
-      }
-    }
-  }
-
-  private createSimpleFlow(isFullFlow?: boolean) {
-    if (!(!!isFullFlow)) {
-      this.loadingProvider.simpleLoader();
-    }
-    // if case full flow do not skip ask encrypt password
-    this.profileProvider.createDefaultWalletsForSimpleFlow(!(!!isFullFlow)).then(async wallets => {
-      this.walletProvider.updateRemotePreferences(wallets);
-      this.pushNotificationsProvider.updateSubscription(wallets);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      this.profileProvider.setNewWalletGroupOrder(
-        wallets[0].credentials.keyId
-      );
-      // if case full flow do not skip recover phrase
-      this.endProcess(wallets[0].credentials.keyId, !(!!isFullFlow));
-      if (!(!!isFullFlow)) {
-        this.loadingProvider.dismissLoader();
-      }
-    })
-      .catch(e => {
-        this.showError(e);
-        this.loadingProvider.dismissLoader();
-      });
-  }
-  private showError(err) {
-    this.onGoingProcessProvider.clear();
-    this.logger.error('Create: could not create wallet', err);
-    const title = this.translate.instant('Error');
-    err = this.bwcErrorProvider.msg(err);
-    this.errorsProvider.showDefaultError(err, title);
-  }
-
-  private endProcess(keyId: string, skipRecoveryPhrase?: boolean) {
-    this.onGoingProcessProvider.clear();
-    if (!!skipRecoveryPhrase) {
-      this.profileProvider.setBackupGroupFlag(keyId);
-      const opts = {
-        keyId: keyId,
-        showHidden: true
-      };
-      const wallets = this.profileProvider.getWalletsFromGroup(opts);
-      wallets.forEach(w => {
-        this.profileProvider.setWalletBackup(w.credentials.walletId);
-      });
-      this.router.navigate(['']).then(() => {
-        this.events.publish('Local/FetchWallets');
+    const config = this.configProvider.get();
+    if ((config.lock && config.lock.method) || !this.isCordova) {
+      const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
+      this.params.isFirstImport = true;
+      this.router.navigate([path], {
+        state: this.params
       });
     } else {
-      this.router.navigate(['/recovery-key'], {
-        state: {
-          keyId,
-          isOnboardingFlow: this.params.isOnboardingFlow,
-          hideBackButton: true
-        }
-      });
+      this.goToLockMethodPage(nextViewName);
     }
   }
-
 
   private goToLockMethodPage(name: string): void {
     let nextView = {

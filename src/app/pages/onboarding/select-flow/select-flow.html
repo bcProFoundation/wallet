@@ -7,8 +7,8 @@
           {{ flowOption.content }}
         </p>
         <div class="button-container">
-          <img *ngIf="!flowOption.isSimpleFlow" src="assets/img/select-flow/button-right-dark.svg" />
-          <img *ngIf="flowOption.isSimpleFlow" src="assets/img/select-flow/button-right-simple-dark.svg" />
+          <img *ngIf="!flowOption.isSimpleFlow" src="assets/img/select-flow/button-right-{{currentTheme}}.svg" />
+          <img *ngIf="flowOption.isSimpleFlow" src="assets/img/select-flow/button-right-simple-{{currentTheme}}.svg" />
         </div>
       </div>
     </ng-container>

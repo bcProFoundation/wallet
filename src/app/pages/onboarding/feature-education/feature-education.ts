@@ -44,7 +44,7 @@ export class FeatureEducationPage {
     resistanceRatio: 0
   }
   zone;
-  public acceptedPlayAround: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     private logger: Logger,
@@ -86,19 +86,15 @@ export class FeatureEducationPage {
   }
 
   public goToNextPage(nextViewName: string): void {
-    if (this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
-      // set boolean var to true to skip all encrypt password + recovery phrase
-      this.createSimpleFlow(false);
-    } else if (!this.acceptedPlayAround && nextViewName === 'SelectCurrencyPage') {
-      this.createSimpleFlow(true);
+    if (nextViewName === 'SelectCurrencyPage') {
+      this.createSimpleFlow();
     }
     else {
       const config = this.configProvider.get();
       if ((config.lock && config.lock.method) || !this.isCordova) {
-        const path = nextViewName == 'SelectCurrencyPage' ? '/select-currency' : '/import-wallet';
-        this.params.isSimpleFlow = this.acceptedPlayAround;
+        this.params.isSimpleFlow = true;
         this.params.isFirstImport = true;
-        this.router.navigate([path], {
+        this.router.navigate(['/import-wallet'], {
           state: this.params
         });
       } else {
@@ -107,12 +103,10 @@ export class FeatureEducationPage {
     }
   }
 
-  private createSimpleFlow(isFullFlow?: boolean) {
-    if (!(!!isFullFlow)) {
-      this.loadingProvider.simpleLoader();
-    }
+  private createSimpleFlow() {
+    this.onGoingProcessProvider.set('Creating account');
     // if case full flow do not skip ask encrypt password
-    this.profileProvider.createDefaultWalletsForSimpleFlow(!(!!isFullFlow)).then(async wallets => {
+    this.profileProvider.createDefaultWalletsForSimpleFlow(false).then(async wallets => {
       this.walletProvider.updateRemotePreferences(wallets);
       this.pushNotificationsProvider.updateSubscription(wallets);
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -121,10 +115,8 @@ export class FeatureEducationPage {
         wallets[0].credentials.keyId
       );
       // if case full flow do not skip recover phrase
-      this.endProcess(wallets[0].credentials.keyId, !(!!isFullFlow));
-      if (!(!!isFullFlow)) {
-        this.loadingProvider.dismissLoader();
-      }
+      this.endProcess(wallets[0].credentials.keyId, false);
+      this.loadingProvider.dismissLoader();
     })
       .catch(e => {
         this.showError(e);

@@ -883,6 +883,7 @@ export class ProfileProvider {
         });
       })
       .catch(e => {
+        this.onGoingProcessProvider.resume();
         this.errorsProvider.showDefaultError(
           e,
           this.translate.instant('Error on Re-Import')

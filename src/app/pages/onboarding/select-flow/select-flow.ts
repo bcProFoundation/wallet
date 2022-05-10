@@ -1,11 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { getMatIconFailedToSanitizeLiteralError } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { ModalController, NavController, Platform } from '@ionic/angular';
+import {  NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ActionSheetProvider, BwcErrorProvider, ConfigProvider, ErrorsProvider, EventManagerService, ExternalLinkProvider, LoadingProvider, Logger, OnGoingProcessProvider, PersistenceProvider, PlatformProvider, ProfileProvider, PushNotificationsProvider, WalletProvider } from 'src/app/providers';
+import {  BwcErrorProvider, ErrorsProvider, EventManagerService, Logger, OnGoingProcessProvider, PersistenceProvider, ProfileProvider, PushNotificationsProvider, WalletProvider } from 'src/app/providers';
 import { ThemeProvider } from 'src/app/providers/theme/theme';
-import { TouchIdProvider } from 'src/app/providers/touchid/touchid';
 
 // Providers
 
@@ -42,7 +40,6 @@ export class SelectFlowPage {
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
     private errorsProvider: ErrorsProvider,
-    private loadingProvider: LoadingProvider,
     private persistenceProvider: PersistenceProvider
   ) {
     // this.checkFingerprint();
@@ -61,7 +58,7 @@ export class SelectFlowPage {
   }
 
   private createSimpleFlow() {
-    this.loadingProvider.simpleLoader();
+    this.onGoingProcessProvider.set('Creating account');
     this.profileProvider.createDefaultWalletsForSimpleFlow(true).then(async wallets => {
       this.walletProvider.updateRemotePreferences(wallets);
       this.pushNotificationsProvider.updateSubscription(wallets);
@@ -72,11 +69,10 @@ export class SelectFlowPage {
       );
       // if case full flow do not skip recover phrase
       this.endProcess(wallets[0].credentials.keyId);
-      this.loadingProvider.dismissLoader();
     })
       .catch(e => {
         this.showError(e);
-        this.loadingProvider.dismissLoader();
+        this.onGoingProcessProvider.clear();
       });
   }
 

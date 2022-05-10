@@ -27,7 +27,7 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import _ from 'lodash';
 import { DisclaimerModal } from '../../includes/disclaimer-modal/disclaimer-modal';
-import { AppProvider } from 'src/app/providers';
+import { AppProvider, PersistenceProvider } from 'src/app/providers';
 @Component({
   selector: 'page-import-wallet',
   templateUrl: 'import-wallet.html',
@@ -87,6 +87,7 @@ export class ImportWalletPage {
     private errorsProvider: ErrorsProvider,
     private router: Router,
     private appProvider: AppProvider,
+    private persistenceProvider: PersistenceProvider
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state
@@ -289,31 +290,27 @@ export class ImportWalletPage {
     });
     if (wallets && wallets[0]) {
       this.profileProvider.setBackupGroupFlag(wallets[0].credentials.keyId);
+      this.persistenceProvider.setKeyOnboardingFlag();
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.profileProvider.setNewWalletGroupOrder(wallets[0].credentials.keyId);
     }
-    if (this.isSimpleFlow) {
-      this.goToHomePage(wallets[0].credentials.keyId);
-    } else {
-      this.profileProvider.isDisclaimerAccepted().then(async onboardingState => {
-        if (onboardingState === 'UNFINISHEDONBOARDING') {
-          const modal = await this.modalCtrl.create({
-            component: DisclaimerModal,
-            backdropDismiss: false,
-            cssClass: 'fixscreen-modal'
-          });
-          await modal.present();
-          modal.onDidDismiss().then(({ data }) => {
-            if (data.isConfirm) {
-              this.goToHomePage(wallets[0].credentials.keyId);
-            }
-          });
-        } else {
-          this.goToHomePage(wallets[0].credentials.keyId);
-        }
-      });
-    }
-
+    this.profileProvider.isDisclaimerAccepted().then(async onboardingState => {
+      if (onboardingState === 'UNFINISHEDONBOARDING' || onboardingState === 'SIMPLEFLOW') {
+        const modal = await this.modalCtrl.create({
+          component: DisclaimerModal,
+          backdropDismiss: false,
+          cssClass: 'fixscreen-modal'
+        });
+        await modal.present();
+        modal.onDidDismiss().then(({ data }) => {
+          if (data.isConfirm) {
+            this.goToHomePage(wallets[0].credentials.keyId);
+          }
+        });
+      } else {
+        this.goToHomePage(wallets[0].credentials.keyId);
+      }
+    });
   }
 
   private goToHomePage(keyId) {

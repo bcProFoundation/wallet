@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EventManagerService } from 'src/app/providers';
@@ -30,19 +30,19 @@ export class KeyNamePage {
     private translate: TranslateService
   ) {
     if (this.router.getCurrentNavigation()) {
-       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
-      this.navParamsData =  history ? history.state : undefined;
+      this.navParamsData = history ? history.state : undefined;
     }
     this.walletGroupNameForm = this.formBuilder.group({
       walletGroupName: [
         '',
-        Validators.compose([Validators.minLength(1), Validators.required])
+        Validators.compose([Validators.minLength(1), Validators.required, this.noWhitespaceValidator])
       ]
     });
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.logger.info('Loaded: KeyNamePage');
   }
 
@@ -54,6 +54,12 @@ export class KeyNamePage {
     this.description = this.translate.instant(
       'You can change the name displayed on this device below.'
     );
+  }
+  
+  public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
   }
 
   public async save() {

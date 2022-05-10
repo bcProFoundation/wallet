@@ -380,51 +380,52 @@ export class ImportWalletPage {
 
   private processError(err?) {
     if (err == 'WALLET_DOES_NOT_EXIST') {
-      if (this.isSimpleFlow) {
-        this.setOptsAndCreate(Coin.XPI, true, true);
-      } else {
-        const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
-          'import-no-wallet-warning'
-        );
 
-        noWalletWarningInfoSheet.present();
-        noWalletWarningInfoSheet.onDidDismiss(async option => {
-          if (option || typeof option === 'undefined') {
-            // Go back
-            this.logger.debug('Go back clicked');
+      const noWalletWarningInfoSheet = this.actionSheetProvider.createInfoSheet(
+        'import-no-wallet-warning'
+      );
+
+      noWalletWarningInfoSheet.present();
+      noWalletWarningInfoSheet.onDidDismiss(async option => {
+        if (option || typeof option === 'undefined') {
+          // Go back
+          this.logger.debug('Go back clicked');
+        } else {
+          // Continue anyway
+          this.logger.debug('Continue anyway clicked');
+
+          if (this.importForm.value.derivationPathEnabled) {
+            this.setOptsAndCreate(this.importForm.value.coin, this.importForm.value.isSlpToken);
           } else {
-            // Continue anyway
-            this.logger.debug('Continue anyway clicked');
-
-            if (this.importForm.value.derivationPathEnabled) {
-              this.setOptsAndCreate(this.importForm.value.coin, this.importForm.value.isSlpToken);
-            } else {
-              if (this.isFirstImport) {
+            if (this.isFirstImport) {
+              if (this.isSimpleFlow) {
+                this.setOptsAndCreate(Coin.XPI, true, true);
+              } else {
                 this.setOptsAndCreate(Coin.XPI, true, true);
               }
-              else {
-                const modal = await this.modalCtrl.create({
-                  component: CoinSelectorPage,
-                  componentProps: {
-                    description: this.translate.instant(
-                      'Please select the coin of the account to import:'
-                    )
-                  },
+            }
+            else {
+              const modal = await this.modalCtrl.create({
+                component: CoinSelectorPage,
+                componentProps: {
+                  description: this.translate.instant(
+                    'Please select the coin of the account to import:'
+                  )
+                },
 
-                  backdropDismiss: false,
-                  cssClass: 'fullscreen-modal'
-                });
-                await modal.present();
-                modal.onDidDismiss().then(({ data }) => {
-                  if (data.selectedCoin) {
-                    this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
-                  }
-                });
-              }
+                backdropDismiss: false,
+                cssClass: 'fullscreen-modal'
+              });
+              await modal.present();
+              modal.onDidDismiss().then(({ data }) => {
+                if (data.selectedCoin) {
+                  this.setOptsAndCreate(data.selectedCoin, this.importForm.value.isSlpToken);
+                }
+              });
             }
           }
-        });
-      }
+        }
+      });
     }
     else {
       const title = this.translate.instant('Error');

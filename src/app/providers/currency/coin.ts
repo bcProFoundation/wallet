@@ -44,7 +44,7 @@ export interface CoinOpts {
 }
 
 export const availableCoins: CoinsMap<CoinOpts> = {
-  
+
   xpi: {
     name: 'Lotus',
     chain: 'XPI',
@@ -121,6 +121,44 @@ export const availableCoins: CoinsMap<CoinOpts> = {
     }
   },
 
+  btc: {
+    name: 'Bitcoin',
+    chain: 'BTC',
+    coin: 'btc',
+    unitInfo: {
+      unitName: 'BTC',
+      unitToSatoshi: 100000000,
+      unitDecimals: 8,
+      unitCode: 'btc'
+    },
+    properties: {
+      hasMultiSig: true,
+      hasMultiSend: true,
+      isUtxo: true,
+      isERCToken: false,
+      isStableCoin: false,
+      singleAddress: false
+    },
+    paymentInfo: {
+      paymentCode: 'BIP73',
+      protocolPrefix: { livenet: 'bitcoin', testnet: 'bitcoin' },
+      ratesApi: 'https://aws.abcpay.cash/bws/api/v3/fiatrates/xpi',
+      blockExplorerUrls: 'blockchain.com/btc/',
+      blockExplorerUrlsTestnet: 'blockchain.com/btc-testnet/'
+    },
+    feeInfo: {
+      feeUnit: 'sat/byte',
+      feeUnitAmount: 1000,
+      blockTime: 10,
+      maxMerchantFee: 'urgent'
+    },
+    theme: {
+      coinColor: '#f7931a',
+      backgroundColor: '#f7921a',
+      gradientBackgroundColor: '#f7921a'
+    }
+  },
+
   bch: {
     name: 'Bitcoin Cash',
     chain: 'BCH',
@@ -143,8 +181,8 @@ export const availableCoins: CoinsMap<CoinOpts> = {
       paymentCode: 'BIP73',
       protocolPrefix: { livenet: 'bitcoincash', testnet: 'bchtest' },
       ratesApi: 'https://aws.abcpay.cash/bws/api/v3/fiatrates/bch',
-      blockExplorerUrls: 'explorer.bitcoin.com/bch/',
-      blockExplorerUrlsTestnet: 'blockexplorer.one/bch/testnet/'
+      blockExplorerUrls: 'blockchain.com/bch/',
+      blockExplorerUrlsTestnet: 'blockchain.com/bch-testnet/'
     },
     feeInfo: {
       feeUnit: 'sat/byte',

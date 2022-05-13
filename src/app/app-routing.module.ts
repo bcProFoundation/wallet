@@ -65,11 +65,16 @@ import { SelectInputsSendPage } from './pages/send/send-select-inputs/send-selec
 import { AccountsPage } from './pages/accounts/accounts';
 import { SettingsPage } from './pages/settings/settings';
 import { SearchContactPage } from './pages/search/search-contact/search-contact.component';
+import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'select-flow',
+    component: SelectFlowPage
   },
   {
     path: 'feature-education',

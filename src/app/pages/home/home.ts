@@ -156,12 +156,10 @@ export class HomePage {
       message: 'Please wait...',
     });
     await loading.present();
-    // this.loadingProvider.simpleLoader('Loading...')
     let wallets = this.profileProvider.wallet;
     await this.loadToken(wallets);
     this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
     if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
-    // this.loadingProvider.dismissLoader();
     loading.dismiss();
   }
   

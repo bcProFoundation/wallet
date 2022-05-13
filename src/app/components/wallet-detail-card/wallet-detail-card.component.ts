@@ -9,7 +9,7 @@ import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { timer } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
-const configProvider = require('src/assets/appConfig.json')
+const configProvider = require('src/assets/appConfig.json');
 const MIN_UPDATE_TIME = 2000;
 
 @Component({
@@ -118,15 +118,8 @@ export class WalletDetailCardComponent implements OnInit {
 
   private checkCardExistListPrimary() {
     let data = JSON.parse(localStorage.getItem("listHome"));
-    if (data) {
-      let isExist;
-      if (this.token && this.token.tokenId) {
-        isExist = data.find(item => item.tokenId === this.token.tokenId && item.walletId === this.wallet.id);
-      } else {
-        isExist = data.find(item => item.walletId === this.wallet.id && item.tokenId === this.token?.tokenId);
-      }
-      isExist ? this.flagOptionRemove = true : this.flagOptionRemove = false;
-    } 
+    let isExist = _.find(data, item => item.walletId === this.wallet.id && item?.tokenId === this.token?.tokenId);
+    this.flagOptionRemove = !!isExist;
   }
 
   public formatTxAmount(amount: any) {
@@ -329,7 +322,7 @@ export class WalletDetailCardComponent implements OnInit {
   }
 
   public goToSendPageToken() {
-    if (this.wallet.cachedStatus.availableBalanceSat === 0 || this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
+    if (this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'no-amount-xec',
         { secondBtnGroup: true,

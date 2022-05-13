@@ -172,8 +172,7 @@ export class ProfileProvider {
 
   public setWalletGroupsHome(walletObj) {
     let result = _.cloneDeep(this.resultPrimaryAccount);
-    let walletsGroupsHome = [];
-    walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) ? JSON.parse(localStorage.getItem("listHome")) : [];
+    let walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) || [];
     if (walletObj && walletObj.walletId) {
       if (walletsGroupsHome.length < 5) {
         if (!JSON.stringify(walletsGroupsHome).includes(JSON.stringify(walletObj))) {
@@ -216,21 +215,12 @@ export class ProfileProvider {
 
   public removeWalletGroupsHome(walletObj) {
     let data = JSON.parse(localStorage.getItem("listHome"));
-    if (data) {
-      const isExist = data.find((item) => {
-        if (walletObj && walletObj.tokenId && walletObj.walletId) {
-          return item.tokenId === walletObj.tokenId;
-        } else if (walletObj && walletObj.walletId && !walletObj.tokenId) {
-          return item.walletId === walletObj.walletId && item.tokenId === walletObj.tokenId;
-        } else {
-          return undefined;
-        }
-      });
+    let isExist = _.find(data, item => item.walletId === walletObj.walletId && item?.tokenId === walletObj?.tokenId);
+    if (isExist) {
       data.splice(data.indexOf(isExist), 1);
       localStorage.setItem("listHome", JSON.stringify(data));
-      return true;
     }
-    return false;
+    return !!isExist;
   }
 
   public setWalletOrder(walletId: string, index: number): void {
@@ -1870,14 +1860,8 @@ export class ProfileProvider {
 
   public getWalletPrimary(walletId, tokenId) {
     let wallet = _.cloneDeep(this.wallet[walletId]);
-    if (wallet && !tokenId) {
-      return wallet;
-    } else if (wallet && walletId) {
-      wallet.tokens = wallet.tokens.find((ele) => {
-        return ele.tokenId === tokenId;
-      });
-    } else {
-      return wallet;
+    if (wallet && tokenId) {
+      wallet.tokens = wallet.tokens.find(ele =>  ele.tokenId === tokenId);
     }
     return wallet;
   }

@@ -61,7 +61,7 @@ export class RecoveryKeyPage {
 
   public async goToBackupKey(): Promise<void> {
     this.profileProvider.isDisclaimerAccepted().then(async onboardingState => {
-      if (onboardingState === 'UNFINISHEDONBOARDING') {
+      if (onboardingState === 'UNFINISHEDONBOARDING' || onboardingState === 'SIMPLEFLOW') {
         const modal = await this.modalCtrl.create({
           component: DisclaimerModal,
           backdropDismiss: false,

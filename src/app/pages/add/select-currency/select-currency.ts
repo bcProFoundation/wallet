@@ -70,11 +70,10 @@ export class SelectCurrencyPage {
     const themeCurrent = this.themeProvider.currentAppTheme;
     this.img = 'assets/img/onboarding/select-currencies-' + themeCurrent + '.svg';
     if (this.router.getCurrentNavigation()) {
-       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
-      this.navParamsData =  history ? history.state : {};
+      this.navParamsData = history ? history.state : {};
     }
-
     this.isJoin = this.navParamsData.isJoin ? this.navParamsData.isJoin : false;
     this.isShared = this.navParamsData.isShared;
     this.keyId = this.navParamsData.keyId;
@@ -89,6 +88,9 @@ export class SelectCurrencyPage {
     this.coinsSelected.xpi = true;
     this.shouldShowKeyOnboarding();
     this.setTokens();
+    if(!!this.navParamsData.isSimpleFlow){
+      this.createSimpleFlow();
+    }
   }
 
 
@@ -128,7 +130,7 @@ export class SelectCurrencyPage {
     });
     await modal.present();
     const data = await modal.onDidDismiss();
-    if(data){
+    if (data) {
       this.persistenceProvider.setKeyOnboardingFlag();
       this._createWallets(coins);
     }
@@ -136,12 +138,13 @@ export class SelectCurrencyPage {
 
   public goToCreateWallet(coin: string): void {
     if (this.isJoin) {
-    this.router.navigate(['/join-wallet'], {
-      state: {
-        keyId: this.keyId,
-        url: this.navParamsData.url,
-        coin
-      }});
+      this.router.navigate(['/join-wallet'], {
+        state: {
+          keyId: this.keyId,
+          url: this.navParamsData.url,
+          coin
+        }
+      });
     } else {
       this.router.navigate(['/create-wallet'], {
         state: {
@@ -149,7 +152,8 @@ export class SelectCurrencyPage {
           coin,
           keyId: this.keyId,
           showKeyOnboarding: this.showKeyOnboarding
-        }});
+        }
+      });
     }
   }
 
@@ -160,8 +164,21 @@ export class SelectCurrencyPage {
   public goToImportWallet(): void {
     this.router.navigate(['/import-wallet']);
   }
-
-  private _createWallets(coins: Coin[]): void {
+  private createSimpleFlow() {
+    this.profileProvider.createDefaultWalletsForSimpleFlow().then(async wallets => {
+      this.walletProvider.updateRemotePreferences(wallets);
+      this.pushNotificationsProvider.updateSubscription(wallets);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.profileProvider.setNewWalletGroupOrder(
+        wallets[0].credentials.keyId
+      );
+      this.endProcess(wallets[0].credentials.keyId, true);
+    })
+      .catch(e => {
+        this.showError(e);
+      });
+  }
+  private _createWallets(coins: Coin[], isSimpleFlow?: boolean): void {
     const selectedCoins = _.keys(_.pickBy(this.coinsSelected)) as Coin[];
     coins = coins || selectedCoins;
     const selectedTokens = _.keys(_.pickBy(this.tokensSelected));
@@ -198,14 +215,30 @@ export class SelectCurrencyPage {
     this.errorsProvider.showDefaultError(err, title);
   }
 
-  private endProcess(keyId?: string) {
+  private endProcess(keyId?: string, skipRecoveryPhrase?: boolean) {
     this.onGoingProcessProvider.clear();
-    this.router.navigate(['/recovery-key'], {
-      state: {
-        keyId,
-        isOnboardingFlow: this.isOnboardingFlow,
-        hideBackButton: true
-      }});
+    if (!!skipRecoveryPhrase) {
+      this.profileProvider.setBackupGroupFlag(this.keyId);
+      const opts = {
+        keyId: this.keyId,
+        showHidden: true
+      };
+      const wallets = this.profileProvider.getWalletsFromGroup(opts);
+      wallets.forEach(w => {
+        this.profileProvider.setWalletBackup(w.credentials.walletId);
+      });
+      this.router.navigate(['']).then(() => {
+        this.events.publish('Local/FetchWallets');
+      });
+    } else {
+      this.router.navigate(['/recovery-key'], {
+        state: {
+          keyId,
+          isOnboardingFlow: this.isOnboardingFlow,
+          hideBackButton: true
+        }
+      });
+    }
   }
 
   public createAndBindTokenWallet(pairedWallet, token) {
@@ -227,10 +260,10 @@ export class SelectCurrencyPage {
   public showPairedWalletSelector(token) {
     const eligibleWallets = this.keyId
       ? this.profileProvider.getWalletsFromGroup({
-          keyId: this.keyId,
-          network: 'livenet',
-          pairFor: token
-        })
+        keyId: this.keyId,
+        network: 'livenet',
+        pairFor: token
+      })
       : [];
 
     const walletSelector = this.actionSheetProvider.createInfoSheet(

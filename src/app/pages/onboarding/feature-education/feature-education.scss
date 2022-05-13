@@ -15,21 +15,36 @@ page-feature-education {
   animation: 1.5s opacityAnimation;
   @keyframes opacityAnimation {
     0% {
-        opacity: 0;
+      opacity: 0;
     }
     100% {
-        opacity: 1;
+      opacity: 1;
     }
   }
   ion-content {
     --offset-bottom: 0px !important;
   }
-  .custom-footer{
-    ion-button{
+  .custom-footer {
+    .term-container {
+      margin-left: 1rem;
+      background-color: transparent !important;
+      ion-item {
+        --background: transparent !important;
+      }
+      .term-title {
+        color: var(--color-light-on-background-theme);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 25px;
+        margin-bottom: 3px;
+      }
+    }
+    ion-button {
       opacity: 0;
     }
-    .show-button{
-      ion-button{
+    .show-button {
+      ion-button {
         opacity: 1;
       }
     }
@@ -47,54 +62,54 @@ page-feature-education {
     display: block;
     .swiper-slide {
       height: 100%;
-  
+
       .slide-info {
         height: 100%;
         display: grid;
         grid-template-rows: 1fr 1fr 30px;
         justify-content: center;
-  
+
         .img-container {
           align-self: end;
           display: flex;
-  
+
           img {
             margin: 3rem auto 0;
             max-width: 65%;
             min-height: 343px;
-  
+
             @media (max-width: 768px) {
               min-height: 270px;
               max-height: 14rem;
             }
           }
         }
-  
+
         .info {
           align-self: start;
           display: grid;
           grid-template-rows: max-content max-content;
           height: 100%;
           padding: 2rem;
-  
+
           .title {
             color: #060606;
             font-weight: 600;
             align-items: center;
             text-align: center;
             line-height: 34px;
-  
+
             @media (max-width: 768px) {
               font-size: 20px;
               line-height: 20px;
             }
-  
+
             @media (max-width: 350px) {
               font-size: 17px;
               line-height: 20px;
             }
           }
-  
+
           .text {
             font-size: 16px;
             text-align: center;
@@ -102,17 +117,17 @@ page-feature-education {
             font-weight: 300;
             padding-top: 15px;
             line-height: 28px;
-  
+
             @media (max-width: 768px) {
               font-size: 14px;
               line-height: 20px;
             }
-  
+
             @media (max-width: 350px) {
               font-size: 12px;
               line-height: 15px;
             }
-  
+
             .note {
               font-size: 14px;
               text-align: center;
@@ -120,12 +135,12 @@ page-feature-education {
               font-weight: 300;
               padding-top: 15px;
               line-height: 25px;
-  
+
               @media (max-width: 768px) {
                 font-size: 11px;
                 line-height: 20px;
               }
-  
+
               @media (max-width: 350px) {
                 font-size: 8px;
                 line-height: 15px;
@@ -136,9 +151,8 @@ page-feature-education {
       }
     }
   }
-  
+
   .no-background {
     --background: transparent !important;
   }
 }
-

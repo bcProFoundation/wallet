@@ -1,11 +1,11 @@
-<ion-header [translucent]="true" class="bp-header">
+<ion-header *ngIf="!this.platformProvider.isCordova" [translucent]="true" class="bp-header">
   <ion-toolbar class="toolbar-desktop" *ngIf="!this.platformProvider.isCordova">
     <div class="header-container-desktop">
       <img class="logo-abcpay" src="../../../assets/img/abcpay-logo.svg" alt="">
       <img src="../../../assets/img/abcpay-text.svg" alt="">
     </div>
   </ion-toolbar>
-  <ion-toolbar class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
+  <!-- <ion-toolbar class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-title>
       <div class="home-icon">
         <img (click)="openSettingPage()" src="assets/img/home-setting-icon-{{currentTheme}}.svg">
@@ -16,12 +16,58 @@
         </ion-button>
       </div>
     </ion-title>
-  </ion-toolbar>
+  </ion-toolbar> -->
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="handleScrolling($event)" #scrollArea>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <div class="card-home-info">
+    <div class="home-toolbar">
+      <div class="home-icon">
+        <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
+          <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
+        </ion-button>
+        <h2>
+          {{ 'Home' | translate }}
+        </h2>
+        <div class="group-btn-top">
+          <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openProposalsNotificationsPage()">
+            <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" slot="icon-only" class="key-notifications" (click)="openProposalsNotificationsPage()">
+            <img *ngIf="txpsN > 0" class="custom-notification-icon" src="assets/img/wallet-details/notification-{{currentTheme}}.svg" />
+            <ion-icon slot="end" src="assets/img/home-notifications-icon-{{currentTheme}}.svg"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="showTotalBalance" class="total-amount-container">
+      <div class="total-amount">
+        <div class="section-header" translate>Total cash value</div>
+        <div class="total-amount-value">
+          <ion-icon [ngClass]="{'eye-light-theme': currentTheme == 'light'}" class="eye"(click)="isShowBalance = !isShowBalance" [name]="isShowBalance ? 'eye-outline' : 'eye-off-outline'"
+          ></ion-icon>
+          <ng-container *ngIf="!isShowBalance;else hideBalance">
+            <span *ngIf="totalBalanceAlternative">
+              {{ totalBalanceAlternative | number:'1.2-2'}} <span class="iso-code">{{totalBalanceAlternativeIsoCode}}</span>
+            </span>
+            <span *ngIf="fetchingStatus">
+              <ion-spinner color="primary"></ion-spinner>
+            </span>
+          </ng-container>
+          <ng-template #hideBalance>
+            <span>
+              ******
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <img class="top-img" src="../../../assets/img/home-abc-top-bg-light.svg" alt="">
+      <img class="bottom-img" src="../../../assets/img/home-abc-bottom-bg-light.svg" alt="">
+    </div>
+  </div>
 
   <div class="message-background" *ngIf="accessDenied">
     <div class="message-header no-dismissible"></div>
@@ -102,31 +148,57 @@
   <!-- TODO: temporary hide the donation feature. Later, adding feature in settings to disable / enable this feature -->
   <!-- <page-lotus-donation-card></page-lotus-donation-card> -->
 
-  <div *ngIf="showTotalBalance" class="total-amount-container stroke-card">
-    <div class="total-amount">
-      <div class="section-header" translate>Total cash value</div>
-      <div class="total-amount-value">
-        <span *ngIf="totalBalanceAlternative">
-          {{ totalBalanceAlternative | number:'1.2-2'}} <span class="iso-code">{{totalBalanceAlternativeIsoCode}}</span>
-        </span>
-        <span *ngIf="fetchingStatus">
-          <ion-spinner color="primary"></ion-spinner>
-        </span>
-      </div>
-      <div class="average-container">
-        <div *ngIf="totalBalanceChange || totalBalanceChange === 0" [ngClass]="totalBalanceChange >= 0 ? 'possitive-avg' : 'negative-avg'">
-          <span class="average"><span *ngIf="totalBalanceChange > 0">+</span>{{ totalBalanceChange | number: '1.2-2' }}%</span>
-        </div>
-        <span *ngIf="totalBalanceChange || totalBalanceChange === 0" class="date" translate>(1D)</span>
-      </div>
-    </div>
-    <img src="../../../assets/img/home-abc-ic-{{currentTheme}}.svg" alt="">
-    
-  </div>
-
   <div class="section-header exchange-rate">
-    <div class="exchange-rate-title" translate>Exchange Rates</div>
-    <div translate class="date-label">(1D)</div>
+    <div class="exchange-rate-title" translate>
+      Primary Accounts
+      <span class="date-label">(max 5)</span>
+    </div>
+    <ion-button id="trigger-button" class="btn-more" fill="clear">
+      <ion-icon *ngIf="!removeAllItem" slot="icon-only" name="ellipsis-vertical"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="removeAllItem" (click)="removeAllItem = !removeAllItem" class="btn-more" fill="clear">
+      <ion-icon name="checkmark-outline"></ion-icon>
+    </ion-button>
+    <ion-popover class="popover-home" [dismissOnSelect]="true" trigger="trigger-button" [arrow]="true" side="top">
+      <ng-template>
+        <ion-content>
+          <ion-list lines="none" class="bp-list list-option-home">
+            <ion-item [disabled]="walletGroupsHome.length >= 5" (click)="addToHome()">
+              <ion-icon slot="start" src="assets/img/add-to-home-{{currentTheme}}.svg"></ion-icon>
+              <ion-label>
+                Add account to home
+              </ion-label>
+            </ion-item>
+            <div class="line-divider"></div>
+            <ion-item [disabled]="walletGroupsHome.length <= 1" (click)="removeAllItem = !removeAllItem">
+              <ion-icon slot="start" src="assets/img/remove-out-home-{{currentTheme}}.svg"></ion-icon>
+              <ion-label>
+                Remove account from home
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
   </div>
-  <exchange-rates #exchangeRates></exchange-rates>
+  <ng-container *ngIf="walletGroupsHome.length != 0;else noWallet">
+    <ion-list lines="none" class="list-item-card">
+      <div class="wallet-item" *ngFor="let wallet of walletGroupsHome; let j = index">
+        <wallet-detail-card *ngIf="!wallet.tokens?.tokenId" [wallet]="wallet" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+        </wallet-detail-card>
+        <wallet-detail-card *ngIf="wallet.tokens?.tokenId" [wallet]="wallet" [token]="wallet.tokens" [isToken]="true" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+        </wallet-detail-card>
+      </div>
+    </ion-list>
+  </ng-container>
+  
+  <ng-template #noWallet>
+    <div class="item-no-wallet" (click)="addToHome()">
+      <img class="bg-item-no-wallet" [ngClass]="{'no-wallet-light-theme': currentTheme == 'light'}" src="assets/img/bg-item-no-wallet-{{currentTheme}}.svg" alt="">
+      <img class="icon-add-home" src="assets/img/add-to-home-{{currentTheme}}.svg" alt="">
+      <p>
+        Add to home
+      </p>
+    </div>
+  </ng-template>
 </ion-content>

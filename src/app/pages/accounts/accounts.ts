@@ -15,7 +15,7 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { LoadingController, ModalController, NavParams, Platform } from '@ionic/angular';
+import { LoadingController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 
@@ -50,6 +50,7 @@ export class AccountsPage {
   public network: string ;
   public coin: string ;
   public titlePage : string = 'Send from';
+  public isAddToHome : boolean = false;
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -63,7 +64,8 @@ export class AccountsPage {
     private persistenceProvider: PersistenceProvider,
     private modalCtrl: ModalController,
     private loadingCtr: LoadingController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private toastController: ToastController
   ) {
     this.collapsedGroups = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -218,7 +220,9 @@ export class AccountsPage {
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
     this.isDonation = this.navParamsData.isDonation;
-    if(this.isDonation) this.titlePage = "Accounts";
+    this.isAddToHome = this.navParamsData.isAddToHome;
+    if (this.isDonation) this.titlePage = "Accounts";
+    if (this.isAddToHome) this.titlePage = "Add to home";
     this.coin = this.navParamsData.coin;
     this.network = this.navParamsData.network;
     this.getWalletsGroups();
@@ -424,5 +428,34 @@ export class AccountsPage {
       },
     })
   }
+
+  async presentToast(finishText, cssClass?) {
+    const toast = await this.toastController.create({
+      message: finishText,
+      duration: 3000,
+      position: 'bottom',
+      animated: true,
+      cssClass: `custom-finish-toast ${cssClass}`,
+    });
+    toast.present();
+  }
+
+  public addToGroupsHome(wallet) {
+    let walletObj = {
+      walletId: wallet?.id
+    }
+    let result = this.profileProvider.setWalletGroupsHome(walletObj);
+    if (result && result.added.status) {
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.events.publish('Local/GetListPrimary', true);
+        this.presentToast(result.added.message);
+      });
+    } else if (result && result.full.status) {
+      this.presentToast(result.full.message, 'toast-warning');
+    } else if (result && result.duplicate.status) {
+      this.presentToast(result.duplicate.message, 'toast-info');
+    }
+  }
+
 
 }

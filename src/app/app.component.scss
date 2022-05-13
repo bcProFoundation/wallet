@@ -56,7 +56,11 @@ body {
         --padding-start: 2rem;
         --padding-end: 2rem;
         width: calc(100% + 15px);
-
+        .flow-container{
+            margin-right: 0px !important;
+            margin-left: 0px !important;
+            width: 100%;
+          }
         &::part(scroll)::-webkit-scrollbar {
             display: none;
         }
@@ -2158,6 +2162,12 @@ page-session-log {
 
 ion-toolbar.header {
     &.bg {
+        &-btc {
+            background: url("../assets/img/wallet-details/bg-btc.svg") no-repeat 10% !important;
+            --background: none !important;
+            background-size: cover !important;
+        }
+
         &-bch {
             background: url("../assets/img/wallet-details/bg-bch.svg") no-repeat 10% !important;
             --background: none !important;

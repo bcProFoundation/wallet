@@ -134,16 +134,21 @@ export class ConfirmTokenPage {
   }
 
   async approve(wallet) {
-    const pass = await this.walletProvider.prepare(wallet);
-    const mnemonic = this.keyProvider.getMnemonic(wallet, pass);
-    this.onGoingProcessProvider.set('Sending Token ...');
-    this.tokenProvider.sendToken(wallet, mnemonic, this.token.tokenInfo, this.amountTokenToSend, this.sendToAddress).then(() => {
+    this.walletProvider.prepare(wallet).then(pass => {
+      const mnemonic = this.keyProvider.getMnemonic(wallet, pass);
+      this.onGoingProcessProvider.set('Sending Token ...');
+      this.tokenProvider.sendToken(wallet, mnemonic, this.token.tokenInfo, this.amountTokenToSend, this.sendToAddress).then(() => {
+        this.onGoingProcessProvider.clear();
+        this.annouceFinish();
+      }).catch(err => {
+        this.onGoingProcessProvider.clear();
+        this.showErrorInfoSheet(err);
+      })
+    }, err => {
       this.onGoingProcessProvider.clear();
-      this.annouceFinish();
-    }).catch(err => {
-      this.onGoingProcessProvider.clear();
-      this.showErrorInfoSheet(err)
+      this.showErrorInfoSheet(err);
     })
+
   }
 
   protected async annouceFinish() {

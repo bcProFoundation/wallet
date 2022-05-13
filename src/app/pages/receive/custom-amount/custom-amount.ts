@@ -164,7 +164,7 @@ export class CustomAmountPage {
       );
 
       let protoAddr;
-      if (this.wallet.coin != 'bch') {
+      if (this.wallet.coin != 'bch' && this.wallet.coin != 'xpi' && this.wallet.coin != 'xec') {
         protoAddr = this.walletProvider.getProtoAddress(
           this.wallet.coin,
           this.wallet.network,

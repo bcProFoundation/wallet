@@ -1,5 +1,6 @@
 <ion-header [translucent]="true" class="bp-header">
-  <ion-toolbar class="header" [ngClass]="{ 
+  <ion-toolbar class="header" [ngClass]="{
+    'bg-btc': coin == 'btc', 
     'bg-bch': coin == 'bch',
     'bg-xec': coin == 'xec',
     'bg-xpi': coin == 'xpi',

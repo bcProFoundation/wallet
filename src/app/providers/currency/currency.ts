@@ -4,7 +4,7 @@ import { availableCoins, CoinOpts } from './coin';
 import { Token, TokenOpts } from './token';
 
 export enum Coin {
-  // BTC = 'btc',
+  BTC = 'btc',
   BCH = 'bch',
   XEC = 'xec',
   // ETH = 'eth',

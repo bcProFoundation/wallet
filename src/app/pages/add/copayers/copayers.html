@@ -1,5 +1,6 @@
 <ion-header [translucent]="true" class="bp-header">
   <ion-toolbar class="header" [ngClass]="{ 
+    'bg-btc': wallet.coin == 'btc',
     'bg-bch': wallet.coin == 'bch',
     'bg-xec': wallet.coin == 'xec',
     'bg-xpi': wallet.coin == 'xpi',

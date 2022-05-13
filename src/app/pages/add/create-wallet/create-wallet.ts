@@ -148,7 +148,7 @@ export class CreateWalletPage implements OnInit {
     });
     this.createForm.controls['coin'].setValue(this.coin);
 
-    if (this.coin === 'ltc')
+    if (this.coin === 'btc' || this.coin === 'ltc')
       this.createForm.controls['useNativeSegwit'].setValue(true);
 
     this.showKeyOnboarding = this.navParamsData.showKeyOnboarding;

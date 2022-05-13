@@ -139,6 +139,10 @@ wallet-detail-card {
       }
     }
     &.bg {
+      &-btc {
+        background: url(../../../assets/img/wallet-details/bg-btc.svg) no-repeat;
+        background-size: cover;
+      }
       &-bch {
         background: url(../../../assets/img/wallet-details/bg-bch.svg) no-repeat;
         background-size: cover;
@@ -293,9 +297,13 @@ wallet-detail-card {
     }
   }
 
-  @media screen and (max-width: 376px) {
+  @media screen and (max-width: 375px) {
     .wallet-name {
-      max-width: 200px !important;
+      max-width: 175px !important;
+    }
+    .btn-edit-name {
+      --padding-end: 0 !important;
+      --padding-start: 0 !important;
     }
   }
 

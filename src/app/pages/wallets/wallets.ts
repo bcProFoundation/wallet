@@ -748,7 +748,7 @@ export class WalletsPage {
 
   public checkCardExistListPrimary(wallet, token?) {
     let data = JSON.parse(localStorage.getItem("listHome"));
-    let isExist = _.find(data, item => item.walletId === wallet.id && item?.tokenId === token?.tokenId);
+    let isExist = _.find(data, item => item.walletId === wallet.id && item.tokenId === token?.tokenId);
     return !!isExist;
   }
 }

@@ -216,7 +216,7 @@ export class ProfileProvider {
 
   public removeWalletGroupsHome(walletObj) {
     let data = JSON.parse(localStorage.getItem("listHome"));
-    let isExist = _.find(data, item => item.walletId === walletObj.walletId && item?.tokenId === walletObj?.tokenId);
+    let isExist = _.find(data, item => item.walletId === walletObj.walletId && item.tokenId === walletObj?.tokenId);
     if (isExist) {
       data.splice(data.indexOf(isExist), 1);
       localStorage.setItem("listHome", JSON.stringify(data));

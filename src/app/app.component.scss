@@ -401,6 +401,18 @@ ion-header ion-toolbar {
         color: #003921;
         border-radius: 8px;
     }
+    &.toast-warning {
+        &::part(container){
+            background: #FFDDB6 !important;
+            color: #482A00 !important;
+        }
+    }
+    &.toast-info {
+        &::part(container){
+            background: #E1E2E5 !important;
+            color: #191C1E !important;
+        }
+    }
 }
 .option-button {
     font-size: 24px;
@@ -2220,4 +2232,32 @@ ion-toolbar.header {
 
 .stroke-card {
     border: 1px solid #e5eff7;
+}
+
+ion-popover {
+    &.popover-home {
+        --width: 285px;
+        .list-option-home {
+            ion-item {
+                --background: none !important;
+                background: none !important;
+                box-shadow: none !important;
+                margin: 0.5rem 1rem !important;
+                ion-icon {
+                    width: 24px !important;
+                    height: 24px !important;
+                    margin: 0 1rem 0 0 !important;
+                    padding: 0 !important;
+                }
+                ion-label {
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+            .line-divider {
+                border: 0;
+                border-bottom: 1px solid #000;
+            }
+        }
+    }
 }

@@ -1,14 +1,15 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import * as _ from 'lodash';
 import { TokenInforPage } from 'src/app/pages/token-info/token-info';
-import { ModalController } from '@ionic/angular';
+import { IonItemSliding, ModalController, ToastController } from '@ionic/angular';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { timer } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 
+const configProvider = require('src/assets/appConfig.json');
 const MIN_UPDATE_TIME = 2000;
 
 @Component({
@@ -22,8 +23,8 @@ export class WalletDetailCardComponent implements OnInit {
   wallet: any;
 
   @Input()
-  address: any;
-  
+  isHomeCard: boolean = false;  
+
   @Input()
   walletNotRegistered: any;
   
@@ -34,7 +35,9 @@ export class WalletDetailCardComponent implements OnInit {
   isToken: boolean = false;
   
   @Input()
-  amountToken: any;
+  flagAllItemRemove: boolean = false;
+
+  @ViewChild('slidingItem') slidingItem: IonItemSliding;
 
   public currentTheme: string;
   public hiddenBalance: boolean;
@@ -47,6 +50,9 @@ export class WalletDetailCardComponent implements OnInit {
   public bchAddrFormat: string;
   public bchCashAddress: string;
   public isEditNameFlag: boolean = false;
+  public amountToken: string;
+  public address: string;
+  public flagOptionRemove: boolean = false;
 
   constructor(
     private appProvider: AppProvider,
@@ -63,15 +69,38 @@ export class WalletDetailCardComponent implements OnInit {
     private addressProvider: AddressProvider,
     private translate: TranslateService,
     private errorsProvider: ErrorsProvider,
+    private toastController: ToastController
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
   }
 
   ngOnInit() {
+    this.walletProvider
+      .getAddress(this.wallet, undefined)
+      .then(addr => {
+        if (!addr) return;
+        const address = this.walletProvider.getAddressView(
+          this.wallet.coin,
+          this.wallet.network,
+          addr
+        );
+        this.address = address;
+      })
     this.hiddenBalance = this.wallet.balanceHidden;
     this.bchAddrFormat = 'cashAddress';
+    this.checkCardExistListPrimary();
+    if (this.isToken) {
+      this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`
+    }
   }
 
+  ngAfterViewChecked() {
+    if (this.flagAllItemRemove && this.flagOptionRemove) {
+      this.slidingItem.open('end');
+    } else {
+      this.slidingItem.close();
+    }
+  }
 
   public updateAll = _.debounce(
     (opts?) => {
@@ -86,6 +115,12 @@ export class WalletDetailCardComponent implements OnInit {
       leading: true
     }
   );
+
+  private checkCardExistListPrimary() {
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    let isExist = _.find(data, item => item.walletId === this.wallet.id && item?.tokenId === this.token?.tokenId);
+    this.flagOptionRemove = !!isExist;
+  }
 
   public formatTxAmount(amount: any) {
     return DecimalFormatBalance(amount);
@@ -277,4 +312,75 @@ export class WalletDetailCardComponent implements OnInit {
     }
     this.isEditNameFlag = !this.isEditNameFlag;
   }
+
+  public goToSendPage() {
+    this.router.navigate(['/send-page'], {
+      state: {
+        walletId: this.wallet.id
+      }
+    });
+  }
+
+  public goToSendPageToken() {
+    if (this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'no-amount-xec',
+        { secondBtnGroup: true,
+          isShowTitle: false
+        }
+      );
+      infoSheet.present();
+    } else {
+      this.router.navigate(['/send-page'], {
+        state: {
+          walletId: this.wallet.id,
+          token : this.token
+        }
+      });
+    }
+  }
+
+  public removeOutGroupsHome() {
+    let walletObj = {
+      walletId: this.wallet.id,
+      tokenId: this.token?.tokenId
+    }
+    let result = this.profileProvider.removeWalletGroupsHome(walletObj);
+    if (result) {
+      this.presentToast('Remove account successful');
+      this.events.publish('Local/GetListPrimary', true);
+    } else {
+      this.presentToast('Remove account unsuccessful');
+    }
+  }
+
+  public addToGroupsHome() {
+    let walletObj = {
+      walletId: this.wallet?.id,
+      tokenId: this.token?.tokenId
+    }
+    let result = this.profileProvider.setWalletGroupsHome(walletObj);
+    if (result && result.added.status) {
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.events.publish('Local/GetListPrimary', true);
+        this.presentToast(result.added.message);
+      });
+    } else if (result && result.full.status) {
+      this.presentToast(result.full.message, 'toast-warning');
+    } else if (result && result.duplicate.status) {
+      this.presentToast(result.duplicate.message, 'toast-info');
+    }
+  }
+
+  async presentToast(finishText, cssClass?) {
+    const toast = await this.toastController.create({
+      message: finishText,
+      duration: 3000,
+      position: 'bottom',
+      animated: true,
+      cssClass: `custom-finish-toast ${cssClass}`,
+    });
+    toast.present();
+  }
+
 }

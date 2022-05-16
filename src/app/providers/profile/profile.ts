@@ -59,8 +59,24 @@ export class ProfileProvider {
     isStatus: false,
     keyId: ''
   };
+  public resultPrimaryAccount = {
+    added: {
+      status: false,
+      message: 'Account added to home'
+    },
+    duplicate: {
+      status: false,
+      message: 'Account already in list'
+    },
+    full: {
+      status: false,
+      message: 'There’s no slot for adding to home. Please remove account from home.'
+    }
+  }
+  public walletsGroupsHome: any = [];
   public walletsGroups: WalletGroups = {}; // TODO walletGroups Class
   public wallet: any = {};
+  public tokens: any = [];
   public profile: Profile;
   public orderedWalletsByGroup: any = [];
 
@@ -153,6 +169,59 @@ export class ProfileProvider {
     if (wallet.linkedEthWallet) {
       this.trySetName(wallet);
     }
+  }
+
+  public setWalletGroupsHome(walletObj) {
+    let result = _.cloneDeep(this.resultPrimaryAccount);
+    let walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) || [];
+    if (walletObj && walletObj.walletId) {
+      if (walletsGroupsHome.length < 5) {
+        if (!JSON.stringify(walletsGroupsHome).includes(JSON.stringify(walletObj))) {
+          walletsGroupsHome.push(walletObj);
+          localStorage.setItem("listHome", JSON.stringify(walletsGroupsHome));
+          result.added.status = true;
+          return result;
+        }
+        result.duplicate.status = true;
+        return result;
+      }
+      result.full.status = true;
+      return result;
+    } 
+    return result;
+  }
+
+  public async getWalletGroupsHome() {
+    let walletsGroupsHome = [];
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    if (data) {
+      walletsGroupsHome = data.map((item) => {
+        return this.getWalletPrimary(item.walletId, item.tokenId);
+      })
+    }
+    // Handle case delete Key
+    if (walletsGroupsHome.includes(undefined)) {
+      let tempWalletsGroupsHome = [];
+      walletsGroupsHome = _.compact(walletsGroupsHome);
+      tempWalletsGroupsHome = walletsGroupsHome.map((item) => {
+        return {
+          walletId: item?.id,
+          tokenId: item?.tokens?.tokenId
+        };
+      });
+      localStorage.setItem("listHome", JSON.stringify(tempWalletsGroupsHome));
+    }
+    return walletsGroupsHome;
+  }
+
+  public removeWalletGroupsHome(walletObj) {
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    let isExist = _.find(data, item => item.walletId === walletObj.walletId && item.tokenId === walletObj?.tokenId);
+    if (isExist) {
+      data.splice(data.indexOf(isExist), 1);
+      localStorage.setItem("listHome", JSON.stringify(data));
+    }
+    return !!isExist;
   }
 
   public setWalletOrder(walletId: string, index: number): void {
@@ -1797,6 +1866,14 @@ export class ProfileProvider {
 
   public getWallet(walletId: string) {
     return this.wallet[walletId];
+  }
+
+  public getWalletPrimary(walletId, tokenId) {
+    let wallet = _.cloneDeep(this.wallet[walletId]);
+    if (wallet && tokenId) {
+      wallet.tokens = wallet.tokens.find(ele =>  ele.tokenId === tokenId);
+    }
+    return wallet;
   }
 
   public getWalletGroup(keyId) {

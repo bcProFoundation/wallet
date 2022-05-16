@@ -1353,15 +1353,16 @@
   page-home {
     .total-amount-container {
       .total-amount-value {
-        color: var(--text-color-dark-theme) !important;
+        color: var(--color-primary-abcpay-dark) !important;
       }
+    }
+
+    .home-toolbar {
+      background: #0e3244 !important;
     }
 
     .section-header {
       color: rgba(237, 239, 240, 0.6) !important;
-      .date-label {
-        background-color: var(--bg-color-dark-theme-2);
-      }
     }
 
     .date-label,
@@ -1379,8 +1380,12 @@
       color: #edeff0 !important;
     }
 
+    .btn-more {
+      --color: rgba(237, 239, 240, 0.6) !important;
+    }
+
     .total-amount-container {
-      background: #0e3244;
+      background: #0e3244 !important;
       .average-container {
         .negative-avg {
           color: #ffb4a9 !important;
@@ -1474,6 +1479,9 @@
             rgba(126, 208, 255, 0.05)
           ),
           #001e2e;
+          ion-item-sliding {
+            background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), #001E2E;;
+          }
       }
       .address-token {
         color: rgba(224, 228, 230, 0.6);

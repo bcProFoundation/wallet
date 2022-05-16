@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, Renderer2, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -11,6 +11,7 @@ import {
   EventManagerService,
   ExternalLinkProvider,
   FeedbackProvider,
+  LoadingProvider,
   Logger,
   NewFeatureData,
   PersistenceProvider,
@@ -19,14 +20,15 @@ import {
   ProfileProvider,
   RateProvider,
   ReleaseProvider,
-  ThemeProvider
+  ThemeProvider,
+  TokenProvider
 } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../providers/config/config';
 
 // Pages
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { IonSlides, ModalController } from '@ionic/angular';
+import { IonSlides, LoadingController, ModalController } from '@ionic/angular';
 import { Network } from 'src/app/providers/persistence/persistence';
 import { Router } from '@angular/router';
 import { AddFundsPage } from '../onboarding/add-funds/add-funds';
@@ -51,7 +53,8 @@ export interface Advertisement {
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  styleUrls: ['home.scss']
+  styleUrls: ['home.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HomePage {
   public tapped = 0;
@@ -91,6 +94,9 @@ export class HomePage {
   private zone;
   public txpsN: number;
   public isScroll: boolean;
+  public walletGroupsHome: Array<any> = [];
+  public removeAllItem: boolean = false;
+  public isShowBalance: boolean = false;
 
   constructor(
     private persistenceProvider: PersistenceProvider,
@@ -114,7 +120,9 @@ export class HomePage {
     private splashScreen: SplashScreen,
     private rateProvider: RateProvider,
     private themeProvider: ThemeProvider,
-    private renderer: Renderer2
+    private tokenProvider: TokenProvider,
+    private loadingProvider: LoadingProvider,
+    private loadingController: LoadingController
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -134,6 +142,25 @@ export class HomePage {
     else {
       this.isScroll = false;
     }
+  }
+
+  public async loadToken(wallets) {
+    for (const i in wallets) {
+      const wallet = wallets[i];
+      await this.tokenProvider.loadTokenWallet(wallet);
+    }
+  }
+
+  public async getWalletGroupsHome() {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+    let wallets = this.profileProvider.wallet;
+    await this.loadToken(wallets);
+    this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
+    if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
+    loading.dismiss();
   }
   
   private showNewFeatureSlides() {
@@ -227,6 +254,9 @@ export class HomePage {
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     });
+    setTimeout(() => {
+      this.getWalletGroupsHome();
+    }, 2900);
     // Required delay to improve performance loading
     setTimeout(() => {
       this.checkEmailLawCompliance();
@@ -274,6 +304,9 @@ export class HomePage {
         this.totalBalanceAlternative = '0';
       }
       this.fetchingStatus = false;
+    });
+    this.events.subscribe('Local/GetListPrimary', data => {
+      if (data) this.getWalletGroupsHome();
     });
     this.events.subscribe('Local/ServerMessages', data => {
       this.serverMessages = _.orderBy(
@@ -520,5 +553,13 @@ export class HomePage {
 
   public openProposalsNotificationsPage(): void {
     this.router.navigate(['/proposals-notifications']);
+  }
+
+  public addToHome() {
+    this.router.navigateByUrl('/accounts-page', {
+      state: {
+        isAddToHome: true
+      }
+    });
   }
 }

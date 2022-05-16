@@ -19,10 +19,39 @@ page-wallets {
     font-weight: 500;
   }
 
+  .wallet-item {
+    padding: 1rem 1rem 0 1rem;
+    ion-item-sliding {
+      border: 0;
+      wallet-item-content {
+        ion-item {
+          margin: 0 !important;
+        }
+      }
+      ion-item-options {
+        border: 0;
+        ion-item-option {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+      &.item-sliding-active-slide {
+        ion-item-option {
+          &.btn-add-to-home {
+            --background: #30885a;
+          }
+          &.btn-remove-out-home {
+            --background: #677A87;
+          }
+        }
+      }
+    }
+  }
+
   .token-container {
     background: linear-gradient(0deg, rgba(0, 101, 141, 0.08), rgba(0, 101, 141, 0.08)), #FAFAFB;
     position: relative;
-    margin: 0 1rem;
+    top: -5px;
     border-radius: 0 0 8px 8px;
 
     ion-item {
@@ -50,13 +79,13 @@ page-wallets {
     }
 
     .token-item {
-      margin: 0 1rem;
       background: linear-gradient(0deg, rgba(0, 101, 141, 0.08), rgba(0, 101, 141, 0.08)), #FAFAFB !important;
 
       ion-item {
         --inner-padding-top: 11px;
         --inner-padding-bottom: 11px;
         box-shadow: none !important;
+        padding: 0 1rem !important;
 
         .token-icon {
           margin: 0;

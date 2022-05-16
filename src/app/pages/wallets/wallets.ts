@@ -14,7 +14,7 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { MenuController, ModalController, NavParams, Platform } from '@ionic/angular';
+import { MenuController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
@@ -54,6 +54,7 @@ export class WalletsPage {
   public isDisableBtnMenu: boolean = false;
   public symbolCurrency;
   public keyHiddenBalanceTemp = [];
+  public flagOptionRemove: boolean;
   listEToken = ['EAT', 'DoC', 'bcPro'];
   donationSupportCoins = [];
   navParamsData;
@@ -85,7 +86,8 @@ export class WalletsPage {
     private appProvider: AppProvider,
     private currencyProvider: CurrencyProvider,
     private configProvider: ConfigProvider,
-    private themeProvider: ThemeProvider
+    private themeProvider: ThemeProvider,
+    private toastController: ToastController
   ) {
     let config = this.configProvider.get();
     const currentCurrency = config.wallet.settings.alternativeIsoCode;
@@ -155,7 +157,6 @@ export class WalletsPage {
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
     this.loadTokenWallet();
-
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -700,6 +701,55 @@ export class WalletsPage {
 
   public openAddressBookPage() {
     this.router.navigate(['/addressbook']);
+  }
+
+  async presentToast(finishText, cssClass?) {
+    const toast = await this.toastController.create({
+      message: finishText,
+      duration: 3000,
+      position: 'bottom',
+      animated: true,
+      cssClass: `custom-finish-toast ${cssClass}`,
+    });
+    toast.present();
+  }
+
+  public addToGroupsHome(wallet, token?) {
+    let walletObj = {
+      walletId: wallet?.id,
+      tokenId: token?.tokenId
+    }
+    let result = this.profileProvider.setWalletGroupsHome(walletObj);
+    if (result && result.added.status) {
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.events.publish('Local/GetListPrimary', true);
+        this.presentToast(result.added.message);
+      });
+    } else if (result && result.full.status) {
+      this.presentToast(result.full.message, 'toast-warning');
+    } else if (result && result.duplicate.status) {
+      this.presentToast(result.duplicate.message, 'toast-info');
+    }
+  }
+
+  public removeOutGroupsHome(wallet, token?) {
+    let walletObj = {
+      walletId: wallet.id,
+      tokenId: token?.tokenId
+    }
+    let result = this.profileProvider.removeWalletGroupsHome(walletObj);
+    if (result) {
+      this.presentToast('Remove account successful');
+      this.events.publish('Local/GetListPrimary', true);
+    } else {
+      this.presentToast('Remove account unsuccessful');
+    }
+  }
+
+  public checkCardExistListPrimary(wallet, token?) {
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    let isExist = _.find(data, item => item.walletId === wallet.id && item.tokenId === token?.tokenId);
+    return !!isExist;
   }
 }
 

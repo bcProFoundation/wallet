@@ -130,6 +130,9 @@ page-import-wallet {
         &::part(indicator-background){
           background: #00658D;
         }
+        @media (max-height: 568px) {
+          min-width: fit-content;
+        }
       }
     }
   }

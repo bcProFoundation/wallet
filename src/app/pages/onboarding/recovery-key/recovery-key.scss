@@ -30,6 +30,10 @@ ion-content {
       .info {
         padding: 20px 32px;
 
+        @media (max-height: 568px) {
+          padding: 20px 20px;
+        }
+
         .title {
           color: #060606;
           font-weight: 600;

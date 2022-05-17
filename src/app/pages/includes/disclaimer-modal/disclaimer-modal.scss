@@ -6,12 +6,11 @@
   }
 }
 disclaimer-modal {
-  padding: 24px 0;
+  padding: 1rem 0;
   background: linear-gradient(0deg, rgba(0, 101, 141, 0.11), rgba(0, 101, 141, 0.11)), #FAFAFB;
   .title{
     font-size: 24px;
-    padding: 0 24px;
-    padding-bottom: 16px;
+    padding: 0 1rem 1rem 1rem;
     line-height: 32px;
     color: rgba(0, 30, 46, 1);
   }
@@ -24,15 +23,16 @@ disclaimer-modal {
     .term-container {
       border-radius: 11px;
       background: transparent;
-      padding-right: 25px;
+      padding-right: 0;
       ion-item.custom-checkbox{
         background: none;
         justify-self: center;
         align-self: start;
         --background: transparent;
+        --padding-start: 1rem;
         ion-checkbox {
           align-self: flex-start;
-       
+          margin-right: 1rem;
         }
         ion-label {
           letter-spacing: 0.25px;
@@ -77,8 +77,7 @@ disclaimer-modal {
     font-size: 16px;
     color: rgba(28, 55, 69, 0.38);
     text-align: right;
-    padding-right: 2rem;
-    padding-bottom: 1rem;
+    padding-right: 1rem;
     cursor: pointer;
   }
   .confirm-term-success{

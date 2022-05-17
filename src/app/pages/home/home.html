@@ -6,9 +6,9 @@
     </div>
   </ion-toolbar>
   <!-- TODO: Keep to header on top when scroll -->
-  <!-- <ion-toolbar class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
+  <ion-toolbar [ngStyle]="{'display': ahihi ? 'flex' : 'none'}" [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea" class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-title>
-      <div class="home-icon" [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+      <div class="home-icon">
         <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
           <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
         </ion-button>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </ion-title>
-  </ion-toolbar> -->
+  </ion-toolbar>
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="handleScrolling($event)" #scrollArea>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

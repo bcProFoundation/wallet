@@ -341,16 +341,20 @@ export class WalletDetailCardComponent implements OnInit {
   }
 
   public removeOutGroupsHome() {
-    let walletObj = {
-      walletId: this.wallet.id,
-      tokenId: this.token?.tokenId
-    }
-    let result = this.profileProvider.removeWalletGroupsHome(walletObj);
-    if (result) {
-      this.presentToast('Remove account successful');
-      this.events.publish('Local/GetListPrimary', true);
+    if (this.profileProvider.isLastItemPrimaryList()) {
+      this.presentToast('Can not remove last item in list', 'toast-warning');
     } else {
-      this.presentToast('Remove account unsuccessful');
+      let walletObj = {
+        walletId: this.wallet.id,
+        tokenId: this.token?.tokenId
+      }
+      let result = this.profileProvider.removeWalletGroupsHome(walletObj);
+      if (result) {
+        this.presentToast('Remove account successful');
+        this.events.publish('Local/GetListPrimary', true);
+      } else {
+        this.presentToast('Remove account unsuccessful');
+      }
     }
   }
 

@@ -322,17 +322,32 @@ page-home {
 
   .item-no-wallet {
     position: relative;
-    .bg-item-no-wallet {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      backdrop-filter: blur(2px);
-      &.no-wallet-light-theme {
-        opacity: 0.4;
+    &.no-wallet-light-theme {
+      background-image: url(../../../assets/img/bg-item-no-wallet-light.svg);
+      &:before {
+        background: rgba(255, 255, 255, 0.84);
       }
     }
+    &.no-wallet-dark-theme {
+      background-image: url(../../../assets/img/bg-item-no-wallet-dark.svg);
+      &:before {
+        background: rgba(33, 51, 62, 0.4);
+        backdrop-filter: blur(1px);
+      }
+    }
+    background-size: cover;
+    background-repeat: no-repeat;
+    &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    }
     margin: 16px;
-    padding: 4rem;
+    padding: 3rem;
     border-radius: 16px;
     display: flex;
     align-items: center;

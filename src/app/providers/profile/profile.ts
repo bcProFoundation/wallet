@@ -171,6 +171,14 @@ export class ProfileProvider {
     }
   }
 
+  public isLastItemPrimaryList() {
+    let listPrimary = JSON.parse(localStorage.getItem("listHome"));
+    if (listPrimary && listPrimary.length === 1) {
+      return true;
+    }
+    return false;
+  }
+
   public setWalletGroupsHome(walletObj) {
     let result = _.cloneDeep(this.resultPrimaryAccount);
     let walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) || [];

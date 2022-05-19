@@ -6,7 +6,7 @@
     </div>
   </ion-toolbar>
   <!-- TODO: Keep to header on top when scroll -->
-  <ion-toolbar [ngStyle]="{'display': ahihi ? 'flex' : 'none'}" [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea" class="toolbar-icon-view-mobile" [ngClass]="{'add-box-shadow-scroll': isScroll}">
+  <!-- <ion-toolbar class="toolbar-icon-view-mobile toolbar-home">
     <ion-title>
       <div class="home-icon">
         <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
@@ -26,7 +26,7 @@
         </div>
       </div>
     </ion-title>
-  </ion-toolbar>
+  </ion-toolbar> -->
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="handleScrolling($event)" #scrollArea>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -205,8 +205,7 @@
   </ng-container>
   
   <ng-template #noWallet>
-    <div class="item-no-wallet" (click)="addToHome()">
-      <img class="bg-item-no-wallet" [ngClass]="{'no-wallet-light-theme': currentTheme == 'light'}" src="assets/img/bg-item-no-wallet-{{currentTheme}}.svg" alt="">
+    <div class="item-no-wallet" [ngClass]="{'no-wallet-light-theme': currentTheme == 'light', 'no-wallet-dark-theme': currentTheme == 'dark'}" (click)="addToHome()">
       <img class="icon-add-home" src="assets/img/add-to-home-{{currentTheme}}.svg" alt="">
       <p translate>
         Add to home

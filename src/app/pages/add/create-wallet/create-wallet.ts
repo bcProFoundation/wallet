@@ -33,6 +33,7 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { CopayersPage } from '../copayers/copayers';
 import { AppProvider } from 'src/app/providers';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-create-wallet',
   templateUrl: 'create-wallet.html',
@@ -104,7 +105,8 @@ export class CreateWalletPage implements OnInit {
     private persistenceProvider: PersistenceProvider,
     private errorsProvider: ErrorsProvider,
     private router: Router,
-    private appProvider: AppProvider
+    private appProvider: AppProvider,
+    private events2: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -403,9 +405,9 @@ export class CreateWalletPage implements OnInit {
                 this.router.navigate(['/wallet-details'], {
                   state: { walletId: wallet.credentials.walletId }
                 }).then(() => {
-                  this.events.publish('Local/RefreshWallets', {
+                  this.events2.publishRefresh({
                     keyId: this.keyId
-                  });
+                  })
                 });
               } else {
                 const copayerModal = this.modalCtrl.create({

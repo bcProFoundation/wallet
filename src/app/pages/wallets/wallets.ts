@@ -22,6 +22,7 @@ import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
 import { AppProvider, ConfigProvider, CurrencyProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { EventsService } from 'src/app/providers/events.service';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -76,6 +77,7 @@ export class WalletsPage {
     private analyticsProvider: AnalyticsProvider,
     private logger: Logger,
     private events: EventManagerService,
+    private events2: EventsService,
     private persistenceProvider: PersistenceProvider,
     private modalCtrl: ModalController,
     private navParams: NavParams,
@@ -401,17 +403,17 @@ export class WalletsPage {
   }
 
   private _didEnter(opts?) {
-      // if (opts && opts.keyId) {
-      //   this.callTest(opts.keyId);
-      // } else {
-       
-      // }
-      this.debounceSetWallets(undefined);
-      this.updateTxps();
-      this.walletAudienceEvents();
+    // if (opts && opts.keyId) {
+    //   this.callTest(opts.keyId);
+    // } else {
+
+    // }
+    this.debounceSetWallets(opts || undefined);
+    this.updateTxps();
+    this.walletAudienceEvents();
   }
 
-  private onEnter(opts){
+  private onEnter(opts) {
     this.debounceSetWallets(opts);
   }
 
@@ -456,7 +458,13 @@ export class WalletsPage {
 
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
 
-      this.events.subscribe('Local/RefreshWallets', this.onEnter);
+      this.events2.getRefresh().subscribe(data => {
+        this.setWallets(data.keyId);
+      })
+
+      this.events2.getRefreshWallets().subscribe(() => {
+        this.walletGetDataHandler(true);
+      })
     };
     //Detect Change theme
     this.themeProvider.themeChange.subscribe(() => {
@@ -478,6 +486,7 @@ export class WalletsPage {
   ngOnDestroy() {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
+    console.log('destroy');
   }
 
   private debounceFetchWalletStatus = _.debounce(
@@ -513,31 +522,58 @@ export class WalletsPage {
   };
 
   private debounceSetWallets(keyId) {
-    console.log(keyId);
-    // _.debounce(
-    //   async () => {
-    //     this.profileProvider.setOrderedWalletsByGroup(keyId);
-    //     this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    //     this.walletsGroups.forEach(walletArray => {
-    //       walletArray.forEach(wallet => {
-    //         this.events.publish('Local/WalletFocus', {
-    //           walletId: wallet.id,
-    //           force: true
-    //         });
-    //       });
+    _.debounce(
+      async () => {
+        this.profileProvider.setOrderedWalletsByGroup(keyId);
+        this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+        this.walletsGroups.forEach(walletArray => {
+          walletArray.forEach(wallet => {
+            this.events.publish('Local/WalletFocus', {
+              walletId: wallet.id,
+              force: true
+            });
+          });
 
+        });
+        this.loadTokenWallet();
+      },
+      5000,
+      {
+        leading: true
+      }
+    );
+  }
+
+  private refreshWallets() {
+    this.updateTxps();
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.walletsGroups.forEach(walletArray => {
+      walletArray.forEach(wallet => {
+        this.events.publish('Local/WalletFocus', {
+          walletId: wallet.id,
+          force: true
+        });
+      });
+
+    });
+  }
+
+  private setWallets(keyId) {
+    this.profileProvider.setOrderedWalletsByGroup(keyId);
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    // this.walletsGroups.forEach(walletArray => {
+    //   walletArray.forEach(wallet => {
+    //     this.events.publish('Local/WalletFocus', {
+    //       walletId: wallet.id,
+    //       force: true
     //     });
-    //     this.loadTokenWallet();
-    //   },
-    //   5000,
-    //   {
-    //     leading: true
-    //   }
-    // );
+    //   });
+
+    // });
+    // this.loadTokenWallet();
+    this.initKeySelected();
   }
-  private callTest(keyId){
-    console.log(keyId);
-  }
+
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {
       this.logger.error('Error no walletId in update History');

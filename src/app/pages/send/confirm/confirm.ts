@@ -40,6 +40,7 @@ import { ChooseFeeLevelModal } from '../../choose-fee-level/choose-fee-level';
 import { FinishModalPage } from '../../finish/finish';
 import { PreviousRouteService } from 'src/app/providers/previous-route/previous-route';
 import { LoadingProvider } from 'src/app/providers/loading/loading';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-confirm',
   templateUrl: 'confirm.html',
@@ -162,7 +163,8 @@ export class ConfirmPage {
     private router: Router,
     private location: Location,
     private routerOutlet: IonRouterOutlet,
-    private loadingProvider: LoadingProvider
+    private loadingProvider: LoadingProvider,
+    private events2: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -1696,7 +1698,13 @@ export class ConfirmPage {
           donationSupportCoins: this.donationSupportCoins,
           finishParam: params
         }
-      });
+      }).then(
+        () => {
+          this.events2.publishRefresh({
+            keyId: this.wallet.keyId
+          });
+        }
+      );
     }
   }
 

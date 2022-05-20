@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import _ from 'lodash';
 import { DisclaimerModal } from '../../includes/disclaimer-modal/disclaimer-modal';
 import { AppProvider, PersistenceProvider } from 'src/app/providers';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-import-wallet',
   templateUrl: 'import-wallet.html',
@@ -87,7 +88,8 @@ export class ImportWalletPage {
     private errorsProvider: ErrorsProvider,
     private router: Router,
     private appProvider: AppProvider,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private events2: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state
@@ -319,9 +321,9 @@ export class ImportWalletPage {
         replaceUrl: true
       })
       .then(() => {
-        this.events.publish('Local/RefreshWallets', {
-          keyId: keyId
-        });
+        this.events2.publishRefresh({
+          keyId
+        })
       });
   }
 

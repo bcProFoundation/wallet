@@ -16,6 +16,7 @@ import { SwiperOptions } from 'swiper';
 import { BackupWordModel } from '../backup-component/backup-word/backup-word.model';
 import { ModalController } from '@ionic/angular';
 import { CopayersPage } from '../../add/copayers/copayers';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-backup-game',
   templateUrl: 'backup-game.html',
@@ -51,8 +52,7 @@ export class BackupGamePage {
     private bwcProvider: BwcProvider,
     private actionSheetProvider: ActionSheetProvider,
     private keyProvider: KeyProvider,
-    private persistenceProvider: PersistenceProvider,
-    private events: EventManagerService,
+    private events2: EventsService,
     private router: Router,
     private modalCtrl: ModalController,
     private location: Location) {
@@ -198,9 +198,9 @@ export class BackupGamePage {
               replaceUrl: true
             })
             .then(() => {
-              this.events.publish('Local/RefreshWallets', {
+              this.events2.publishRefresh({
                 keyId: this.keyId
-              });
+              })
             });
         }
         )
@@ -211,9 +211,9 @@ export class BackupGamePage {
             replaceUrl: true
           })
           .then(() => {
-            this.events.publish('Local/RefreshWallets', {
+            this.events2.publishRefresh({
               keyId: this.keyId
-            });
+            })
           });
       }
     });

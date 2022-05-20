@@ -213,6 +213,7 @@ export class KeySettingsPage {
     infoSheet.onDidDismiss(option => {
       if (!option) return;
       this.deleteWalletGroup();
+      this.events.publish('Local/GetListPrimary', true);
     });
   }
 

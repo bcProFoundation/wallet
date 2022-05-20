@@ -44,6 +44,11 @@ export class WalletItemContent {
     }
   }
 
+  isSupportToken(wallet): boolean {
+    if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
+    return false
+  }
+
   getBalance(wallet, currency) {
     const lastKnownBalance = this.getLastKownBalance(wallet, currency);
     const totalBalanceStr =

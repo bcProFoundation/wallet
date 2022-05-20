@@ -1,263 +1,349 @@
-swiper {
-  max-height: 220px;
-  ion-slide {
-    justify-content: normal;
-    align-items: normal;
-  }
-}
-button.bitpay-id-login {
-  height: 2.1em;
-  margin-top: -12px;
-  float: right;
-}
-
-.icon-bitpay-id {
-  font-family: 'Heebo-Medium' !important;
-  background: #1a2c57;
-  color: #9faff5;
-  font-size: 16px;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.icon-bitpay-id.icon-small {
-  font-size: 12px;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.total-amount-container {
-  background: #fafafb;
-  margin: 1rem;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  .section-header {
-    color: rgba(0, 30, 46, 0.6);
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    letter-spacing: 0.1px;
-  }
-  .total-amount {
-    padding: 1rem;
-  }
-
-  img {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 100%;
-  }
-
-  .total-amount-value {
-    color: #000000;
-    font-size: 32px;
-    line-height: 40px;
-    font-weight: 400;
-    margin-top: 4px;
-    .iso-code {
-      font-size: 14px;
+page-home {
+  .card-home-info {
+    position: relative;
+    .home-toolbar {
+      background: #fafafb;
+      padding-top: env(safe-area-inset-top);
+      .home-icon {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        align-items: center;
+        ion-button {
+          min-height: 36px;
+          z-index: 9;
+          --overflow: visible;
+          --padding-end: 0;
+          --padding-start: 0;
+          &.chart-btn {
+            --padding-end: 0.5rem;
+          }
+          &.key-notifications {
+            --padding-start: 0.5rem;
+          }
+          ion-icon {
+            margin: 0;
+          }
+        }
+      
+        h2 {
+          margin: 0;
+          margin-left: 2.5rem;
+          font-size: 16px;
+          font-weight: 600;
+        }
+      
+        .custom-notification-icon {
+          position: absolute;
+          bottom: 17px;
+          left: 17px;
+          z-index: 1;
+        }
+  
+        .group-btn-top {
+          display: flex;
+        }
+      }
     }
-    ion-spinner {
-      margin-left: 15px;
-      * {
-        stroke: var(--ion-color-primary);
+    .total-amount-container {
+      background: #fafafb;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      min-height: 145px;
+      border-bottom-left-radius: 48px;
+      border-bottom-right-radius: 48px;
+      .section-header {
+        display: block;
+        color: rgba(0, 30, 46, 0.6);
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 0.1px;
+      }
+      .total-amount {
+        width: 100%;
+      }
+    
+      img {
+        position: absolute;
+        width: 175px;
+        height: 140px;
+        &.top-img {
+          top: 0;
+          left: 0;
+        }
+        &.bottom-img {
+          right: 0;
+          bottom: 0;
+          border-bottom-right-radius: 30%;
+        }
+      }
+    
+      .total-amount-value {
+        color: var(--color-primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        line-height: 28px;
+        font-weight: 700;
+        margin-top: 4px;
+        .iso-code {
+          font-size: 14px;
+        }
+        ion-icon {
+          z-index: 9;
+          margin-right: 0.5rem;
+          color: rgba(237, 239, 240, 0.6);
+          &.eye-light-theme {
+            color: rgba(0, 30, 46, 0.6);
+          }
+        }
+        ion-spinner {
+          margin-left: 15px;
+          * {
+            stroke: var(--ion-color-primary);
+          }
+        }
+      }
+      .average-container {
+        display: flex;
+        text-align: center;
+        height: 21px;
+        .negative-avg {
+          color: #ba1b1b;
+          border-radius: 50vh;
+        }
+        .possitive-avg {
+          color: #37a372;
+          border-radius: 50vh;
+        }
+        .average {
+          font-size: 14px;
+          line-height: 19px;
+          height: 21px;
+          font-weight: 400;
+        }
+        .date {
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(0, 30, 46, 0.6);
+          margin-left: 10px;
+        }
       }
     }
   }
-  .average-container {
-    display: flex;
-    text-align: center;
-    height: 21px;
-    .negative-avg {
-      color: #ba1b1b;
-      border-radius: 50vh;
-    }
-    .possitive-avg {
-      color: #37a372;
-      border-radius: 50vh;
-    }
-    .average {
-      font-size: 14px;
-      line-height: 19px;
-      height: 21px;
-      font-weight: 400;
-    }
-    .date {
-      font-size: 14px;
-      font-weight: 400;
-      color: rgba(0, 30, 46, 0.6);
-      margin-left: 10px;
-    }
-  }
-}
-.balance-hidden {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  .title {
-    cursor: pointer;
-    font-size: 32px;
-    font-weight: 500;
-  }
-  .subtitle {
-    padding-top: 10px;
-    font-size: 15px;
-  }
-}
-.message {
-  &-background {
-    width: 90%;
-    border-radius: 12px;
-    background-color: #f9f9fb;
-    margin: 2rem auto 0 auto;
-    &.no-margin {
-      margin-top: 0;
-    }
-    .line-divider {
-      margin: 0px 15px;
-    }
-  }
-
-  &-header {
-    &.no-dismissible {
-      height: 30px;
-    }
-    .button[icon-only] {
-      font-size: 10px;
-    }
-  }
-  &-icon {
-    padding: 0 15px;
-    display: flex;
-    img {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  &-title {
-    text-align: left;
-    font-size: 18px;
-    font-weight: 700;
-    &-adv {
-      padding: 0px 15px 7px 0px;
-    }
-    &-info {
-      color: var(--color-info);
-    }
-
-    &-critical {
-      color: var(--ion-color-danger);
-    }
-  }
-
-  &-body {
-    color: grey;
-    font-weight: 400;
-    text-align: left;
-    white-space: normal;
+  
+  .icon-bitpay-id {
+    font-family: 'Heebo-Medium' !important;
+    background: #1a2c57;
+    color: #9faff5;
     font-size: 16px;
-    padding: 10px 15px 20px 15px;
-    &-adv {
-      padding: 0px 15px 7px 0px;
-    }
-  }
-
-  &-button {
-    cursor: pointer;
-    padding-left: 15px;
-    font-size: 16px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
-    color: #4f6ef7;
-    height: 45px;
   }
-  &-img {
-    img {
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
+  .icon-bitpay-id.icon-small {
+    font-size: 12px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .balance-hidden {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    .title {
+      cursor: pointer;
+      font-size: 32px;
+      font-weight: 500;
     }
-    img.card-img {
-      border-radius: 0;
-      width: 60px;
-      height: 60px;
+    .subtitle {
+      padding-top: 10px;
+      font-size: 15px;
     }
   }
-}
-
-.services-list {
-  &-label {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 25px;
-    margin-left: 6px;
+  .message {
+    &-background {
+      width: 90%;
+      border-radius: 12px;
+      background-color: #f9f9fb;
+      margin: 2rem auto 0 auto;
+      &.no-margin {
+        margin-top: 0;
+      }
+      .line-divider {
+        margin: 0px 15px;
+      }
+    }
+  
+    &-header {
+      &.no-dismissible {
+        height: 30px;
+      }
+      .button[icon-only] {
+        font-size: 10px;
+      }
+    }
+    &-icon {
+      padding: 0 15px;
+      display: flex;
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  
+    &-title {
+      text-align: left;
+      font-size: 18px;
+      font-weight: 700;
+      &-adv {
+        padding: 0px 15px 7px 0px;
+      }
+      &-info {
+        color: var(--color-info);
+      }
+  
+      &-critical {
+        color: var(--ion-color-danger);
+      }
+    }
+  
+    &-body {
+      color: grey;
+      font-weight: 400;
+      text-align: left;
+      white-space: normal;
+      font-size: 16px;
+      padding: 10px 15px 20px 15px;
+      &-adv {
+        padding: 0px 15px 7px 0px;
+      }
+    }
+  
+    &-button {
+      cursor: pointer;
+      padding-left: 15px;
+      font-size: 16px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      color: #4f6ef7;
+      height: 45px;
+    }
+    &-img {
+      img {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+      }
+      img.card-img {
+        border-radius: 0;
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
-  &-arrow {
-    margin-right: 10px;
-  }
-}
-.date-label {
-  display: inline-block;
-  background: #f6f7fc;
-  border-radius: 25vh;
-  padding: 0 18px;
-  color: #9ba3ae;
-  font-size: 12px;
-  cursor: default;
-}
-
-.wide-header__title {
-  padding-top: 0;
-  padding-bottom: 0;
-  --padding-end: 1rem;
-  --padding-start: 1rem;
-  expandable-header-primary {
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: 0.1px;
-  }
-}
-
-.home-icon {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 1rem;
-  align-items: center;
-  .key-notifications {
-    height: 36px;
-    --overflow: visible;
-    --padding-end: 0;
-  }
-
-  .custom-notification-icon {
-    position: absolute;
-    bottom: 17px;
-    left: 17px;
-    z-index: 1;
-  }
-}
-
-.exchange-rate {
-  justify-content: flex-start !important;
-  align-items: baseline;
-  margin: 2rem 1rem 0 1rem;
-  .exchange-rate-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: #001e2e;
+  
+  .services-list {
+    &-label {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 25px;
+      margin-left: 6px;
+    }
+    &-arrow {
+      margin-right: 10px;
+    }
   }
   .date-label {
-    background: none;
-    font-size: 14px;
-    color: rgba(0, 30, 46, 0.6);
-    padding-left: 0.5rem;
+    display: inline-block;
+    background: #f6f7fc;
+    border-radius: 25vh;
+    padding: 0 18px;
+    color: #9ba3ae;
+    font-size: 12px;
+    cursor: default;
   }
+  
+  .wide-header__title {
+    padding-top: 0;
+    padding-bottom: 0;
+    --padding-end: 1rem;
+    --padding-start: 1rem;
+    expandable-header-primary {
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.1px;
+    }
+  }
+  
+  .exchange-rate {
+    align-items: baseline;
+    margin: 1.5rem 1rem;
+    .exchange-rate-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #001e2e;
+    }
+    .date-label {
+      background: none;
+      font-size: 14px;
+      color: rgba(0, 30, 46, 0.6);
+      padding-left: 0;
+    }
+    .btn-more {
+      --color: rgba(0, 30, 46, 0.6);
+      --padding-end: 0;
+      height: fit-content;
+      margin: 0;
+      align-self: center;
+      ion-icon {
+        width: 19px;
+        height: 19px;
+      }
+    }
+  }
+  
+  .list-item-card {
+    margin: 0 1rem;
+    .wallet-item {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .item-no-wallet {
+    position: relative;
+    .bg-item-no-wallet {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      backdrop-filter: blur(2px);
+      &.no-wallet-light-theme {
+        opacity: 0.4;
+      }
+    }
+    margin: 16px;
+    padding: 4rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .icon-add-home {
+      width: 40px;
+      height: 40px;
+      z-index: 1;
+    }
+    p {
+      z-index: 1;
+    }
+  }
+  
 }

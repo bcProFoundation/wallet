@@ -118,8 +118,9 @@
   @include toolbar-button-color(var(--text-color-dark-theme));
 
   // Custom header class when scroll
-  .add-box-shadow-scroll{
-    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.6);
+  .add-box-shadow-scroll {
+    box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.3),
+      0px 1px 2px rgba(0, 0, 0, 0.6);
   }
 
   // TODO: Remove text opacity from default styles
@@ -439,7 +440,12 @@
 
   ion-alert {
     .alert-wrapper {
-      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      background: linear-gradient(
+          0deg,
+          rgba(126, 208, 255, 0.11),
+          rgba(126, 208, 255, 0.11)
+        ),
+        #001e2e !important;
       color: var(--text-color-dark-theme) !important;
 
       .alert-title {
@@ -1347,15 +1353,16 @@
   page-home {
     .total-amount-container {
       .total-amount-value {
-        color: var(--text-color-dark-theme) !important;
+        color: var(--color-primary-abcpay-dark) !important;
       }
+    }
+
+    .home-toolbar {
+      background: #0e3244 !important;
     }
 
     .section-header {
       color: rgba(237, 239, 240, 0.6) !important;
-      .date-label {
-        background-color: var(--bg-color-dark-theme-2);
-      }
     }
 
     .date-label,
@@ -1373,8 +1380,12 @@
       color: #edeff0 !important;
     }
 
+    .btn-more {
+      --color: rgba(237, 239, 240, 0.6) !important;
+    }
+
     .total-amount-container {
-      background: #0e3244;
+      background: #0e3244 !important;
       .average-container {
         .negative-avg {
           color: #ffb4a9 !important;
@@ -1468,6 +1479,9 @@
             rgba(126, 208, 255, 0.05)
           ),
           #001e2e;
+          ion-item-sliding {
+            background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), #001E2E;;
+          }
       }
       .address-token {
         color: rgba(224, 228, 230, 0.6);
@@ -1547,18 +1561,23 @@
           }
           .sub-menu {
             border-color: rgba(112, 129, 138, 0.38);
-            background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), rgb(0, 30, 46) !important;
+            background: linear-gradient(
+                0deg,
+                rgba(126, 208, 255, 0.05),
+                rgba(126, 208, 255, 0.05)
+              ),
+              rgb(0, 30, 46) !important;
           }
           sub-menu-account {
             .edit-key-name {
               ion-input {
-                  border: 2px solid var(--color-primary-abcpay-dark) !important;
+                border: 2px solid var(--color-primary-abcpay-dark) !important;
               }
               ion-button {
-                  border-color: var(--color-primary-abcpay-dark) !important;
-                  ion-icon {
-                      color: #73DAA5 !important;
-                  }
+                border-color: var(--color-primary-abcpay-dark) !important;
+                ion-icon {
+                  color: #73daa5 !important;
+                }
               }
             }
           }
@@ -1878,7 +1897,12 @@
     }
 
     .tx-history {
-      background: linear-gradient(0deg, rgba(126, 208, 255, 0.08), rgba(126, 208, 255, 0.08)), #001e2e !important;
+      background: linear-gradient(
+          0deg,
+          rgba(126, 208, 255, 0.08),
+          rgba(126, 208, 255, 0.08)
+        ),
+        #001e2e !important;
       .tx-history-header {
         &.item {
           background: linear-gradient(
@@ -2034,7 +2058,12 @@
     }
 
     ion-infinite-scroll {
-      background: linear-gradient(0deg, rgba(126, 208, 255, 0.08), rgba(126, 208, 255, 0.08)), #001e2e;
+      background: linear-gradient(
+          0deg,
+          rgba(126, 208, 255, 0.08),
+          rgba(126, 208, 255, 0.08)
+        ),
+        #001e2e;
     }
   }
 
@@ -3629,6 +3658,24 @@
   wallet-detail-card {
     .input-edit-account-name {
       border-color: var(--color-primary-abcpay-dark) !important;
+    }
+  }
+
+  page-select-flow {
+    .flow-container {
+      background: rgba(126, 208, 255, 0.14) !important;
+      border-color: rgba(126, 208, 255, 0.2);
+      box-shadow: unset !important;
+    }
+
+    .is-simple {
+      color: rgba(255, 180, 169, 1) !important;
+      background: rgba(255, 180, 169, 0.18) !important;
+      border: unset !important;
+      box-shadow: unset !important;
+      .button-container {
+        color: #ffb4a9;
+      }
     }
   }
 }

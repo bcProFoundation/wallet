@@ -56,7 +56,11 @@ body {
         --padding-start: 2rem;
         --padding-end: 2rem;
         width: calc(100% + 15px);
-
+        .flow-container{
+            margin-right: 0px !important;
+            margin-left: 0px !important;
+            width: 100%;
+          }
         &::part(scroll)::-webkit-scrollbar {
             display: none;
         }
@@ -396,6 +400,18 @@ ion-header ion-toolbar {
         background: #73DAA5;
         color: #003921;
         border-radius: 8px;
+    }
+    &.toast-warning {
+        &::part(container){
+            background: #FFDDB6 !important;
+            color: #482A00 !important;
+        }
+    }
+    &.toast-info {
+        &::part(container){
+            background: #E1E2E5 !important;
+            color: #191C1E !important;
+        }
     }
 }
 .option-button {
@@ -2146,6 +2162,12 @@ page-session-log {
 
 ion-toolbar.header {
     &.bg {
+        &-btc {
+            background: url("../assets/img/wallet-details/bg-btc.svg") no-repeat 10% !important;
+            --background: none !important;
+            background-size: cover !important;
+        }
+
         &-bch {
             background: url("../assets/img/wallet-details/bg-bch.svg") no-repeat 10% !important;
             --background: none !important;
@@ -2210,4 +2232,32 @@ ion-toolbar.header {
 
 .stroke-card {
     border: 1px solid #e5eff7;
+}
+
+ion-popover {
+    &.popover-home {
+        --width: 285px;
+        .list-option-home {
+            ion-item {
+                --background: none !important;
+                background: none !important;
+                box-shadow: none !important;
+                margin: 0.5rem 1rem !important;
+                ion-icon {
+                    width: 24px !important;
+                    height: 24px !important;
+                    margin: 0 1rem 0 0 !important;
+                    padding: 0 !important;
+                }
+                ion-label {
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+            .line-divider {
+                border: 0;
+                border-bottom: 1px solid #000;
+            }
+        }
+    }
 }

@@ -99,7 +99,6 @@ export class HomePage {
   public walletGroupsHome: Array<any> = [];
   public removeAllItem: boolean = false;
   public isShowBalance: boolean = false;
-  public ahihi: boolean = false;
 
   constructor(
     private persistenceProvider: PersistenceProvider,
@@ -142,18 +141,9 @@ export class HomePage {
   async handleScrolling(event) {
     if (event.detail.currentY > 0) {
       this.isScroll = true;
-      // this.ahihi = true;
-      if (event.detail.currentY < 20) {
-        console.log("AHIHIHIHI" + event.detail.currentY);
-          this.ahihi = false;
-      } else {
-        console.log("AHIHIHIHI" + event.detail.currentY);
-        this.ahihi = true;
-      }
     }
     else {
       this.isScroll = false;
-      this.ahihi = false;
     }
   }
 

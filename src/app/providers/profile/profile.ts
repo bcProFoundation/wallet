@@ -2119,7 +2119,6 @@ export class ProfileProvider {
                   walletClient.etokenAddress = etoken;
                 }
               }
-              console.log('AHIHIHIHIHIHIHI' + this.wallet)
               this.setDefaultPrimaryAccount();
               return resolve(boundWalletClients);
             } catch (error) {

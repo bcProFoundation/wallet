@@ -1,16 +1,17 @@
 page-home {
+  .toolbar-home {
+    background: #fafafb;
+    --background: #fafafb;
+    padding-top: env(safe-area-inset-top);
+  }
   .card-home-info {
     position: relative;
-    .home-toolbar {
-      background: #fafafb;
-      padding-top: env(safe-area-inset-top);
-    }
     .total-amount-container {
       background: #fafafb;
       display: flex;
       align-items: center;
       text-align: center;
-      min-height: 145px;
+      min-height: 105px;
       border-bottom-left-radius: 48px;
       border-bottom-right-radius: 48px;
       .section-header {
@@ -28,15 +29,15 @@ page-home {
       img {
         position: absolute;
         width: 175px;
-        height: 140px;
         &.top-img {
-          top: 0;
+          bottom: 0;
           left: 0;
+          border-bottom-left-radius: 50px;
         }
         &.bottom-img {
           right: 0;
           bottom: 0;
-          border-bottom-right-radius: 30%;
+          border-bottom-right-radius: 50px;
         }
       }
     
@@ -324,34 +325,19 @@ page-home {
     position: relative;
     &.no-wallet-light-theme {
       background-image: url(../../../assets/img/bg-item-no-wallet-light.svg);
-      &:before {
-        background: rgba(255, 255, 255, 0.84);
-      }
     }
     &.no-wallet-dark-theme {
       background-image: url(../../../assets/img/bg-item-no-wallet-dark.svg);
-      &:before {
-        background: rgba(33, 51, 62, 0.4);
-        backdrop-filter: blur(1px);
-      }
     }
     background-size: cover;
     background-repeat: no-repeat;
-    &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 16px;
-    }
-    margin: 16px;
-    padding: 3rem;
+    margin: 1rem;
     border-radius: 16px;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
+    height: 260px;
     .icon-add-home {
       width: 40px;
       height: 40px;

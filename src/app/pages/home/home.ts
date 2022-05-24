@@ -558,6 +558,10 @@ export class HomePage {
     this.router.navigate(['/proposals-notifications']);
   }
 
+  public openChartViewPage(): void {
+    this.router.navigate(['/chart-view']);
+  }
+
   public addToHome() {
     this.router.navigateByUrl('/accounts-page', {
       state: {

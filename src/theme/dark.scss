@@ -1350,11 +1350,16 @@
 
   // 5 - Tabs
   // 5.1 Tab Home
-  page-home {
+  page-home, chart-view {
     .total-amount-container {
       .total-amount-value {
         color: var(--color-primary-abcpay-dark) !important;
       }
+    }
+
+    .toolbar-home {
+      background: #0e3244 !important;
+      --background: #0e3244 !important;
     }
 
     .home-toolbar {

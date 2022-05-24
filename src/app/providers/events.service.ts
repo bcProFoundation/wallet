@@ -15,12 +15,4 @@ export class EventsService {
     getRefresh(): Subject<any> {
         return this.refreshKey;
     }
-
-    publishRefreshWallets() {
-        this.refreshWallets.next();
-    }
-
-    getRefreshWallets(): Subject<any> {
-        return this.refreshWallets;
-    }
 }

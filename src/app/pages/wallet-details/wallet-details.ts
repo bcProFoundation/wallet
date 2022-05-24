@@ -266,7 +266,6 @@ export class WalletDetailsPage {
 
   ionViewDidLeave() {
     this.events.publish('Local/GetData', true);
-    this.events.publish('Local/FetchWallets');
   }
 
   shouldShowZeroState() {

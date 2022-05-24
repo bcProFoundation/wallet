@@ -652,9 +652,9 @@ export class WalletsPage {
         this.events.publish('Local/UpdateTxps', {
           n: data.n
         });
-        // this.zone.run(() => {
-        //   this.txpsN = data.n;
-        // });
+        this.zone.run(() => {
+          this.txpsN = data.n;
+        });
       })
       .catch(err => {
         this.logger.error(err);

@@ -2036,7 +2036,6 @@ export class ProfileProvider {
           .then(walletsData => {
             walletsData.unshift(firstWalletData);
             let walletClients = _.map(walletsData, 'walletClient');
-            console.log('1*************WALLET' + this.wallet);
             // Handle tokens
             if (!_.isEmpty(tokens)) {
               const ethWalletClient = walletClients.find(
@@ -2055,14 +2054,12 @@ export class ProfileProvider {
               walletClients = walletClients.concat(tokenClients);
             }
 
-            console.log('2*************WALLET' + this.wallet);
 
             this.addAndBindWalletClients({
               key: firstWalletData.key,
               walletClients
             })
               .then(() => {
-                console.log('*************WALLET' + this.wallet);
                 return resolve(walletClients);
               })
               .catch(e => {

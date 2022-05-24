@@ -89,7 +89,7 @@ export class ImportWalletPage {
     private router: Router,
     private appProvider: AppProvider,
     private persistenceProvider: PersistenceProvider,
-    private events2: EventsService
+    private eventsService: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state
@@ -321,7 +321,7 @@ export class ImportWalletPage {
         replaceUrl: true
       })
       .then(() => {
-        this.events2.publishRefresh({
+        this.eventsService.publishRefresh({
           keyId
         })
       });

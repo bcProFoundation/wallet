@@ -52,7 +52,7 @@ export class BackupGamePage {
     private bwcProvider: BwcProvider,
     private actionSheetProvider: ActionSheetProvider,
     private keyProvider: KeyProvider,
-    private events2: EventsService,
+    private eventsService: EventsService,
     private router: Router,
     private modalCtrl: ModalController,
     private location: Location) {
@@ -198,7 +198,7 @@ export class BackupGamePage {
               replaceUrl: true
             })
             .then(() => {
-              this.events2.publishRefresh({
+              this.eventsService.publishRefresh({
                 keyId: this.keyId
               })
             });
@@ -211,7 +211,7 @@ export class BackupGamePage {
             replaceUrl: true
           })
           .then(() => {
-            this.events2.publishRefresh({
+            this.eventsService.publishRefresh({
               keyId: this.keyId
             })
           });

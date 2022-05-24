@@ -77,7 +77,7 @@ export class WalletsPage {
     private analyticsProvider: AnalyticsProvider,
     private logger: Logger,
     private events: EventManagerService,
-    private events2: EventsService,
+    private eventsService: EventsService,
     private persistenceProvider: PersistenceProvider,
     private modalCtrl: ModalController,
     private navParams: NavParams,
@@ -448,7 +448,7 @@ export class WalletsPage {
 
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
 
-      this.events2.getRefresh().subscribe(data => {
+      this.eventsService.getRefreshKey().subscribe(data => {
         this.setWallets(data.keyId);
       })
     };
@@ -467,7 +467,7 @@ export class WalletsPage {
       this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
       this.events.unsubscribe('Local/TxAction', this.walletFocusHandler);
       this.events.unsubscribe('Local/WalletFocus', this.walletFocusHandler);
-      this.events2.getRefresh().unsubscribe();
+      this.eventsService.getRefreshKey().unsubscribe();
     });
   }
 

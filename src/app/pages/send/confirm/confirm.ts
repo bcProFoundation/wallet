@@ -164,7 +164,7 @@ export class ConfirmPage {
     private location: Location,
     private routerOutlet: IonRouterOutlet,
     private loadingProvider: LoadingProvider,
-    private events2: EventsService
+    private eventsService: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -1700,7 +1700,7 @@ export class ConfirmPage {
         }
       }).then(
         () => {
-          this.events2.publishRefresh({
+          this.eventsService.publishRefresh({
             keyId: this.wallet.keyId
           });
         }

@@ -106,7 +106,7 @@ export class CreateWalletPage implements OnInit {
     private errorsProvider: ErrorsProvider,
     private router: Router,
     private appProvider: AppProvider,
-    private events2: EventsService
+    private eventsService: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -405,7 +405,7 @@ export class CreateWalletPage implements OnInit {
                 this.router.navigate(['/wallet-details'], {
                   state: { walletId: wallet.credentials.walletId }
                 }).then(() => {
-                  this.events2.publishRefresh({
+                  this.eventsService.publishRefresh({
                     keyId: this.keyId
                   })
                 });

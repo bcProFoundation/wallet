@@ -26,7 +26,6 @@ import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
-
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -82,7 +81,6 @@ export class WalletDetailsPage {
   public navPramss: any;
   public finishParam: any;
   public isScroll = false;
-
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -259,6 +257,10 @@ export class WalletDetailsPage {
     this.events.unsubscribe('Local/WalletUpdate', this.updateStatus);
     this.events.unsubscribe('Local/WalletHistoryUpdate', this.updateHistory);
     this.onResumeSubscription.unsubscribe();
+  }
+
+  ionViewDidLeave() {
+    this.events.publish('Local/GetData', true);
   }
 
   shouldShowZeroState() {

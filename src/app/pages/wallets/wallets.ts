@@ -22,6 +22,7 @@ import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
 import { AppProvider, ConfigProvider, CurrencyProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { EventsService } from 'src/app/providers/events.service';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -67,7 +68,7 @@ export class WalletsPage {
   isShowBalance = true;
   keySelected = [];
   keyNameSelected;
-  
+
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -78,6 +79,7 @@ export class WalletsPage {
     private analyticsProvider: AnalyticsProvider,
     private logger: Logger,
     private events: EventManagerService,
+    private eventsService: EventsService,
     private persistenceProvider: PersistenceProvider,
     private modalCtrl: ModalController,
     private navParams: NavParams,
@@ -113,7 +115,6 @@ export class WalletsPage {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.collapsedGroups = {};
     this.collapsedToken = {};
-    this.zone = new NgZone({ enableLongStackTrace: false });
   }
 
   async handleScrolling(event) {
@@ -403,6 +404,7 @@ export class WalletsPage {
   }
 
   private _didEnter() {
+    this.debounceSetWallets();
     this.updateTxps();
     this.walletAudienceEvents();
   }
@@ -447,7 +449,12 @@ export class WalletsPage {
       this.events.subscribe('Local/WalletFocus', this.walletFocusHandler);
 
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
+
+      this.eventsService.getRefreshKey().subscribe(data => {
+        this.setWallets(data.keyId);
+      })
     };
+
     //Detect Change theme
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
@@ -462,6 +469,7 @@ export class WalletsPage {
       this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
       this.events.unsubscribe('Local/TxAction', this.walletFocusHandler);
       this.events.unsubscribe('Local/WalletFocus', this.walletFocusHandler);
+      this.eventsService.getRefreshKey().unsubscribe();
     });
   }
 
@@ -502,26 +510,34 @@ export class WalletsPage {
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
   };
 
-  private debounceSetWallets = _.debounce(
-    async () => {
-      this.profileProvider.setOrderedWalletsByGroup();
-      this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-      this.walletsGroups.forEach(walletArray => {
-        walletArray.forEach(wallet => {
-          this.events.publish('Local/WalletFocus', {
-            walletId: wallet.id,
-            force: true
+  private debounceSetWallets() {
+    _.debounce(
+      async () => {
+        this.profileProvider.setOrderedWalletsByGroup();
+        this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+        this.walletsGroups.forEach(walletArray => {
+          walletArray.forEach(wallet => {
+            this.events.publish('Local/WalletFocus', {
+              walletId: wallet.id,
+              force: true
+            });
           });
-        });
 
-      });
-      this.loadTokenWallet();
-    },
-    5000,
-    {
-      leading: true
-    }
-  );
+        });
+        this.loadTokenWallet();
+      },
+      5000,
+      {
+        leading: true
+      }
+    );
+  }
+  private setWallets(keyId) {
+    this.profileProvider.setOrderedWalletsByGroup(keyId);
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    this.events.publish('Local/FetchWallets');
+  }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {

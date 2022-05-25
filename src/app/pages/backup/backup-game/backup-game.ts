@@ -16,6 +16,7 @@ import { SwiperOptions } from 'swiper';
 import { BackupWordModel } from '../backup-component/backup-word/backup-word.model';
 import { ModalController } from '@ionic/angular';
 import { CopayersPage } from '../../add/copayers/copayers';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-backup-game',
   templateUrl: 'backup-game.html',
@@ -51,8 +52,7 @@ export class BackupGamePage {
     private bwcProvider: BwcProvider,
     private actionSheetProvider: ActionSheetProvider,
     private keyProvider: KeyProvider,
-    private persistenceProvider: PersistenceProvider,
-    private events: EventManagerService,
+    private eventsService: EventsService,
     private router: Router,
     private modalCtrl: ModalController,
     private location: Location) {
@@ -183,7 +183,7 @@ export class BackupGamePage {
     );
     infoSheet.present();
     infoSheet.onDidDismiss(async () => {
-      if(this.navParamsData.isNewSharedWallet){
+      if (this.navParamsData.isNewSharedWallet) {
         const copayerModal = await this.modalCtrl.create({
           component: CopayersPage,
           componentProps: {
@@ -192,10 +192,30 @@ export class BackupGamePage {
           cssClass: 'wallet-details-modal'
         });
         await copayerModal.present();
+        copayerModal.onDidDismiss().then(() => {
+          this.router
+            .navigate(['/tabs/wallets'], {
+              replaceUrl: true
+            })
+            .then(() => {
+              this.eventsService.publishRefresh({
+                keyId: this.keyId
+              })
+            });
+        }
+        )
       }
-      this.router.navigate(['']).then(() => {
-        this.events.publish('Local/FetchWallets');
-      });
+      else {
+        this.router
+          .navigate(['/tabs/wallets'], {
+            replaceUrl: true
+          })
+          .then(() => {
+            this.eventsService.publishRefresh({
+              keyId: this.keyId
+            })
+          });
+      }
     });
   }
 

@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import _ from 'lodash';
 import { DisclaimerModal } from '../../includes/disclaimer-modal/disclaimer-modal';
 import { AppProvider, PersistenceProvider } from 'src/app/providers';
+import { EventsService } from 'src/app/providers/events.service';
 @Component({
   selector: 'page-import-wallet',
   templateUrl: 'import-wallet.html',
@@ -87,7 +88,8 @@ export class ImportWalletPage {
     private errorsProvider: ErrorsProvider,
     private router: Router,
     private appProvider: AppProvider,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private eventsService: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state
@@ -304,13 +306,25 @@ export class ImportWalletPage {
         await modal.present();
         modal.onDidDismiss().then(({ data }) => {
           if (data.isConfirm) {
-            this.goToHomePage(wallets[0].credentials.keyId);
+            this.goToWalletsPage(wallets[0].credentials.keyId);
           }
         });
       } else {
-        this.goToHomePage(wallets[0].credentials.keyId);
+        this.goToWalletsPage(wallets[0].credentials.keyId);
       }
     });
+  }
+
+  private goToWalletsPage(keyId) {
+    this.router
+      .navigate(['/tabs/wallets'], {
+        replaceUrl: true
+      })
+      .then(() => {
+        this.eventsService.publishRefresh({
+          keyId
+        })
+      });
   }
 
   private goToHomePage(keyId) {
@@ -321,19 +335,12 @@ export class ImportWalletPage {
         },
         replaceUrl: true
       })
-      .then(data => {
+      .then(() => {
         this.events.publish('Local/FetchWallets');
       });
   }
 
-  private goToWalletsPage() {
-    this.router
-      .navigate(['tabs/wallets'])
-      .then(() => {
-        this.events.publish('Local/FetchWallets');
-        // this.events.publish('Local/GetData', true);
-      });
-  }
+
 
   private importExtendedPrivateKey(xPrivKey, opts) {
     this.onGoingProcessProvider.set('importingWallet');

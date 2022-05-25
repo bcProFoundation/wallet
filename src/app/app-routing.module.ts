@@ -66,6 +66,7 @@ import { AccountsPage } from './pages/accounts/accounts';
 import { SettingsPage } from './pages/settings/settings';
 import { SearchContactPage } from './pages/search/search-contact/search-contact.component';
 import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
+import { ChartViewPage } from './pages/chart-view/chart-view';
 
 const routes: Routes = [
   {
@@ -341,6 +342,10 @@ const routes: Routes = [
   {
     path: 'search-contact',
     component: SearchContactPage
+  },
+  {
+    path: 'chart-view',
+    component: ChartViewPage
   }
 ];
 

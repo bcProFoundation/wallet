@@ -39,6 +39,7 @@ import { ScanPage } from '../pages/scan/scan';
 import { SendPage } from '../pages/send/send';
 import { SettingsPage } from '../pages/settings/settings';
 import { WalletsPage } from '../pages/wallets/wallets';
+import { ChartViewPage } from './chart-view/chart-view';
 
 /* Home */
 import { ProposalsNotificationsPage } from '../pages/wallets/proposals-notifications/proposals-notifications';
@@ -150,6 +151,7 @@ export const PAGES = [
   GravatarPage,
   FingerprintModalPage,
   HomePage,
+  ChartViewPage,
   // CardsPage,
   WalletsPage,
   AccountsPage,

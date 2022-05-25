@@ -104,3 +104,32 @@ ion-toolbar {
   }
 }
 
+@media (max-height: 568px) {
+  .select-method {
+    ion-item {
+      --padding-bottom: 0;
+      --padding-top: 0;
+      ion-label {
+        font-size: 14px;
+      }
+    }
+  }
+  .term-container {
+    ion-item {
+      --padding-start: 1rem;
+      --inner-padding-end: 0;
+      ion-checkbox {
+        width: 22px;
+        height: 22px;
+        margin-top: 5px;
+      }
+      .term-title {
+        font-size: 14px;
+      }
+      .term-note {
+        font-size: 12px;
+      }
+    }
+  }
+}
+

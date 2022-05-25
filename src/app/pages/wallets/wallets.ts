@@ -14,7 +14,7 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { MenuController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
+import { IonItemSliding, MenuController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
@@ -38,6 +38,8 @@ interface UpdateWalletOptsI {
 export class WalletsPage {
   @ViewChild('priceCard')
   priceCard;
+
+  @ViewChild('slidingItem') slidingItem: IonItemSliding;
   public wallets;
   public walletsGroups = [];
   public txpsN: number;
@@ -723,6 +725,7 @@ export class WalletsPage {
     if (result && result.added.status) {
       this.router.navigate(['/tabs/home']).then(() => {
         this.events.publish('Local/GetListPrimary', true);
+        this.slidingItem.close();
         this.presentToast(result.added.message);
       });
     } else if (result && result.full.status) {
@@ -733,16 +736,20 @@ export class WalletsPage {
   }
 
   public removeOutGroupsHome(wallet, token?) {
-    let walletObj = {
-      walletId: wallet.id,
-      tokenId: token?.tokenId
-    }
-    let result = this.profileProvider.removeWalletGroupsHome(walletObj);
-    if (result) {
-      this.presentToast('Remove account successful');
-      this.events.publish('Local/GetListPrimary', true);
+    if (this.profileProvider.isLastItemPrimaryList()) {
+      this.presentToast('Can not remove last item in list', 'toast-warning');
     } else {
-      this.presentToast('Remove account unsuccessful');
+      let walletObj = {
+        walletId: wallet.id,
+        tokenId: token?.tokenId
+      }
+      let result = this.profileProvider.removeWalletGroupsHome(walletObj);
+      if (result) {
+        this.presentToast('Remove account successful');
+        this.events.publish('Local/GetListPrimary', true);
+      } else {
+        this.presentToast('Remove account unsuccessful');
+      }
     }
   }
 

@@ -100,25 +100,23 @@
         </div>
         <ion-list lines="nones" class="bp-list">
           <div class="wallet-item" *ngFor="let wallet of keySelected; let j = index">
-            <ion-item-sliding>
+            <ion-item-sliding #slidingItem>
               <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance"
                 (click)="goToWalletDetails(wallet)">
               </wallet-item-content>
 
-              <ng-container *ngIf="!checkCardExistListPrimary(wallet);else removeOut">
-                <ion-item-options side="end">
+              <ion-item-options side="end">
+                <ng-container *ngIf="!checkCardExistListPrimary(wallet);else removeOut">
                   <ion-item-option (click)="addToGroupsHome(wallet)" class="btn-add-to-home">
                     <img src="../../../assets/img/add-to-home-dark.svg" alt="">
                   </ion-item-option>
-                </ion-item-options>
-              </ng-container>
-              <ng-template #removeOut>
-                <ion-item-options side="end">
-                  <ion-item-option (click)="removeOutGroupsHome(wallet)" class="btn-remove-out-home">
-                    <img src="../../../assets/img/remove-out-home-dark.svg" alt="">
-                  </ion-item-option>
-                </ion-item-options>
-              </ng-template>
+                </ng-container>
+                <ng-template #removeOut>
+                    <ion-item-option (click)="removeOutGroupsHome(wallet)" class="btn-remove-out-home">
+                      <img src="../../../assets/img/remove-out-home-dark.svg" alt="">
+                    </ion-item-option>
+                </ng-template>
+              </ion-item-options>
             </ion-item-sliding>
 
             <ng-container *ngIf="isSupportToken(wallet)">
@@ -173,20 +171,18 @@
                           </ion-note>  
                         </ion-item>
 
-                        <ng-container *ngIf="!checkCardExistListPrimary(wallet, token);else removeOutToken">
-                          <ion-item-options side="end">
+                        <ion-item-options side="end">
+                          <ng-container *ngIf="!checkCardExistListPrimary(wallet, token);else removeOutToken">
                             <ion-item-option (click)="addToGroupsHome(wallet, token)" class="btn-add-to-home">
                               <img src="../../../assets/img/add-to-home-dark.svg" alt="">
                             </ion-item-option>
-                          </ion-item-options>
-                        </ng-container>
-                        <ng-template #removeOutToken>
-                          <ion-item-options side="end">
+                          </ng-container>
+                          <ng-template #removeOutToken>
                             <ion-item-option (click)="removeOutGroupsHome(wallet, token)" class="btn-remove-out-home">
                               <img src="../../../assets/img/remove-out-home-dark.svg" alt="">
                             </ion-item-option>
-                          </ion-item-options>
-                        </ng-template>
+                          </ng-template>
+                        </ion-item-options>
                       </ion-item-sliding>
                       
                     </ng-container>

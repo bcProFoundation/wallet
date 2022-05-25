@@ -83,14 +83,14 @@
 
           <div class="action-btn receive-btn" (click)="requestSpecificAmount()">
             <ion-button expand="block">
-              <ion-icon slot="start" name="arrow-down-outline"></ion-icon>
+              <ion-icon slot="start" src="assets/img/wallet-details/ic-request-{{currentTheme}}.svg"></ion-icon>
               {{ 'Request' | translate }}
             </ion-button>
           </div>
 
           <div class="action-btn send-btn" (click)="goToSendPage()">
             <ion-button expand="block">
-              <ion-icon slot="start" name="arrow-up-outline"></ion-icon>
+              <ion-icon slot="start" src="assets/img/wallet-details/ic-send-{{currentTheme}}.svg"></ion-icon>
               {{ 'Send' | translate }}
             </ion-button>
           </div>

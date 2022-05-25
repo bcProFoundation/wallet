@@ -1,0 +1,29 @@
+<ion-header [translucent]="true" class="bp-header">
+  <ion-toolbar class="toolbar-desktop" translucent *ngIf="!this.platformProvider.isCordova">
+    <div class="header-container-desktop">
+      <img class="logo-abcpay" src="../../../assets/img/abcpay-logo.svg" alt="">
+      <img src="../../../assets/img/abcpay-text.svg" alt="">
+    </div>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+        {{ 'Exchange Rates' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+  <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+    <ion-toolbar class="wide-header__title wide-header-chart-view">
+      <expandable-header-primary>
+        {{ 'Exchange Rates' | translate }}
+        <div translate class="date-label">(1D)</div>
+      </expandable-header-primary>
+    </ion-toolbar>
+  </expandable-header>
+
+  <exchange-rates #exchangeRates></exchange-rates>
+</ion-content>

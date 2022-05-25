@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, NgZone, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -28,7 +28,7 @@ import { ConfigProvider } from '../../providers/config/config';
 
 // Pages
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { IonSlides, LoadingController, ModalController } from '@ionic/angular';
+import { IonContent, IonSlides, LoadingController, ModalController } from '@ionic/angular';
 import { Network } from 'src/app/providers/persistence/persistence';
 import { Router } from '@angular/router';
 import { AddFundsPage } from '../onboarding/add-funds/add-funds';
@@ -66,6 +66,8 @@ export class HomePage {
   showCard;
 
   @ViewChild(IonSlides) slides: IonSlides;
+
+  @ViewChild('homeToolbar') homeToolbar: ElementRef;
   public serverMessages: any[];
   public showServerMessage: boolean;
   public showAdvertisements: boolean;
@@ -122,7 +124,8 @@ export class HomePage {
     private themeProvider: ThemeProvider,
     private tokenProvider: TokenProvider,
     private loadingProvider: LoadingProvider,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private renderer: Renderer2
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -553,6 +556,10 @@ export class HomePage {
 
   public openProposalsNotificationsPage(): void {
     this.router.navigate(['/proposals-notifications']);
+  }
+
+  public openChartViewPage(): void {
+    this.router.navigate(['/chart-view']);
   }
 
   public addToHome() {

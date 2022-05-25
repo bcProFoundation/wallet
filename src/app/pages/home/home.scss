@@ -1,56 +1,17 @@
 page-home {
+  .toolbar-home {
+    background: #fafafb;
+    --background: #fafafb;
+    padding-top: env(safe-area-inset-top);
+  }
   .card-home-info {
     position: relative;
-    .home-toolbar {
-      background: #fafafb;
-      padding-top: env(safe-area-inset-top);
-      .home-icon {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 1rem;
-        align-items: center;
-        ion-button {
-          min-height: 36px;
-          z-index: 9;
-          --overflow: visible;
-          --padding-end: 0;
-          --padding-start: 0;
-          &.chart-btn {
-            --padding-end: 0.5rem;
-          }
-          &.key-notifications {
-            --padding-start: 0.5rem;
-          }
-          ion-icon {
-            margin: 0;
-          }
-        }
-      
-        h2 {
-          margin: 0;
-          margin-left: 2.5rem;
-          font-size: 16px;
-          font-weight: 600;
-        }
-      
-        .custom-notification-icon {
-          position: absolute;
-          bottom: 17px;
-          left: 17px;
-          z-index: 1;
-        }
-  
-        .group-btn-top {
-          display: flex;
-        }
-      }
-    }
     .total-amount-container {
       background: #fafafb;
       display: flex;
       align-items: center;
       text-align: center;
-      min-height: 145px;
+      min-height: 105px;
       border-bottom-left-radius: 48px;
       border-bottom-right-radius: 48px;
       .section-header {
@@ -68,15 +29,15 @@ page-home {
       img {
         position: absolute;
         width: 175px;
-        height: 140px;
         &.top-img {
-          top: 0;
+          bottom: 0;
           left: 0;
+          border-bottom-left-radius: 50px;
         }
         &.bottom-img {
           right: 0;
           bottom: 0;
-          border-bottom-right-radius: 30%;
+          border-bottom-right-radius: 50px;
         }
       }
     
@@ -132,6 +93,47 @@ page-home {
           margin-left: 10px;
         }
       }
+    }
+  }
+
+  .home-icon {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+    ion-button {
+      min-height: 36px;
+      z-index: 9;
+      --overflow: visible;
+      --padding-end: 0;
+      --padding-start: 0;
+      &.chart-btn {
+        --padding-end: 0.5rem;
+      }
+      &.key-notifications {
+        --padding-start: 0.5rem;
+      }
+      ion-icon {
+        margin: 0;
+      }
+    }
+  
+    h2 {
+      margin: 0;
+      margin-left: 2.5rem;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  
+    .custom-notification-icon {
+      position: absolute;
+      bottom: 23px;
+      left: 12px;
+      z-index: 1;
+    }
+
+    .group-btn-top {
+      display: flex;
     }
   }
   
@@ -321,21 +323,21 @@ page-home {
 
   .item-no-wallet {
     position: relative;
-    .bg-item-no-wallet {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      backdrop-filter: blur(2px);
-      &.no-wallet-light-theme {
-        opacity: 0.4;
-      }
+    &.no-wallet-light-theme {
+      background-image: url(../../../assets/img/bg-item-no-wallet-light.svg);
     }
-    margin: 16px;
-    padding: 4rem;
+    &.no-wallet-dark-theme {
+      background-image: url(../../../assets/img/bg-item-no-wallet-dark.svg);
+    }
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 1rem;
     border-radius: 16px;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
+    height: 260px;
     .icon-add-home {
       width: 40px;
       height: 40px;

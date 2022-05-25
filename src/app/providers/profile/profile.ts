@@ -171,6 +171,14 @@ export class ProfileProvider {
     }
   }
 
+  public isLastItemPrimaryList() {
+    let listPrimary = JSON.parse(localStorage.getItem("listHome"));
+    if (listPrimary && listPrimary.length === 1) {
+      return true;
+    }
+    return false;
+  }
+
   public setWalletGroupsHome(walletObj) {
     let result = _.cloneDeep(this.resultPrimaryAccount);
     let walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) || [];
@@ -2028,7 +2036,6 @@ export class ProfileProvider {
           .then(walletsData => {
             walletsData.unshift(firstWalletData);
             let walletClients = _.map(walletsData, 'walletClient');
-
             // Handle tokens
             if (!_.isEmpty(tokens)) {
               const ethWalletClient = walletClients.find(
@@ -2046,6 +2053,7 @@ export class ProfileProvider {
 
               walletClients = walletClients.concat(tokenClients);
             }
+
 
             this.addAndBindWalletClients({
               key: firstWalletData.key,
@@ -2108,6 +2116,7 @@ export class ProfileProvider {
                   walletClient.etokenAddress = etoken;
                 }
               }
+              this.setDefaultPrimaryAccount();
               return resolve(boundWalletClients);
             } catch (error) {
               reject(error);
@@ -2121,8 +2130,19 @@ export class ProfileProvider {
     })
   };
 
-
-
+  setDefaultPrimaryAccount() {
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    if (!data) {
+      let wallets = _.cloneDeep(this.wallet);
+      for (let item in wallets) {
+        let walletObj = {
+          walletId: item
+        }
+        this.setWalletGroupsHome(walletObj);
+      }
+    }
+  }
+  
   public createWallet(opts) {
     this.walletChange = {
       isStatus: true,

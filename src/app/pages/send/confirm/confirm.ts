@@ -246,7 +246,11 @@ export class ConfirmPage {
       amount = this.navParamsData.amount
         ? this.navParamsData.amount
         : this.navParamsData.totalInputsAmount;
-    } else {
+    } else if (this.navParamsData.isSentXecToEtoken) {
+      networkName = this.navParamsData.network;
+      amount = amount = this.navParamsData.amount;
+    }
+    else {
       amount = this.navParamsData.amount;
       try {
         networkName = this.addressProvider.getCoinAndNetwork(

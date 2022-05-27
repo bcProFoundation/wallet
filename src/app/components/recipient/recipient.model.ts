@@ -9,6 +9,7 @@ export class RecipientModel {
     public recipientType: string;
     public currency?: string;
     public isSpecificAmount?: boolean;
+    public isSentXecToEtoken?: boolean;
     constructor(data) {
         this.id = Date.now();
         this.toAddress = data.toAddress || "";

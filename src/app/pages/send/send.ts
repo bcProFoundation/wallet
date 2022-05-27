@@ -340,7 +340,8 @@ export class SendPage {
           useSendMax: false,
           toAddress: recipient.toAddress,
           name: recipient.name,
-          fromWalletDetails: true
+          fromWalletDetails: true,
+          isSentXecToEtoken: recipient.isSentXecToEtoken
         }
       });
     } else {

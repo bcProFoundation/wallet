@@ -22,6 +22,7 @@ export interface RedirParams {
   fromHomeCard?: boolean;
   fromFooterMenu?: boolean;
   recipientId?: number;
+  isSentXecToEtoken?: boolean;
 }
 @Injectable({
   providedIn: 'root'
@@ -244,18 +245,25 @@ export class IncomingDataProvider {
     let amountFromRedirParams =
       redirParams && redirParams.amount ? redirParams.amount : '';
     const coin = Coin.XEC;
-    let parsed = this.bwcProvider.getBitcoreXec().URI(data);
-    let address = parsed.address ? parsed.address.toString() : '';
+    let parsed, address, amount, message;
+    if (!redirParams.isSentXecToEtoken) {
+      parsed = this.bwcProvider.getBitcoreXec().URI(data);
+      address = parsed.address ? parsed.address.toString() : '';
 
-    // keep address in original format
-    if (parsed.address && data.indexOf(address) < 0) {
-      address = parsed.address.toCashAddress();
+
+      // keep address in original format
+      if (parsed.address && data.indexOf(address) < 0) {
+        address = parsed.address.toCashAddress();
+      }
+
+      message = parsed.message;
+      amount = parsed.amount || amountFromRedirParams;
     }
 
-    let message = parsed.message;
-    let amount = parsed.amount || amountFromRedirParams;
 
-    if (parsed.r) {
+
+
+    if (parsed.r || redirParams.isSentXecToEtoken) {
     } else this.goSend(address, amount, message, coin, redirParams.recipientId);
   }
 
@@ -372,7 +380,7 @@ export class IncomingDataProvider {
         type: 'bitcoinAddress',
         coin
       });
-    }else {
+    } else {
       this.goSend(data, redirParams.amount, '', coin, redirParams.recipientId);
     }
   }
@@ -440,7 +448,7 @@ export class IncomingDataProvider {
         type: 'ecashAddress',
         coin
       });
-    }  else {
+    } else {
       this.goSend(data, redirParams.amount, '', coin, redirParams.recipientId);
     }
   }
@@ -518,7 +526,7 @@ export class IncomingDataProvider {
       return true;
 
       // Ecash URI
-    } else if (this.isValidECashUri(data)) {
+    } else if (redirParams.isSentXecToEtoken || this.isValidECashUri(data)) {
       this.handleECashUri(data, redirParams);
       return true;
 

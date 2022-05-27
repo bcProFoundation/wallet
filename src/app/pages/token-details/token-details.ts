@@ -60,6 +60,7 @@ export class TokenDetailsPage {
   public finishParam: any;
   public isScroll = false;
   public isShowZeroState = false;
+  private tokenId;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -92,6 +93,12 @@ export class TokenDetailsPage {
     }
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
+    this.tokenId = this.navPramss.tokenId;
+
+    if (this.tokenId) {
+      const tokens = this.wallet?.tokens;
+      this.token = tokens.find(item => item.tokenId === this.tokenId)
+    }
 
     this.addressbookProvider
       .list(this.wallet.network)

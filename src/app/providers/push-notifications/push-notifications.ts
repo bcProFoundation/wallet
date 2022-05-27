@@ -319,11 +319,15 @@ export class PushNotificationsProvider {
     const multisigContractAddress = data.multisigContractAddress;
     if (!walletIdHashed) return;
 
-    const wallet = this.findWallet(
+    let wallet = this.findWallet(
       walletIdHashed,
       tokenAddress,
       multisigContractAddress
     );
+
+    if (data.tokenId) {
+      wallet.tokenId = data.tokenId;
+    }
 
     //TODO: test opening the same wallet then remove later
     // if (!wallet || this.openWalletId === wallet.credentials.walletId) return;

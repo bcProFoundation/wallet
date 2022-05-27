@@ -321,14 +321,26 @@ export class CopayApp {
 
   private async openWallet(wallet, params) {
     if (wallet.isComplete()) {
-      this.router.navigate(['/tabs/wallets']).then(() => {
-        this.router.navigate(['/wallet-details'], {
-          state: {
-            ...params,
-            walletId: wallet.credentials.walletId
-          }
-        });
-      })
+      if (wallet.tokenId) {
+        this.router.navigate(['/tabs/wallets']).then(() => {
+          this.router.navigate(['/token-details'], {
+            state: {
+              ...params,
+              walletId: wallet.credentials.walletId,
+              tokenId: wallet.tokenId
+            }
+          });
+        })
+      } else {
+        this.router.navigate(['/tabs/wallets']).then(() => {
+          this.router.navigate(['/wallet-details'], {
+            state: {
+              ...params,
+              walletId: wallet.credentials.walletId
+            }
+          });
+        })
+      }
     } else {
       // check if modal is already open
       if (this.isCopayerModalOpen) {

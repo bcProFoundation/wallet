@@ -482,29 +482,61 @@ export class RecipientComponent implements OnInit {
   }
 
   public async processInput() {
+    let isSentXecToEtoken = false;
     if (this.recipient.name) this.validAddress = true;
     else {
       let address = this.searchValue;
       let tokenAddress: string = '';
       if (address == '') this.validAddress = false;
-      if (this.token && this.wallet.coin == 'xec') {
+      // handle case send to etoken address in xec
+      if (address.includes("etoken") && this.wallet.coin == 'xec') {
         // handle etoken 
-        const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
-        if (prefix == 'etoken') {
-          tokenAddress = address;
-          address = this.addressProvider.encodeAddress('ecash', type, hash, address);
-        } else {
+        try {
+          const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+          if (prefix == 'etoken') {
+            isSentXecToEtoken = true;
+          } else {
+            this.validAddress = false;
+            this.checkRecipientValid();
+            return;
+          }
+        } catch (e) {
           this.validAddress = false;
+          this.checkRecipientValid();
           return;
         }
+        // handle case send token
+      } else if (this.token && this.wallet.coin == 'xec') {
+        try {
+          const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+          if (prefix === 'ecash') {
+            tokenAddress = address;
+          }
+          else if (prefix === 'etoken') {
+            tokenAddress = address;
+            address = this.addressProvider.encodeAddress('ecash', type, hash, address);
+          } else {
+            this.validAddress = false;
+            this.checkRecipientValid();
+            return;
+          }
+        } catch (e) {
+          this.validAddress = false;
+          this.checkRecipientValid();
+          return;
+        }
+
       }
       const parsedData = this.incomingDataProvider.parseData(address);
       if (
         parsedData &&
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1
       ) {
-        const isValid = this.checkCoinAndNetwork(address);
-        if (isValid) {
+        let isValid = false;
+        if (!isSentXecToEtoken) {
+          isValid = this.checkCoinAndNetwork(address);
+        }
+        if (isValid || isSentXecToEtoken) {
           this.validAddress = true;
           let addressFinal = tokenAddress.trim().length > 0 ? tokenAddress : address;
           this.addressBookProvider.get(addressFinal, this.wallet.network).then(
@@ -516,9 +548,14 @@ export class RecipientComponent implements OnInit {
               }
             }
           );
+          this.recipient.isSentXecToEtoken = isSentXecToEtoken;
           this.recipient.toAddress = address;
           if (this.token && this.wallet.coin) this.recipient.toAddress = tokenAddress;
-          this.redir();
+          this.checkRecipientValid();
+          this.redir(isSentXecToEtoken);
+        }
+        else {
+          this.validAddress = false;
         }
       }
       else if (parsedData && parsedData.type == 'PrivateKey') {
@@ -527,16 +564,16 @@ export class RecipientComponent implements OnInit {
         this.validAddress = false;
       }
     }
-
     this.checkRecipientValid();
   }
 
-  private redir() {
+  private redir(isSentXecToEtoken) {
     this.incomingDataProvider.redir(this.searchValue, {
       activePage: 'SendPage',
       amount: this.navParams.data.amount,
       coin: this.navParams.data.coin, // TODO ???? what is this for ?
-      recipientId: !this.isShowSendMax ? this.recipient.id : null
+      recipientId: !this.isShowSendMax ? this.recipient.id : null,
+      isSentXecToEtoken: isSentXecToEtoken
     });
     this.search = '';
   }

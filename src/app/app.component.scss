@@ -2238,6 +2238,17 @@ ion-toolbar.header {
 ion-popover {
     &.popover-home {
         --width: 285px;
+        @media only screen and (min-width: 450px) {
+            --width: 295px;
+            left: -82%;
+            ion-content {
+                --padding-start: 0 !important;
+                --padding-end: 0 !important;
+            }
+        }
+        &::part(content) {
+            border-radius: 16px !important;
+        }
         .list-option-home {
             ion-item {
                 --background: none !important;

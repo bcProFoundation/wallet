@@ -101,7 +101,7 @@
         <ion-list lines="nones" class="bp-list">
           <div class="wallet-item" *ngFor="let wallet of keySelected; let j = index">
             <ion-item-sliding #slidingItem>
-              <wallet-item-content [isKeyTab]="true" [wallet]="wallet" [isShowBalance]="isShowBalance"
+              <wallet-item-content [isKeyTab]="true" [wallet]="wallet"
                 (click)="goToWalletDetails(wallet)">
               </wallet-item-content>
 
@@ -157,7 +157,7 @@
                           </ion-label>
                           <ion-note slot="end">
                             <div>
-                              <ng-container *ngIf="isShowBalance && !wallet?.balanceHidden;else noShowBalanceToken">
+                              <ng-container *ngIf="!wallet?.balanceHidden;else noShowBalanceToken">
                                 <div class="main-note">{{DecimalFormatBalance(token?.amountToken)}}</div>
                                 <div class="secondary-note" *ngIf="wallet?.cachedStatus">
                                   <span >~</span> {{symbolCurrency + DecimalFormatBalance(token.alternativeBalance)}}

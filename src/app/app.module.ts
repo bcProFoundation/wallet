@@ -47,6 +47,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { CountdownModule } from 'ngx-countdown';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -115,6 +116,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         ProvidersModule,
         SwiperModule,
         ClickOutsideModule,
+        CountdownModule,
         TranslateModule.forRoot({
             parser: { provide: TranslateParser, useFactory: translateParserFactory },
             missingTranslationHandler: {

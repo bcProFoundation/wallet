@@ -245,6 +245,16 @@
     }
   }
 
+  ion-popover {
+    &.popover-home {
+        .list-option-home {
+            .line-divider {
+                border-color: rgba(112, 129, 138, 0.38) !important;
+            }
+        }
+    }
+}
+
   ion-modal {
     --background: var(--bg-color-dark-theme);
   }
@@ -1398,6 +1408,17 @@
         .possitive-avg {
           color: #73daa5 !important;
         }
+      }
+    }
+
+    .toolbar-footer-chart-view {
+      ion-chip {
+        border-color: rgba(112, 129, 138, 0.38);
+        --color: var(--color-primary-abcpay-dark);
+        &.item-active {
+          background: var(--color-primary-abcpay-dark);
+          --color: var(--color-on-primary-abcpay-dark);
+      }
       }
     }
   }

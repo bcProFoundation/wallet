@@ -338,6 +338,15 @@ page-home {
     justify-content: center;
     flex-direction: column;
     height: 260px;
+    @media (max-width: 420px) {
+      height: 210px;
+    }
+    @media (max-width: 390px) {
+      height: 195px;
+    }
+    @media (max-width: 320px) {
+      height: 160px;
+    }
     .icon-add-home {
       width: 40px;
       height: 40px;

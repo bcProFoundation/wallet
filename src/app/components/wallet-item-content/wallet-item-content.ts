@@ -24,9 +24,6 @@ export class WalletItemContent {
   @Input()
   isKeyTab: any;
 
-  @Input()
-  isShowBalance: any = true;
-
   public symbolCurrency: any;
 
   constructor(private configProvider: ConfigProvider) {

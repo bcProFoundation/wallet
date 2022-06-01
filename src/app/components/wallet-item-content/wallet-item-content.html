@@ -23,15 +23,12 @@
       </div>
     </ng-container>
     <ng-template #showBalance>
-      <div *ngIf="!wallet?.balanceHidden">
-        <div class="main-note">{{ isShowBalance ? getBalance(wallet, wallet?.coin.toUpperCase()) : '******'}}</div>
+      <div>
+        <div class="main-note">{{ !wallet?.balanceHidden ? getBalance(wallet, wallet?.coin.toUpperCase()) : '******'}}</div>
         <div class="secondary-note" *ngIf="wallet?.cachedStatus">
-          <span *ngIf="(getBalance(wallet, wallet?.coin.toUpperCase()) > '0') && isShowBalance">~</span> {{ isShowBalance ? this.symbolCurrency+getAlternativeBalance(wallet, wallet?.coin.toUpperCase()) : '******'}}
+          <span *ngIf="(getBalance(wallet, wallet?.coin.toUpperCase()) > '0') && !wallet?.balanceHidden">~</span> {{ !wallet?.balanceHidden ? this.symbolCurrency+getAlternativeBalance(wallet, wallet?.coin.toUpperCase()) : '******'}}
         </div>
       </div>
     </ng-template>
-    <div class="wallet-hidden" *ngIf="wallet?.balanceHidden">
-      <span translate>******</span>
-    </div>
   </ion-note>
 </ion-item>

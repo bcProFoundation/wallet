@@ -9,7 +9,7 @@
         <span class="message" *ngIf="incorrect" translate>Incorrect passcode, try again.</span>
       </div>
       <div *ngIf="disableButtons">
-        <span class="message" *ngIf="expires" translate>Try again in {{expires}}</span>
+        <span class="message" *ngIf="expires" translate>Try again in <countdown [config]="{leftTime: countDownTime, format: 'm:s'}"></countdown></span>
       </div>
     </div>
   </div>

@@ -36,6 +36,7 @@ export class PinModalPage {
   public unregister;
   public isCordova: boolean;
   public currentTheme: string;
+  public countDownTime: number;
 
   @ViewChild(Animate)
   pinCode: Animate;
@@ -183,6 +184,7 @@ export class PinModalPage {
       const m = Math.floor(totalSecs / 60);
       const s = totalSecs % 60;
       this.expires = ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2);
+      this.countDownTime = totalSecs;
     }, 1000);
   }
 

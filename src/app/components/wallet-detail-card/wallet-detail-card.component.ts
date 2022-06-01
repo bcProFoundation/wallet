@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
@@ -18,7 +18,7 @@ const MIN_UPDATE_TIME = 2000;
   styleUrls: ['./wallet-detail-card.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class WalletDetailCardComponent implements OnInit {
+export class WalletDetailCardComponent {
   @Input()
   wallet: any;
 
@@ -94,8 +94,19 @@ export class WalletDetailCardComponent implements OnInit {
     }
   }
 
-  ngAfterViewChecked() {
-    if (this.flagAllItemRemove && this.flagOptionRemove) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.flagAllItemRemove) {
+      this.flagAllItemRemove = changes.flagAllItemRemove.currentValue;
+      if (this.flagAllItemRemove) {
+        this.slidingItem.open('end');
+      } else {
+        this.slidingItem.close();
+      }
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.flagAllItemRemove) {
       this.slidingItem.open('end');
     } else {
       this.slidingItem.close();
@@ -156,6 +167,7 @@ export class WalletDetailCardComponent implements OnInit {
     this.profileProvider.toggleHideBalanceFlag(
       this.wallet.credentials.walletId
     );
+    this.events.publish('Local/GetListPrimary', true);
   }
 
   public openWalletSettings(id) {
@@ -309,6 +321,7 @@ export class WalletDetailCardComponent implements OnInit {
         walletId: this.wallet.credentials.walletId
       });
       this.profileProvider.setOrderedWalletsByGroup();
+      this.events.publish('Local/GetListPrimary', true);
     }
     this.isEditNameFlag = !this.isEditNameFlag;
   }
@@ -387,4 +400,21 @@ export class WalletDetailCardComponent implements OnInit {
     toast.present();
   }
 
+  public goToAccountDetail() {
+    if (!this.token) {
+      this.router.navigate(['/wallet-details'], {
+        state: {
+          walletId: this.wallet.credentials.walletId
+        }
+      });
+    } else {
+      this.router.navigate(['/token-details'], {
+        state: {
+          walletId: this.wallet.credentials.walletId,
+          token: this.token
+        }
+      });
+    }
+    
+  }
 }

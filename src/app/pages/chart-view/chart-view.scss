@@ -17,4 +17,18 @@ chart-view {
             }
         }
     }
+    .toolbar-footer-chart-view {
+        padding: 1rem !important;
+        ion-chip {
+            --color: var(--color-primary);
+            &.item-active {
+                background: var(--color-primary);
+                --color: var(--color-inner-item-light-theme);
+            }
+            ion-label {
+                font-weight: 600;
+                letter-spacing: 0.1px;
+            }
+        }
+    }
 }

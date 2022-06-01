@@ -252,6 +252,12 @@ export class WalletsPage {
       keyId: this.keySelected[0].keyId,
       isShowBalanceKey: this.isShowBalance
     }
+    this.keySelected.forEach(ele => {
+      this.profileProvider.toggleHideBalanceFlag(
+        ele.credentials.walletId
+      )
+    });
+    this.events.publish('Local/GetListPrimary', true);
     const keyItemTemp = this.keyHiddenBalanceTemp.find((item) => {
       return item.keyId === this.keySelected[0].keyId;
     })

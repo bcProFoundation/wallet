@@ -1994,7 +1994,7 @@ export class WalletProvider {
 
   getRecentNotifications(listWalletId, wallet): Promise<any> {
     return new Promise((resolve, reject) => {
-      wallet.fetchRecentNotificationsByCopayerId(
+      wallet.fetchRecentNotificationsByWalletId(
         {
           walletId: listWalletId,
           type: 'NewIncomingTx',

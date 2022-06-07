@@ -1991,4 +1991,21 @@ export class WalletProvider {
       });
     });
   }
+
+  getRecentNotifications(listWalletId, wallet): Promise<any> {
+    return new Promise((resolve, reject) => {
+      wallet.fetchRecentNotificationsByCopayerId(
+        {
+          walletId: listWalletId,
+          type: 'NewIncomingTx',
+          limitNumber: 10
+        },
+        (err, resp) => {
+          if (err || !resp || !resp.length)
+            return reject(err ? err : 'No recent notification');
+          return resolve(resp);
+        }
+      );
+    });
+  }
 }

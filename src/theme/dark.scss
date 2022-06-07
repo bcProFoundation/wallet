@@ -2363,6 +2363,39 @@
         ),
         #001e2e;
     }
+
+    .recent-notification-item {
+      --border-color: var(--border-color-dark-theme-2);
+      .detail-transaction {
+        .title-label {
+          color: #EDEFF0;
+        }
+        .amount {
+          color: #EDEFF0;
+        }
+      }
+      .date-label {
+        color: rgba(224, 228, 230, 0.6);
+      }
+
+      &.read-notification-item {
+        .title-label {
+          color: rgba(237, 239, 240, 0.6);
+        }
+        .amount {
+          color: rgba(237, 239, 240, 0.6) !important;
+        }
+      }
+    }
+
+    ion-segment-button {
+      &::part(native) {
+        color: #edeff0 !important;
+      }
+      &::part(indicator-background) {
+        background: #7ed0ff !important;
+      }
+    }
   }
 
   recipient-component {

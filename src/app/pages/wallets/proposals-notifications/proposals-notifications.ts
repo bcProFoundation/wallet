@@ -1,8 +1,9 @@
 import { Component, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
-import { IonRouterOutlet, ModalController, NavController, NavParams, Platform, ToastController } from '@ionic/angular';
+import { IonRouterOutlet, Platform, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { AddressBookProvider, Contact } from 'src/app/providers/address-book/address-book';
@@ -21,6 +22,7 @@ import { Location } from '@angular/common';
 // pages
 import { Router } from '@angular/router';
 import { AppProvider } from 'src/app/providers';
+const MILLIS_IN_SECOND = 1000;
 
 @Component({
   selector: 'page-proposals-notifications',
@@ -47,8 +49,9 @@ export class ProposalsNotificationsPage {
   private isElectron: boolean;
   private walletId: string;
   private multisigContractAddress: string;
-
+  public selectedTab: string;
   public currentTheme: string;
+  public listRecentNotification = [];
   navParamsData;
   canGoBack;
   constructor(
@@ -63,10 +66,6 @@ export class ProposalsNotificationsPage {
     private events: EventManagerService,
     private replaceParametersProvider: ReplaceParametersProvider,
     private walletProvider: WalletProvider,
-    private modalCtrl: ModalController,
-    private navCtrl: NavController,
-    private navParams: NavParams,
-    private location: Location,
     private errorsProvider: ErrorsProvider,
     private routerOutlet: IonRouterOutlet,
     private router: Router,
@@ -93,7 +92,42 @@ export class ProposalsNotificationsPage {
     this.txpsPending = [];
     this.txpsAccepted = [];
     this.txpsRejected = [];
-    // this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
+    this.selectedTab = 'recent';
+    this.getListRecentNotification();
+  }
+    
+  getListRecentNotification() {
+    const listWallet = this.profileProvider.wallet;
+      let listWalletId = [];
+      for (const item in listWallet) {
+        listWalletId.push(item);
+      }
+      this.walletProvider.getRecentNotifications(listWalletId, this.profileProvider.wallet[listWalletId[0]])
+      .then((data) => {
+        const listRecentNotification = this.mapListRecentNotification(data);
+        this.listRecentNotification = listRecentNotification;
+        localStorage.setItem("listRecentNotification", JSON.stringify(this.listRecentNotification));
+      }).catch((err) => console.log(err))
+  }
+
+  mapListRecentNotification(data) {
+    data.forEach((item) => {
+      if (item?.walletId) {
+        let wallet = this.profileProvider.wallet[item.walletId];
+        let token;
+        if (item.data.tokenId) {
+          token = wallet?.tokens.find(ele => ele.tokenId === item.data.tokenId);
+        }
+        let unit = token ? token.tokenInfo.symbol : wallet.coin;
+        let name = token ? token.tokenInfo.name : wallet.name;
+        if (typeof item.data.amount === 'string') parseFloat(item.data.amount);
+        item.createdOn = moment(item.createdOn * MILLIS_IN_SECOND).format('MM/DD/YYYY');
+        item.status = 'unread';
+        item.unit = unit || null;
+        item.name = name || null;
+      }
+    });
+    return data || [];
   }
 
   ionViewWillEnter() {
@@ -130,6 +164,36 @@ export class ProposalsNotificationsPage {
   ngOnDestroy() {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
+  }
+
+  public selectTab(tab: string): void {
+    this.selectedTab = tab;
+  }
+
+  public goToAccountDetail(notificationData) {
+    if (notificationData) {
+      // Change status notification
+      this.listRecentNotification.map(rc => {
+        if (rc.id === notificationData.id)  {
+            rc.status = 'read';
+        } 
+      })
+      localStorage.setItem("listRecentNotification", JSON.stringify(this.listRecentNotification));
+      if (notificationData?.data?.tokenId) {
+        this.router.navigate(['/token-details'], {
+          state: {
+            walletId: notificationData?.walletId,
+            tokenId: notificationData.data.tokenId
+          }
+        });
+      } else {
+        this.router.navigate(['/wallet-details'], {
+          state: {
+            walletId: notificationData?.walletId
+          }
+        });
+      }
+    }
   }
 
   private updateDesktopOnFocus() {

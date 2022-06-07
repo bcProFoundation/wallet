@@ -92,4 +92,80 @@ page-proposals-notifications {
       }
     }
   }
+  .container-segment-notification{
+    padding: 0 1rem;
+    ion-segment{
+      ion-segment-button{
+        position: relative;
+        text-transform: capitalize;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.1px;
+        &::part(native){
+          color: #001E2E;
+        }
+        &::part(indicator-background){
+          background: #00658D;
+        }
+        img {
+          position: absolute;
+          right: -5px;
+          top: 5px;
+        }
+      }
+    }
+  }
+  .recent-notification-item {
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    --inner-padding-end: 0;
+    --inner-padding-top: 1rem;
+    --inner-padding-bottom: 1rem;
+    margin-top: 1rem;
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 1rem;
+    }
+    ion-label {
+      display: flex !important;
+      .detail-transaction {
+        .title-label {
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+          letter-spacing: 0.1px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          white-space: break-spaces;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .amount {
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 20px;
+          letter-spacing: 0.1px;
+        }
+      }
+    }
+    ion-note {
+      align-self: flex-end;
+      .date-label {
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.4px;
+      }
+    }
+    &.read-notification-item {
+      .title-label {
+        color: rgba(0, 30, 46, 0.6);
+      }
+      .amount {
+        color: rgba(0, 30, 46, 0.6);
+      }
+    }
+  }
 }

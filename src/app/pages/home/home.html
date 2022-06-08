@@ -6,27 +6,54 @@
     </div>
   </ion-toolbar>
   <!-- TODO: Keep to header on top when scroll -->
-  <ion-toolbar class="toolbar-icon-view-mobile toolbar-home" [ngClass]="{'add-box-shadow-scroll': isScroll}">
-    <ion-title>
-      <div class="home-icon">
-        <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
-          <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
-        </ion-button>
-        <h2>
-          {{ 'Home' | translate }}
-        </h2>
-        <div class="group-btn-top">
-          <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openChartViewPage()">
-            <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
+  <ng-container *ngIf="!this.platformProvider.isCordova;else mobileToolbar">
+    <div class="desktopToolbarHome">
+      <ion-toolbar class="toolbar-icon-view-mobile toolbar-home" [ngClass]="{'add-box-shadow-scroll': isScroll}">
+        <ion-title>
+          <div class="home-icon">
+            <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
+              <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
+            </ion-button>
+            <h2>
+              {{ 'Home' | translate }}
+            </h2>
+            <div class="group-btn-top">
+              <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openChartViewPage()">
+                <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" slot="icon-only" class="key-notifications" (click)="openProposalsNotificationsPage()">
+                <img *ngIf="txpsN > 0" class="custom-notification-icon" src="assets/img/wallet-details/notification-{{currentTheme}}.svg" />
+                <ion-icon slot="end" src="assets/img/home-notifications-icon-{{currentTheme}}.svg"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-title>
+      </ion-toolbar>
+    </div>
+  </ng-container>
+  <ng-template #mobileToolbar>
+    <ion-toolbar class="toolbar-icon-view-mobile toolbar-home" [ngClass]="{'add-box-shadow-scroll': isScroll}">
+      <ion-title>
+        <div class="home-icon">
+          <ion-button fill="clear" slot="icon-only" class="settings-btn" (click)="openSettingPage()">
+            <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
           </ion-button>
-          <ion-button fill="clear" slot="icon-only" class="key-notifications" (click)="openProposalsNotificationsPage()">
-            <img *ngIf="txpsN > 0" class="custom-notification-icon" src="assets/img/wallet-details/notification-{{currentTheme}}.svg" />
-            <ion-icon slot="end" src="assets/img/home-notifications-icon-{{currentTheme}}.svg"></ion-icon>
-          </ion-button>
+          <h2>
+            {{ 'Home' | translate }}
+          </h2>
+          <div class="group-btn-top">
+            <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openChartViewPage()">
+              <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" slot="icon-only" class="key-notifications" (click)="openProposalsNotificationsPage()">
+              <img *ngIf="txpsN > 0" class="custom-notification-icon" src="assets/img/wallet-details/notification-{{currentTheme}}.svg" />
+              <ion-icon slot="end" src="assets/img/home-notifications-icon-{{currentTheme}}.svg"></ion-icon>
+            </ion-button>
+          </div>
         </div>
-      </div>
-    </ion-title>
-  </ion-toolbar>
+      </ion-title>
+    </ion-toolbar>
+  </ng-template>
 </ion-header>
 <ion-content [scrollEvents]="true" (ionScroll)="handleScrolling($event)" #scrollArea>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -171,23 +198,59 @@
       </ng-template>
     </ion-popover>
   </div>
-  <ng-container *ngIf="walletGroupsHome.length != 0;else noWallet">
-    <ion-list lines="none" class="list-item-card">
-      <div class="wallet-item" *ngFor="let wallet of walletGroupsHome; let j = index">
-        <wallet-detail-card *ngIf="!wallet.tokens?.tokenId" [wallet]="wallet" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
-        </wallet-detail-card>
-        <wallet-detail-card *ngIf="wallet.tokens?.tokenId" [wallet]="wallet" [token]="wallet.tokens" [isToken]="true" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
-        </wallet-detail-card>
+  <ng-container *ngIf="loading;else showHomeCard">
+    <ion-item lines="none" class="card-home-loading">
+      <div class="wallet-card">
+        <div class="wallet-card-header">
+          <div class="icon">
+            <ion-avatar>
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-avatar>
+          </div>
+          <div class="title">
+            <p>
+              <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+            </p>
+          </div>
+        </div>
+        <div class="balance-content">
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+        </div>
+        <div class="wallet-address">
+          <p>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+          </p>
+        </div>
       </div>
-    </ion-list>
+    </ion-item>
   </ng-container>
-  
-  <ng-template #noWallet>
-    <div class="item-no-wallet" [ngClass]="{'no-wallet-light-theme': currentTheme == 'light', 'no-wallet-dark-theme': currentTheme == 'dark'}" (click)="addToHome()">
-      <img class="icon-add-home" src="assets/img/add-to-home-{{currentTheme}}.svg" alt="">
-      <p translate>
-        Add to home
-      </p>
-    </div>
+  <ng-template #showHomeCard>
+    <ng-container *ngIf="walletGroupsHome.length != 0;else noWallet">
+      <ion-list lines="none" class="list-item-card">
+        <div class="wallet-item" *ngFor="let wallet of walletGroupsHome; let j = index">
+          <wallet-detail-card *ngIf="!wallet.tokens?.tokenId" [wallet]="wallet" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+          </wallet-detail-card>
+          <wallet-detail-card *ngIf="wallet.tokens?.tokenId" [wallet]="wallet" [token]="wallet.tokens" [isToken]="true" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+          </wallet-detail-card>
+        </div>
+      </ion-list>
+    </ng-container>
+    
+    <ng-template #noWallet>
+      <div class="item-no-wallet" [ngClass]="{'no-wallet-light-theme': currentTheme == 'light', 'no-wallet-dark-theme': currentTheme == 'dark'}" (click)="addToHome()">
+        <img class="icon-add-home" src="assets/img/add-to-home-{{currentTheme}}.svg" alt="">
+        <p translate>
+          Add to home
+        </p>
+      </div>
+    </ng-template>
   </ng-template>
 </ion-content>

@@ -1,6 +1,6 @@
-import { Component, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
+import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, PlatformProvider, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import * as _ from 'lodash';
 import { TokenInforPage } from 'src/app/pages/token-info/token-info';
@@ -38,6 +38,7 @@ export class WalletDetailCardComponent {
   flagAllItemRemove: boolean = false;
 
   @ViewChild('slidingItem') slidingItem: IonItemSliding;
+  @ViewChild('itemWallet') itemWallet: ElementRef;
 
   public currentTheme: string;
   public hiddenBalance: boolean;
@@ -69,7 +70,8 @@ export class WalletDetailCardComponent {
     private addressProvider: AddressProvider,
     private translate: TranslateService,
     private errorsProvider: ErrorsProvider,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public platformProvider: PlatformProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
   }
@@ -111,6 +113,11 @@ export class WalletDetailCardComponent {
     } else {
       this.slidingItem.close();
     }
+  }
+
+  handleOnDrag() {
+    let element = this.itemWallet.nativeElement;
+    this.flagOptionRemove ? element.style.background = '#677A87' : element.style.background = '#30885a';
   }
 
   public updateAll = _.debounce(

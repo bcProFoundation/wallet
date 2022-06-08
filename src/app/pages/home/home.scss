@@ -4,6 +4,14 @@ page-home {
     --background: #fafafb;
     padding-top: env(safe-area-inset-top);
   }
+  .desktopToolbarHome {
+    padding: 0 2rem;
+    background: #fafafb;
+    .toolbar-home {
+      --padding-start: 0 !important;
+      --padding-end: 0 !important;
+    }
+  }
   .card-home-info {
     position: relative;
     .total-amount-container {
@@ -354,6 +362,29 @@ page-home {
     }
     p {
       z-index: 1;
+    }
+  }
+
+  .card-home-loading {
+    margin: 0 1rem;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    --background: linear-gradient(105.17deg, #D6E6ED 11.71%, #E5E5EA 89.93%);
+    border-radius: 1rem;
+    .wallet-card {
+      width: 100%;
+      .wallet-card-header {
+        display: flex;
+        .title {
+          width: 100%;
+          margin-left: 1rem;
+        }
+      }
+      .wallet-address {
+        p {
+           margin-bottom: 0;
+        }
+      }
     }
   }
   

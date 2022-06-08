@@ -1361,6 +1361,12 @@
   // 5 - Tabs
   // 5.1 Tab Home
   page-home, chart-view {
+    .desktopToolbarHome{
+      background: #011e2e !important;
+    }
+    .card-home-loading {
+      --background: linear-gradient(105.17deg, #1B3D4E 11.71%, #2E3B4B 89.93%);
+    }
     .total-amount-container {
       .total-amount-value {
         color: var(--color-primary-abcpay-dark) !important;

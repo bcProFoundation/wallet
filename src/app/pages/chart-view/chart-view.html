@@ -22,7 +22,7 @@
     <ion-toolbar class="wide-header__title wide-header-chart-view">
       <expandable-header-primary>
         {{ selectedCardPrice.unitCode.toUpperCase() | translate }}
-        <div translate class="date-label">({{selectedCardPrice.name}})</div>
+        <span class="date-label">({{selectedCardPrice.name | translate}})</span>
       </expandable-header-primary>
     </ion-toolbar>
   </expandable-header>

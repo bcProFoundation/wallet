@@ -39,6 +39,7 @@ export class PricePage {
   public isFiatIsoCodeSupported: boolean;
   public fiatIsoCode: string;
   public fiatCodes;
+  private dateActiveOption = DateRanges.Day;
   navParamsData;
   constructor(
     private router: Router,
@@ -75,7 +76,7 @@ export class PricePage {
     this.drawCanvas();
     // Let the canvas settle
     setTimeout(() => {
-      this.getPrice(DateRanges.Day);
+      this.getPrice(this.dateActiveOption);
       loading.then(loadingEl => loadingEl.dismiss());
     }, 1000);
   }
@@ -197,6 +198,7 @@ export class PricePage {
   public updateChart(option) {
     const { label, dateRange } = option;
     this.activeOption = label;
+    this.dateActiveOption = dateRange;
     this.getPrice(dateRange);
   }
 

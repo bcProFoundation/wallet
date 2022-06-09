@@ -16,6 +16,7 @@ import { ErrorsProvider } from "src/app/providers/errors/errors";
 import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
 import { Location } from '@angular/common';
 import { OnGoingProcessProvider } from "src/app/providers/on-going-process/on-going-process";
+import { EventManagerService } from "src/app/providers";
 
 @Component({
   selector: 'confirm-token',
@@ -45,6 +46,7 @@ export class ConfirmTokenPage {
     private profileProvider: ProfileProvider,
     private tokenProvider: TokenProvider,
     private walletProvider: WalletProvider,
+    private events: EventManagerService,
     private keyProvider: KeyProvider,
     private platformProvider: PlatformProvider,
     private translate: TranslateService,
@@ -160,7 +162,8 @@ export class ConfirmTokenPage {
       finishText: this.successText,
       autoDismiss: true
     };
-
+    // Update balance in card home
+    this.events.publish('Local/GetListPrimary', true);
     setTimeout(() => {
       this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
         this.router.navigate(['/token-details'], {

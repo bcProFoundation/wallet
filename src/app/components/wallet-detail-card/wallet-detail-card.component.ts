@@ -372,6 +372,8 @@ export class WalletDetailCardComponent {
       if (result) {
         this.presentToast('Remove account successful');
         this.events.publish('Local/GetListPrimary', true);
+        this.flagOptionRemove = !this.flagOptionRemove;
+        this.handleOnDrag();
       } else {
         this.presentToast('Remove account unsuccessful');
       }

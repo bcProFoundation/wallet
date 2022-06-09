@@ -94,6 +94,7 @@ export class WalletsPage {
     private toastController: ToastController
   ) {
     let config = this.configProvider.get();
+    this.zone = new NgZone({ enableLongStackTrace: false });
     const currentCurrency = config.wallet.settings.alternativeIsoCode;
     switch (currentCurrency) {
       case 'VND':
@@ -281,6 +282,7 @@ export class WalletsPage {
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
     this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));
     this.loadTokenWallet();
+    this.closeMenu();
   }
 
   public handleBtnSubMenu(isDisable) {

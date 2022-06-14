@@ -17,7 +17,7 @@
         [value]="recipient.name"
         (ionChange)="processInput()">
       </ion-input>
-      <ion-icon src="assets/img/recipient-component/Subtract.svg" *ngIf="searchValue && searchValue.length > 0"
+      <ion-icon src="assets/img/recipient-component/Subtract.svg" *ngIf="(searchValue && searchValue.length > 0) || (recipient.name && recipient.name.length > 0)"
         slot="end" class="erase-icon" (click)="cleanSearch(this.recipient.isSpecificAmount)">
       </ion-icon>
       <ion-icon src="assets/img/recipient-component/qr-{{darkThemeString}}.svg" *ngIf="isCordova" slot="end" class="scan-icon" (click)="openScanner()">

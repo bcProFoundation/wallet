@@ -1128,7 +1128,8 @@ export class WalletProvider {
   public getEstimatedTxSize(
     wallet,
     nbOutputs?: number,
-    nbInputs?: number
+    nbInputs?: number,
+    isAllFund?: boolean
   ): number {
     // Note: found empirically based on all multisig P2SH inputs and within m & n allowed limits.
     nbOutputs = nbOutputs ? nbOutputs : 2; // Assume 2 outputs
@@ -1137,8 +1138,8 @@ export class WalletProvider {
     const inputSize = this.getEstimatedSizeForSingleInput(wallet);
     const outputSize = 34;
     nbInputs = nbInputs ? nbInputs : 1; // Assume 1 input
-
-    const size = overhead + inputSize * nbInputs + outputSize * nbOutputs;
+    const outputReturn = !isAllFund ? 14 : 0;
+    const size = overhead + inputSize * nbInputs + outputSize * nbOutputs + outputReturn;
     return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
   }
 

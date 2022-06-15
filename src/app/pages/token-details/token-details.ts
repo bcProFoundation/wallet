@@ -157,7 +157,7 @@ export class TokenDetailsPage {
     this.events.subscribe('Local/WalletHistoryUpdate', this.updateHistory);
   }
 
-  onViewWillLeave() {
+  ionViewWillLeave() {
     this.events.unsubscribe('Local/WalletHistoryUpdate', this.updateHistory);
     this.onResumeSubscription.unsubscribe();
   }
@@ -186,6 +186,7 @@ export class TokenDetailsPage {
       this.token.amountToken = this.caculateAmountToken(utxoToken, this.token.tokenInfo.decimals);
       this.token.alternativeBalance = this.tokenProvider.getAlternativeBalanceToken(this.token, this.wallet);
       this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`
+      this.events.publish('Local/Update Amount Token', this.amountToken)
     }).catch(err => {
       this.logger.error(err);
     })

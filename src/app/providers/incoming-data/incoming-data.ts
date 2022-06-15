@@ -231,6 +231,19 @@ export class IncomingDataProvider {
     } else this.goSend(address, amount, message, coin, redirParams.recipientId);
   }
 
+  private handleBitcoinUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: Bitcoin URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.BTC;
+    let parsed = this.bwcProvider.getBitcore().URI(data);
+    let address = parsed.address ? parsed.address.toString() : '';
+    let message = parsed.message;
+    let amount = parsed.amount || amountFromRedirParams;
+    if (parsed.r) {
+    } else this.goSend(address, amount, message, coin, redirParams.recipientId);
+  }
+
   private handleEtoken(data: string, redirParams?: RedirParams) {
     this.logger.debug('Incoming-data: Etoken');
     let amountFromRedirParams =
@@ -517,7 +530,7 @@ export class IncomingDataProvider {
     }
     // Bitcoin  URI
     else if (this.isValidBitcoinUri(data)) {
-      // this.handleBitcoinUri(data, redirParams);
+      this.handleBitcoinUri(data, redirParams);
       return true;
 
       // Bitcoin Cash URI

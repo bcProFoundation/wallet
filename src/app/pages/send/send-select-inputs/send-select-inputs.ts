@@ -60,6 +60,7 @@ export class SelectInputsSendPage {
   public indeterminateState: boolean = false;
   public checkParentChecked: boolean = false;
   @ViewChild(IonContent) content: IonContent;
+  DUST_AMOUNT = 546;
 
   constructor(
     private router: Router,
@@ -170,15 +171,14 @@ export class SelectInputsSendPage {
 
   public goToConfirm(): void {
     const recipient = this.listRecipient[0];
+    const totalAmountSataoshi = this.totalAmount * this.currencyProvider.getPrecision(this.wallet.coin).unitToSatoshi
     this.router.navigate(['/confirm'], {
       state: {
         walletId: this.wallet.credentials.walletId,
         fromSelectInputs: true,
-        totalInputsAmount:
-          this.totalAmount *
-          this.currencyProvider.getPrecision(this.wallet.coin).unitToSatoshi,
+        totalInputsAmount: totalAmountSataoshi,
         toAddress: recipient.toAddress,
-        amount: recipient.amount,
+        amount:  ( totalAmountSataoshi - recipient.amount ) < this.DUST_AMOUNT ? totalAmountSataoshi :  recipient.amount,
         coin: this.wallet.coin,
         network: this.wallet.network,
         useSendMax: false,

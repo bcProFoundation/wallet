@@ -1138,7 +1138,7 @@ export class WalletProvider {
     const inputSize = this.getEstimatedSizeForSingleInput(wallet);
     const outputSize = 34;
     nbInputs = nbInputs ? nbInputs : 1; // Assume 1 input
-    const outputReturn = !isAllFund ? 14 : 0;
+    const outputReturn = !isAllFund ? 16 : 0;
     const size = overhead + inputSize * nbInputs + outputSize * nbOutputs + outputReturn;
     return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
   }

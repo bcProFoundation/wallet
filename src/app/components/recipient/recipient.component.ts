@@ -489,7 +489,7 @@ export class RecipientComponent implements OnInit {
       let tokenAddress: string = '';
       if (address == '') this.validAddress = false;
       // handle case send to etoken address in xec
-      if (address.includes("etoken") && this.wallet.coin == 'xec') {
+      if (!this.token && address.includes("etoken") && this.wallet.coin == 'xec') {
         // handle etoken 
         try {
           const { prefix, type, hash } = this.addressProvider.decodeAddress(address);

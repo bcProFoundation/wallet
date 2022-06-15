@@ -1,62 +1,29 @@
-<ion-header [translucent]="true" class="bp-header">
-  <ion-toolbar class="toolbar-desktop" translucent *ngIf="!this.platformProvider.isCordova">
-    <div class="header-container-desktop">
-      <img class="logo-abcpay" src="../../../assets/img/abcpay-logo.svg" alt="">
-      <img src="../../../assets/img/abcpay-text.svg" alt="">
-    </div>
-  </ion-toolbar>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button icon="chevron-back-outline"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
-        {{ card.unitCode | translate}}
-      </div>
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content fullscreen scrollEvents="true" #scrollArea>
-  <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
-      <expandable-header-primary class="card-title">
-        {{ card.unitCode | translate}}
-      </expandable-header-primary>
-  </expandable-header>
-
-  <div class="price-wraper stroke-card">
-    <div class="total-amount-container">
-      <div id="displayDate" class="section-header" translate></div>
-      <span id="displayPrice" class="total-amount-value"></span>
-      <div class="average-container">
-        <div *ngIf="card.totalBalanceChangeAmount || card.totalBalanceChangeAmount === 0"
-          [ngClass]="card.totalBalanceChangeAmount >= 0 ? 'possitive-avg' : 'negative-avg'">
-          <span class="average" id="averagePriceAmount"><span *ngIf="card.totalBalanceChangeAmount > 0">+</span></span>
-          <span *ngIf="card.totalBalanceChange || card.totalBalanceChange === 0"
-            [ngClass]="card.totalBalanceChange >= 0 ? 'possitive-avg percent' : 'negative-avg percent'">
-            <span *ngIf="card.totalBalanceChange > 0">+</span><span id="averagePricePercent"></span>
-          </span>
-        </div>
+<div class="price-wraper stroke-card">
+  <div class="total-amount-container">
+    <div id="displayDate" class="section-header" translate></div>
+    <span id="displayPrice" class="total-amount-value"></span>
+    <div class="average-container">
+      <div *ngIf="card.totalBalanceChangeAmount || card.totalBalanceChangeAmount === 0"
+        [ngClass]="card.totalBalanceChangeAmount >= 0 ? 'possitive-avg' : 'negative-avg'">
+        <span class="average" id="averagePriceAmount"><span *ngIf="card.totalBalanceChangeAmount > 0">+</span></span>
+        <span *ngIf="card.totalBalanceChange || card.totalBalanceChange === 0"
+          [ngClass]="card.totalBalanceChange >= 0 ? 'possitive-avg percent' : 'negative-avg percent'">
+          <span *ngIf="card.totalBalanceChange > 0">+</span><span id="averagePricePercent"></span>
+        </span>
       </div>
     </div>
-
-    <price-chart #canvas (priceChange)="setPrice($event)"></price-chart>
-    <ion-toolbar class="footer-price">
-      <span class="labels">
-        <div *ngFor="let option of updateOptions">
-          <ion-chip [ngClass]="{'active': activeOption === option.label, 'inactive': activeOption !== option.label }">
-            <ion-label [disabled]="canvas.loading" (click)="updateChart(option)">
-              {{ option.label }}
-            </ion-label>
-          </ion-chip>
-        </div>
-      </span>
-    </ion-toolbar>
   </div>
-  <!-- TODO: temporary hide the donation feature. Later, adding feature in settings to disable / enable this feature -->
-  <!-- <ion-toolbar *ngIf="isDonation" class="donation-footer">
-    <ion-button class="button-standard" (click)="goToDonation()">
-      Donate
-    </ion-button>
-  </ion-toolbar> -->
-</ion-content>
+
+  <price-chart #canvas (priceChange)="setPrice($event)"></price-chart>
+  <ion-toolbar class="footer-price">
+    <span class="labels">
+      <div *ngFor="let option of updateOptions">
+        <ion-chip (click)="updateChart(option)" [ngClass]="{'active': activeOption === option.label, 'inactive': activeOption !== option.label }">
+          <ion-label [disabled]="canvas.loading">
+            {{ option.label }}
+          </ion-label>
+        </ion-chip>
+      </div>
+    </span>
+  </ion-toolbar>
+</div>

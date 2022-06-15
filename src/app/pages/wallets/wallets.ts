@@ -94,6 +94,7 @@ export class WalletsPage {
     private toastController: ToastController
   ) {
     let config = this.configProvider.get();
+    this.zone = new NgZone({ enableLongStackTrace: false });
     const currentCurrency = config.wallet.settings.alternativeIsoCode;
     switch (currentCurrency) {
       case 'VND':
@@ -252,6 +253,12 @@ export class WalletsPage {
       keyId: this.keySelected[0].keyId,
       isShowBalanceKey: this.isShowBalance
     }
+    this.keySelected.forEach(ele => {
+      this.profileProvider.toggleHideBalanceFlag(
+        ele.credentials.walletId
+      )
+    });
+    this.events.publish('Local/GetListPrimary', true);
     const keyItemTemp = this.keyHiddenBalanceTemp.find((item) => {
       return item.keyId === this.keySelected[0].keyId;
     })
@@ -275,6 +282,7 @@ export class WalletsPage {
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
     this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));
     this.loadTokenWallet();
+    this.closeMenu();
   }
 
   public handleBtnSubMenu(isDisable) {

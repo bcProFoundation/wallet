@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
+import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, PlatformProvider, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import * as _ from 'lodash';
 import { TokenInforPage } from 'src/app/pages/token-info/token-info';
@@ -18,7 +18,7 @@ const MIN_UPDATE_TIME = 2000;
   styleUrls: ['./wallet-detail-card.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class WalletDetailCardComponent implements OnInit {
+export class WalletDetailCardComponent {
   @Input()
   wallet: any;
 
@@ -38,6 +38,7 @@ export class WalletDetailCardComponent implements OnInit {
   flagAllItemRemove: boolean = false;
 
   @ViewChild('slidingItem') slidingItem: IonItemSliding;
+  @ViewChild('itemWallet') itemWallet: ElementRef;
 
   public currentTheme: string;
   public hiddenBalance: boolean;
@@ -69,7 +70,8 @@ export class WalletDetailCardComponent implements OnInit {
     private addressProvider: AddressProvider,
     private translate: TranslateService,
     private errorsProvider: ErrorsProvider,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public platformProvider: PlatformProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
   }
@@ -94,12 +96,28 @@ export class WalletDetailCardComponent implements OnInit {
     }
   }
 
-  ngAfterViewChecked() {
-    if (this.flagAllItemRemove && this.flagOptionRemove) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.flagAllItemRemove) {
+      this.flagAllItemRemove = changes.flagAllItemRemove.currentValue;
+      if (this.flagAllItemRemove) {
+        this.slidingItem.open('end');
+      } else {
+        this.slidingItem.close();
+      }
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.flagAllItemRemove) {
       this.slidingItem.open('end');
     } else {
       this.slidingItem.close();
     }
+  }
+
+  handleOnDrag() {
+    let element = this.itemWallet.nativeElement;
+    this.flagOptionRemove ? element.style.background = '#677A87' : element.style.background = '#30885a';
   }
 
   public updateAll = _.debounce(
@@ -156,6 +174,7 @@ export class WalletDetailCardComponent implements OnInit {
     this.profileProvider.toggleHideBalanceFlag(
       this.wallet.credentials.walletId
     );
+    this.events.publish('Local/GetListPrimary', true);
   }
 
   public openWalletSettings(id) {
@@ -309,6 +328,7 @@ export class WalletDetailCardComponent implements OnInit {
         walletId: this.wallet.credentials.walletId
       });
       this.profileProvider.setOrderedWalletsByGroup();
+      this.events.publish('Local/GetListPrimary', true);
     }
     this.isEditNameFlag = !this.isEditNameFlag;
   }
@@ -352,6 +372,8 @@ export class WalletDetailCardComponent implements OnInit {
       if (result) {
         this.presentToast('Remove account successful');
         this.events.publish('Local/GetListPrimary', true);
+        this.flagOptionRemove = !this.flagOptionRemove;
+        this.handleOnDrag();
       } else {
         this.presentToast('Remove account unsuccessful');
       }
@@ -387,4 +409,21 @@ export class WalletDetailCardComponent implements OnInit {
     toast.present();
   }
 
+  public goToAccountDetail() {
+    if (!this.token) {
+      this.router.navigate(['/wallet-details'], {
+        state: {
+          walletId: this.wallet.credentials.walletId
+        }
+      });
+    } else {
+      this.router.navigate(['/token-details'], {
+        state: {
+          walletId: this.wallet.credentials.walletId,
+          token: this.token
+        }
+      });
+    }
+    
+  }
 }

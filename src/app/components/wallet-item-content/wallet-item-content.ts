@@ -24,9 +24,6 @@ export class WalletItemContent {
   @Input()
   isKeyTab: any;
 
-  @Input()
-  isShowBalance: any = true;
-
   public symbolCurrency: any;
 
   constructor(private configProvider: ConfigProvider) {
@@ -45,7 +42,8 @@ export class WalletItemContent {
   }
 
   isSupportToken(wallet): boolean {
-    if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
+    const isHrefAccounts = (location.href).includes('accounts');
+    if (wallet && wallet.coin == 'xec' && wallet.isSlpToken && !isHrefAccounts) return true;
     return false
   }
 

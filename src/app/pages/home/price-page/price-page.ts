@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { FormatCurrencyPipe } from '../../../pipes/format-currency';
@@ -25,6 +25,7 @@ import { PlatformProvider } from 'src/app/providers';
 export class PricePage {
   wallet: any;
   wallets: any[];
+  @Input() cardPrice: Card;
   @ViewChild('canvas', {static: true}) canvas: PriceChart;
   card: Card;
   public isDonation: boolean = false;
@@ -38,6 +39,7 @@ export class PricePage {
   public isFiatIsoCodeSupported: boolean;
   public fiatIsoCode: string;
   public fiatCodes;
+  private dateActiveOption = DateRanges.Day;
   navParamsData;
   constructor(
     private router: Router,
@@ -58,6 +60,12 @@ export class PricePage {
     }
     this.card = this.navParamsData?.card;
     this.setFiatIsoCode();
+    this.card = this.cardPrice;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.card = changes.cardPrice.currentValue;
+    this.ngOnInit();
   }
 
   ngOnInit() {
@@ -68,7 +76,7 @@ export class PricePage {
     this.drawCanvas();
     // Let the canvas settle
     setTimeout(() => {
-      this.getPrice(DateRanges.Day);
+      this.getPrice(this.dateActiveOption);
       loading.then(loadingEl => loadingEl.dismiss());
     }, 1000);
   }
@@ -190,6 +198,7 @@ export class PricePage {
   public updateChart(option) {
     const { label, dateRange } = option;
     this.activeOption = label;
+    this.dateActiveOption = dateRange;
     this.getPrice(dateRange);
   }
 

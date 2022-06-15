@@ -245,6 +245,16 @@
     }
   }
 
+  ion-popover {
+    &.popover-home {
+        .list-option-home {
+            .line-divider {
+                border-color: rgba(112, 129, 138, 0.38) !important;
+            }
+        }
+    }
+}
+
   ion-modal {
     --background: var(--bg-color-dark-theme);
   }
@@ -1351,6 +1361,12 @@
   // 5 - Tabs
   // 5.1 Tab Home
   page-home, chart-view {
+    .desktopToolbarHome{
+      background: #011e2e !important;
+    }
+    .card-home-loading {
+      --background: linear-gradient(105.17deg, #1B3D4E 11.71%, #2E3B4B 89.93%);
+    }
     .total-amount-container {
       .total-amount-value {
         color: var(--color-primary-abcpay-dark) !important;
@@ -1398,6 +1414,17 @@
         .possitive-avg {
           color: #73daa5 !important;
         }
+      }
+    }
+
+    .toolbar-footer-chart-view {
+      ion-chip {
+        border-color: rgba(112, 129, 138, 0.38);
+        --color: var(--color-primary-abcpay-dark);
+        &.item-active {
+          background: var(--color-primary-abcpay-dark);
+          --color: var(--color-on-primary-abcpay-dark);
+      }
       }
     }
   }

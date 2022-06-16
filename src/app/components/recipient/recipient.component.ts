@@ -61,6 +61,7 @@ export class RecipientComponent implements OnInit {
   public searchValue: string;
   validAddress = false;
   validAmount = false;
+  validMessage = true;
   isSelectedTotalAmout: boolean = false;
   remaining: number;
   isShowReceiveLotus: boolean;
@@ -68,6 +69,9 @@ export class RecipientComponent implements OnInit {
   receiveAmountLotus: number;
   formatRemaining: string;
   messagesReceiveLotus: boolean = false;
+
+  message='';
+  Buffer = Buffer;
   @Input()
   recipient: RecipientModel;
 
@@ -204,6 +208,21 @@ export class RecipientComponent implements OnInit {
 
     this.expression = '';
     this.updateUnitUI(!!isToken);
+  }
+
+  changeMessage(){
+        if(Buffer.from(this.message).length > 206) {
+          if(this.validMessage){
+            this.validMessage = false;
+            this.checkRecipientValid();
+          }
+        } else{
+          this.recipient.message = this.message;
+          if(!this.validMessage){
+            this.validMessage = true;
+            this.checkRecipientValid();
+          }
+        }
   }
 
   private updateAddressHandler: any = data => {
@@ -581,7 +600,7 @@ export class RecipientComponent implements OnInit {
 
   checkRecipientValid() {
     if (!this.isDonation) {
-      this.recipient.isValid = this.validAddress && this.validAmount;
+      this.recipient.isValid = this.validAddress && this.validAmount && this.validMessage;
     } else {
       if (this.isShowReceiveLotus) {
         this.recipient.isValid = this.validAddress && this.validAmount;

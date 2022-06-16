@@ -73,6 +73,7 @@ export interface TransactionProposal {
   inputs: any;
   fee: any;
   message: string;
+  messageOnChain: string;
   customData?: {
     service?: string;
     giftCardName?: string;

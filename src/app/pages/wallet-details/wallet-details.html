@@ -292,6 +292,9 @@
                 </ng-container>
 
                 <span *ngIf="tx.message" class="memo">{{tx.message}}</span>
+
+                <span *ngIf="tx.messageOnchain" class="memo">{{tx.messageOnchain}}</span>
+                
               </div>
 
               <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">

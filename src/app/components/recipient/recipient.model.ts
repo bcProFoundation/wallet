@@ -3,6 +3,7 @@ export class RecipientModel {
     public amount: number;
     public amountToShow: string;
     public altAmountStr: string;
+    public message?: string;
     public isValid?: boolean;
     public id?: number = Date.now();
     public name?:string;

@@ -253,6 +253,7 @@ export class HomePage {
 
   ngOnInit() {
     this.preFetchWallets();
+    
     //Detect Change theme
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
@@ -260,11 +261,41 @@ export class HomePage {
     setTimeout(() => {
       this.getWalletGroupsHome();
     }, 2900);
+    setTimeout(() => {
+      this.doMigrateMessageOnchainProcess();
+    }, 3200);
     // Required delay to improve performance loading
     setTimeout(() => {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
     }, 2000);
+  }
+
+  doMigrateMessageOnchainProcess(){
+    this.persistenceProvider.getMigrateMessageOnchainProcess().then(
+      processStatus => {
+        if(!processStatus){
+          this.persistenceProvider.setMigrateMessageOnchainProcess('start');
+          const wallets = _.filter(this.profileProvider.wallet, w => {
+            return !w.hidden;
+          });
+          _.each(wallets, wallet => {
+            this.persistenceProvider.removeTxHistory(wallet.id);
+          })
+          this.persistenceProvider.setMigrateMessageOnchainProcess('finish');
+        }
+        else if(processStatus === 'start'){
+          const wallets = _.filter(this.profileProvider.wallet, w => {
+            return !w.hidden;
+          });
+          _.each(wallets, wallet => {
+            this.persistenceProvider.removeTxHistory(wallet.id);
+          })
+          this.persistenceProvider.setMigrateMessageOnchainProcess('finish');
+        }
+      }
+      
+    )
   }
 
   getAdPageOrLink(link) {
@@ -336,6 +367,7 @@ export class HomePage {
   }
 
   private preFetchWallets() {
+
     // Avoid heavy tasks that can slow down the unlocking experience
     if (this.appProvider.isLockModalOpen) return;
     this.fetchingStatus = true;
@@ -347,6 +379,7 @@ export class HomePage {
     setTimeout(() => {
       refresher.target.complete();
       this.updateTxps();
+      this.doMigrateMessageOnchainProcess();
     }, 2000);
   }
 

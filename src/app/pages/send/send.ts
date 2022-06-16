@@ -341,7 +341,8 @@ export class SendPage {
           toAddress: recipient.toAddress,
           name: recipient.name,
           fromWalletDetails: true,
-          isSentXecToEtoken: recipient.isSentXecToEtoken
+          isSentXecToEtoken: recipient.isSentXecToEtoken,
+          messageOnChain: recipient.message
         }
       });
     } else {
@@ -358,7 +359,7 @@ export class SendPage {
           coin: this.wallet.coin,
           network: this.wallet.network,
           useSendMax: false,
-          recipients: this.listRecipient
+          recipients: this.listRecipient,
         }
       });
     }

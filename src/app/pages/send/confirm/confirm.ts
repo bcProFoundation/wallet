@@ -289,7 +289,7 @@ export class ConfirmPage {
       invoiceID: this.navParamsData.invoiceID, // xrp
       payProUrl: this.navParamsData.payProUrl,
       spendUnconfirmed: this.config.wallet.spendUnconfirmed,
-
+      messageOnChain: this.navParamsData.messageOnChain,
       // Vanity tx info (not in the real tx)
       recipientType: this.navParamsData.recipientType,
       name: this.navParamsData.name,
@@ -1159,7 +1159,7 @@ export class ConfirmPage {
       }
 
       txp.message = tx.description;
-
+      txp.messageOnChain = tx.messageOnChain;
       if (tx.paypro) {
         txp.payProUrl = tx.payProUrl;
         tx.paypro.host = new URL(tx.payProUrl).host;

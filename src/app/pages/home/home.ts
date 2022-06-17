@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -11,7 +11,6 @@ import {
   EventManagerService,
   ExternalLinkProvider,
   FeedbackProvider,
-  LoadingProvider,
   Logger,
   NewFeatureData,
   PersistenceProvider,
@@ -99,6 +98,7 @@ export class HomePage {
   public walletGroupsHome: Array<any> = [];
   public removeAllItem: boolean = false;
   public isShowBalance: boolean = false;
+  public loading: boolean = false;
 
   constructor(
     private persistenceProvider: PersistenceProvider,
@@ -122,10 +122,7 @@ export class HomePage {
     private splashScreen: SplashScreen,
     private rateProvider: RateProvider,
     private themeProvider: ThemeProvider,
-    private tokenProvider: TokenProvider,
-    private loadingProvider: LoadingProvider,
-    private loadingController: LoadingController,
-    private renderer: Renderer2
+    private tokenProvider: TokenProvider
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -155,15 +152,12 @@ export class HomePage {
   }
 
   public async getWalletGroupsHome() {
-    const loading = await this.loadingController.create({
-      message: 'Please wait...',
-    });
-    await loading.present();
+    this.loading = true;
     let wallets = this.profileProvider.wallet;
     await this.loadToken(wallets);
     this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
     if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
-    loading.dismiss();
+    this.loading = false
   }
   
   private showNewFeatureSlides() {
@@ -258,16 +252,12 @@ export class HomePage {
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     });
-    setTimeout(() => {
-      this.getWalletGroupsHome();
-    }, 2900);
-    setTimeout(() => {
-      this.doMigrateMessageOnchainProcess();
-    }, 3200);
+    this.getWalletGroupsHome();
     // Required delay to improve performance loading
     setTimeout(() => {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
+      this.doMigrateMessageOnchainProcess();
     }, 2000);
   }
 

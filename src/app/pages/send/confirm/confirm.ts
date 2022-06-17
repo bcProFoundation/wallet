@@ -1614,7 +1614,8 @@ export class ConfirmPage {
         if (txp.payProUrl && txp.payProUrl.includes('redir=wc')) {
           redir = 'wc';
         }
-
+        // Update balance in card home
+        this.events.publish('Local/GetListPrimary', true);
         if (this.navParamsData.isEthMultisigInstantiation) {
           this.onGoingProcessProvider.set('creatingEthMultisigWallet');
           return this.instantiateMultisigContract(txp);
@@ -1702,7 +1703,8 @@ export class ConfirmPage {
           walletId: walletId ? walletId : this.wallet.credentials.walletId,
           donationSupportCoins: this.donationSupportCoins,
           finishParam: params
-        }
+        },
+        replaceUrl: true
       }).then(
         () => {
           this.eventsService.publishRefresh({

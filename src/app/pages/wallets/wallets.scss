@@ -3,7 +3,7 @@ page-wallets {
   .custom-notification-icon {
     position: absolute;
     bottom: 12px;
-    left: 14px;
+    left: 13px;
     z-index: 1;
   }
 
@@ -20,7 +20,9 @@ page-wallets {
   }
 
   .wallet-item {
-    padding: 1rem 1rem 0 1rem;
+    margin: 1rem 1rem 0 1rem;
+    background: none;
+    border-radius: 10px;
     ion-item-sliding {
       border: 0;
       wallet-item-content {
@@ -51,7 +53,6 @@ page-wallets {
   .token-container {
     background: linear-gradient(0deg, rgba(0, 101, 141, 0.08), rgba(0, 101, 141, 0.08)), #FAFAFB;
     position: relative;
-    top: -5px;
     border-radius: 0 0 8px 8px;
 
     ion-item {

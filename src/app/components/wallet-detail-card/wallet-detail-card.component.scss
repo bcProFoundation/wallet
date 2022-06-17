@@ -1,5 +1,9 @@
 wallet-detail-card {
   width: 100%;
+  .wallet-detail-card-container {
+    border-radius: 18px;
+    background: none;
+  }
   .wallet-card {
     width: 100%;
     border-radius: 16px;
@@ -384,8 +388,11 @@ wallet-detail-card {
   }
 
   ion-item-sliding {
+    &.slide-item-mobile {
+      width: calc(100% + 1px);
+    }
     ion-item {
-      --background: transparent;
+      --background: none !important;
       --padding-start: 0;
       --inner-padding-end: 0;
     }
@@ -409,6 +416,10 @@ wallet-detail-card {
         }
         &.btn-remove-out-home {
           --background: #677A87;
+        }
+        &.ion-activated {
+          --background: none;
+          background: none;
         }
       }
     }

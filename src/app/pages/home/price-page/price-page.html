@@ -18,8 +18,8 @@
   <ion-toolbar class="footer-price">
     <span class="labels">
       <div *ngFor="let option of updateOptions">
-        <ion-chip [ngClass]="{'active': activeOption === option.label, 'inactive': activeOption !== option.label }">
-          <ion-label [disabled]="canvas.loading" (click)="updateChart(option)">
+        <ion-chip (click)="updateChart(option)" [ngClass]="{'active': activeOption === option.label, 'inactive': activeOption !== option.label }">
+          <ion-label [disabled]="canvas.loading">
             {{ option.label }}
           </ion-label>
         </ion-chip>

@@ -99,6 +99,9 @@ export class RecipientComponent implements OnInit {
   @Input()
   isDonation?: boolean;
 
+  @Input()
+  isShowMessage?: boolean;
+
   @Output() deleteEvent?= new EventEmitter<number>();
   @Output() sendMaxEvent?= new EventEmitter<boolean>();
 

@@ -315,6 +315,9 @@
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |
                     amDateFormat:'MM/DD/YYYY'}}</p>
+                  <p class="date" *ngIf="tx.messageOnchain">
+                    Reply
+                  </p>
                 </div>
               </ion-note>
             </ion-item>

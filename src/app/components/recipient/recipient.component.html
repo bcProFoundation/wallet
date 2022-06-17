@@ -34,14 +34,16 @@
       <span *ngIf="!token" (click)="changeUnit()" [ngClass]="{'disabled': isSelectedTotalAmout, 'bold-text': !isSelectedTotalAmout}">{{unit}} </span>
       <span *ngIf="token" (click)="changeUnit()" class="bold-text">{{unit}}</span>
     </ion-item>
+    <ng-conatiner *ngIf="isShowMessage">
+      <div class="amount-header">
+        <p class="title">{{'Message' | translate}}</p>
+      </div>
+      <ion-item lines="none" class="amount-wrapper">
+        <ion-textarea [(ngModel)]="message" (ionChange)="changeMessage()" (ionBlur)="checkRecipientValid()"></ion-textarea>
+      </ion-item>
+      <p class="unit-alt-text">{{Buffer.from(this.message).length}} / 206</p>
+    </ng-conatiner>
 
-    <div class="amount-header">
-      <p class="title">{{'Message' | translate}}</p>
-    </div>
-    <ion-item lines="none" class="amount-wrapper">
-      <ion-textarea [(ngModel)]="message" (ionChange)="changeMessage()" (ionBlur)="checkRecipientValid()"></ion-textarea>
-    </ion-item>
-    <p class="unit-alt-text">{{Buffer.from(this.message).length}} / 206</p>
     <div class="selected-amount" lines="none" *ngIf="isShowSelectInput">
       <ion-label class="item-title">{{'Send total selected amount' | translate}}</ion-label>
       <ion-toggle [(ngModel)]="isSelectedTotalAmout" (ionChange)="changeSelectedAmount($event)" ></ion-toggle>

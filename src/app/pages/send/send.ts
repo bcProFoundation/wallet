@@ -60,6 +60,7 @@ export class SendPage {
   walletId: string;
   isShowSendMax: boolean = true;
   isShowDelete: boolean = false;
+  isShowMessage: boolean = true;
   toAddress: string = '';
   formatRemaining: string;
   recipientNotInit: RecipientModel;
@@ -279,6 +280,7 @@ export class SendPage {
     }))
     this.isShowSendMax = this.listRecipient.length === 1;
     this.isShowDelete = this.listRecipient.length > 1;
+    this.isShowMessage = this.listRecipient.length === 1;
     this.content.scrollToBottom(1000);
   }
 
@@ -286,6 +288,7 @@ export class SendPage {
     this.listRecipient = this.listRecipient.filter(s => s.id !== id);
     this.isShowSendMax = this.listRecipient.length === 1;
     this.isShowDelete = this.listRecipient.length > 1;
+    this.isShowMessage = this.listRecipient.length === 1;
   }
 
   private goToConfirmToken(isSendMax?: boolean) {

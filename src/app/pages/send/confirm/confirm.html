@@ -196,6 +196,21 @@
         </div>
       </ion-item>
 
+      <ion-item *ngIf="tx && tx.messageOnChainToShow" lines="none">
+        <ion-label slot="start">
+          <div class="summary-item">
+            <span translate>Message</span>
+          </div>
+        </ion-label>
+
+        <ion-note slot="end" class="address-note-custom">
+          <div class="note-container ellipsis">
+            {{tx.messageOnChainToShow}}
+          </div>
+        </ion-note>
+      </ion-item>
+
+
       <div class="line-divider"></div>
 
       <ng-container *ngIf="isDonation && remaining && isShowReceive">

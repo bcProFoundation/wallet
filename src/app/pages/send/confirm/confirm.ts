@@ -290,6 +290,7 @@ export class ConfirmPage {
       payProUrl: this.navParamsData.payProUrl,
       spendUnconfirmed: this.config.wallet.spendUnconfirmed,
       messageOnChain: this.navParamsData.messageOnChain,
+      messageOnChainToShow: this.navParamsData.messageOnChain,
       // Vanity tx info (not in the real tx)
       recipientType: this.navParamsData.recipientType,
       name: this.navParamsData.name,

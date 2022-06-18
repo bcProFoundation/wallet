@@ -17,6 +17,7 @@ import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
 import { Location } from '@angular/common';
 import { OnGoingProcessProvider } from "src/app/providers/on-going-process/on-going-process";
 import { EventManagerService } from "src/app/providers";
+import { EventsService } from "src/app/providers/events.service";
 
 @Component({
   selector: 'confirm-token',
@@ -56,7 +57,8 @@ export class ConfirmTokenPage {
     private errorsProvider: ErrorsProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private location: Location
+    private location: Location,
+    private eventsService: EventsService
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
@@ -141,6 +143,8 @@ export class ConfirmTokenPage {
       this.onGoingProcessProvider.set('Sending Token ...');
       this.tokenProvider.sendToken(wallet, mnemonic, this.token.tokenInfo, this.amountTokenToSend, this.sendToAddress).then(() => {
         this.onGoingProcessProvider.clear();
+        // Update balance in card home
+        this.events.publish('Local/GetListPrimary', true);
         this.annouceFinish();
       }).catch(err => {
         this.onGoingProcessProvider.clear();
@@ -162,8 +166,6 @@ export class ConfirmTokenPage {
       finishText: this.successText,
       autoDismiss: true
     };
-    // Update balance in card home
-    this.events.publish('Local/GetListPrimary', true);
     setTimeout(() => {
       this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
         this.router.navigate(['/token-details'], {
@@ -173,8 +175,14 @@ export class ConfirmTokenPage {
             finishParam: params
           }
         });
-      })
-    }, 100);
+      }).then(
+        () => {
+          this.eventsService.publishRefresh({
+            keyId: this.wallet.keyId
+          });
+        }
+      );
+    }, 50);
   }
 
   public showErrorInfoSheet(

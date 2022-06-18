@@ -18,10 +18,10 @@ import { AppProvider } from '../../../../providers/app/app';
 import { CurrencyProvider } from '../../../../providers/currency/currency';
 import { Logger } from '../../../../providers/logger/logger';
 import { PlatformProvider } from '../../../../providers/platform/platform';
-import { PopupProvider } from '../../../../providers/popup/popup';
 
 // validators
 import { AddressValidator } from '../../../../validators/address';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'page-addressbook-add',
@@ -38,6 +38,7 @@ export class AddressbookAddPage extends ActionSheetParent{
   public networks;
   public coins: string[];
   public allowNetworkSelection: boolean;
+  public hiddenFormAddContact: boolean = false;
 
   private destinationTagregex: RegExp;
   navParamsData;
@@ -53,7 +54,6 @@ export class AddressbookAddPage extends ActionSheetParent{
     private formBuilder: FormBuilder,
     private logger: Logger,
     private platformProvider: PlatformProvider,
-    private popupProvider: PopupProvider
   ) {
     super();
     if (this.router.getCurrentNavigation()) {
@@ -167,6 +167,7 @@ export class AddressbookAddPage extends ActionSheetParent{
         this.parseAddress(data.value)
       );
     }
+    this.hiddenFormAddContact = false;
   };
 
   private emailOrEmpty(control: AbstractControl): ValidationErrors | null {
@@ -201,7 +202,9 @@ export class AddressbookAddPage extends ActionSheetParent{
   }
 
   public openScanner(): void {
-    this.router.navigate(['scan'], {state: {fromAddressbook: true}})
+    this.hiddenFormAddContact = true;
+    Keyboard.hide();
+    this.router.navigate(['scan'], {state: {fromAddressbook: true}});
   }
 
   public getCoinAndNetwork(): { coin: string; network: string } {

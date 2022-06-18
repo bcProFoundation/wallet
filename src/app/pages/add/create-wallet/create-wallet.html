@@ -108,12 +108,12 @@
 
     <div *ngIf="showAdvOpts" class="show-advance-option stroke-card ion-padding-bottom">
 
-      <ion-item lines="none" *ngIf="showAdvOpts &&  coin === 'ltc' && createForm.value.selectedSeed == 'new'">
+      <ion-item lines="none" *ngIf="showAdvOpts && (coin === 'ltc' || coin === 'btc') && createForm.value.selectedSeed == 'new'">
         <ion-label>Segwit</ion-label>
         <ion-toggle formControlName="useNativeSegwit"></ion-toggle>
       </ion-item>
       
-      <div *ngIf="showAdvOpts &&  coin === 'ltc' && createForm.value.selectedSeed == 'new'" class="line-divider"></div>
+      <div *ngIf="showAdvOpts &&  (coin === 'ltc' || coin === 'btc') && createForm.value.selectedSeed == 'new'" class="line-divider"></div>
 
       <mat-form-field class="wallet-service-url-mat-form-field" appearance="outline">
         <mat-label>{{'Wallet Service URL' | translate}}</mat-label>

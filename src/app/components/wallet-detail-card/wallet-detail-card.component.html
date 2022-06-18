@@ -126,7 +126,7 @@
   </ng-container>
   
   <ng-template #tokenCard>
-    <ion-item-sliding [disabled]="flagAllItemRemove" #slidingItem>
+    <ion-item-sliding (ionDrag)="handleOnDrag()" [disabled]="flagAllItemRemove" #slidingItem>
       <ion-item lines="none">
         <div class="wallet-card bg-default" [ngClass]="{ 
           'bg-EAT': token?.tokenInfo?.symbol == 'EAT',

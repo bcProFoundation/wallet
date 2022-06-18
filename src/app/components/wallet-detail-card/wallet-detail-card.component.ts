@@ -105,6 +105,9 @@ export class WalletDetailCardComponent {
         this.slidingItem.close();
       }
     }
+    this.events.subscribe('Local/Update Amount Token', (data) => {
+      if (data) this.amountToken = data;
+    })
   }
 
   ngAfterViewInit() {

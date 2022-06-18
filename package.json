@@ -61,6 +61,7 @@
     "@capacitor/android": "3.5.0",
     "@capacitor/core": "^3.2.3",
     "@capacitor/ios": "^3.2.3",
+    "@capacitor/keyboard": "^1.2.2",
     "@capacitor/project": "^1.0.28",
     "@capacitor/push-notifications": "^1.0.9",
     "@capacitor/splash-screen": "^1.2.2",

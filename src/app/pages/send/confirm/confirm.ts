@@ -1112,7 +1112,8 @@ export class ConfirmPage {
           const size = this.walletProvider.getEstimatedTxSize(
             wallet,
             1,
-            tx.inputs.length
+            tx.inputs.length,
+            _.sumBy(tx.inputs, 'satoshis') - tx.amount === 0
           );
           let estimatedFee;
           switch (tx.coin) {

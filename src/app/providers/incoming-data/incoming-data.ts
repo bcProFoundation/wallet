@@ -240,8 +240,9 @@ export class IncomingDataProvider {
     let address = parsed.address ? parsed.address.toString() : '';
     let message = parsed.message;
     let amount = parsed.amount || amountFromRedirParams;
-    if (parsed.r) {
-    } else this.goSend(address, amount, message, coin, redirParams.recipientId);
+    if (!parsed.r) {
+      this.goSend(address, amount, message, coin, redirParams.recipientId);
+    } 
   }
 
   private handleEtoken(data: string, redirParams?: RedirParams) {

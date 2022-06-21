@@ -18,6 +18,7 @@ import { WalletProvider } from 'src/app/providers/wallet/wallet';
 import { ConfigProvider } from 'src/app/providers/config/config';
 import { CurrencyProvider } from 'src/app/providers/currency/currency';
 import { ThemeProvider } from 'src/app/providers/theme/theme';
+import { DUST_AMOUNT } from 'src/app/constants';
 
 @Component({
   selector: 'page-send-select-inputs',
@@ -60,7 +61,6 @@ export class SelectInputsSendPage {
   public indeterminateState: boolean = false;
   public checkParentChecked: boolean = false;
   @ViewChild(IonContent) content: IonContent;
-  DUST_AMOUNT = 546;
 
   constructor(
     private router: Router,
@@ -178,7 +178,7 @@ export class SelectInputsSendPage {
         fromSelectInputs: true,
         totalInputsAmount: totalAmountSataoshi,
         toAddress: recipient.toAddress,
-        amount:  ( totalAmountSataoshi - recipient.amount ) < this.DUST_AMOUNT ? totalAmountSataoshi :  recipient.amount,
+        amount:  ( totalAmountSataoshi - recipient.amount ) < DUST_AMOUNT ? totalAmountSataoshi :  recipient.amount,
         coin: this.wallet.coin,
         network: this.wallet.network,
         useSendMax: false,

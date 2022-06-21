@@ -358,6 +358,87 @@ export class WalletDetailsPage {
     }, 1000);
   }
 
+  handleClick(tx){
+    this.showReplyMessageModal(tx);  
+  }
+
+  getAddressFrom(tx): any{
+    if((!this.addressbook || !tx.inputAddresses[0] || !this.getContactName(tx.inputAddresses[0]))){
+      return {
+        name: tx.inputAddresses[0].slice(-8),
+        address:  tx.inputAddresses[0],
+        type: ''
+      }
+    }
+    // else if(this.addressbook && tx.inputAddresses[0] && this.getContactName(tx.inputAddresses[0])){
+    //   return {
+    //     name: this.getContactName(tx.inputAddresses[0]),
+    //     address: tx.inputAddresses[0].address,
+    //     type: 'contact'
+    //   }
+    // }
+    else return {
+      name: this.getContactName(tx.inputAddresses[0]),
+      address: tx.inputAddresses[0],
+      type: 'contact'
+    }
+  }
+
+  getAddressTo(tx): any{
+    if((!tx.note || (tx.note && !tx.note.body)) && (!this.addressbook || !tx.outputs[0] || !this.getContactName(tx.outputs[0].address)) && (!tx.customData || !tx.customData.toWalletName)){
+      return {
+        name: tx.addressTo.slice(-8),
+        address: tx.addressTo,
+        type: ''
+      }
+    }
+    else if((!tx.note || (tx.note && !tx.note.body)) && (!this.addressbook || !tx.outputs[0] || !this.getContactName(tx.outputs[0].address)) && (tx.customData && tx.customData.toWalletName)){
+      return {
+        name: tx.customData.toWalletName,
+        address: tx.outputs[0].address,
+        type: 'wallet'
+      }
+    }
+    else return {
+      name: this.getContactName(tx.outputs[0].address),
+      address: tx.outputs[0].address,
+      type: 'contact'
+    }
+  }
+
+  showReplyMessageModal(tx) {
+    const txInfo = this.getAddressFrom(tx);
+    const addContactModal = this.actionSheetProvider.createMessageReplyComponent({
+      addressTo: this.getAddressFrom(tx).name,
+      messageOnChain: tx.messageOnchain
+    });
+    addContactModal.present({ maxHeight: '48%%', minHeight: '48%%' });
+    addContactModal.onDidDismiss((rs) => {
+      if (rs) {
+        this.sendReplyMessage(rs, txInfo);
+      }
+    });
+  }
+
+  sendReplyMessage(rs, txInfo){
+    this.router.navigate(['/confirm'], {
+      state: {
+        walletId: this.wallet.credentials.walletId,
+        recipientType: txInfo.type,
+        amount: 5000,
+        currency: this.wallet.coin,
+        coin: this.wallet.coin,
+        network: this.wallet.network,
+        useSendMax: false,
+        toAddress: txInfo.address,
+        name: txInfo.type === 'contact' ? txInfo.name : null,
+        fromWalletDetails: true,
+        isSentXecToEtoken: false,
+        messageOnChain: rs
+      }
+    });
+  }
+
   updateAddressToShowToken(tx) {
     const outputAddr = tx.outputs[0].address;
     let addressToShow = this.walletProvider.getAddressView(
@@ -559,7 +640,12 @@ export class WalletDetailsPage {
     }
   };
 
-  public itemTapped(tx) {
+  public itemTapped(tx, itemTapped){
+    if(itemTapped.target.innerText === 'Reply'){
+      itemTapped.preventDefault();
+      itemTapped.stopPropagation();
+      return;
+    }
     if (tx.hasUnconfirmedInputs) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'unconfirmed-inputs'

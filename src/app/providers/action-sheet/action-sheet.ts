@@ -6,6 +6,7 @@ import { FooterMenuComponent } from 'src/app/components/footer-menu/footer-menu'
 import { IncomingDataMenuComponent } from 'src/app/components/incoming-data-menu/incoming-data-menu';
 import { InfoSheetComponent } from 'src/app/components/info-sheet/info-sheet';
 import { MemoComponent } from 'src/app/components/memo-component/memo-component';
+import { MessageReplyComponent } from 'src/app/components/message-reply/message-reply.component';
 import { MinerFeeWarningComponent } from 'src/app/components/miner-fee-warning/miner-fee-warning';
 import { MultisignInfoComponent } from 'src/app/components/multisign-info/multisign-info.component';
 import { NeedsBackupComponent } from 'src/app/components/needs-backup/needs-backup';
@@ -214,6 +215,15 @@ export class ActionSheetProvider {
   public createAddContactComponent(params?): AddressbookAddPage {
     return this.setupSheet<AddressbookAddPage>(
       AddressbookAddPage,
+      null,
+      params
+      )
+      .instance;
+  }
+
+  public createMessageReplyComponent(params?): MessageReplyComponent {
+    return this.setupSheet<MessageReplyComponent>(
+      MessageReplyComponent,
       null,
       params
       )

@@ -1,0 +1,24 @@
+<action-sheet>
+  <div class="add-address-book-container">
+    <div class="reply-to-container">
+      <div class="reply-to-title">
+        Replying to {{messageReplyInfo.addressTo}}
+      </div>
+      <div class="reply-to-message">
+        {{messageReplyInfo.messageOnChain}}
+      </div>
+    </div>
+    <form [formGroup]="messageReplySend">
+      <mat-form-field MatInput class="form-field" appearance="outline">
+        <textarea matInput formControlName="messageOnChain"></textarea>
+      </mat-form-field>
+    </form>
+    
+
+    <div class="footer">
+      <ion-button type="submit" class="button-standard ion-no-margin-bottom" (click)="send()">
+        {{'Send' | translate}}
+      </ion-button>
+    </div>
+  </div>
+</action-sheet>

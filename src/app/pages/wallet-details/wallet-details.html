@@ -232,7 +232,7 @@
 
           <div class="item-wrapper" *ngFor="let tx of group; trackBy: trackByFn; let i = index">
 
-            <ion-item button detail="false" (click)="itemTapped(tx)"
+            <ion-item button detail="false" (click)="itemTapped(tx, $event)"
               [ngClass]="{'warning-background': canSpeedUpTx(tx), 'danger-background': tx.hasUnconfirmedInputs || tx.isRBF}">
 
               <div class="action">
@@ -315,9 +315,9 @@
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |
                     amDateFormat:'MM/DD/YYYY'}}</p>
-                  <p class="date" *ngIf="tx.messageOnchain">
+                  <ion-button name="button-handle-click" fill="clear" class="date" *ngIf="tx.messageOnchain && tx.action === 'received'" (click)="handleClick(tx)">
                     Reply
-                  </p>
+                  </ion-button>
                 </div>
               </ion-note>
             </ion-item>

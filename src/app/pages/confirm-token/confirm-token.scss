@@ -405,4 +405,27 @@ confirm-token {
   .no-margin-left{
     margin-left: 0 !important;
   }
+  .send-to-custom {
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+    &::part(native) {
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-top-left-radius: 8px !important;
+      border-top-right-radius: 8px !important;
+    }
+  }
+  .add-address-book {
+    margin-top: 0 !important;
+    border-radius: 0 !important;
+    &::part(native) {
+      border-bottom-left-radius: 8px !important;
+      border-bottom-right-radius: 8px !important;
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+    }
+    mat-form-field {
+      padding: 0 0 1rem 0 !important;
+    }
+  }
 }

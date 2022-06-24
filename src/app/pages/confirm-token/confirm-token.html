@@ -82,6 +82,12 @@
         </ion-note>
       </ion-item>
 
+      <ion-item *ngIf="!toAddressName" class="add-address-book">
+        <mat-form-field appearance="outline">
+            <mat-label translate>Name Address Book</mat-label>
+            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book'" translate>
+          </mat-form-field>
+      </ion-item>
 
     </ion-list>
   </div>

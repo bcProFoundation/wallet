@@ -16,7 +16,7 @@ import { ErrorsProvider } from "src/app/providers/errors/errors";
 import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
 import { Location } from '@angular/common';
 import { OnGoingProcessProvider } from "src/app/providers/on-going-process/on-going-process";
-import { EventManagerService } from "src/app/providers";
+import { AddressBookProvider, EventManagerService } from "src/app/providers";
 import { EventsService } from "src/app/providers/events.service";
 
 @Component({
@@ -41,6 +41,8 @@ export class ConfirmTokenPage {
   sendToAddress: string;
   fee: number
   precision;
+  toAddressName;
+  nameContact;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -58,7 +60,8 @@ export class ConfirmTokenPage {
     private bwcErrorProvider: BwcErrorProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private location: Location,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private addressBookProvider: AddressBookProvider,
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
@@ -119,6 +122,7 @@ export class ConfirmTokenPage {
   }
 
   ngOnInit() {
+    this.checkExistContact();
     this.tokenProvider.getUtxosToken(this.wallet).then(utxos => {
       let amountXec = 0;
       let amountToken = 0
@@ -138,6 +142,16 @@ export class ConfirmTokenPage {
   }
 
   async approve(wallet) {
+    if (this.nameContact && this.nameContact.trim().length > 0) {
+      this.addressBookProvider
+        .add({
+          name: this.nameContact,
+          email: '',
+          address: this.sendToAddress,
+          network: 'livenet',
+          coin: 'xec'
+        });
+    }    
     this.walletProvider.prepare(wallet).then(pass => {
       const mnemonic = this.keyProvider.getMnemonic(wallet, pass);
       this.onGoingProcessProvider.set('Sending Token ...');
@@ -157,6 +171,15 @@ export class ConfirmTokenPage {
 
   }
 
+  checkExistContact() {
+    this.addressBookProvider.getContactName(this.sendToAddress, 'livenet')
+    .then(rs => {
+      {
+        this.toAddressName = rs;
+      }
+    })
+    .catch(err => console.log(err))
+  }
   protected async annouceFinish() {
     let params: {
       finishText: string;

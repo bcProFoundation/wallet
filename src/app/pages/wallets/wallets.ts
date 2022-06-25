@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
 import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
-import { AppProvider, ConfigProvider, CurrencyProvider, ThemeProvider } from 'src/app/providers';
+import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
 
@@ -68,6 +68,7 @@ export class WalletsPage {
   isShowBalance = true;
   keySelected = [];
   keyNameSelected;
+  isLoading: boolean = false;
 
   constructor(
     public http: HttpClient,
@@ -91,7 +92,8 @@ export class WalletsPage {
     private currencyProvider: CurrencyProvider,
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private loadingProvider: LoadingProvider
   ) {
     let config = this.configProvider.get();
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -160,7 +162,7 @@ export class WalletsPage {
     const walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
-    this.loadTokenWallet();
+    !this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -173,14 +175,20 @@ export class WalletsPage {
     return totalAlternativeBalanceToken + _.toNumber(this.getTotalBalanceKey(keySelected));
   }
 
-  private loadTokenWallet() {
-    this.loadTokenData(this.keySelected).then(data => {
+  private async loadTokenWallet() {
+    this.isLoading = false;
+    this.loadingProvider.simpleLoader();
+    await this.loadTokenData(this.keySelected).then(data => {
       this.keySelected = data;
       this.totalBalanceKey = DecimalFormatBalance(this.updateTotalBalanceKey(data));
       this.changeDetectorRef.detectChanges();
     }).catch(err => {
       this.logger.error(err);
     })
+    setTimeout(() => {
+      this.loadingProvider.dismissLoader();
+      this.isLoading = true;
+    }, 500);
   }
 
   openMenu() {

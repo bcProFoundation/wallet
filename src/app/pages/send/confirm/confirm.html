@@ -168,6 +168,13 @@
         </ion-note>
       </ion-item>
 
+      <ion-item *ngIf="!tx.name && !toAddressName" class="add-address-book">
+        <mat-form-field appearance="outline">
+            <mat-label translate>Address book name</mat-label>
+            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book'" translate>
+          </mat-form-field>
+      </ion-item>
+
       <ion-item *ngIf="tx && fromMultiSend" lines="none" class="custom-list">
         <div class="list-container">
           <div class="first-row first-row-send-to row-container summary-amount-info">

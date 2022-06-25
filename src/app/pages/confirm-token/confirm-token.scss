@@ -416,6 +416,7 @@ confirm-token {
     }
   }
   .add-address-book {
+    font-size: 14px;
     margin-top: 0 !important;
     border-radius: 0 !important;
     &::part(native) {
@@ -426,6 +427,10 @@ confirm-token {
     }
     mat-form-field {
       padding: 0 0 1rem 0 !important;
+      .mat-input-element,
+      ::placeholder {
+        font-size: 14px !important;
+      }
     }
   }
 }

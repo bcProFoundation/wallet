@@ -343,8 +343,10 @@ export class WalletDetailsPage {
   }
 
   private showHistory(loading?: boolean) {
-    if (!this.wallet.completeHistory) return;
-
+    if (!this.wallet.completeHistory) {
+      this.loadingProvider.dismissLoader();
+      return;
+    }
     this.history = this.wallet.completeHistory.slice(
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT

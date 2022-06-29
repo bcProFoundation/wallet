@@ -1699,13 +1699,15 @@ export class ConfirmPage {
 
   private navigateBack(_redir?: string, walletId?: string, params?) {
     if (this.wallet) {
-      this.router.navigate(['/wallet-details'], {
-        state: {
-          walletId: walletId ? walletId : this.wallet.credentials.walletId,
-          donationSupportCoins: this.donationSupportCoins,
-          finishParam: params
-        },
-        replaceUrl: true
+      this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
+        this.router.navigate(['/wallet-details'], {
+          state: {
+            walletId: walletId ? walletId : this.wallet.credentials.walletId,
+            donationSupportCoins: this.donationSupportCoins,
+            finishParam: params
+          },
+          replaceUrl: true
+        });
       }).then(
         () => {
           this.eventsService.publishRefresh({

@@ -445,7 +445,6 @@ export class WalletsPage {
       const walletsGroups = this.profileProvider.orderedWalletsByGroup;
       this.walletsGroups = walletsGroups;
       this.initKeySelected();
-      this.loadTokenWallet();
     }
   };
 

@@ -7,21 +7,29 @@ import { LoadingController } from '@ionic/angular';
 export class LoadingProvider {
   defaultDuration: any = 1000;
   defaultMessage: any = 'Loading...';
+  isLoading: boolean = false;
   constructor(
     private loadingCtr: LoadingController
   ) { }
 
-  public simpleLoader(message?) {
-    this.loadingCtr
-    .create({
-        message: message ? message : this.defaultMessage,
-    }).then((response) => {
-        response.present();
+  public async simpleLoader(message?) {
+    this.isLoading = true;
+    return await this.loadingCtr.create({
+      message: message ? message : this.defaultMessage,
+      backdropDismiss: true
+    }).then(a => {
+      a.present().then(() => {
+        console.log('presented');
+        if (!this.isLoading) {
+          a.dismiss().then(() => console.log('abort presenting'));
+        }
+      });
     });
   }
 
-  public dismissLoader() {
-    this.loadingCtr.dismiss();
+  public async dismissLoader() {
+    this.isLoading = false;
+    return await this.loadingCtr.dismiss().then(() => console.log('dismissed'));
   }
 
   // Auto hide show loader
@@ -36,6 +44,6 @@ export class LoadingProvider {
         console.log('Loader dismissed', response);
       });
     });
-  } 
+  }
 
 }

@@ -114,6 +114,7 @@ export class ConfirmPage {
   public nameContact: string;
 
   public errors = this.bwcProvider.getErrors();
+  private isSendFromHome: boolean = false;
   remaining;
   isDonation;
   receiveLotusAddress;
@@ -197,6 +198,7 @@ export class ConfirmPage {
     this.fromSelectInputs = this.navParamsData.fromSelectInputs;
     this.appName = this.appProvider.info.nameCase;
     this.isSpeedUpTx = this.navParamsData.speedUpTx;
+    this.isSendFromHome = this.navParamsData.isSendFromHome;
     // this.isCardPurchase =
     //   this.navParamsData.payProUrl &&
     //   this.navParamsData.payProUrl.includes('redir=wc');
@@ -1699,13 +1701,16 @@ export class ConfirmPage {
 
   private navigateBack(_redir?: string, walletId?: string, params?) {
     if (this.wallet) {
-      this.router.navigate(['/wallet-details'], {
-        state: {
-          walletId: walletId ? walletId : this.wallet.credentials.walletId,
-          donationSupportCoins: this.donationSupportCoins,
-          finishParam: params
-        },
-        replaceUrl: true
+      this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
+        this.router.navigate(['/wallet-details'], {
+          state: {
+            walletId: walletId ? walletId : this.wallet.credentials.walletId,
+            donationSupportCoins: this.donationSupportCoins,
+            finishParam: params,
+            isSendFromHome: this.isSendFromHome
+          },
+          replaceUrl: true
+        });
       }).then(
         () => {
           this.eventsService.publishRefresh({

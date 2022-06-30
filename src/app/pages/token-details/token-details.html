@@ -7,7 +7,7 @@
   </ion-toolbar>
   <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
-      <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button>
+      <ion-back-button icon="chevron-back-outline" (click)="handleNavigateBack()" defaultHref='/'></ion-back-button>
     </ion-buttons>
     <ion-title>
       <div [reveal-at-scroll-pos]="(expandableHeader.headerHeight + 200)" [scrollArea]="scrollArea">

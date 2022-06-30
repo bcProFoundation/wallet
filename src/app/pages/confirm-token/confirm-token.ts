@@ -43,6 +43,7 @@ export class ConfirmTokenPage {
   precision;
   toAddressName;
   nameContact;
+  isSendFromHome: boolean = false;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -68,6 +69,7 @@ export class ConfirmTokenPage {
     } else {
       this.navPramss = history ? history.state : {};
     }
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.sendToAddress = this.navPramss.toAddress;
@@ -195,7 +197,8 @@ export class ConfirmTokenPage {
           state: {
             walletId: this.wallet.credentials.walletId,
             token: this.token,
-            finishParam: params
+            finishParam: params,
+            isSendFromHome: this.isSendFromHome
           }
         });
       }).then(

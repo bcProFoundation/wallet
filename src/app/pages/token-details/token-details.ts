@@ -61,6 +61,7 @@ export class TokenDetailsPage {
   public isScroll = false;
   public isShowZeroState = false;
   private tokenId;
+  public isSendFromHome: boolean = false;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -91,6 +92,7 @@ export class TokenDetailsPage {
     } else {
       this.navPramss = history ? history.state : {};
     }
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.tokenId = this.navPramss.tokenId;
@@ -552,16 +554,12 @@ export class TokenDetailsPage {
       })
   }
 
-  openWalletSettings(id) {
-
+  public handleNavigateBack() {
+    if (this.isSendFromHome) {
+      this.router.navigate(['/tabs/home']);
+    } else {
+      this.router.navigate(['/tabs/wallets']);
+    }
   }
 
-  updateAll(id) {
-
-  }
-
-  toggleBalance() {
-
-  }
-  
 }

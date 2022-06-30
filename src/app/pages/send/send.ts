@@ -63,6 +63,7 @@ export class SendPage {
   toAddress: string = '';
   formatRemaining: string;
   recipientNotInit: RecipientModel;
+  isSendFromHome: boolean = false;
   @ViewChild(IonContent) content: IonContent;
   @ViewChildren(RecipientComponent) queryListRecipientComponent: QueryList<RecipientComponent>;
   constructor(
@@ -89,6 +90,7 @@ export class SendPage {
     } else {
       this.navPramss = history ? history.state : {};
     }
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.toAddress = this.navPramss.toAddress;
     this.listRecipient.push(new RecipientModel({
       toAddress: !_.isEmpty(this.toAddress) ? this.toAddress : '',
@@ -296,7 +298,8 @@ export class SendPage {
         toAddress: recipient.toAddress,
         token: this.token,
         walletId: this.wallet.credentials.walletId,
-        useSendMax: !!isSendMax
+        useSendMax: !!isSendMax,
+        isSendFromHome: this.isSendFromHome
       }
     });
   }
@@ -341,7 +344,8 @@ export class SendPage {
           toAddress: recipient.toAddress,
           name: recipient.name,
           fromWalletDetails: true,
-          isSentXecToEtoken: recipient.isSentXecToEtoken
+          isSentXecToEtoken: recipient.isSentXecToEtoken,
+          isSendFromHome: this.isSendFromHome
         }
       });
     } else {
@@ -358,7 +362,8 @@ export class SendPage {
           coin: this.wallet.coin,
           network: this.wallet.network,
           useSendMax: false,
-          recipients: this.listRecipient
+          recipients: this.listRecipient,
+          isSendFromHome: this.isSendFromHome
         }
       });
     }

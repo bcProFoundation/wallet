@@ -81,6 +81,7 @@ export class WalletDetailsPage {
   public navPramss: any;
   public finishParam: any;
   public isScroll = false;
+  public isSendFromHome: boolean = false;
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -118,7 +119,7 @@ export class WalletDetailsPage {
     } else {
       this.navPramss = history ? history.state : {};
     }
-
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.selectedTheme = this.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
@@ -226,8 +227,8 @@ export class WalletDetailsPage {
     );
   }
 
-  ionViewWillEnter() {
-    this.loadingProvider.simpleLoader();
+  async ionViewWillEnter() {
+    await this.loadingProvider.simpleLoader();
     this.hiddenBalance = this.wallet.balanceHidden;
     this.backgroundColor = this.themeProvider.getThemeInfo().walletDetailsBackgroundStart;
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
@@ -342,9 +343,9 @@ export class WalletDetailsPage {
     return new Date(number);
   }
 
-  private showHistory(loading?: boolean) {
+  private async showHistory(loading?: boolean) {
     if (!this.wallet.completeHistory) {
-      this.loadingProvider.dismissLoader();
+      await this.loadingProvider.dismissLoader();
       return;
     }
     this.history = this.wallet.completeHistory.slice(
@@ -355,8 +356,8 @@ export class WalletDetailsPage {
       this.groupedHistory = this.groupHistory(this.history);
     });
     if (loading) this.currentPage++;
-    setTimeout(() => {
-      this.loadingProvider.dismissLoader();
+    setTimeout(async () => {
+      await this.loadingProvider.dismissLoader();
     }, 1000);
   }
 
@@ -1017,5 +1018,13 @@ export class WalletDetailsPage {
       okText,
       cancelText
     );
+  }
+
+  public handleNavigateBack() {
+    if (this.isSendFromHome) {
+      this.router.navigate(['/tabs/home']);
+    } else {
+      this.router.navigate(['/tabs/wallets']);
+    }
   }
 }

@@ -339,7 +339,8 @@ export class WalletDetailCardComponent {
   public goToSendPage() {
     this.router.navigate(['/send-page'], {
       state: {
-        walletId: this.wallet.id
+        walletId: this.wallet.id,
+        isSendFromHome: true
       }
     });
   }
@@ -357,7 +358,8 @@ export class WalletDetailCardComponent {
       this.router.navigate(['/send-page'], {
         state: {
           walletId: this.wallet.id,
-          token : this.token
+          token : this.token,
+          isSendFromHome: true
         }
       });
     }

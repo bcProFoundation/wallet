@@ -15,8 +15,8 @@ export class LoadingProvider {
   public async simpleLoader(message?) {
     this.isLoading = true;
     return await this.loadingCtr.create({
-      message: message ? message : this.defaultMessage
-      // duration: 5000,
+      message: message ? message : this.defaultMessage,
+      backdropDismiss: true
     }).then(a => {
       a.present().then(() => {
         console.log('presented');

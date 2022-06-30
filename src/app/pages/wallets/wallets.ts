@@ -177,7 +177,7 @@ export class WalletsPage {
 
   private async loadTokenWallet() {
     this.isLoading = false;
-    this.loadingProvider.simpleLoader();
+    await this.loadingProvider.simpleLoader();
     await this.loadTokenData(this.keySelected).then(data => {
       this.keySelected = data;
       this.totalBalanceKey = DecimalFormatBalance(this.updateTotalBalanceKey(data));
@@ -185,8 +185,8 @@ export class WalletsPage {
     }).catch(err => {
       this.logger.error(err);
     })
-    setTimeout(() => {
-      this.loadingProvider.dismissLoader();
+    setTimeout(async () => {
+      await this.loadingProvider.dismissLoader();
       this.isLoading = true;
     }, 500);
   }

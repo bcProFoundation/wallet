@@ -21,7 +21,7 @@ export class LoadingProvider {
       a.present().then(() => {
         console.log('presented');
         if (!this.isLoading) {
-          a.dismiss().then(() => console.log('abort presenting'));
+          a.dismiss();
         }
       });
     });
@@ -29,7 +29,7 @@ export class LoadingProvider {
 
   public async dismissLoader() {
     this.isLoading = false;
-    return await this.loadingCtr.dismiss().then(() => console.log('dismissed'));
+    return await this.loadingCtr.dismiss();
   }
 
   // Auto hide show loader

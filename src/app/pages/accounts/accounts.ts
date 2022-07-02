@@ -94,7 +94,7 @@ export class AccountsPage {
     }
     else {
       this.walletsGroups = this.filterValidWallet(walletsGroups);
-      if(this.walletsGroups.length === 1 && this.walletsGroups[0].length ===1){
+      if( !this.addToGroupsHome && this.walletsGroups.length === 1 && this.walletsGroups[0].length ===1){
         this.goToSendPage(this.walletsGroups[0][0]);
       }
     }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import env from 'src/environments';
 import { Logger } from '../logger/logger';
 
 type Nullable<T> = T | null;
@@ -24,7 +25,10 @@ export declare class PageDto {
   providedIn: 'root'
 })
 export class LixiLotusProvider {
-  private apiUrl = 'https://lixilotus.test/api/';
+  private apiUrl =
+    env.lixiLotusUrl && env.lixiLotusUrl.length > 0
+      ? env.lixiLotusUrl
+      : 'https://lixilotus.com/api/';
   constructor(private http: HttpClient, private logger: Logger) {
     this.logger.debug('LixiLotusProvider initialized');
   }

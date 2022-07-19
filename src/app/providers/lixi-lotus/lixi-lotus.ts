@@ -28,7 +28,7 @@ export class LixiLotusProvider {
   private apiUrl =
     env.lixiLotusUrl && env.lixiLotusUrl.length > 0
       ? env.lixiLotusUrl
-      : 'https://lixilotus.com/api/';
+      : 'https://lixilotus.com/api';
   constructor(private http: HttpClient, private logger: Logger) {
     this.logger.debug('LixiLotusProvider initialized');
   }
@@ -39,7 +39,7 @@ export class LixiLotusProvider {
       if (!address && address.length <= 0) {
         reject(new Error('Not have address'));
       }
-      this.http.get(this.apiUrl + 'pages/address/' + address).subscribe(
+      this.http.get(this.apiUrl + '/pages/address/' + address).subscribe(
         data => {
           resolve(data as PageDto);
         },

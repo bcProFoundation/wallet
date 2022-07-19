@@ -15,6 +15,10 @@ export class LanguageProvider {
     {
       name: 'English',
       isoCode: 'en'
+    },
+    {
+      name: 'Vietnamese',
+      isoCode: 'vn'
     }
     // {
     //   name: 'Español',

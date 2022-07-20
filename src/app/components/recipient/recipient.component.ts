@@ -22,9 +22,10 @@ import { timer } from 'rxjs';
 import { RecipientModel } from './recipient.model';
 import { FilterProvider } from 'src/app/providers/filter/filter';
 import { RateProvider } from 'src/app/providers/rate/rate';
-import { AddressBookProvider, ClipboardProvider, ThemeProvider } from 'src/app/providers';
+import { AddressBookProvider, ClipboardProvider, LixiLotusProvider, ThemeProvider } from 'src/app/providers';
 import { Token } from 'src/app/models/tokens/tokens.model';
 import { TransferToModalPage } from 'src/app/pages/send/transfer-to-modal/transfer-to-modal';
+import { PageDto, PageModel } from 'src/app/providers/lixi-lotus/lixi-lotus';
 
 @Component({
   selector: 'recipient-component',
@@ -68,6 +69,7 @@ export class RecipientComponent implements OnInit {
   receiveAmountLotus: number;
   formatRemaining: string;
   messagesReceiveLotus: boolean = false;
+  
   @Input()
   recipient: RecipientModel;
 
@@ -97,7 +99,7 @@ export class RecipientComponent implements OnInit {
 
   @Output() deleteEvent?= new EventEmitter<number>();
   @Output() sendMaxEvent?= new EventEmitter<boolean>();
-
+  @Output() sendOfficialInfo?= new EventEmitter<PageDto>();
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
@@ -125,7 +127,7 @@ export class RecipientComponent implements OnInit {
     private router: Router,
     private navParams: NavParams,
     private incomingDataProvider: IncomingDataProvider,
-    private profileProvider: ProfileProvider,
+    private lixiLotusProvider: LixiLotusProvider,
     private addressProvider: AddressProvider,
     private appProvider: AppProvider,
     private translate: TranslateService,
@@ -165,7 +167,7 @@ export class RecipientComponent implements OnInit {
       const precision = this.currencyProvider.getPrecision(coin as Coin).unitToSatoshi;
       this.formatRemaining = this.txFormatProvider.formatAmount(coin, precision * this.remaining);
     }
-
+    this.config = this.configProvider.get();
   }
 
   ngOnInit() {
@@ -539,6 +541,24 @@ export class RecipientComponent implements OnInit {
         if (isValid || isSentXecToEtoken) {
           this.validAddress = true;
           let addressFinal = tokenAddress.trim().length > 0 ? tokenAddress : address;
+          // query on server first => check if this address is official or not 
+          // call api  
+          this.lixiLotusProvider.getOfficialInfo(addressFinal).then(data =>{
+            this.sendOfficialInfo.emit({...data, address: addressFinal, index: this.index || 0} as PageModel);
+          })
+          // this.lixiLotusProvider .createTxProposal(addressFinal, (err, res) => {
+          //   if (err) return reject(err);
+          //   else {
+          //     this.logger.debug('Transaction created');
+          //     return resolve(createdTxp);
+          //   }
+          // });
+          // if api return true 
+
+
+          // if api return false
+
+          // if not official => return 
           this.addressBookProvider.get(addressFinal, this.wallet.network).then(
             contactSelected => {
               if (contactSelected) {

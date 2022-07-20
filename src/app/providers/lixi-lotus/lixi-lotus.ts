@@ -21,6 +21,11 @@ export declare class PageDto {
   constructor(partial: Partial<PageDto>);
 }
 
+export declare class PageModel extends PageDto {
+  addressCrypto: string;
+  index: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })

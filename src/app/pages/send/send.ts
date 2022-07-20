@@ -434,17 +434,21 @@ export class SendPage {
   }
 
   handleOfficialInfo(pageInfo: PageModel){
-    this.isOfficialInfo = true;
-    this.listRecipient = [this.listRecipient[pageInfo.index]];
-    this.tx = {
-      toAddress: pageInfo.addressCrypto,
-      spendUnconfirmed: this.config.wallet.spendUnconfirmed,
-      // Vanity tx info (not in the real tx)
-      recipientType: 'address',
-      network: this.wallet.network,
-      coin: this.wallet.coin,
-      txp: {},
-    };
+    if(pageInfo){
+      this.isOfficialInfo = true;
+      this.listRecipient = [this.listRecipient[pageInfo.index]];
+      this.tx = {
+        toAddress: pageInfo.addressCrypto,
+        spendUnconfirmed: this.config.wallet.spendUnconfirmed,
+        // Vanity tx info (not in the real tx)
+        recipientType: 'address',
+        network: this.wallet.network,
+        coin: this.wallet.coin,
+        txp: {},
+      };
+    } else {
+      this.isOfficialInfo = false;
+    }
   }
 
   public approve(): Promise<void> {
@@ -470,6 +474,7 @@ export class SendPage {
         })
         .catch(err => {
           this.onGoingProcessProvider.clear();
+          this.showErrorInfoSheet(err);
           this.logger.warn('Error getting transaction proposal', err);
         });
     } else {
@@ -515,6 +520,7 @@ export class SendPage {
         }
       });
   }
+
   protected async annouceFinish(
     onlyPublish?: boolean,
     redirectionParam?: { redir: string },

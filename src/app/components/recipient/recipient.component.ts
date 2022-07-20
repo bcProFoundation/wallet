@@ -26,6 +26,7 @@ import { AddressBookProvider, ClipboardProvider, LixiLotusProvider, ThemeProvide
 import { Token } from 'src/app/models/tokens/tokens.model';
 import { TransferToModalPage } from 'src/app/pages/send/transfer-to-modal/transfer-to-modal';
 import { PageDto, PageModel } from 'src/app/providers/lixi-lotus/lixi-lotus';
+import { Contact } from 'src/app/providers/address-book/address-book';
 
 @Component({
   selector: 'recipient-component',
@@ -542,37 +543,58 @@ export class RecipientComponent implements OnInit {
           this.validAddress = true;
           let addressFinal = tokenAddress.trim().length > 0 ? tokenAddress : address;
           // query on server first => check if this address is official or not 
-          // call api  
           this.lixiLotusProvider.getOfficialInfo(addressFinal).then(data =>{
+            this.recipient.isOfficialInfo = true;
+            this.recipient.name = data.name;
             this.sendOfficialInfo.emit({...data, address: addressFinal, index: this.index || 0} as PageModel);
-          })
-          // this.lixiLotusProvider .createTxProposal(addressFinal, (err, res) => {
-          //   if (err) return reject(err);
-          //   else {
-          //     this.logger.debug('Transaction created');
-          //     return resolve(createdTxp);
-          //   }
-          // });
-          // if api return true 
-
-
-          // if api return false
-
-          // if not official => return 
-          this.addressBookProvider.get(addressFinal, this.wallet.network).then(
-            contactSelected => {
-              if (contactSelected) {
-                this.recipient.toAddress = contactSelected.address;
-                this.recipient.name = contactSelected.name;
-                this.recipient.recipientType = 'contact';
+            this.addressBookProvider.get(addressFinal, this.wallet.network).then(
+              contactSelected => {
+                if(contactSelected && data.name !== contactSelected.name){
+                  this.addressBookProvider.remove(contactSelected.address, contactSelected.network, contactSelected.coin).then(() => {
+                    this.addressBookProvider.add({
+                      name: data.name,
+                      coin: this.wallet.coin,
+                      isOfficialInfo: true,
+                      address: addressFinal
+                    } as Contact)
+                  })
+                } else {
+                  this.addressBookProvider.get(addressFinal, this.wallet.network).then(
+                    contactSelected => {
+                      if (contactSelected) {
+                        this.recipient.toAddress = contactSelected.address;
+                        this.recipient.name = contactSelected.name;
+                        this.recipient.recipientType = 'contact';
+                      }
+                    }
+                  );
+                }
               }
-            }
-          );
-          this.recipient.isSentXecToEtoken = isSentXecToEtoken;
-          this.recipient.toAddress = address;
-          if (this.token && this.wallet.coin) this.recipient.toAddress = tokenAddress;
-          this.checkRecipientValid();
-          this.redir(isSentXecToEtoken);
+            ).catch(err => {
+                this.addressBookProvider.add({
+                  name: data.name,
+                  coin: this.wallet.coin,
+                  isOfficialInfo: true,
+                  address: addressFinal
+                } as Contact)
+            })
+          }).catch(e => {
+            this.addressBookProvider.get(addressFinal, this.wallet.network).then(
+              contactSelected => {
+                if (contactSelected) {
+                  this.recipient.toAddress = contactSelected.address;
+                  this.recipient.name = contactSelected.name;
+                  this.recipient.recipientType = 'contact';
+                }
+              }
+            );
+          }).finally(()=>{
+            this.recipient.isSentXecToEtoken = isSentXecToEtoken;
+            this.recipient.toAddress = address;
+            if (this.token && this.wallet.coin) this.recipient.toAddress = tokenAddress;
+            this.checkRecipientValid();
+            this.redir(isSentXecToEtoken);
+          });
         }
         else {
           this.validAddress = false;
@@ -585,6 +607,36 @@ export class RecipientComponent implements OnInit {
       }
     }
     this.checkRecipientValid();
+  }
+
+  private handleOfficialInfo(addressFinal){
+    this.lixiLotusProvider.getOfficialInfo(addressFinal).then(data =>{
+      this.recipient.isOfficialInfo = true;
+      this.recipient.toAddress = addressFinal;
+      this.recipient.name = data.name;
+      this.sendOfficialInfo.emit({...data, address: addressFinal, index: this.index || 0} as PageModel);
+      this.addressBookProvider.get(addressFinal, this.wallet.network).then(
+        contactSelected => {
+          if(contactSelected && data.name !== contactSelected.name){
+            this.addressBookProvider.remove(contactSelected.address, contactSelected.network, contactSelected.coin).then(() => {
+              this.addressBookProvider.add({
+                name: data.name,
+                coin: this.wallet.coin,
+                isOfficialInfo: true,
+                address: addressFinal
+              } as Contact)
+            })
+          }
+        }
+      ).catch(err => {
+          this.addressBookProvider.add({
+            name: data.name,
+            coin: this.wallet.coin,
+            isOfficialInfo: true,
+            address: addressFinal
+          } as Contact)
+      })
+    });
   }
 
   private redir(isSentXecToEtoken) {
@@ -697,6 +749,9 @@ export class RecipientComponent implements OnInit {
       this.recipient.isSpecificAmount = false;
       this.expression = 0;
       this.processAmount();
+    } else if(this.recipient.isOfficialInfo){
+      this.recipient.isOfficialInfo = false;
+      this.sendOfficialInfo.emit(null);
     }
     this.checkRecipientValid();
   }
@@ -743,11 +798,15 @@ export class RecipientComponent implements OnInit {
         fromSend: true,
       }
     });
-    modal.onDidDismiss().then((recipient) => {
+    modal.onDidDismiss().then(recipient => {
       if (recipient.data && recipient.data.id == this.recipient.id) {
-        this.recipient.toAddress = recipient.data.toAddress;
-        this.recipient.name = recipient.data.name;
-        this.recipient.recipientType = recipient.data.recipientType;
+        if(recipient.data.isOfficialInfo){
+          this.handleOfficialInfo(recipient.data.toAddress);
+        } else{
+          this.recipient.toAddress = recipient.data.toAddress;
+          this.recipient.name = recipient.data.name;
+          this.recipient.recipientType = recipient.data.recipientType;
+        }
       }
     });
 

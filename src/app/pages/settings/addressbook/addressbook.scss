@@ -1,4 +1,15 @@
 page-addressbook {
+  .check {
+    margin: 0 !important;
+    font-size: 22px;
+    &.success {
+      color: var(--ion-color-success);
+    }
+  }
+  .contact-wrapper{
+    display: flex !important;
+    align-items: center;
+  }
   .zero-state {
     margin-top: 20vh;
     text-align: center;

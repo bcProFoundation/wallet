@@ -17,7 +17,7 @@
       </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="showOptions(wallet?.coin) && !isDonation && !token">
-      <ion-button fill="clear" class="option-button" (click)="goToSelectInput()">
+      <ion-button *ngIf="!isOfficialInfo" fill="clear" class="option-button" (click)="goToSelectInput()">
         <span>{{"Select Inputs" | translate}}</span>
       </ion-button>
     </ion-buttons>

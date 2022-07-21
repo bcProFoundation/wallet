@@ -140,7 +140,7 @@
                   </div>
                 </div>
                 <ng-container *ngIf="!wallet.tokens">
-                  <div class="no-token" [ngClass]="{ collapsed: isCollapsedToken(wallet.id) }">No token available yet!
+                  <div class="no-token" [ngClass]="{ collapsed: isCollapsedToken(wallet.id) }">{{'No token available yet!' | translate}}
                   </div>
                 </ng-container>
                 <ng-container *ngIf="wallet.tokens">

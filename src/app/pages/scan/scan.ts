@@ -168,7 +168,6 @@ export class ScanPage {
       'scannerServiceInitialized',
       this.scannerServiceInitializedHandler
     );
-    this.handleSuccessfulScan('lotus_16PSJPk2Lywfr6EeoGC278K7F4qfrKFvhqGuqG5kZ');
   }
 
   private incomingDataErrorHandler: any = err => {

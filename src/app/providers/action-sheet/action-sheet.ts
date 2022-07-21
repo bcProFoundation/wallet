@@ -89,7 +89,8 @@ export type InfoSheetType =
   | 'help-and-support'
   | 'invalid-qr'
   | 'delete-contact'
-  | 'no-amount-xec';
+  | 'no-amount-xec'
+  | 'process-fail-voucher'
 
 export type OptionsSheetType =
   | 'wallet-options'

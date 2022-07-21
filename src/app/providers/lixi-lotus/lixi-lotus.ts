@@ -55,4 +55,21 @@ export class LixiLotusProvider {
       );
     });
   }
+
+  public claimVoucher(body): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!body) {
+        reject(new Error('Not have address'));
+      }
+      this.http.post(this.apiUrl + '/claims', body).subscribe(
+        data => {
+          resolve(data as any);
+        },
+        err => {
+          this.logger.error(err);
+          reject(err);
+        }
+      );
+    })
+  }
 }

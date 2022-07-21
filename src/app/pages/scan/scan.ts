@@ -341,18 +341,22 @@ export class ScanPage {
   }
 
   private redirScanAddress(address) {
-    const parsedData = this.incomingDataProvider.parseData(address);
-    if (parsedData) {
-      const addrData = this.addressProvider.getCoinAndNetwork(address);
-      if (addrData && addrData.coin && addrData.network) {
-        return this.handleSendAddress({
-          data: address,
-          type: parsedData.type,
-          coin: addrData.coin
-        }, addrData)
+    if (address.includes('lixi_')) {
+      this.events.publish('Local/ClaimVoucher', { value: address });
+    } else {
+      const parsedData = this.incomingDataProvider.parseData(address);
+      if (parsedData) {
+        const addrData = this.addressProvider.getCoinAndNetwork(address);
+        if (addrData && addrData.coin && addrData.network) {
+          return this.handleSendAddress({
+            data: address,
+            type: parsedData.type,
+            coin: addrData.coin
+          }, addrData)
+        }
       }
+      return this.showErrorInvalidQr(' ', 'Invalid QR code');
     }
-    return this.showErrorInvalidQr(' ', 'Invalid QR code');
   }
 
   public authorize(): void {

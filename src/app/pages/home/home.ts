@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@an
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 // Providers
 import {
@@ -11,6 +12,8 @@ import {
   EventManagerService,
   ExternalLinkProvider,
   FeedbackProvider,
+  LixiLotusProvider,
+  LoadingProvider,
   Logger,
   NewFeatureData,
   PersistenceProvider,
@@ -32,6 +35,7 @@ import { Network } from 'src/app/providers/persistence/persistence';
 import { Router } from '@angular/router';
 import { AddFundsPage } from '../onboarding/add-funds/add-funds';
 import { NewFeaturePage } from '../new-feature/new-feature';
+import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
 
 export interface Advertisement {
   name: string;
@@ -122,7 +126,10 @@ export class HomePage {
     private splashScreen: SplashScreen,
     private rateProvider: RateProvider,
     private themeProvider: ThemeProvider,
-    private tokenProvider: TokenProvider
+    private tokenProvider: TokenProvider,
+    private loadingProvider: LoadingProvider,
+    private lixiLotusProvider: LixiLotusProvider,
+    private recaptchaV3Service: ReCaptchaV3Service
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -325,6 +332,9 @@ export class HomePage {
     this.events.subscribe('Local/showNewFeaturesSlides', () => {
       this.showNewFeatureSlides();
     });
+    this.events.subscribe('Local/ClaimVoucher', (claimCode) => {
+      this.handleQrScanVoucher(claimCode);
+    } )
   }
 
   private preFetchWallets() {
@@ -560,5 +570,54 @@ export class HomePage {
         isAddToHome: true
       }
     });
+  }
+
+  public async handleQrScanVoucher(claimCode) {
+    // Get first wallet lotus in home list
+    let wallet = this.profileProvider.getFirstLotusWalletHome();
+    this.executeImportantAction();
+    if (wallet) {
+      let message = 'Loading...';
+      this.loadingProvider.simpleLoader(message);
+      const bodyClaim = {
+        captchaToken: 'isAbcpay',
+        claimAddress: wallet.lastAddress,
+        claimCode: claimCode
+      }
+      // lixi_w6YfK1qp5
+      // Call provider to claim xpi from lixilotus/api
+      this.lixiLotusProvider.claimVoucher(bodyClaim)
+      .then(async (data) => {
+        const copayerModal = await this.modalCtrl.create({
+          component: ClaimVoucherModalComponent,
+          componentProps: {
+            result: {...data, ...wallet}
+          },
+          cssClass: 'recevied-voucher-success',
+          initialBreakpoint: 0.4,
+        });
+        await copayerModal.present();
+        this.loadingProvider.dismissLoader();
+        copayerModal.onDidDismiss().then(({ data }) => {
+        });
+      })
+      .catch(err => {
+        const infoSheet = this.actionSheetProvider.createInfoSheet(
+          'process-fail-voucher'
+        );
+        infoSheet.present();
+        this.loadingProvider.dismissLoader();
+        infoSheet.onDidDismiss(async option => {
+          if (option) {
+            this.router.navigate(['/tabs/scan']);
+          }
+        });
+      });
+    }
+  }
+
+  public executeImportantAction(): void {
+    this.recaptchaV3Service.execute('getTokenForVoucher')
+      .subscribe((token) => console.log('****** TOKEN' + token));
   }
 }

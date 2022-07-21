@@ -199,6 +199,17 @@ export class ProfileProvider {
     return result;
   }
 
+  public getFirstLotusWalletHome() {
+    let data = JSON.parse(localStorage.getItem("listHome"));
+    if (data) {
+      let walletsGroupsHome = [];
+      walletsGroupsHome = data.map((item) => {
+        return this.getWalletPrimary(item.walletId, item.tokenId);
+      })
+      return walletsGroupsHome.find(item => item.coin === 'xpi')
+    }
+  }
+
   public async getWalletGroupsHome() {
     let walletsGroupsHome = [];
     let data = JSON.parse(localStorage.getItem("listHome"));

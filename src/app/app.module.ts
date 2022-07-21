@@ -48,6 +48,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -115,6 +116,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         AppRoutingModule,
         ProvidersModule,
         SwiperModule,
+        RecaptchaV3Module,
         ClickOutsideModule,
         CountdownModule,
         TranslateModule.forRoot({
@@ -142,7 +144,8 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         FormatCurrencyPipe,
         NavParams,
         FormBuilder,
-        WebView
+        WebView,
+        { provide: RECAPTCHA_V3_SITE_KEY, useValue: "6Lc1rGwdAAAAABrD2AxMVIj4p_7ZlFKdE5xCFOrb" }
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [CopayApp]

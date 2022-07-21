@@ -354,6 +354,12 @@
       <span sheet-fourth-button-text translate>Report issue</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'process-fail-voucher'" sheetSecondBtnGroup="true" type="danger">
+      <span sheet-title-text translate>Proccess failed</span>
+      <span sheet-text translate>Because you are sending the maximum amount contained in this account, the Lotus miner fee will be deducted from the total.</span>
+      <span sheet-fourth-button-text translate>Scan again</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'new-key'" type="warning">
       <span sheet-title-text translate>Store this key separately</span>
       <span sheet-text translate>

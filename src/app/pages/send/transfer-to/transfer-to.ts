@@ -302,7 +302,8 @@ export class TransferToPage {
             recipientType: 'contact',
             coin: c.coin,
             getAddress: () => Promise.resolve(c.address),
-            destinationTag: c.tag
+            destinationTag: c.tag,
+            isOfficialInfo: c.isOfficialInfo || false
           });
         });
         contactsList = _.orderBy(contactsList, 'name');
@@ -433,6 +434,7 @@ export class TransferToPage {
             toAddress: addr,
             name: item.name,
             email: item.email,
+            isOfficialInfo: item.isOfficialInfo,
             id: this.navParamsData.recipientId
           });
         }

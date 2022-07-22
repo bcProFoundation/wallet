@@ -12,18 +12,18 @@ import { Logger } from '../logger/logger';
 })
 export class LanguageProvider {
   private languages = [
-    //{
-    //  name: 'English',
-    //  isoCode: 'en'
-    //},
+    {
+      name: 'English',
+      isoCode: 'en'
+    },
     {
       name: 'Vietnamese',
       isoCode: 'vn'
+    },
+    {
+       name: 'Español',
+       isoCode: 'es'
     }
-    // {
-    //   name: 'Español',
-    //   isoCode: 'es'
-    // },
     // {
     //   name: 'Français',
     //   isoCode: 'fr'

@@ -23,6 +23,7 @@ import { Token } from 'src/app/providers/currency/token';
 import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -93,7 +94,8 @@ export class WalletsPage {
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider,
     private toastController: ToastController,
-    private loadingProvider: LoadingProvider
+    private loadingProvider: LoadingProvider,
+    private translate: TranslateService
   ) {
     let config = this.configProvider.get();
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -738,7 +740,7 @@ export class WalletsPage {
 
   async presentToast(finishText, cssClass?) {
     const toast = await this.toastController.create({
-      message: finishText,
+      message: this.translate.instant(finishText),
       duration: 3000,
       position: 'bottom',
       animated: true,
@@ -768,7 +770,7 @@ export class WalletsPage {
 
   public removeOutGroupsHome(wallet, token?) {
     if (this.profileProvider.isLastItemPrimaryList()) {
-      this.presentToast('Can not remove last item in list', 'toast-warning');
+      this.presentToast('Can not remove the last account in Home!', 'toast-warning');
     } else {
       let walletObj = {
         walletId: wallet.id,
@@ -776,10 +778,10 @@ export class WalletsPage {
       }
       let result = this.profileProvider.removeWalletGroupsHome(walletObj);
       if (result) {
-        this.presentToast('Remove account successful');
+        this.presentToast('Removed account successfully!');
         this.events.publish('Local/GetListPrimary', true);
       } else {
-        this.presentToast('Remove account unsuccessful');
+        this.presentToast('Removed account unsuccessfully!');
       }
     }
   }

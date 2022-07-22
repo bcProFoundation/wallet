@@ -21,14 +21,38 @@ msgstr "Tôi chỉ muốn trải nghiệm. Bỏ qua tất cả các bước bả
 msgid "Primary Accounts"
 msgstr "Tài khoản chính"
 
+msgid "{walletsGroupLength} Accounts"
+msgstr "{walletsGroupLength} Tài khoản"
+
 msgid "(max 5)"
-msgstr "(max 5)"
+msgstr "(tối đa 5)"
+
+msgid "Add to home"
+msgstr "Thêm vào Trang chủ"
 
 msgid "Add account to home"
-msgstr "Thêm tài khoản vô trang chủ"
+msgstr "Thêm tài khoản vào Trang chủ"
+
+msgid "Account added successfully to Home!"
+msgstr "Đã thêm tài khoản vào Trang chủ thành công!"
+
+msgid "Maximum 5 accounts has reached. Please remove account from Home first."
+msgstr "Đã đạt đến tối đa 5 tài khoản. Vui lòng xóa tài khoản khỏi Trang chủ trước."
+
+msgid "Account already existed!"
+msgstr "Tài khoản đã tồn tại!"
 
 msgid "Remove account from home"
-msgstr "Xoá tài khoản khỏi trang chủ"
+msgstr "Xoá tài khoản khỏi Trang chủ"
+
+msgid "Removed account successfully!"
+msgstr "Đã xóa tài khoản thành công!"
+
+msgid "Removed account unsuccessfully!"
+msgstr "Đã xóa tài khoản không thành công!"
+
+msgid "Can not remove the last account in Home!"
+msgstr "Không thể xóa tài khoản cuối cùng ở Trang chủ!"
 
 msgid "Other"
 msgstr "Khác..."
@@ -207,6 +231,9 @@ msgstr "Thêm Ví"
 msgid "Add account"
 msgstr "Thêm tài khoản"
 
+msgid "Add Account"
+msgstr "Thêm Tài Khoản"
+
 msgid "Add as a contact"
 msgstr "Thêm thông tin liên lạc"
 
@@ -230,6 +257,12 @@ msgstr "Phí cho bên thứ ba có thể phát sinh."
 
 msgid "Address"
 msgstr "Địa chỉ"
+
+msgid "eCash Address"
+msgstr "Địa chỉ eCash"
+
+msgid "Etoken Address"
+msgstr "Địa chỉ eToken"
 
 msgid "Address Book"
 msgstr "Danh bạ"
@@ -903,29 +936,32 @@ msgstr "Người đồng thanh toán {{idx+1}}"
 msgid "Copayers"
 msgstr "Người đồng thanh toán"
 
+msgid "Copy"
+msgstr "Sao chép"
+
 msgid "Copied"
 msgstr "Đã sao chép"
 
 msgid "Copied to Clipboard"
-msgstr "Đã sao chép lên bộ nhớ tạm"
+msgstr "Đã sao chép"
 
 msgid "Copied to clipboard"
-msgstr "Đã sao chép lên bộ nhớ tạm"
+msgstr "Đã sao chép"
 
 msgid "Copied {coin} address"
-msgstr "Đã chép {đồng tiền} địa chỉ"
+msgstr "Đã sao chép {đồng tiền} địa chỉ"
 
 msgid "Copied: {claimCode}"
-msgstr "Đã chép: {mã nhận}"
+msgstr "Đã sao chép: {claimCode}"
 
 msgid "Copy Code"
-msgstr "Chép mã"
+msgstr "Sao chép mã"
 
 msgid "Copy this text as it is to a safe place (notepad or email)"
-msgstr "Chép đoạn chữ và lưu trữ ở nơi an toàn (notepad hoặc email)"
+msgstr "Sao chép đoạn chữ và lưu trữ ở nơi an toàn (notepad hoặc email)"
 
 msgid "Copy to clipboard"
-msgstr "Đã sap chép lên bộ nhớ tạm"
+msgstr "Đã sao chép"
 
 msgid "Could not access wallet"
 msgstr "Không thể truy cập ví"
@@ -1023,20 +1059,23 @@ msgstr "Tạo tài khoản"
 msgid "Create a new account"
 msgstr "Tạo tài khoản mới"
 
-msgid "Create Wallet"
-msgstr "Tạo ví"
+msgid "Create Account"
+msgstr "Tạo Tài Khoản"
 
-msgid "Create a new wallet"
-msgstr "Tạo ví mới"
+msgid "Create account"
+msgstr "Tạo tài khoản"
+
+msgid "Create a new account"
+msgstr "Tạo tài khoản mới"
 
 msgid "Create or Import a Key"
-msgstr "Tạo hoặc khôi phục Khóa"
+msgstr "Tạo hoặc Khôi phục Khóa"
 
-msgid "Create or import a wallet"
-msgstr "Tạo hoặc Nhập ví"
+msgid "Create or import a account"
+msgstr "Tạo hoặc khôi phục tài khoản"
 
-msgid "Create {coinLabel} Wallet"
-msgstr "Tạo {coinLabel} ví"
+msgid "Create {coinLabel} Account"
+msgstr "Tạo Tài Khoản {coinLabel}"
 
 msgid "Created"
 msgstr "Đã tạo"
@@ -1141,11 +1180,11 @@ msgstr "Đặt cọc cho"
 msgid ""
 "Depositing any other crypto asset besides {coin} to this address may result "
 "in the total loss of your funds. AbcPay is not responsible for any funds "
-"loss  due to the deposit of a different asset, wallet or network."
+"loss due to the deposit of a different asset, wallet or network."
 msgstr ""
-"Depositing any other crypto asset besides {coin} to this address may result "
-"in the total loss of your funds. AbcPay is not responsible for any funds "
-"loss  due to the deposit of a different asset, wallet or network."
+"Việc gửi bất kỳ tài sản tiền điện tử nào khác ngoài {coin} vào địa chỉ này "
+"có thể dẫn đến mất toàn bộ số tiền vừa gửi của bạn. AbcPay không chịu trách nhiệm "
+"về bất kỳ sự mất mát nào do việc gửi từ một loại tiền điện tử hoặc mạng khác."
 
 msgid ""
 "Depositing any other crypto asset besides {coin} to this address or doing it "
@@ -1163,6 +1202,12 @@ msgstr "Đường dẫn xuất"
 
 msgid "Derivation path"
 msgstr "Đường dẫn xuất"
+
+msgid "eToken Path"
+msgstr "Đường dẫn xuất eToken"
+
+msgid "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"
+msgstr "Chỉ chọn đường dẫn xuất m'/44'/1899'/0 cho các chương trình #Saving4Lotus hoặc #Hold2Earn"
 
 msgid "Description"
 msgstr "Mô tả"
@@ -1761,7 +1806,7 @@ msgid "Hide Wallet"
 msgstr "Ẩn ví"
 
 msgid "Hide advanced options"
-msgstr "Lựa chọn ẩn nâng cao"
+msgstr "Ẩn tùy chọn nâng cao"
 
 msgid "Hide discount?"
 msgstr "Ẩn mức giảm giá?"
@@ -1869,8 +1914,8 @@ msgid ""
 "If you have funds stored on a website then you should move them into a "
 "secure wallet... like this one!"
 msgstr ""
-"Nếu bạn có tiền ảo lưu trữ trên website thì bạn nên chuyển nó về"
-"ví được bảo mật....như cái ví này!"
+"Nếu bạn đang lưu trữ tài sản của mình trên một trang web nào đó thì bạn nên chuyển "
+"chúng vào một ví an toàn và bảo mật... như ví AbcPay này!"
 
 msgid ""
 "If you have successfully completed the entire payment process, remember that "
@@ -1913,8 +1958,8 @@ msgstr "Nếu bạn muốn kết nối thẻ này với"
 msgid "Import"
 msgstr "Khôi phục"
 
-msgid "Import Wallet"
-msgstr "Nhập ví"
+msgid "Import Account"
+msgstr "Khôi phục tài khoản"
 
 msgid "Import Words"
 msgstr "Nhập chữ"
@@ -2086,7 +2131,10 @@ msgid "It could take a while to confirm transaction"
 msgstr "It could take a while to confirm transaction"
 
 msgid "It's a ghost town in here"
-msgstr "Ở đây trong như một thị trấn ma"
+msgstr "Trông như một thị trấn ma"
+
+msgid "It's an empty pond here"
+msgstr "Không có hoa Sen nào trong hồ"
 
 msgid ""
 "It's a good idea to avoid reusing addresses - this both protects your "
@@ -2098,16 +2146,16 @@ msgstr ""
 "quantum computers."
 
 msgid "It's ok for now"
-msgstr "It's ok for now"
+msgstr "Bây giờ ổn rồi"
 
 msgid "I’ll do this later"
-msgstr "I’ll do this later"
+msgstr "Tôi sẽ làm điều này sau"
 
 msgid "Join"
-msgstr "Join"
+msgstr "Tham gia"
 
-msgid "Join Shared Wallet"
-msgstr "Join Shared Wallet"
+msgid "Join Shared Account"
+msgstr "Tham gia tài khoản đa chữ ký"
 
 msgid "Join more Copayers"
 msgstr "Join more Copayers"
@@ -2118,8 +2166,8 @@ msgstr "Join the waitlist and be first to experience the new card."
 msgid "Join the waitlist and be the first to experience our new card."
 msgstr "Join the waitlist and be the first to experience our new card."
 
-msgid "Joining Wallet..."
-msgstr "Joining Wallet..."
+msgid "Joining Account..."
+msgstr "Đang tham gia tài khoản ..."
 
 msgid "Just a second, we're setting a few things up."
 msgstr "Just a second, we're setting a few things up."
@@ -2230,23 +2278,29 @@ msgstr "Bitcoin Address"
 msgid "Live on crypto."
 msgstr "Live on crypto."
 
+msgid "Loading..."
+msgstr "Đang tải...."
+
 msgid "Loading accounts..."
-msgstr "Loading accounts..."
+msgstr "Đang tải tài khoản ..."
 
 msgid "Loading addresses..."
-msgstr "Loading addresses..."
+msgstr "Đang tải địa chỉ..."
+
+msgid "Loading addresses..."
+msgstr "Đang tải địa chỉ..."
 
 msgid "Loading transaction info..."
-msgstr "Loading transaction info..."
+msgstr "Đang tải thông tin giao dịch..."
 
 msgid "Lock"
-msgstr "Lock"
+msgstr "Khóa"
 
 msgid "Lock App"
-msgstr "Lock App"
+msgstr "Khóa ứng dụng"
 
 msgid "Locked"
-msgstr "Locked"
+msgstr "Đã khóa"
 
 msgid "Locktime in effect. Please wait to create a new spend proposal"
 msgstr "Locktime in effect. Please wait to create a new spend proposal"
@@ -2336,11 +2390,12 @@ msgid "Moving"
 msgstr "Moving"
 
 msgid ""
-"Multi-user wallet require multiple devices to set up. It takes longer to "
+"Multi-user account requires multiple devices to set up. It takes longer to "
 "complete but it's recommended security configuration for long term storage."
 msgstr ""
-"Multi-user wallet require multiple devices to set up. It takes longer to "
-"complete but it's recommended security configuration for long term storage."
+"Tài khoản đa chữ ký yêu cầu nhiều thiết bị để thiết lập. Cần nhiều thời gian hơn để hoàn "
+"thành nhưng AbcPay khuyến nghị bạn nên sử dụng vì tính bảo mật cao và có thể sử dụng để lưu "
+"trữ tài sản lâu dài."
 
 msgid "Multiple Recipients"
 msgstr "Multiple Recipients"
@@ -2902,7 +2957,7 @@ msgstr ""
 "the Settings app."
 
 msgid "Quick and easy setup"
-msgstr "Quick and easy setup"
+msgstr "Thiết lập nhanh chóng và dễ dàng"
 
 msgid "RBF transaction"
 msgstr "RBF transaction"
@@ -2945,16 +3000,16 @@ msgid "Receipt Email"
 msgstr "Receipt Email"
 
 msgid "Receive"
-msgstr "Receive"
+msgstr "Nhận"
 
 msgid "Received"
-msgstr "Received"
+msgstr "Đã nhận"
 
 msgid "Receiving"
-msgstr "Receiving"
+msgstr "Đang nhận"
 
 msgid "Receiving amount"
-msgstr "Receiving amount"
+msgstr "Số tiền nhận được"
 
 msgid ""
 "Receiving funds will be temporarily disabled until you can verify your key "
@@ -2964,13 +3019,13 @@ msgstr ""
 "has been stored away securely. You can always complete this later."
 
 msgid "Recent"
-msgstr "Recent"
+msgstr "Gần đây"
 
 msgid "Recipient"
-msgstr "Recipient"
+msgstr "Người nhận"
 
 msgid "Recipient {{ i + 1 }}"
-msgstr "Recipient {{ i + 1 }}"
+msgstr "Người nhận {{ i + 1 }}"
 
 msgid "Reconnect Account"
 msgstr "Reconnect Account"
@@ -2981,11 +3036,11 @@ msgstr "Reconnect to quickly withdraw and deposit funds."
 msgid "Recover old wallets"
 msgstr "Recover old wallets"
 
-msgid "Recover your wallet using your passphrase"
-msgstr "Recover your wallet using your passphrase"
+msgid "Recover your account using your passphrase"
+msgstr "Khôi phục tài khoản của bạn bằng cụm từ khoá (12 từ) của bạn"
 
 msgid "Recovery Key"
-msgstr "Recovery Key"
+msgstr "Khôi phục Khóa"
 
 msgid "Recovery Phrase"
 msgstr "Cụm từ khôi phục"
@@ -3003,16 +3058,16 @@ msgid "Refund address"
 msgstr "Refund address"
 
 msgid "Reject"
-msgstr "Reject"
+msgstr "Từ chối"
 
 msgid "Reject Payment Proposal"
-msgstr "Reject Payment Proposal"
+msgstr "Từ chối Đề Xuất Thanh Toán"
 
 msgid "Rejected"
-msgstr "Rejected"
+msgstr "Đã từ chối"
 
 msgid "Rejecting payment proposal..."
-msgstr "Rejecting payment proposal..."
+msgstr "Đang từ chối đề xuất thanh toán..."
 
 msgid "Release information"
 msgstr "Release information"
@@ -3043,22 +3098,22 @@ msgid "Repeat the password"
 msgstr "Repeat the password"
 
 msgid "Report an Issue"
-msgstr "Report an Issue"
+msgstr "Báo cáo một vấn đề"
 
 msgid "Report an issue"
-msgstr "Report an issue"
+msgstr "Báo cáo một vấn đề"
 
 msgid "Report issue"
-msgstr "Report issue"
+msgstr "Báo cáo vấn đề"
 
 msgid "Request Biometric Authentication"
-msgstr "Request Biometric Authentication"
+msgstr "Yêu cầu xác thực sinh trắc học"
 
 msgid "Request Encrypt Password"
-msgstr "Request Encrypt Password"
+msgstr "Yêu cầu mật khẩu bảo mật"
 
 msgid "Request Fingerprint"
-msgstr "Request Fingerprint"
+msgstr "Yêu cầu vân tay"
 
 msgid "Request Specific Amount"
 msgstr "Yêu cầu số tiền cụ thể"
@@ -3067,34 +3122,34 @@ msgid "Request specific amount"
 msgstr "Yêu cầu số tiền cụ thể"
 
 msgid "Request a Feature"
-msgstr "Request a Feature"
+msgstr "Yêu cầu một tính năng"
 
 msgid "Request a new feature"
-msgstr "Request a new feature"
+msgstr "Yêu cầu một tính năng mới"
 
 msgid "Request feature"
-msgstr "Request feature"
+msgstr "Yêu cầu tính năng"
 
 msgid "Required number of signatures"
-msgstr "Required number of signatures"
+msgstr "Yêu cầu số chữ ký"
 
 msgid "Requires invitation to join"
-msgstr "Requires invitation to join"
+msgstr "Yêu cầu nhập mã mời hoặc quét mã QR để tham gia"
 
 msgid "Requires multiple devices (most secure)"
-msgstr "Requires multiple devices (most secure)"
+msgstr "Yêu cầu nhiều thiết bị để thiết lập (an toàn nhất)"
 
 msgid "Reset All Settings"
-msgstr "Reset All Settings"
+msgstr "Đặt lại các thiết lập"
 
 msgid "Restore from backup"
-msgstr "Restore from backup"
+msgstr "Khôi phục lại từ bản sao lưu"
 
 msgid "Retrieving inputs information..."
 msgstr "Retrieving inputs information..."
 
 msgid "Retry camera"
-msgstr "Retry camera"
+msgstr "Thử lại máy ảnh"
 
 msgid "Review Changelly policies"
 msgstr "Review Changelly policies"
@@ -3108,10 +3163,10 @@ msgstr ""
 "SEPA Bank Transfer purchases are not supported outside the European Union."
 
 msgid "SUBTOTAL"
-msgstr "SUBTOTAL"
+msgstr "TỔNG PHỤ"
 
 msgid "SUMMARY"
-msgstr "SUMMARY"
+msgstr "TÓM TẮT"
 
 msgid "Save"
 msgstr "Lưu"
@@ -3123,16 +3178,16 @@ msgid "Scan"
 msgstr "Scan"
 
 msgid "Scan QR Codes"
-msgstr "Scan QR Codes"
+msgstr "Quét mã QR"
 
 msgid "Scan addresses for funds"
-msgstr "Scan addresses for funds"
+msgstr "Quét địa chỉ để tìm số dư"
 
 msgid "Scan again"
-msgstr "Scan again"
+msgstr "Quét lại"
 
-msgid "Scanning Wallet funds..."
-msgstr "Scanning Wallet funds..."
+msgid "Scanning Account funds..."
+msgstr "Đang quét số dư của tài khoản ..."
 
 msgid "Search Transactions"
 msgstr "Search Transactions"
@@ -3141,7 +3196,7 @@ msgid "Search Wallets or Contacts"
 msgstr "Search Wallets or Contacts"
 
 msgid "Search a contact"
-msgstr "Search a contact"
+msgstr "Tìm kiếm địa chỉ gửi"
 
 msgid "Search contact or enter address"
 msgstr "Search contact or enter address"
@@ -3168,10 +3223,10 @@ msgid "Select Coin"
 msgstr "Select Coin"
 
 msgid "Select Currencies"
-msgstr "Select Currencies"
+msgstr "Chọn đơn vị tiền tệ"
 
 msgid "Select Currency"
-msgstr "Select Currency"
+msgstr "Chọn đơn vị tiền tệ"
 
 msgid "Select Destination Wallet"
 msgstr "Select Destination Wallet"
@@ -3201,13 +3256,13 @@ msgid "Select destination wallet"
 msgstr "Select destination wallet"
 
 msgid "Select inputs"
-msgstr "Select inputs"
+msgstr "Chọn số dư"
 
 msgid "Select inputs for transaction"
-msgstr "Select inputs for transaction"
+msgstr "Chọn số dư cho giao dịch"
 
 msgid "Select recipient"
-msgstr "Select recipient"
+msgstr "Chọn người nhận"
 
 msgid "Select source wallet"
 msgstr "Select source wallet"
@@ -3349,7 +3404,7 @@ msgid "Share {{appName}}"
 msgstr "Share {{appName}}"
 
 msgid "Shared Account"
-msgstr "Tài khoản chia sẻ"
+msgstr "Tài khoản đa chữ ký"
 
 msgid "Shop"
 msgstr "Shop"
@@ -3405,32 +3460,35 @@ msgstr "Signatures rejected by server"
 msgid "Signing transaction..."
 msgstr "Signing transaction..."
 
-msgid "Simple Wallet"
-msgstr "Simple Wallet"
+msgid "Simple Account"
+msgstr "Tài khoản đơn giản"
 
 msgid "Single address"
-msgstr "Single address"
+msgstr "Địa chỉ đơn"
+
+msgid "Single Address"
+msgstr "Địa chỉ đơn"
 
 msgid "Skip"
-msgstr "Skip"
+msgstr "Bỏ qua"
 
 msgid "Slide to Make Payment"
 msgstr "Slide to Make Payment"
 
 msgid "Slide to accept"
-msgstr "Slide to accept"
+msgstr "Trượt để chấp nhận"
 
 msgid "Slide to confirm"
-msgstr "Slide to confirm"
+msgstr "Trượt để xác nhận"
 
 msgid "Slide to deposit"
 msgstr "Slide to deposit"
 
 msgid "Slide to pay"
-msgstr "Slide to pay"
+msgstr "Trượt để thanh toán"
 
 msgid "Slide to send"
-msgstr "Slide to send"
+msgstr "Trượt để gửi"
 
 msgid "Slide to speed up"
 msgstr "Slide to speed up"
@@ -3580,7 +3638,7 @@ msgstr "Terms of Use"
 msgid "Terms of use"
 msgstr "Terms of use"
 
-msgid "Testnet Wallet"
+msgid "Testnet Account"
 msgstr "Testnet Wallet"
 
 msgid "Text"
@@ -3777,11 +3835,11 @@ msgid "The request could not be understood by the server"
 msgstr "The request could not be understood by the server"
 
 msgid ""
-"The single address feature will force the wallet to only use one address "
+"The single address feature will force the account to only use one address "
 "rather than generating new addresses."
 msgstr ""
-"The single address feature will force the wallet to only use one address "
-"rather than generating new addresses."
+"Tính năng địa chỉ đơn cho phép tài khoản chỉ sử dụng một địa chỉ duy nhất thay "
+"vì tạo được nhiều địa chỉ mới."
 
 msgid "The spend proposal is not pending"
 msgstr "The spend proposal is not pending"
@@ -4062,7 +4120,7 @@ msgid "Total cash value"
 msgstr "Tổng giá trị tiền mặt"
 
 msgid "Total number of copayers"
-msgstr "Total number of copayers"
+msgstr "Tổng số người đồng thuận"
 
 msgid "Total selected inputs"
 msgstr "Total selected inputs"
@@ -4352,8 +4410,11 @@ msgstr "Wallet Inputs"
 msgid "Wallet Invitation"
 msgstr "Wallet Invitation"
 
-msgid "Wallet Name"
-msgstr "Wallet Name"
+msgid "Account Name"
+msgstr "Tên Tài Khoản"
+
+msgid "Account name"
+msgstr "Tên Tài Khoản"
 
 msgid "Wallet Needs Backup"
 msgstr "Wallet Needs Backup"
@@ -4839,7 +4900,7 @@ msgid "Your linked ETH wallet does not have enough ETH for fee"
 msgstr "Your linked ETH wallet does not have enough ETH for fee"
 
 msgid "Your name"
-msgstr "Your name"
+msgstr "Tên của bạn"
 
 msgid ""
 "Your recovery key is composed of 12 randomly selected words. Please "
@@ -5017,1219 +5078,3 @@ msgid ""
 msgstr ""
 "{{walletName}} will be disconected from your actual connection to "
 "{{peerMetaName}} ({{peerMetaUrl}})"
-
-#~ msgid ""
-#~ "Amazon.com Gift Cards never expire and can be redeemed towards millions "
-#~ "of items at www.amazon.com."
-#~ msgstr ""
-#~ "Amazon.com Gift Cards never expire and can be redeemed towards millions "
-#~ "of items at www.amazon.com."
-
-#~ msgid "Only redeemable on www.amazon.com (USA website)"
-#~ msgstr "Only redeemable on www.amazon.com (USA website)"
-
-#~ msgid "Apply changes"
-#~ msgstr "Apply changes"
-
-#~ msgid "Average confirmation time"
-#~ msgstr "Average confirmation time"
-
-#~ msgid ""
-#~ "Bitcoin transactions include a fee collected by miners on the network."
-#~ msgstr ""
-#~ "Bitcoin transactions include a fee collected by miners on the network."
-
-#~ msgid "Connect your AbcPay ID"
-#~ msgstr "Connect your AbcPay ID"
-
-#~ msgid "Could not get the Addressbook"
-#~ msgstr "Could not get the Addressbook"
-
-#~ msgid "Current fee rate for this policy"
-#~ msgstr "Current fee rate for this policy"
-
-#~ msgid "Enter the wallet connect uri"
-#~ msgstr "Enter the wallet connect uri"
-
-#~ msgid "This amount should be higher than the amount you are trying to send."
-#~ msgstr ""
-#~ "This amount should be higher than the amount you are trying to send."
-
-#~ msgid "{{ 'Linked wallet' | translate }}"
-#~ msgstr "{{ 'Linked wallet' | translate }}"
-
-#~ msgid "{{ 'Pending Call Requests' | translate }}"
-#~ msgstr "{{ 'Pending Call Requests' | translate }}"
-
-#~ msgid "AbcPay does not receive and does not control miner fees."
-#~ msgstr "AbcPay does not receive and does not control miner fees."
-
-#~ msgid "Bitcoin Cash URI"
-#~ msgstr "Bitcoin Cash URI"
-
-#~ msgid "Bitcoin URI"
-#~ msgstr "Bitcoin URI"
-
-#~ msgid "Ethereum URI"
-#~ msgstr "Ethereum URI"
-
-#~ msgid "Invoice URL"
-#~ msgstr "Invoice URL"
-
-#~| msgid "Needs Backup"
-#~ msgid "Needs Backup 2"
-#~ msgstr "Needs Backup 2"
-
-#~ msgid "Network Fee Warning"
-#~ msgstr "Network Fee Warning"
-
-#~ msgid "Payment URL"
-#~ msgstr "Payment URL"
-
-#~ msgid "Plain URL"
-#~ msgstr "Plain URL"
-
-#~| msgid "Recent"
-#~ msgid "Recently added"
-#~ msgstr "Recently added"
-
-#~ msgid "Recreating Wallet..."
-#~ msgstr "Recreating Wallet..."
-
-#~ msgid "Ripple URI"
-#~ msgstr "Ripple URI"
-
-#~ msgid "Tap to recreate"
-#~ msgstr "Tap to recreate"
-
-#~ msgid ""
-#~ "This transaction requires a high network fee because either the sending "
-#~ "amount is too small or the network is experiencing congestion."
-#~ msgstr ""
-#~ "This transaction requires a high network fee because either the sending "
-#~ "amount is too small or the network is experiencing congestion."
-
-#~ msgid ""
-#~ "This wallet is not registered at the given AbcPros Wallet Service (AWS). "
-#~ "You can recreate it from the local information."
-#~ msgstr ""
-#~ "This wallet is not registered at the given AbcPros Wallet Service (AWS). "
-#~ "You can recreate it from the local information."
-
-#~ msgid "2.9% of the amount + 0.30 USD per transactions"
-#~ msgstr "2.9% of the amount + 0.30 USD per transactions"
-
-#~ msgid "3.9% of the amount + 0.30 USD per transactions"
-#~ msgstr "3.9% of the amount + 0.30 USD per transactions"
-
-#~ msgid ""
-#~ "A total of {{amountStr}} ({{fiatAmount | number:'1.2-2'}} "
-#~ "{{currencyIsoCode}}) will be exchanged for {{withdrawalStr}} "
-#~ "({{fiatWithdrawal | number:'1.2-2'}} {{currencyIsoCode}}). ShapeShift "
-#~ "fee: {{withdrawalFee}} {{toWallet.coin | uppercase}}"
-#~ msgstr ""
-#~ "A total of {{amountStr}} ({{fiatAmount | number:'1.2-2'}} "
-#~ "{{currencyIsoCode}}) will be exchanged for {{withdrawalStr}} "
-#~ "({{fiatWithdrawal | number:'1.2-2'}} {{currencyIsoCode}}). ShapeShift "
-#~ "fee: {{withdrawalFee}} {{toWallet.coin | uppercase}}"
-
-#~ msgid ""
-#~ "A total of {{fee}} {{coin}} were excluded. The maximum size allowed for a "
-#~ "transaction was exceeded."
-#~ msgstr ""
-#~ "A total of {{fee}} {{coin}} were excluded. The maximum size allowed for a "
-#~ "transaction was exceeded."
-
-#~ msgid ""
-#~ "A total of {{fee}} {{coin}} were excluded. These funds come from UTXOs "
-#~ "smaller than the network fee provided."
-#~ msgstr ""
-#~ "A total of {{fee}} {{coin}} were excluded. These funds come from UTXOs "
-#~ "smaller than the network fee provided."
-
-#~ msgid "Choose Assets"
-#~ msgstr "Choose Assets"
-
-#~ msgid "Click to confirm"
-#~ msgstr "Click to confirm"
-
-#~ msgid "Confirm to shift {{fromCoin}} to {{toCoin}}"
-#~ msgstr "Confirm to shift {{fromCoin}} to {{toCoin}}"
-
-#~ msgid "Connect to ShapeShift Account"
-#~ msgstr "Connect to ShapeShift Account"
-
-#~ msgid "Connecting to ShapeShift..."
-#~ msgstr "Connecting to ShapeShift..."
-
-#~ msgid "Could not get claim code. Please contact AbcPay support."
-#~ msgstr "Could not get claim code. Please contact AbcPay support."
-
-#~ msgid "Deposit"
-#~ msgstr "Deposit"
-
-#~ msgid "Deposit Max"
-#~ msgstr "Deposit Max"
-
-#~ msgid "Deposit Min"
-#~ msgstr "Deposit Min"
-
-#~ msgid "Do you want to verify your account now?"
-#~ msgstr "Do you want to verify your account now?"
-
-#~ msgid "Error connecting to ShapeShift"
-#~ msgstr "Error connecting to ShapeShift"
-
-#~ msgid "Having problems with a ShapeShift?"
-#~ msgstr "Having problems with a ShapeShift?"
-
-#~ msgid ""
-#~ "I agree to the Terms and certify that I am the beneficial owner of the "
-#~ "input assets and the destination address."
-#~ msgstr ""
-#~ "I agree to the Terms and certify that I am the beneficial owner of the "
-#~ "input assets and the destination address."
-
-#~| msgid "Session Log"
-#~ msgid "Kill Session"
-#~ msgstr "Kill Session"
-
-#~ msgid "Maximum amount allowed is {{max}}"
-#~ msgstr "Maximum amount allowed is {{max}}"
-
-#~ msgid "Minimum amount required is {{min}}"
-#~ msgstr "Minimum amount required is {{min}}"
-
-#~ msgid "Not enough funds for fee {{shiftFee}}"
-#~ msgstr "Not enough funds for fee {{shiftFee}}"
-
-#~ msgid "Or contact Wyre's support team: support@sendwyre.com"
-#~ msgstr "Or contact Wyre's support team: support@sendwyre.com"
-
-#~ msgid "Please complete your account verification on ShapeShift website."
-#~ msgstr "Please complete your account verification on ShapeShift website."
-
-#~ msgid "Rate"
-#~ msgstr "Rate"
-
-#~ msgid "Resolved"
-#~ msgstr "Resolved"
-
-#~ msgid "Select wallet to deposit funds"
-#~ msgstr "Select wallet to deposit funds"
-
-#~ msgid "Select wallet to receive funds"
-#~ msgstr "Select wallet to receive funds"
-
-#~ msgid "ShapeShift max limit reached"
-#~ msgstr "ShapeShift max limit reached"
-
-#~ msgid "ShapeShift requires a minimum value of {{min}}"
-#~ msgstr "ShapeShift requires a minimum value of {{min}}"
-
-#~ msgid "Sign Up for ShapeShift"
-#~ msgstr "Sign Up for ShapeShift"
-
-#~ msgid "Terms of Service"
-#~ msgstr "Terms of Service"
-
-#~ msgid "The Safest, Fastest Asset Exchange on Earth"
-#~ msgstr "The Safest, Fastest Asset Exchange on Earth"
-
-#~ msgid ""
-#~ "The destination wallet is not backed up. Please, complete the backup "
-#~ "process before continue."
-#~ msgstr ""
-#~ "The destination wallet is not backed up. Please, complete the backup "
-#~ "process before continue."
-
-#~ msgid "To get started, you'll need to create a wallet and get some funds."
-#~ msgstr "To get started, you'll need to create a wallet and get some funds."
-
-#~ msgid "Trade Crypto with ShapeShift"
-#~ msgstr "Trade Crypto with ShapeShift"
-
-#~ msgid ""
-#~ "Trade any leading blockchain asset for any other. Protection by Design."
-#~ msgstr ""
-#~ "Trade any leading blockchain asset for any other. Protection by Design."
-
-#~ msgid "Unverified Account"
-#~ msgstr "Unverified Account"
-
-#~ msgid "Value"
-#~ msgstr "Value"
-
-#~ msgid "Verify Account"
-#~ msgstr "Verify Account"
-
-#~ msgid "Visit ShapeShift.io"
-#~ msgstr "Visit ShapeShift.io"
-
-#~ msgid "Why does this require authentication?"
-#~ msgstr "Why does this require authentication?"
-
-#~ msgid "Withdraw"
-#~ msgstr "Withdraw"
-
-#~ msgid ""
-#~ "You can describe the problem to Wyre's support team: support@sendwyre.com"
-#~ msgstr ""
-#~ "You can describe the problem to Wyre's support team: support@sendwyre.com"
-
-#~ msgid "{{fee}} {{coin}} will be deducted for bitcoin networking fees."
-#~ msgstr "{{fee}} {{coin}} will be deducted for bitcoin networking fees."
-
-#~ msgid "AMOUNT"
-#~ msgstr "AMOUNT"
-
-#~ msgid "Add Recipient"
-#~ msgstr "Add Recipient"
-
-#~ msgid "Add an existent contact or wallet"
-#~ msgstr "Add an existent contact or wallet"
-
-#~ msgid "Amount Cost"
-#~ msgstr "Amount Cost"
-
-#~ msgid "Amount Receiving"
-#~ msgstr "Amount Receiving"
-
-#~ msgid "Be sure to store your recovery phrase in a safe and secure place"
-#~ msgstr "Be sure to store your recovery phrase in a safe and secure place"
-
-#~ msgid "Buy Crypto (Simplex)"
-#~ msgstr "Buy Crypto (Simplex)"
-
-#~| msgid ""
-#~| "By giving my email address, I give explicit consent to AbcPay to use it "
-#~| "to contact me about payment issues."
-#~ msgid ""
-#~ "By giving my phone number, I give explicit consent to AbcPay to use it to "
-#~ "connect this card to Apple Pay or Google Pay."
-#~ msgstr ""
-#~ "By giving my phone number, I give explicit consent to AbcPay to use it to "
-#~ "connect this card to Apple Pay or Google Pay."
-
-#~ msgid "Continue Backup"
-#~ msgstr "Continue Backup"
-
-#~ msgid "Do this later?"
-#~ msgstr "Do this later?"
-
-#~| msgid "Wallet Settings"
-#~ msgid "Enable from settings"
-#~ msgstr "Enable from settings"
-
-#~ msgid ""
-#~ "Enabling dark mode can prolong the battery life of your device. But let's "
-#~ "be honest, dark mode just looks super amazing!"
-#~ msgstr ""
-#~ "Enabling dark mode can prolong the battery life of your device. But let's "
-#~ "be honest, dark mode just looks super amazing!"
-
-#~ msgid "Enter your encrypt password again to confirm"
-#~ msgstr "Enter your encrypt password again to confirm"
-
-#~ msgid ""
-#~ "I give explicit consent to AbcPay to use my email address to send me "
-#~ "email notifications about payments (and, if selected, email updates and "
-#~ "news about the wallet)."
-#~ msgstr ""
-#~ "I give explicit consent to AbcPay to use my email address to send me "
-#~ "email notifications about payments (and, if selected, email updates and "
-#~ "news about the wallet)."
-
-#~ msgid ""
-#~ "If you would like to connect this card to Apple Pay or Google Pay, please "
-#~ "provide your phone number."
-#~ msgstr ""
-#~ "If you would like to connect this card to Apple Pay or Google Pay, please "
-#~ "provide your phone number."
-
-#~ msgid "Incorrect backup phrase"
-#~ msgstr "Incorrect backup phrase"
-
-#~ msgid ""
-#~ "It's important that you write your recovery phrase down correctly. If "
-#~ "something happens to your wallet, you'll need it to recover your money. "
-#~ "Please review and try again."
-#~ msgstr ""
-#~ "It's important that you write your recovery phrase down correctly. If "
-#~ "something happens to your wallet, you'll need it to recover your money. "
-#~ "Please review and try again."
-
-#~ msgid "Load dollars and spend crypto with our Visa Debit card in seconds."
-#~ msgstr "Load dollars and spend crypto with our Visa Debit card in seconds."
-
-#~ msgid "Multisig and key encryption help you always keep your funds secure."
-#~ msgstr "Multisig and key encryption help you always keep your funds secure."
-
-#~ msgid "Open Insight"
-#~ msgstr "Open Insight"
-
-#~ msgid "Please Review"
-#~ msgstr "Please Review"
-
-#~ msgid "START OVER"
-#~ msgstr "START OVER"
-
-#~ msgid "Safeguard your recovery phrase"
-#~ msgstr "Safeguard your recovery phrase"
-
-#~| msgid "Select wallet to deposit to"
-#~ msgid "Select a wallet to link to"
-#~ msgstr "Select a wallet to link to"
-
-#~ msgid "Store, manage, and protect your crypto."
-#~ msgstr "Store, manage, and protect your crypto."
-
-#~ msgid ""
-#~ "The {{ quoteForm.value.altCurrency }} amount must be between "
-#~ "{{ minFiatAmount }} and {{ maxFiatAmount }}"
-#~ msgstr ""
-#~ "The {{ quoteForm.value.altCurrency }} amount must be between "
-#~ "{{ minFiatAmount }} and {{ maxFiatAmount }}"
-
-#~ msgid ""
-#~ "This password is only for this device, and it cannot be recovered. To "
-#~ "avoid losing funds, write your password down."
-#~ msgstr ""
-#~ "This password is only for this device, and it cannot be recovered. To "
-#~ "avoid losing funds, write your password down."
-
-#~ msgid ""
-#~ "To enable the dark mode, tap the gear icon at the bottom, tap Theme and "
-#~ "select Dark Mode"
-#~ msgstr ""
-#~ "To enable the dark mode, tap the gear icon at the bottom, tap Theme and "
-#~ "select Dark Mode"
-
-#~| msgid "Dark Mode"
-#~ msgid "Try dark mode"
-#~ msgstr "Try dark mode"
-
-#~ msgid ""
-#~ "Use crypto to buy store credit at places like Amazon, Uber, and Spotify."
-#~ msgstr ""
-#~ "Use crypto to buy store credit at places like Amazon, Uber, and Spotify."
-
-#~ msgid "View Transaction on Insight"
-#~ msgstr "View Transaction on Insight"
-
-#~ msgid "Would you like to protect this wallet with a password?"
-#~ msgstr "Would you like to protect this wallet with a password?"
-
-#~ msgid "You do not have wallets able to receive funds"
-#~ msgstr "You do not have wallets able to receive funds"
-
-#~ msgid "Your recovery phrase is verified"
-#~ msgstr "Your recovery phrase is verified"
-
-#~ msgid ""
-#~ "An update to this app is available. For your security, please update to "
-#~ "the latest version."
-#~ msgstr ""
-#~ "An update to this app is available. For your security, please update to "
-#~ "the latest version."
-
-#~ msgid "Could not fetch payment details"
-#~ msgstr "Could not fetch payment details"
-
-#~ msgid "Error in Payment Protocol"
-#~ msgstr "Error in Payment Protocol"
-
-#~ msgid "Featured Brands"
-#~ msgstr "Featured Brands"
-
-#~ msgid "Fee for token transfer"
-#~ msgstr "Fee for token transfer"
-
-#~ msgid "Join the waitlist and be first"
-#~ msgstr "Join the waitlist and be first"
-
-#~| msgid "Live on crypto."
-#~ msgid "Live on crypto"
-#~ msgstr "Live on crypto"
-
-#~ msgid "More Brands"
-#~ msgstr "More Brands"
-
-#~ msgid "Moved"
-#~ msgstr "Moved"
-
-#~ msgid "Moved Funds"
-#~ msgstr "Moved Funds"
-
-#~ msgid "Received Funds"
-#~ msgstr "Received Funds"
-
-#~ msgid "Sent Funds"
-#~ msgstr "Sent Funds"
-
-#~ msgid "Session Logs. Be careful, this could contain sensitive private data"
-#~ msgstr "Session Logs. Be careful, this could contain sensitive private data"
-
-#~ msgid "Type the recovery phrase (usually 12 words)"
-#~ msgstr "Type the recovery phrase (usually 12 words)"
-
-#~ msgid "Wrong number of recovery words:"
-#~ msgstr "Wrong number of recovery words:"
-
-#~ msgid "A New Home for Wallets"
-#~ msgstr "A New Home for Wallets"
-
-#~ msgid "A New Look and Feel"
-#~ msgstr "A New Look and Feel"
-
-#~ msgid "Activated"
-#~ msgstr "Activated"
-
-#~ msgid "Add funds to get started"
-#~ msgstr "Add funds to get started"
-
-#~ msgid "Amount:"
-#~ msgstr "Amount:"
-
-#~ msgid "Click here if you prefer to enter the amount"
-#~ msgstr "Click here if you prefer to enter the amount"
-
-#~ msgid ""
-#~ "Core features have now been re-organized into four accessible tabs "
-#~ "allowing you to manage and spend your crypto seamlessly and quickly."
-#~ msgstr ""
-#~ "Core features have now been re-organized into four accessible tabs "
-#~ "allowing you to manage and spend your crypto seamlessly and quickly."
-
-#~ msgid "Could not fetch payment options"
-#~ msgstr "Could not fetch payment options"
-
-#~ msgid "Get Help"
-#~ msgstr "Get Help"
-
-#~ msgid "Give us feedback"
-#~ msgstr "Give us feedback"
-
-#~ msgid "I'm satisfied"
-#~ msgstr "I'm satisfied"
-
-#~ msgid "I'm very happy"
-#~ msgstr "I'm very happy"
-
-#~ msgid "Introducing Tabs"
-#~ msgstr "Introducing Tabs"
-
-#~ msgid "Open website"
-#~ msgstr "Open website"
-
-#~| msgid "Order ID"
-#~ msgid "Order"
-#~ msgstr "Order"
-
-#~ msgid "Please, enter the amount"
-#~ msgstr "Please, enter the amount"
-
-#~| msgid "See transaction"
-#~ msgid "Select inputs for your transaction"
-#~ msgstr "Select inputs for your transaction"
-
-#~ msgid ""
-#~ "The home tab is where you can check your total wallet value, exchange "
-#~ "rates, buy crypto, and see current offers at a glance."
-#~ msgstr ""
-#~ "The home tab is where you can check your total wallet value, exchange "
-#~ "rates, buy crypto, and see current offers at a glance."
-
-#~| msgid "Total amount"
-#~ msgid "Total inputs amount"
-#~ msgstr "Total inputs amount"
-
-#~ msgid "Warning: this transaction has unconfirmed inputs"
-#~ msgstr "Warning: this transaction has unconfirmed inputs"
-
-#~ msgid "Website"
-#~ msgstr "Website"
-
-#~ msgid ""
-#~ "Your wallets have now all been consolidated into one tab allowing you to "
-#~ "access and organize all of your crypto assets with ease."
-#~ msgstr ""
-#~ "Your wallets have now all been consolidated into one tab allowing you to "
-#~ "access and organize all of your crypto assets with ease."
-
-#~ msgid "Are you sure you want to cancel and delete this wallet?"
-#~ msgstr "Are you sure you want to cancel and delete this wallet?"
-
-#~ msgid "AbcPay ID successfully paired."
-#~ msgstr "AbcPay ID successfully paired."
-
-#~ msgid ""
-#~ "Get detailed information for all transaction activity and reload dollars "
-#~ "from the app."
-#~ msgstr ""
-#~ "Get detailed information for all transaction activity and reload dollars "
-#~ "from the app."
-
-#~ msgid ""
-#~ "Load dollars in the AbcPay app, or from any compatible crypto wallet."
-#~ msgstr ""
-#~ "Load dollars in the AbcPay app, or from any compatible crypto wallet."
-
-#~ msgid "Load dollars onto your AbcPay Card. Shop anywhere that accepts Visa®"
-#~ msgstr ""
-#~ "Load dollars onto your AbcPay Card. Shop anywhere that accepts Visa®"
-
-#~ msgid "Manage your card on-the-go"
-#~ msgstr "Manage your card on-the-go"
-
-#~| msgid "Order Now"
-#~ msgid "Order now"
-#~ msgstr "Order now"
-
-#~ msgid "Shop anytime, around the world"
-#~ msgstr "Shop anytime, around the world"
-
-#~ msgid "Start using your crypto"
-#~ msgstr "Start using your crypto"
-
-#~ msgid "Use your AbcPay Card with any retailer that accepts Visa®."
-#~ msgstr "Use your AbcPay Card with any retailer that accepts Visa®."
-
-#~ msgid "20 XRP required to activate"
-#~ msgstr "20 XRP required to activate"
-
-#~ msgid "About"
-#~ msgstr "About"
-
-#~ msgid "Add Card"
-#~ msgstr "Add Card"
-
-#~ msgid "Address book"
-#~ msgstr "Address book"
-
-#~ msgid "Bitcoin network fee policy"
-#~ msgstr "Bitcoin network fee policy"
-
-#~ msgid "Export wallet"
-#~ msgstr "Export wallet"
-
-#~ msgid "Fee level"
-#~ msgstr "Fee level"
-
-#~| msgid "Add amount"
-#~ msgid "Fiat amount"
-#~ msgstr "Fiat amount"
-
-#~ msgid ""
-#~ "Get local cash anywhere you go, from any Visa® compatible ATM. ATM bank "
-#~ "fees may apply."
-#~ msgstr ""
-#~ "Get local cash anywhere you go, from any Visa® compatible ATM. ATM bank "
-#~ "fees may apply."
-
-#~ msgid "Integrations"
-#~ msgstr "Integrations"
-
-#~ msgid "Keys"
-#~ msgstr "Keys"
-
-#~ msgid "Legacy"
-#~ msgstr "Legacy"
-
-#~ msgid "Miner fee:"
-#~ msgstr "Miner fee:"
-
-#~ msgid "Pay 0% fees to turn bitcoin into dollars."
-#~ msgstr "Pay 0% fees to turn bitcoin into dollars."
-
-#~ msgid "Preferences"
-#~ msgstr "Preferences"
-
-#~ msgid "Read more in our Wiki"
-#~ msgstr "Read more in our Wiki"
-
-#~ msgid "Receiving {coinName} address"
-#~ msgstr "Receiving {coinName} address"
-
-#~| msgid "Wallet Address"
-#~ msgid "Ripple Address"
-#~ msgstr "Ripple Address"
-
-#~ msgid "Send Money"
-#~ msgstr "Send Money"
-
-#~ msgid "Session log"
-#~ msgstr "Session log"
-
-#~ msgid ""
-#~ "The final amount is based on the exchange rate when the transaction is "
-#~ "complete"
-#~ msgstr ""
-#~ "The final amount is based on the exchange rate when the transaction is "
-#~ "complete"
-
-#~ msgid "Transfer to {{ getCoinName(coin) }} Wallet"
-#~ msgstr "Transfer to {{ getCoinName(coin) }} Wallet"
-
-#~ msgid "Turn bitcoin into dollars, swipe anywhere Visa® is accepted."
-#~ msgstr "Turn bitcoin into dollars, swipe anywhere Visa® is accepted."
-
-#~ msgid ""
-#~ "Unfortunately, your country/region has banned the use or acceptance of "
-#~ "cryptocurrencies as a valid form of payment and we are therefore unable "
-#~ "to service you."
-#~ msgstr ""
-#~ "Unfortunately, your country/region has banned the use or acceptance of "
-#~ "cryptocurrencies as a valid form of payment and we are therefore unable "
-#~ "to service you."
-
-#~ msgid "Wallet Address"
-#~ msgstr "Wallet Address"
-
-#~ msgid ""
-#~ "Your wallet address is similar to a bank account number. You can add "
-#~ "funds to your wallet by withdrawing funds you may have stored on an "
-#~ "exchange to your wallet address. Or other {coinName} users can send you "
-#~ "money by scanning your QR code."
-#~ msgstr ""
-#~ "Your wallet address is similar to a bank account number. You can add "
-#~ "funds to your wallet by withdrawing funds you may have stored on an "
-#~ "exchange to your wallet address. Or other {coinName} users can send you "
-#~ "money by scanning your QR code."
-
-#~ msgid "{{wallet.m}}-of-{{wallet.n}}"
-#~ msgstr "{{wallet.m}}-of-{{wallet.n}}"
-
-#~ msgid "Click to open Terms"
-#~ msgstr "Click to open Terms"
-
-#~ msgid "Select a Ethereum Wallet for Transaction Costs"
-#~ msgstr "Select a Ethereum Wallet for Transaction Costs"
-
-#~ msgid ""
-#~ "This token will use your wallet {{ params.wallets[0].walletName}} (ETH) "
-#~ "for the transaction costs"
-#~ msgstr ""
-#~ "This token will use your wallet {{ params.wallets[0].walletName}} (ETH) "
-#~ "for the transaction costs"
-
-#~| msgid "Transactions"
-#~ msgid "Transaction Costs"
-#~ msgstr "Transaction Costs"
-
-#~ msgid "Bitcoin Cash Wallets"
-#~ msgstr "Bitcoin Cash Wallets"
-
-#~| msgid "Copy Code"
-#~ msgid "Copy"
-#~ msgstr "Copy"
-
-#~ msgid "Could not access the wallet at the server"
-#~ msgstr "Could not access the wallet at the server"
-
-#~ msgid "Enter bitcoin address"
-#~ msgstr "Enter bitcoin address"
-
-#~ msgid ""
-#~ "If enabled, the new wallets may have different keys and will require a "
-#~ "new backup."
-#~ msgstr ""
-#~ "If enabled, the new wallets may have different keys and will require a "
-#~ "new backup."
-
-#~ msgid ""
-#~ "NOTE: To import a wallet from a 3rd party software, please go to Add "
-#~ "Wallet, Create Wallet, and specify the Recovery Phrase there."
-#~ msgstr ""
-#~ "NOTE: To import a wallet from a 3rd party software, please go to Add "
-#~ "Wallet, Create Wallet, and specify the Recovery Phrase there."
-
-#~ msgid "Notify me when transactions are confirmed"
-#~ msgstr "Notify me when transactions are confirmed"
-
-#~| msgid "Retrieving inputs information..."
-#~ msgid "Retrieving gas limit..."
-#~ msgstr "Retrieving gas limit..."
-
-#~ msgid "Support Wallets with Different Keys"
-#~ msgstr "Support Wallets with Different Keys"
-
-#~ msgid "Transfer to Bitcoin Cash Wallet"
-#~ msgstr "Transfer to Bitcoin Cash Wallet"
-
-#~| msgid "Transfer to Bitcoin Wallet"
-#~ msgid "Transfer to Ethereum Wallet"
-#~ msgstr "Transfer to Ethereum Wallet"
-
-#~ msgid "BCH Wallet"
-#~ msgstr "BCH Wallet"
-
-#~ msgid "BTC Wallet"
-#~ msgstr "BTC Wallet"
-
-#~ msgid "Basic Wallet"
-#~ msgstr "Basic Wallet"
-
-#~ msgid ""
-#~ "By reusing a current key, your new wallet will share the recovery phrase, "
-#~ "so you don't need to backup it again."
-#~ msgstr ""
-#~ "By reusing a current key, your new wallet will share the recovery phrase, "
-#~ "so you don't need to backup it again."
-
-#~ msgid "Enter an email address"
-#~ msgstr "Enter an email address"
-
-#~ msgid "Enter custom fee in sat/byte"
-#~ msgstr "Enter custom fee in sat/byte"
-
-#~ msgid ""
-#~ "If there is an issue with this payment, or a refund needs to be made, we "
-#~ "will contact you at this address."
-#~ msgstr ""
-#~ "If there is an issue with this payment, or a refund needs to be made, we "
-#~ "will contact you at this address."
-
-#~ msgid "Now it's time for you to create a wallet to store your funds into."
-#~ msgstr "Now it's time for you to create a wallet to store your funds into."
-
-#~ msgid "Refund Email"
-#~ msgstr "Refund Email"
-
-#~ msgid ""
-#~ "The key on the response is not trusted for transactions on the 'test' "
-#~ "network"
-#~ msgstr ""
-#~ "The key on the response is not trusted for transactions on the 'test' "
-#~ "network"
-
-#~ msgid "Wallet Key Settings"
-#~ msgstr "Wallet Key Settings"
-
-#~ msgid "Wallets (Grouped by key)"
-#~ msgstr "Wallets (Grouped by key)"
-
-#~ msgid "Wallets using this key"
-#~ msgstr "Wallets using this key"
-
-#~ msgid ""
-#~ "Inspired by physical wallets, the home view is now clean and more "
-#~ "spacious such that all the important details are accessible and "
-#~ "summarized in a glance."
-#~ msgstr ""
-#~ "Inspired by physical wallets, the home view is now clean and more "
-#~ "spacious such that all the important details are accessible and "
-#~ "summarized in a glance."
-
-#~ msgid "Swipe to Send/Receive"
-#~ msgstr "Swipe to Send/Receive"
-
-#~ msgid ""
-#~ "You can now send or receive a payment directly from the home view by "
-#~ "sliding your wallet to the left or right."
-#~ msgstr ""
-#~ "You can now send or receive a payment directly from the home view by "
-#~ "sliding your wallet to the left or right."
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplicate"
-
-#~ msgid ""
-#~ "To recover BCH from your {{appName}} Wallet, you must duplicate your BTC "
-#~ "wallet. We strongly recommend you protect your wallets with a password to "
-#~ "keep your funds safe."
-#~ msgstr ""
-#~ "To recover BCH from your {{appName}} Wallet, you must duplicate your BTC "
-#~ "wallet. We strongly recommend you protect your wallets with a password to "
-#~ "keep your funds safe."
-
-#~| msgid "Export wallet"
-#~ msgid "Export Wallet Metadata"
-#~ msgstr "Export Wallet Metadata"
-
-#~ msgid "Fingerprint"
-#~ msgstr "Fingerprint"
-
-#~| msgid ""
-#~| "The private key of this wallet is not available. The export allows to "
-#~| "check the wallet balance, transaction history, and create spend "
-#~| "proposals from the export. However, does not allow to approve (sign) "
-#~| "proposals, so funds will not be accessible from the export."
-#~ msgid ""
-#~ "The private key of this wallet will not be included in the generated "
-#~ "file. The export allows to check the wallet balance, transaction history, "
-#~ "and create spend proposals. However, does not allow to approve (sign) "
-#~ "proposals, so funds will not be accessible from the export."
-#~ msgstr ""
-#~ "The private key of this wallet will not be included in the generated "
-#~ "file. The export allows to check the wallet balance, transaction history, "
-#~ "and create spend proposals. However, does not allow to approve (sign) "
-#~ "proposals, so funds will not be accessible from the export."
-
-#~ msgid "Color"
-#~ msgstr "Color"
-
-#~ msgid "Could not create using the specified extended public key"
-#~ msgstr "Could not create using the specified extended public key"
-
-#~ msgid "Derivation Strategy"
-#~ msgstr "Derivation Strategy"
-
-#~ msgid ""
-#~ "From the destination device, go to Add wallet > Import wallet and scan "
-#~ "this QR code"
-#~ msgstr ""
-#~ "From the destination device, go to Add wallet > Import wallet and scan "
-#~ "this QR code"
-
-#~ msgid ""
-#~ "Note: if this BCH wallet was duplicated from a BTC wallet, they share the "
-#~ "same recovery phrase."
-#~ msgstr ""
-#~ "Note: if this BCH wallet was duplicated from a BTC wallet, they share the "
-#~ "same recovery phrase."
-
-#~ msgid "QR Code"
-#~ msgstr "QR Code"
-
-#~ msgid "The Wallet Service URL"
-#~ msgstr "The Wallet Service URL"
-
-#~ msgid "The password of the recovery phrase (if set)"
-#~ msgstr "The password of the recovery phrase (if set)"
-
-#~ msgid "This wallet is waiting for authorized users/devices to join."
-#~ msgstr "This wallet is waiting for authorized users/devices to join."
-
-#~ msgid "Wallet Color"
-#~ msgstr "Wallet Color"
-
-#~ msgid "Wallet Incomplete"
-#~ msgstr "Wallet Incomplete"
-
-#~ msgid "Wallet Preferences"
-#~ msgstr "Wallet Preferences"
-
-#~ msgid ""
-#~ "Add gift cards to your {appName} wallet from brands like Amazon, Delta, "
-#~ "Google Play, and Uber."
-#~ msgstr ""
-#~ "Add gift cards to your {appName} wallet from brands like Amazon, Delta, "
-#~ "Google Play, and Uber."
-
-#~ msgid "Cancel invitation"
-#~ msgstr "Cancel invitation"
-
-#~ msgid "Scanning funds"
-#~ msgstr "Scanning funds"
-
-#~ msgid "{{wallet.credentials.m}}-of-{{wallet.credentials.n}}"
-#~ msgstr "{{wallet.credentials.m}}-of-{{wallet.credentials.n}}"
-
-#~ msgid ""
-#~ "If enabled, Bitcoin Cash addresses will be shown using Copay style "
-#~ "address, and not the new cashaddr format."
-#~ msgstr ""
-#~ "If enabled, Bitcoin Cash addresses will be shown using Copay style "
-#~ "address, and not the new cashaddr format."
-
-#~ msgid "New Proposal"
-#~ msgstr "New Proposal"
-
-#~ msgid "Payment Received"
-#~ msgstr "Payment Received"
-
-#~ msgid "Proposal Accepted"
-#~ msgstr "Proposal Accepted"
-
-#~ msgid "Proposal Deleted"
-#~ msgstr "Proposal Deleted"
-
-#~ msgid "Proposal Rejected"
-#~ msgstr "Proposal Rejected"
-
-#~ msgid "Send logs by email"
-#~ msgstr "Send logs by email"
-
-#~ msgid "Suggested by Merchant"
-#~ msgstr "Suggested by Merchant"
-
-#~ msgid "Tap to retry"
-#~ msgstr "Tap to retry"
-
-#~ msgid "Use Bitcoin Cash Copay Style Addresses"
-#~ msgstr "Use Bitcoin Cash Copay Style Addresses"
-
-#~ msgid "Wallet created"
-#~ msgstr "Wallet created"
-
-#~ msgid ""
-#~ "You are trying to send ({amount} {coin}) more than what your wallet "
-#~ "contains. Please enter a lower amount or send max."
-#~ msgstr ""
-#~ "You are trying to send ({amount} {coin}) more than what your wallet "
-#~ "contains. Please enter a lower amount or send max."
-
-#~ msgid "Almost done! Let's review."
-#~ msgstr "Almost done! Let's review."
-
-#~ msgid "Are you sure you want to skip it?"
-#~ msgstr "Are you sure you want to skip it?"
-
-#~ msgid "Bitcoin is a currency."
-#~ msgstr "Bitcoin is a currency."
-
-#~ msgid ""
-#~ "Bitcoin is different - it cannot be safely held with a bank or web "
-#~ "service."
-#~ msgstr ""
-#~ "Bitcoin is different - it cannot be safely held with a bank or web "
-#~ "service."
-
-#~ msgid "Bitcoin is secure, digital money."
-#~ msgstr "Bitcoin is secure, digital money."
-
-#~ msgid "Cannot create wallet"
-#~ msgstr "Cannot create wallet"
-
-#~ msgid "Do it later"
-#~ msgstr "Do it later"
-
-#~ msgid ""
-#~ "If this device is replaced or this app is deleted, neither you nor AbcPay "
-#~ "can recover your funds without a backup."
-#~ msgstr ""
-#~ "If this device is replaced or this app is deleted, neither you nor AbcPay "
-#~ "can recover your funds without a backup."
-
-#~ msgid ""
-#~ "If you were using the old desktop version you will need to import your "
-#~ "wallets manually."
-#~ msgstr ""
-#~ "If you were using the old desktop version you will need to import your "
-#~ "wallets manually."
-
-#~ msgid "Just scan the code to pay."
-#~ msgstr "Just scan the code to pay."
-
-#~ msgid "Makes sense"
-#~ msgstr "Makes sense"
-
-#~ msgid "New {appName} desktop platform"
-#~ msgstr "New {appName} desktop platform"
-
-#~ msgid "No backup, no bitcoin."
-#~ msgstr "No backup, no bitcoin."
-
-#~ msgid "Not even AbcPay can access it."
-#~ msgstr "Not even AbcPay can access it."
-
-#~ msgid "On this screen you can see all your wallets, accounts, and assets."
-#~ msgstr "On this screen you can see all your wallets, accounts, and assets."
-
-#~ msgid "Quick review!"
-#~ msgstr "Quick review!"
-
-#~ msgid "Retry"
-#~ msgstr "Retry"
-
-#~ msgid ""
-#~ "Since only you control your money, you’ll need to save your recovery "
-#~ "phrase in case this app is deleted."
-#~ msgstr ""
-#~ "Since only you control your money, you’ll need to save your recovery "
-#~ "phrase in case this app is deleted."
-
-#~ msgid "Take control of your money, get started with bitcoin."
-#~ msgstr "Take control of your money, get started with bitcoin."
-
-#~ msgid "The exchange rate changes with the market."
-#~ msgstr "The exchange rate changes with the market."
-
-#~ msgid "This app stores your bitcoin with cutting-edge security."
-#~ msgstr "This app stores your bitcoin with cutting-edge security."
-
-#~| msgid "Wallet Information"
-#~ msgid "Wallet Configuration"
-#~ msgstr "Wallet Configuration"
-
-#~ msgid "Watch Out!"
-#~ msgstr "Watch Out!"
-
-#~ msgid "Yes, skip"
-#~ msgstr "Yes, skip"
-
-#~ msgid "You are ready!"
-#~ msgstr "You are ready!"
-
-#~ msgid "You can back up your wallet later from your wallet settings."
-#~ msgstr "You can back up your wallet later from your wallet settings."
-
-#~ msgid "You can spend bitcoin at millions of websites and stores worldwide."
-#~ msgstr "You can spend bitcoin at millions of websites and stores worldwide."
-
-#~ msgid ""
-#~ "You can trade it for other currencies like US Dollars, Euros, or Pounds."
-#~ msgstr ""
-#~ "You can trade it for other currencies like US Dollars, Euros, or Pounds."
-
-#~ msgid ""
-#~ "Your wallet is never saved to cloud storage or standard device backups."
-#~ msgstr ""
-#~ "Your wallet is never saved to cloud storage or standard device backups."
-
-#~ msgid "(Trusted)"
-#~ msgstr "(Trusted)"
-
-#~ msgid "Anyone with your recovery phrase can access or spend your bitcoin."
-#~ msgstr "Anyone with your recovery phrase can access or spend your bitcoin."
-
-#~ msgid "Are you being watched?"
-#~ msgstr "Are you being watched?"
-
-#~ msgid "Could Not Fetch Payment: Check if it is still valid"
-#~ msgstr "Could Not Fetch Payment: Check if it is still valid"
-
-#~ msgid "Create bitcoin wallet"
-#~ msgstr "Create bitcoin wallet"
-
-#~ msgid "Enable in-app notification"
-#~ msgstr "Enable in-app notification"
-
-#~ msgid "Enter your name"
-#~ msgstr "Enter your name"
-
-#~ msgid "I have written it down"
-#~ msgstr "I have written it down"
-
-#~ msgid ""
-#~ "If you take a screenshot, your recovery phrase may be viewed by other "
-#~ "apps. You can make a safe backup with physical paper and a pen."
-#~ msgstr ""
-#~ "If you take a screenshot, your recovery phrase may be viewed by other "
-#~ "apps. You can make a safe backup with physical paper and a pen."
-
-#~ msgid "Merchant fee too high. Payment rejected"
-#~ msgstr "Merchant fee too high. Payment rejected"
-
-#~ msgid "New wallet"
-#~ msgstr "New wallet"
-
-#~ msgid ""
-#~ "Now is a perfect time to assess your surroundings. Nearby windows? Hidden "
-#~ "cameras? Shoulder-spies?"
-#~ msgstr ""
-#~ "Now is a perfect time to assess your surroundings. Nearby windows? Hidden "
-#~ "cameras? Shoulder-spies?"
-
-#~ msgid "Pay To"
-#~ msgstr "Pay To"
-
-#~ msgid "Payment Protocol Invalid"
-#~ msgstr "Payment Protocol Invalid"
-
-#~ msgid "Please carefully write down this phrase."
-#~ msgstr "Please carefully write down this phrase."
-
-#~ msgid "Proposals"
-#~ msgstr "Proposals"
-
-#~ msgid "Screenshots are not secure"
-#~ msgstr "Screenshots are not secure"
-
-#~ msgid "Self-signed Certificate"
-#~ msgstr "Self-signed Certificate"
-
-#~ msgid "Uh oh..."
-#~ msgstr "Uh oh..."
-
-#~ msgid "WARNING: UNTRUSTED CERTIFICATE"
-#~ msgstr "WARNING: UNTRUSTED CERTIFICATE"
-
-#~ msgid "We will confirm on the next screen."
-#~ msgstr "We will confirm on the next screen."
-
-#~ msgid ""
-#~ "{coinName} miner fees are high due to record demand for limited space on "
-#~ "the {coinName} network. AbcPay does not receive and does not control "
-#~ "{coinName} miner fees."
-#~ msgstr ""
-#~ "{coinName} miner fees are high due to record demand for limited space on "
-#~ "the {coinName} network. AbcPay does not receive and does not control "
-#~ "{coinName} miner fees."
-
-#~ msgid "{coinName} miner fees unusually high"
-#~ msgstr "{coinName} miner fees unusually high"
-
-#~ msgid "1. Tap \"Add Payment Method\" and select \"Gift Card\""
-#~ msgstr "1. Tap \"Add Payment Method\" and select \"Gift Card\""
-
-#~ msgid "2. Enter Gift Code"
-#~ msgstr "2. Enter Gift Code"
-
-#~ msgid "Connecting to Glidera..."
-#~ msgstr "Connecting to Glidera..."
-
-#~ msgid ""
-#~ "Delta Gift Cards can be used toward airfare on any Delta marketed flight "
-#~ "through www.delta.com, at the airport, through reservations, or by phone "
-#~ "with Delta Vacations®. Delta Gift Cards do not have any expiration dates "
-#~ "or fees."
-#~ msgstr ""
-#~ "Delta Gift Cards can be used toward airfare on any Delta marketed flight "
-#~ "through www.delta.com, at the airport, through reservations, or by phone "
-#~ "with Delta Vacations®. Delta Gift Cards do not have any expiration dates "
-#~ "or fees."
-
-#~ msgid ""
-#~ "Give friends and family the gift of tapping a button and getting a ride - "
-#~ "any time of day, any day of year."
-#~ msgstr ""
-#~ "Give friends and family the gift of tapping a button and getting a ride - "
-#~ "any time of day, any day of year."
-
-#~ msgid ""
-#~ "If enabled, the Recent Transactions card - a list of transactions "
-#~ "occuring across all wallets - will appear in the Home tab."
-#~ msgstr ""
-#~ "Nếu bật chế độ Các thẻ giao dịch gần đây là một danh sách các giao dịch "
-#~ "xuất hiện tại tất cả các ví - sẽ hiện trên thư mục HOME."
-
-#~ msgid "Payment Proposals"
-#~ msgstr "Đề nghị thanh toán"
-
-#~ msgid ""
-#~ "Payment accepted. It will be broadcasted by Glidera. In case there is a "
-#~ "problem, it can be deleted 6 hours after it was created."
-#~ msgstr ""
-#~ "Chấp nhận thanh toán. Thanh toán sẽ thực hiện trực tiếp bởi Glidera. Trong trường hợp có "
-#~ "vấn đề, thanh toán có thể hủy trong vòng 06 giờ kể từ khi được lập."
-
-#~ msgid "Recent Transactions"
-#~ msgstr "Giao dịch gần đây"
-
-#~ msgid "Redeem by going to the payment section in the Uber app."
-#~ msgstr "Nhận điểm tích lỹ bằng cách vào phần thanh toán trên ứng dụng Uber."
-
-#~ msgid ""
-#~ "The Gift of Go.™ With over 300 destinations and limitless adventures to "
-#~ "choose from, the Delta Gift Card opens up a world of possibilities."
-#~ msgstr ""
-#~ "Quà tặng từ Go.™ với hơn 300 địa điểm để"
-#~ "lựa chọn, Thẻ quà tặng Delta mở ra một thế giới tiềm năng."
-
-#~ msgid "Transaction not found"
-#~ msgstr "Không tìm thấy giao dịch"
-
-#~ msgid ""
-#~ "Uber gift cards also apply to UberEATS orders. Enjoy food from hundreds "
-#~ "of restaurants, delivered at Uber speed."
-#~ msgstr ""
-#~ "Thẻ quà tặng Uber cũng dùng được cho các đề nghị mua hàng tại UberEATS. Tiếp cận thực phẩm từ hàng trăm "
-#~ "nhà hàng, được giao với tốc độ Uber."
-
-#~ msgid "Updating pending proposals... Please stand by"
-#~ msgstr "Cập nhật các đề nghị chưa thực hiện... Vui lòng đợi"
-
-#~ msgid "Updating... Please stand by"
-#~ msgstr "Cập nhật... vui lòng đợi"

@@ -578,11 +578,13 @@ export class HomePage {
     this.executeImportantAction();
     if (wallet) {
       let message = 'Loading...';
+      let codeClaimSplit = claimCode?.value ? claimCode.value.replace('lixi_','') : '';
       this.loadingProvider.simpleLoader(message);
+      if (claimCode?.value) claimCode.value.replace('lixi_','')
       const bodyClaim = {
         captchaToken: 'isAbcpay',
         claimAddress: wallet.lastAddress,
-        claimCode: claimCode.value
+        claimCode: codeClaimSplit
       }
       // lixi_w6YfK1qp5
       // Call provider to claim xpi from lixilotus/api
@@ -597,8 +599,9 @@ export class HomePage {
           initialBreakpoint: 0.4,
         });
         // Update balance card home
-        this.events.publish('Local/GetListPrimary', true);
+        this.events.publish('Local/FetchWallets');
         await copayerModal.present();
+        this.events.publish('Local/GetListPrimary', true);
         this.loadingProvider.dismissLoader();
         copayerModal.onDidDismiss().then(({ data }) => {
         });

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { NavParams } from '@ionic/angular';
+import { CurrencyProvider } from 'src/app/providers';
 
 @Component({
   selector: 'claim-voucher-modal',
@@ -10,8 +11,9 @@ export class ClaimVoucherModalComponent implements OnInit {
   name: string;
   result: any;
   dataModal: any;
+  coinSupport: string = 'xpi'
   constructor(
-    private modalCtrl: ModalController,
+    private currencyProvider: CurrencyProvider,
     private navParams : NavParams
     ) {
       this.result = this.navParams.data.result;
@@ -21,10 +23,10 @@ export class ClaimVoucherModalComponent implements OnInit {
     if (this.result) {
       // Call api to validate & get data voucher 
       this.dataModal = {
-        name: this.result.pageName,
+        name: this.result.pageName || 'Shop',
         voucher: {
-          value: this.result.amount,
-          chain: 'XPI'
+          value: this.result.amount / this.currencyProvider.coinOpts[this.coinSupport].unitInfo.unitToSatoshi,
+          chain: this.coinSupport
         },
         walletName: this.result.name,
         keyName: this.result.walletGroupName

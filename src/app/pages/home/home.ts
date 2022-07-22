@@ -582,7 +582,7 @@ export class HomePage {
       const bodyClaim = {
         captchaToken: 'isAbcpay',
         claimAddress: wallet.lastAddress,
-        claimCode: claimCode
+        claimCode: claimCode.value
       }
       // lixi_w6YfK1qp5
       // Call provider to claim xpi from lixilotus/api
@@ -596,6 +596,8 @@ export class HomePage {
           cssClass: 'recevied-voucher-success',
           initialBreakpoint: 0.4,
         });
+        // Update balance card home
+        this.events.publish('Local/GetListPrimary', true);
         await copayerModal.present();
         this.loadingProvider.dismissLoader();
         copayerModal.onDidDismiss().then(({ data }) => {

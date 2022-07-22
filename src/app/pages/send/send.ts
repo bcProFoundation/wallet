@@ -164,18 +164,6 @@ export class SendPage {
     this.logger.info('Loaded: SendPage');
   }
 
-  ionViewDidEnter() {
-    if (this.isCordova) {
-      window.addEventListener('keyboardWillShow', () => {
-        this.hideSlideButton = true;
-      });
-
-      window.addEventListener('keyboardWillHide', () => {
-        this.hideSlideButton = false;
-      });
-    }
-  }
-
   ngAfterViewInit() {
     if (this.recipientNotInit) {
       this.queryListRecipientComponent.toArray()[0].updateRecipient(this.recipientNotInit);

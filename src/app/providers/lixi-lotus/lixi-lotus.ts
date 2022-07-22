@@ -52,7 +52,11 @@ export class LixiLotusProvider {
 
       return Http.get(options)
         .then(response => {
+          if(response.status === 200){
           resolve(response.data as PageDto);
+          } else {
+            reject(response);
+          }
         })
         .catch(err => {
           this.logger.error(err);
@@ -72,7 +76,11 @@ export class LixiLotusProvider {
       };
       Http.post(options).then(
         response => {
-          resolve(response.data as any);
+          if(response.status === 200){
+            resolve(response.data as any);
+          } else{
+            reject(response);
+          }
         }
       ).catch(e => {
         this.logger.error(e);

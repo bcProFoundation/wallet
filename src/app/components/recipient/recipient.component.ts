@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChange,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-
 
 // Providers
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
@@ -22,7 +30,12 @@ import { timer } from 'rxjs';
 import { RecipientModel } from './recipient.model';
 import { FilterProvider } from 'src/app/providers/filter/filter';
 import { RateProvider } from 'src/app/providers/rate/rate';
-import { AddressBookProvider, ClipboardProvider, LixiLotusProvider, ThemeProvider } from 'src/app/providers';
+import {
+  AddressBookProvider,
+  ClipboardProvider,
+  LixiLotusProvider,
+  ThemeProvider
+} from 'src/app/providers';
 import { Token } from 'src/app/models/tokens/tokens.model';
 import { TransferToModalPage } from 'src/app/pages/send/transfer-to-modal/transfer-to-modal';
 import { PageDto, PageModel } from 'src/app/providers/lixi-lotus/lixi-lotus';
@@ -70,7 +83,7 @@ export class RecipientComponent implements OnInit {
   receiveAmountLotus: number;
   formatRemaining: string;
   messagesReceiveLotus: boolean = false;
-  
+
   @Input()
   recipient: RecipientModel;
 
@@ -98,9 +111,9 @@ export class RecipientComponent implements OnInit {
   @Input()
   isDonation?: boolean;
 
-  @Output() deleteEvent?= new EventEmitter<number>();
-  @Output() sendMaxEvent?= new EventEmitter<boolean>();
-  @Output() sendOfficialInfo?= new EventEmitter<PageDto>();
+  @Output() deleteEvent? = new EventEmitter<number>();
+  @Output() sendMaxEvent? = new EventEmitter<boolean>();
+  @Output() sendOfficialInfo? = new EventEmitter<PageDto>();
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
@@ -145,7 +158,8 @@ export class RecipientComponent implements OnInit {
     private modalCtrl: ModalController,
     private addressBookProvider: AddressBookProvider
   ) {
-    this.darkThemeString = this.themeProvider.currentAppTheme === 'dark' ? 'dark' : 'light';
+    this.darkThemeString =
+      this.themeProvider.currentAppTheme === 'dark' ? 'dark' : 'light';
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state;
     } else {
@@ -165,8 +179,13 @@ export class RecipientComponent implements OnInit {
       this.remaining = this.navParamsData.remaining;
       this.receiveAmountLotus = this.navParamsData.receiveLotus;
       const coin = _.get(this.navParams, 'data.donationCoin', 'xpi');
-      const precision = this.currencyProvider.getPrecision(coin as Coin).unitToSatoshi;
-      this.formatRemaining = this.txFormatProvider.formatAmount(coin, precision * this.remaining);
+      const precision = this.currencyProvider.getPrecision(
+        coin as Coin
+      ).unitToSatoshi;
+      this.formatRemaining = this.txFormatProvider.formatAmount(
+        coin,
+        precision * this.remaining
+      );
     }
     this.config = this.configProvider.get();
   }
@@ -182,10 +201,14 @@ export class RecipientComponent implements OnInit {
 
   ngOnChanges(changes: { [property: string]: SimpleChange }) {
     if (this.isSelectedTotalAmout) {
-      const currentAmountInput = _.get(changes, 'amountFromSelectedInput.currentValue', undefined)
+      const currentAmountInput = _.get(
+        changes,
+        'amountFromSelectedInput.currentValue',
+        undefined
+      );
       if (!_.isUndefined(currentAmountInput)) {
         this.expression = this.amountFromSelectedInput;
-        this.processAmount()
+        this.processAmount();
       }
     }
   }
@@ -219,11 +242,12 @@ export class RecipientComponent implements OnInit {
     this.unit = this.availableUnits[this.unitIndex].shortName;
     this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
     if (!isToken) {
-      const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
-        .isFiat
+      const { unitToSatoshi, unitDecimals } = this.availableUnits[
+        this.unitIndex
+      ].isFiat
         ? this.currencyProvider.getPrecision(
-          this.availableUnits[this.altUnitIndex].id
-        )
+            this.availableUnits[this.altUnitIndex].id
+          )
         : this.currencyProvider.getPrecision(this.unit.toLowerCase() as Coin);
       this.unitToSatoshi = unitToSatoshi;
       this.satToUnit = 1 / this.unitToSatoshi;
@@ -232,18 +256,19 @@ export class RecipientComponent implements OnInit {
     this.processAmount();
     this.logger.debug(
       'Update unit coin @amount unit:' +
-      this.unit +
-      ' alternativeUnit:' +
-      this.alternativeUnit
+        this.unit +
+        ' alternativeUnit:' +
+        this.alternativeUnit
     );
   }
 
   private setAvailableUnits(isToken?: boolean): void {
     this.availableUnits = [];
 
-    const parentWalletCoin = !isToken ? (this.navParamsData.wallet
-      ? this.navParamsData.wallet.coin
-      : this.wallet && this.wallet.coin)
+    const parentWalletCoin = !isToken
+      ? this.navParamsData.wallet
+        ? this.navParamsData.wallet.coin
+        : this.wallet && this.wallet.coin
       : this.token.tokenInfo.coin;
 
     if (isToken) {
@@ -255,7 +280,8 @@ export class RecipientComponent implements OnInit {
     } else {
       for (const coin of this.currencyProvider.getAvailableCoins()) {
         if (parentWalletCoin === coin || !parentWalletCoin) {
-          const { unitName, unitCode } = this.currencyProvider.getPrecision(coin);
+          const { unitName, unitCode } =
+            this.currencyProvider.getPrecision(coin);
           this.availableUnits.push({
             name: this.currencyProvider.getCoinName(coin),
             id: unitCode,
@@ -264,7 +290,6 @@ export class RecipientComponent implements OnInit {
         }
       }
     }
-
 
     this.unitIndex = 0;
 
@@ -317,7 +342,9 @@ export class RecipientComponent implements OnInit {
       this.fixedUnit = true;
     }
     if (this.token) {
-      if (!this.rateProvider.getRate(this.fiatCode, this.token.tokenInfo.symbol)) {
+      if (
+        !this.rateProvider.getRate(this.fiatCode, this.token.tokenInfo.symbol)
+      ) {
         this.fixedUnit = true;
       }
     }
@@ -376,16 +403,16 @@ export class RecipientComponent implements OnInit {
 
   private fromFiatToken(val: number, tokenSymbol): number {
     return parseFloat(
-      (
-        this.rateProvider.fromFiatToken(val, this.fiatCode, tokenSymbol)
-      ).toFixed(2)
+      this.rateProvider
+        .fromFiatToken(val, this.fiatCode, tokenSymbol)
+        .toFixed(2)
     );
   }
 
   changeSelectedAmount(event) {
     if (this.isSelectedTotalAmout) {
       this.expression = this.amountFromSelectedInput;
-      this.processAmount()
+      this.processAmount();
     }
   }
 
@@ -398,12 +425,11 @@ export class RecipientComponent implements OnInit {
     )
       return undefined;
 
-    const rateProvider = this.rateProvider
-      .toFiat(
-        val * this.unitToSatoshi,
-        this.fiatCode,
-        coin || this.availableUnits[this.unitIndex].id
-      )
+    const rateProvider = this.rateProvider.toFiat(
+      val * this.unitToSatoshi,
+      this.fiatCode,
+      coin || this.availableUnits[this.unitIndex].id
+    );
     if (_.isNil(rateProvider)) return undefined;
     return parseFloat(rateProvider.toString());
   }
@@ -416,11 +442,9 @@ export class RecipientComponent implements OnInit {
       : _.isNumber(result) && +result > 0;
 
     if (_.isNumber(result)) {
-
       this.globalResult = this.isExpression(this.expression)
         ? '= ' + this.processResult(result)
         : '';
-
 
       if (this.availableUnits[this.unitIndex].isFiat) {
         let a = result === 0 ? 0 : this.fromFiat(result);
@@ -459,13 +483,15 @@ export class RecipientComponent implements OnInit {
           this.wallet.cachedStatus.alternativeIsoCode,
           this.token.tokenInfo.symbol
         );
-        this.alternativeAmount = this.filterProvider.formatFiatAmount(alternativeAmount);
+        this.alternativeAmount =
+          this.filterProvider.formatFiatAmount(alternativeAmount);
         this.recipient.altAmountStr = this.alternativeAmount;
-      }
-      else {
+      } else {
         amount = this.fromFiatToken(amount, this.token.tokenInfo.symbol);
         this.recipient.amount = parseInt((amount * unitDecimal).toFixed(0), 10);
-        this.alternativeAmount = this.filterProvider.formatFiatAmount(amount).toString();
+        this.alternativeAmount = this.filterProvider
+          .formatFiatAmount(amount)
+          .toString();
         this.recipient.altAmountStr = this.alternativeAmount;
       }
     } else {
@@ -492,10 +518,15 @@ export class RecipientComponent implements OnInit {
       let tokenAddress: string = '';
       if (address == '') this.validAddress = false;
       // handle case send to etoken address in xec
-      if (!this.token && address.includes("etoken") && this.wallet.coin == 'xec') {
-        // handle etoken 
+      if (
+        !this.token &&
+        address.includes('etoken') &&
+        this.wallet.coin == 'xec'
+      ) {
+        // handle etoken
         try {
-          const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+          const { prefix, type, hash } =
+            this.addressProvider.decodeAddress(address);
           if (prefix == 'etoken') {
             isSentXecToEtoken = true;
           } else {
@@ -511,13 +542,18 @@ export class RecipientComponent implements OnInit {
         // handle case send token
       } else if (this.token && this.wallet.coin == 'xec') {
         try {
-          const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+          const { prefix, type, hash } =
+            this.addressProvider.decodeAddress(address);
           if (prefix === 'ecash') {
             tokenAddress = address;
-          }
-          else if (prefix === 'etoken') {
+          } else if (prefix === 'etoken') {
             tokenAddress = address;
-            address = this.addressProvider.encodeAddress('ecash', type, hash, address);
+            address = this.addressProvider.encodeAddress(
+              'ecash',
+              type,
+              hash,
+              address
+            );
           } else {
             this.validAddress = false;
             this.checkRecipientValid();
@@ -528,7 +564,6 @@ export class RecipientComponent implements OnInit {
           this.checkRecipientValid();
           return;
         }
-
       }
       const parsedData = this.incomingDataProvider.parseData(address);
       if (
@@ -541,67 +576,82 @@ export class RecipientComponent implements OnInit {
         }
         if (isValid || isSentXecToEtoken) {
           this.validAddress = true;
-          let addressFinal = tokenAddress.trim().length > 0 ? tokenAddress : address;
-          // query on server first => check if this address is official or not 
-          this.lixiLotusProvider.getOfficialInfo(addressFinal).then(data =>{
-            this.recipient.isOfficialInfo = true;
-            this.recipient.name = data.name;
-            this.sendOfficialInfo.emit({...data, address: addressFinal, index: this.index || 0} as PageModel);
-            this.addressBookProvider.get(addressFinal, this.wallet.network).then(
-              contactSelected => {
-                if(contactSelected && data.name !== contactSelected.name){
-                  this.addressBookProvider.remove(contactSelected.address, contactSelected.network, contactSelected.coin).then(() => {
-                    this.addressBookProvider.add({
-                      name: data.name,
-                      coin: this.wallet.coin,
-                      isOfficialInfo: true,
-                      address: addressFinal
-                    } as Contact)
-                  })
-                } else {
-                  this.addressBookProvider.get(addressFinal, this.wallet.network).then(
-                    contactSelected => {
-                      if (contactSelected) {
-                        this.recipient.toAddress = contactSelected.address;
-                        this.recipient.name = contactSelected.name;
-                        this.recipient.recipientType = 'contact';
-                      }
-                    }
-                  );
-                }
-              }
-            ).catch(err => {
-                this.addressBookProvider.add({
-                  name: data.name,
-                  coin: this.wallet.coin,
-                  isOfficialInfo: true,
-                  address: addressFinal
-                } as Contact)
+          let addressFinal =
+            tokenAddress.trim().length > 0 ? tokenAddress : address;
+          // query on server first => check if this address is official or not
+          this.lixiLotusProvider
+            .getOfficialInfo(addressFinal)
+            .then(data => {
+              this.recipient.isOfficialInfo = true;
+              this.recipient.name = data.name;
+              this.sendOfficialInfo.emit({
+                ...data,
+                address: addressFinal,
+                index: this.index || 0
+              } as PageModel);
+              this.addressBookProvider
+                .get(addressFinal, this.wallet.network)
+                .then(contactSelected => {
+                  if (contactSelected && data.name !== contactSelected.name) {
+                    this.addressBookProvider
+                      .remove(
+                        contactSelected.address,
+                        contactSelected.network,
+                        contactSelected.coin
+                      )
+                      .then(() => {
+                        this.addressBookProvider.add({
+                          name: data.name,
+                          coin: this.wallet.coin,
+                          isOfficialInfo: true,
+                          address: addressFinal
+                        } as Contact);
+                      });
+                  } else {
+                    this.addressBookProvider
+                      .get(addressFinal, this.wallet.network)
+                      .then(contactSelected => {
+                        if (contactSelected) {
+                          this.recipient.toAddress = contactSelected.address;
+                          this.recipient.name = contactSelected.name;
+                          this.recipient.recipientType = 'contact';
+                        }
+                      });
+                  }
+                })
+                .catch(err => {
+                  this.addressBookProvider.add({
+                    name: data.name,
+                    coin: this.wallet.coin,
+                    isOfficialInfo: true,
+                    address: addressFinal
+                  } as Contact);
+                });
             })
-          }).catch(e => {
-            this.addressBookProvider.get(addressFinal, this.wallet.network).then(
-              contactSelected => {
-                if (contactSelected) {
-                  this.recipient.toAddress = contactSelected.address;
-                  this.recipient.name = contactSelected.name;
-                  this.recipient.recipientType = 'contact';
-                }
-              }
-            );
-          }).finally(()=>{
-            this.recipient.isSentXecToEtoken = isSentXecToEtoken;
-            this.recipient.toAddress = address;
-            if (this.token && this.wallet.coin) this.recipient.toAddress = tokenAddress;
-            this.checkRecipientValid();
-            this.redir(isSentXecToEtoken);
-          });
-        }
-        else {
+            .catch(e => {
+              this.addressBookProvider
+                .get(addressFinal, this.wallet.network)
+                .then(contactSelected => {
+                  if (contactSelected) {
+                    this.recipient.toAddress = contactSelected.address;
+                    this.recipient.name = contactSelected.name;
+                    this.recipient.recipientType = 'contact';
+                  }
+                });
+            })
+            .finally(() => {
+              this.recipient.isSentXecToEtoken = isSentXecToEtoken;
+              this.recipient.toAddress = address;
+              if (this.token && this.wallet.coin)
+                this.recipient.toAddress = tokenAddress;
+              this.checkRecipientValid();
+              this.redir(isSentXecToEtoken);
+            });
+        } else {
           this.validAddress = false;
         }
-      }
-      else if (parsedData && parsedData.type == 'PrivateKey') {
-        this.validAddress = true
+      } else if (parsedData && parsedData.type == 'PrivateKey') {
+        this.validAddress = true;
       } else {
         this.validAddress = false;
       }
@@ -609,34 +659,70 @@ export class RecipientComponent implements OnInit {
     this.checkRecipientValid();
   }
 
-  private handleOfficialInfo(addressFinal){
-    this.lixiLotusProvider.getOfficialInfo(addressFinal).then(data =>{
-      this.recipient.isOfficialInfo = true;
-      this.recipient.toAddress = addressFinal;
-      this.recipient.name = data.name;
-      this.sendOfficialInfo.emit({...data, address: addressFinal, index: this.index || 0} as PageModel);
-      this.addressBookProvider.get(addressFinal, this.wallet.network).then(
-        contactSelected => {
-          if(contactSelected && data.name !== contactSelected.name){
-            this.addressBookProvider.remove(contactSelected.address, contactSelected.network, contactSelected.coin).then(() => {
-              this.addressBookProvider.add({
-                name: data.name,
-                coin: this.wallet.coin,
-                isOfficialInfo: true,
-                address: addressFinal
-              } as Contact)
-            })
-          }
-        }
-      ).catch(err => {
-          this.addressBookProvider.add({
-            name: data.name,
-            coin: this.wallet.coin,
-            isOfficialInfo: true,
-            address: addressFinal
-          } as Contact)
+  private handleOfficialInfo(addressFinal) {
+    this.lixiLotusProvider
+      .getOfficialInfo(addressFinal)
+      .then(data => {
+        this.recipient.isOfficialInfo = true;
+        this.recipient.toAddress = addressFinal;
+        this.recipient.name = data.name;
+        this.sendOfficialInfo.emit({
+          ...data,
+          address: addressFinal,
+          index: this.index || 0
+        } as PageModel);
+        this.addressBookProvider
+          .get(addressFinal, this.wallet.network)
+          .then(contactSelected => {
+            if (contactSelected && data.name !== contactSelected.name) {
+              this.addressBookProvider
+                .remove(
+                  contactSelected.address,
+                  contactSelected.network,
+                  contactSelected.coin
+                )
+                .then(() => {
+                  this.addressBookProvider.add({
+                    name: data.name,
+                    coin: this.wallet.coin,
+                    isOfficialInfo: true,
+                    address: addressFinal
+                  } as Contact);
+                });
+            }
+          })
+          .catch(err => {
+            this.addressBookProvider.add({
+              name: data.name,
+              coin: this.wallet.coin,
+              isOfficialInfo: true,
+              address: addressFinal
+            } as Contact);
+          });
       })
-    });
+      .catch(err => {
+        this.addressBookProvider
+          .get(addressFinal, this.wallet.network)
+          .then(contactSelected => {
+            this.addressBookProvider
+              .remove(
+                contactSelected.address,
+                contactSelected.network,
+                contactSelected.coin
+              )
+              .then(() => {
+                this.addressBookProvider.add({
+                  ...contactSelected,
+                  isOfficialInfo: false
+                } as Contact);
+              });
+            if (contactSelected) {
+              this.recipient.toAddress = contactSelected.address;
+              this.recipient.name = contactSelected.name;
+              this.recipient.recipientType = 'contact';
+            }
+          });
+      });
   }
 
   private redir(isSentXecToEtoken) {
@@ -649,7 +735,6 @@ export class RecipientComponent implements OnInit {
     });
     this.search = '';
   }
-
 
   checkRecipientValid() {
     if (!this.isDonation) {
@@ -682,7 +767,7 @@ export class RecipientComponent implements OnInit {
       );
       isValid =
         this.currencyProvider.getChain(this.wallet.coin).toLowerCase() ==
-        addrData.coin && addrData.network == this.wallet.network;
+          addrData.coin && addrData.network == this.wallet.network;
     }
 
     if (isValid) {
@@ -704,7 +789,9 @@ export class RecipientComponent implements OnInit {
   }
   private checkIfLegacy(): boolean {
     return (
-      this.incomingDataProvider.isValidBitcoinCashLegacyAddress(this.recipient.toAddress) ||
+      this.incomingDataProvider.isValidBitcoinCashLegacyAddress(
+        this.recipient.toAddress
+      ) ||
       this.incomingDataProvider.isValidBitcoinCashUriWithLegacyAddress(
         this.recipient.toAddress
       )
@@ -720,9 +807,8 @@ export class RecipientComponent implements OnInit {
     infoSheet.onDidDismiss(option => {
       if (option) {
         const legacyAddr = this.recipient.toAddress;
-        const cashAddr = this.addressProvider.translateToCashAddress(
-          legacyAddr
-        );
+        const cashAddr =
+          this.addressProvider.translateToCashAddress(legacyAddr);
         this.recipient.toAddress = cashAddr;
         this.processInput();
       }
@@ -749,7 +835,7 @@ export class RecipientComponent implements OnInit {
       this.recipient.isSpecificAmount = false;
       this.expression = 0;
       this.processAmount();
-    } else if(this.recipient.isOfficialInfo){
+    } else if (this.recipient.isOfficialInfo) {
       this.recipient.isOfficialInfo = false;
       this.sendOfficialInfo.emit(null);
     }
@@ -757,7 +843,9 @@ export class RecipientComponent implements OnInit {
   }
 
   public openScanner(): void {
-    this.router.navigate(['/scan'], { state: { fromRecipientComponent: true, recipientId: this.recipient.id } });
+    this.router.navigate(['/scan'], {
+      state: { fromRecipientComponent: true, recipientId: this.recipient.id }
+    });
   }
 
   public shouldShowZeroState() {
@@ -785,7 +873,9 @@ export class RecipientComponent implements OnInit {
   }
 
   public goToAddressBook() {
-    this.router.navigate(['/addressbook'], { state: { fromSend: true, recipientId: this.recipient.id } });
+    this.router.navigate(['/addressbook'], {
+      state: { fromSend: true, recipientId: this.recipient.id }
+    });
   }
 
   public async openTransferToModal(): Promise<void> {
@@ -795,14 +885,14 @@ export class RecipientComponent implements OnInit {
         completeHistory: this.wallet.completeHistory,
         walletId: this.wallet.credentials.walletId,
         recipientId: this.recipient.id,
-        fromSend: true,
+        fromSend: true
       }
     });
     modal.onDidDismiss().then(recipient => {
       if (recipient.data && recipient.data.id == this.recipient.id) {
-        if(recipient.data.isOfficialInfo){
+        if (recipient.data.isOfficialInfo) {
           this.handleOfficialInfo(recipient.data.toAddress);
-        } else{
+        } else {
           this.recipient.toAddress = recipient.data.toAddress;
           this.recipient.name = recipient.data.name;
           this.recipient.recipientType = recipient.data.recipientType;
@@ -826,11 +916,20 @@ export class RecipientComponent implements OnInit {
 
   private handleReceiveLotus(amountDonation) {
     this.receiveLotus = '';
-    const availableUnit = this.availableUnits[this.unitIndex].isFiat ? this.availableUnits[this.altUnitIndex].id : this.availableUnits[this.unitIndex].id;
-    const minMoneydonation = this.fromSatToFiat(this.rateProvider.fromFiat(this.navParamsData.minMoneydonation, 'USD', availableUnit));
+    const availableUnit = this.availableUnits[this.unitIndex].isFiat
+      ? this.availableUnits[this.altUnitIndex].id
+      : this.availableUnits[this.unitIndex].id;
+    const minMoneydonation = this.fromSatToFiat(
+      this.rateProvider.fromFiat(
+        this.navParamsData.minMoneydonation,
+        'USD',
+        availableUnit
+      )
+    );
     const remaining = this.navParamsData.remaining;
     const receiveLotus = this.navParamsData.receiveLotus;
-    this.isShowReceiveLotus = amountDonation >= minMoneydonation && remaining >= receiveLotus;
+    this.isShowReceiveLotus =
+      amountDonation >= minMoneydonation && remaining >= receiveLotus;
     if (this.isShowReceiveLotus) {
       this.receiveLotus = `You will receive ${receiveLotus} Lotus`;
       this.messagesReceiveLotus = false;
@@ -843,21 +942,17 @@ export class RecipientComponent implements OnInit {
   }
 
   private fromSatToFiat(val: number, coin?: Coin): number {
-    const availableUnit = this.availableUnits[this.unitIndex].isFiat ? this.availableUnits[this.altUnitIndex].id : this.availableUnits[this.unitIndex].id;
-    if (
-      !this.rateProvider.getRate(
-        this.fiatCode,
-        coin || availableUnit
-      )
-    )
+    const availableUnit = this.availableUnits[this.unitIndex].isFiat
+      ? this.availableUnits[this.altUnitIndex].id
+      : this.availableUnits[this.unitIndex].id;
+    if (!this.rateProvider.getRate(this.fiatCode, coin || availableUnit))
       return undefined;
 
-    const rateProvider = this.rateProvider
-      .toFiat(
-        val,
-        this.fiatCode,
-        coin || availableUnit
-      )
+    const rateProvider = this.rateProvider.toFiat(
+      val,
+      this.fiatCode,
+      coin || availableUnit
+    );
     if (_.isNil(rateProvider)) return undefined;
     return parseFloat(rateProvider.toString());
   }

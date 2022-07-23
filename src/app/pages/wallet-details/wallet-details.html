@@ -215,7 +215,7 @@
     </div>
 
     <ng-container *ngIf="history && history[0]">
-      <div class="header-transaction">
+      <div class="header-transaction" translate>
         Transaction History
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>
       </div>
@@ -224,6 +224,7 @@
 
           <ion-item-divider (click)="viewOnBlockchain()" sticky class="tx-history-header">
             <ion-label>
+              <!-- TODO add month calendar to Vietnamese -->
               <span *ngIf="isDateInCurrentMonth(getDate(group[0].time))">{{ 'Recent' | translate }} </span>
               <span *ngIf="!isDateInCurrentMonth(getDate(group[0].time))">{{getDate(group[0].time) |
                 amDateFormat:'MMMM'}}</span>
@@ -308,6 +309,7 @@
                   <p class="status" *ngIf="tx.isGenesis">Genesis</p>
                   <p class="status" *ngIf="tx.action == 'mined'">Mined</p>
                   <p class="status" *ngIf="tx.action == 'immature'">Immature</p>
+                  <!-- TODO need to convert datetime to Vietnamese-->
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |

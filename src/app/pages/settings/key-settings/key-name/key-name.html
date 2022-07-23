@@ -4,7 +4,7 @@
       <form [formGroup]="walletGroupNameForm">
         <mat-form-field appearance="outline">
           <mat-label translate>What do you call this key?</mat-label>
-          <input matInput type="text" formControlName="walletGroupName" [value]="walletGroupNameForm.value.walletGroupName" [placeholder]="'What do you call this key?'" translate>
+          <input matInput type="text" formControlName="walletGroupName" [value]="walletGroupNameForm.value.walletGroupName" [placeholder]="'What do you call this key?' | translate">
         </mat-form-field>
       </form>
     </ion-list>

@@ -18,8 +18,28 @@ msgstr "Cách an toàn nhất để lưu trữ tiền điện tử (Được khu
 msgid "I’m just playing around. Skip all the security steps and show me the wallet."
 msgstr "Tôi chỉ muốn trải nghiệm. Bỏ qua tất cả các bước bảo mật và cho tôi xem ví."
 
+msgid "Password unmatched!"
+msgstr "Mật khẩu không khớp!"
+
+msgid "Important"
+msgstr "Quan Trọng"
+
+msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
+msgstr "{appName} không thể khôi phục số dư nếu bạn mất cụm từ khóa (12 từ). Đồng nghĩa với việc tài sản của bạn sẽ bị mất vĩnh viễn."
+
+msgid "Once the App is deleted, the account data will be all deleted."
+msgstr "Khi ứng dụng bị xóa, tất cả dữ liệu tài khoản cũng sẽ bị xóa."
+
+msgid "Please backup the recovery phrase in the secure environment. "
+"Make sure there is no third party or camera around you during the back-up."
+msgstr "Vui lòng sao lưu cụm từ khôi phục và lưu trữ nơi an toàn. Đảm bảo "
+"không có bên thứ ba hoặc máy ảnh xung quanh bạn trong quá trình sao lưu."
+
 msgid "Primary Accounts"
 msgstr "Tài khoản chính"
+
+msgid "Account ID"
+msgstr "ID Tài khoản"
 
 msgid "{walletsGroupLength} Accounts"
 msgstr "{walletsGroupLength} Tài khoản"
@@ -203,6 +223,9 @@ msgstr "Tài khoản"
 
 msgid "Accounts"
 msgstr "Tài khoản"
+
+msgid "Hide Account"
+msgstr "Ẩn tài khoản"
 
 msgid "Activation Fee"
 msgstr "Phí kích hoạt"
@@ -424,7 +447,7 @@ msgid "Attempted payment request"
 msgstr "Thực hiện lệnh thanh toán"
 
 msgid "Available"
-msgstr "Cho phép"
+msgstr "Khả dụng"
 
 msgid "Average"
 msgstr "Trung bình"
@@ -449,6 +472,9 @@ msgstr "Sao lưu"
 
 msgid "Backup recovery phrase"
 msgstr "Sao lưu cụm từ khôi phục"
+
+msgid "Backup Phrase"
+msgstr "Sao lưu cụm từ (12 từ)"
 
 msgid "You will now be shown a recovery phrase which is very important. If you write down "
 "and store it safely, you will always be able to recover your accounts."
@@ -799,7 +825,7 @@ msgid "Completed"
 msgstr "Hoàn thành"
 
 msgid "Configuration (m-n)"
-msgstr "Điều chỉnh (m-n)"
+msgstr "Cấu hình (m-n)"
 
 msgid "Confirm"
 msgstr "Xác nhận"
@@ -832,7 +858,7 @@ msgid "Confirm your new encrypt password"
 msgstr "Xác nhận mật khẩu được mã hóa mới"
 
 msgid "Confirmations"
-msgstr "Các xác nhận"
+msgstr "Khối đã xác nhận"
 
 msgid "Confirmed transactions"
 msgstr "Giao dịch đã được xác nhận"
@@ -996,8 +1022,8 @@ msgstr "Không thể giải mã ví"
 msgid "Could not delete payment proposal"
 msgstr "Không thể xóa đề nghị thanh toán"
 
-msgid "Could not encrypt wallet"
-msgstr "Không thể mã hóa ví"
+msgid "Could not encrypt account"
+msgstr "Không thể mã hóa tài khoản"
 
 msgid "Could not get crypto offer. Please, try again later."
 msgstr "Không thể lấy tiền ảo. Vui lòng thử lại sau."
@@ -1032,8 +1058,8 @@ msgstr "Không thể gửi giao dịch"
 msgid "Could not update transaction history"
 msgstr "Không thể cập nhật lịch sử giao dịch"
 
-msgid "Could not update wallet"
-msgstr "Không thể cập nhật ví"
+msgid "Could not update account"
+msgstr "Không thể cập nhật tài khoản"
 
 msgid "Country"
 msgstr "Quốc gia"
@@ -1048,7 +1074,7 @@ msgid "Create"
 msgstr "Tạo"
 
 msgid "Create Key"
-msgstr "Tạo khóa"
+msgstr "Tạo Khóa"
 
 msgid "Create New Key"
 msgstr "Tạo khóa mới"
@@ -1093,6 +1119,9 @@ msgid "Creating Gift Card..."
 msgstr "Đang tạo Thẻ quà tặng."
 
 msgid "Creating Account..."
+msgstr "Đang tạo tài khoản..."
+
+msgid "Creating account..."
 msgstr "Đang tạo tài khoản..."
 
 msgid "Creating transaction..."
@@ -1146,6 +1175,9 @@ msgstr "Các loại thẻ ghi nợ"
 
 msgid "Delete"
 msgstr "Xóa"
+
+msgid "Permanently delete?"
+msgstr "Xóa vĩnh viễn?"
 
 msgid "Delete Key"
 msgstr "Xóa khóa"
@@ -1263,7 +1295,7 @@ msgid "Display Currency"
 msgstr "Đồng tiền hiển thị"
 
 msgid "Do not include private key"
-msgstr "Vui lòng không cung cấp mã cá nhân"
+msgstr "Không bao gồm private key"
 
 msgid "Do you want to reset all settings to default value?"
 msgstr "Bạn có muốn cài lại giá trị mặc định?"
@@ -1394,7 +1426,7 @@ msgid "Enter a destination tag"
 msgstr "nhập nhãn địa điểm"
 
 msgid "Enter a new encrypt password"
-msgstr "Nhập mật khẩu được mã hóa mới"
+msgstr "Nhập mật khẩu mới"
 
 msgid "Enter a transaction memo"
 msgstr "Nhập ghi chú cho giao dịch"
@@ -1409,7 +1441,13 @@ msgid "Enter email address"
 msgstr "Nhập địa chỉ email"
 
 msgid "Enter encrypt password"
-msgstr "Nhập mật khẩu mã hóa"
+msgstr "Nhập mật khẩu"
+
+msgid "Retype encrypt password"
+msgstr "Nhập lại mật khẩu"
+
+msgid "Your account key will be encrypted. The encrypt password cannot be recovered. Be sure to write it down"
+msgstr "Khóa tài khoản của bạn sẽ được mã hóa. Không thể khôi phục mật khẩu mã hóa. Hãy chắc chắn để viết nó ra"
 
 msgid ""
 "Enter your recovery phrase (usually 12-words) in the correct order. Separate "
@@ -1544,10 +1582,10 @@ msgid "Expires"
 msgstr "Hết hạn"
 
 msgid "Export Key"
-msgstr "Xuất khóa"
+msgstr "Xuất Khóa"
 
-msgid "Export Wallet"
-msgstr "Xuất ví"
+msgid "Export Account"
+msgstr "Xuất Tài Khoản"
 
 msgid "Export to file"
 msgstr "Xuất thành tập tin"
@@ -1556,10 +1594,10 @@ msgid "Exporting via QR not supported for this wallet"
 msgstr "Xuất thông qua mã QR không hỗ trợ cho ví này"
 
 msgid "Extended Private Key"
-msgstr "Gia hạn khóa cá nhân"
+msgstr "Extended Private Key"
 
 msgid "Extended Public Keys"
-msgstr "Gia hạn khóa công cộng"
+msgstr "Extended Public Keys"
 
 msgid "External Services"
 msgstr "Dịch vụ bên ngoài"
@@ -1583,7 +1621,7 @@ msgid "Fee level is not defined"
 msgstr "Mức phí không xác định được"
 
 msgid "Fee rate"
-msgstr "Giá trị phí"
+msgstr "Tỷ lệ phí"
 
 msgid "Feedback"
 msgstr "Phản hồi"
@@ -1630,7 +1668,7 @@ msgstr ""
 "dịch vụ cộng thêm chi phí hạ tầng mạng."
 
 msgid "For best security this should not match your AbcPay ID password."
-msgstr "Để đảm bảo bảo mật tốt nhất, mật mã này không nên trùng với mật mã của AbcPay ID của bạn"
+msgstr "Để đảm bảo bảo mật tốt nhất, mật mã này không nên trùng với mật mã của AbcPay ID của bạn."
 
 msgid "Forgot your password?"
 msgstr "Quên mật mã?"
@@ -1641,10 +1679,13 @@ msgid ""
 "team."
 msgstr ""
 "Thấy điểm nào đó không hoạt động? Vui lòng thông báo lỗi. Nếu bạn cần hỗ trợ "
-"ngay lập tức với vấn đề bạn đang gặp, vui lòng gọi hỗ trợ từ đội ngũ hỗ trợ của chúng tôi"
+"ngay lập tức với vấn đề bạn đang gặp, vui lòng liên hệ hỗ trợ từ đội ngũ hỗ trợ của chúng tôi."
 
 msgid "From"
 msgstr "Từ"
+
+msgid "From: {address}"
+msgstr "Gửi từ: {address}"
 
 msgid "From AbcPay account"
 msgstr "Từ tài khoản AbcPay"
@@ -1839,6 +1880,9 @@ msgstr ""
 msgid "I Understand"
 msgstr "Tôi đã hiểu"
 
+msgid "I understood"
+msgstr "Tôi đã hiểu"
+
 msgid "I already have an account"
 msgstr "Tôi đã có tài khoản"
 
@@ -1931,8 +1975,8 @@ msgid ""
 "If you need immediate help with a problem you are having, then get help by "
 "contacting our support team."
 msgstr ""
-"Nếu bạn cần hỗ trợ ngay lập tức với vấn đề đang gặp, vui lòng liên hệ"
-"đội ngũ hỗ trợ của chúng tôi"
+"Nếu bạn cần hỗ trợ ngay lập tức với vấn đề đang gặp, vui lòng liên hệ "
+"đội ngũ hỗ trợ của chúng tôi."
 
 msgid ""
 "If you need to regain access to your wallet because you have forgotten or "
@@ -1964,8 +2008,8 @@ msgstr "Khôi phục tài khoản"
 msgid "Import Words"
 msgstr "Nhập chữ"
 
-msgid "Import existing wallet"
-msgstr "Nhập ví hiện hữu"
+msgid "Import existing account"
+msgstr "Khôi phục tài khoản"
 
 msgid "Import from backup"
 msgstr "Khôi phục tài khoản"
@@ -1980,8 +2024,8 @@ msgstr ""
 "Ghi chú quan trọng: Nhớ rằng AbcPay đã ngưng sử dụng XRP như là một phương tiện thanh toán, "
 "bao gồm việc nhập lên thẻ AbcPay, hóa đơn AbcPay và các mua sắm trong ứng dụng."
 
-msgid "Importing Wallet..."
-msgstr "Đang nhập ví"
+msgid "Importing Account..."
+msgstr "Đang khôi phục..."
 
 msgid ""
 "In order to begin purchasing and receiving cryptocurrencies you will need to "
@@ -2064,7 +2108,7 @@ msgid "Incorrect network address"
 msgstr "Incorrect network address"
 
 msgid "Information"
-msgstr "Information"
+msgstr "Thông tin"
 
 msgid "Instant Reloads*"
 msgstr "Instant Reloads*"
@@ -2092,7 +2136,7 @@ msgid "Interaction with contract"
 msgstr "Interaction with contract"
 
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "Không hợp lệ"
 
 msgid "Invalid Email"
 msgstr "Invalid Email"
@@ -2141,9 +2185,9 @@ msgid ""
 "privacy and keeps your bitcoins secure against hypothetical attacks by "
 "quantum computers."
 msgstr ""
-"It's a good idea to avoid reusing addresses - this both protects your "
-"privacy and keeps your bitcoins secure against hypothetical attacks by "
-"quantum computers."
+"Bạn nên tránh sử dụng lại địa chỉ - điều này vừa bảo vệ quyền riêng tư "
+"của bạn vừa giữ tài sản của bạn an toàn trước các cuộc tấn công giả định "
+"của máy tính lượng tử."
 
 msgid "It's ok for now"
 msgstr "Bây giờ ổn rồi"
@@ -2188,10 +2232,13 @@ msgid "Keep in mind your encrypt password is not the 12-word recovery phrase"
 msgstr "Keep in mind your encrypt password is not the 12-word recovery phrase"
 
 msgid "Key Name"
-msgstr "Key Name"
+msgstr "Tên Khóa"
 
 msgid "Key Settings"
-msgstr "Key Settings"
+msgstr "Cài Đặt Khóa"
+
+msgid "Account Settings"
+msgstr "Cài Đặt Tài Khoản"
 
 msgid "Key already associated with an existing wallet"
 msgstr "Key already associated with an existing wallet"
@@ -2342,7 +2389,7 @@ msgid "Me"
 msgstr "Me"
 
 msgid "Memo"
-msgstr "Memo"
+msgstr "Ghi chú"
 
 msgid "Merchant Directory"
 msgstr "Merchant Directory"
@@ -2357,13 +2404,13 @@ msgid "Method"
 msgstr "Method"
 
 msgid "Miner Fee"
-msgstr "Miner Fee"
+msgstr "Phí Thợ Đào"
 
 msgid "Miner Fee Notice"
 msgstr "Miner Fee Notice"
 
 msgid "Miner fee"
-msgstr "Miner fee"
+msgstr "Phí thợ đào"
 
 msgid "Miner fee not required for payments with Coinbase accounts"
 msgstr "Miner fee not required for payments with Coinbase accounts"
@@ -2384,10 +2431,10 @@ msgid "Mmm..."
 msgstr "Mmm..."
 
 msgid "More"
-msgstr "More"
+msgstr "Thêm"
 
 msgid "Moving"
-msgstr "Moving"
+msgstr "Đang chuyển"
 
 msgid ""
 "Multi-user account requires multiple devices to set up. It takes longer to "
@@ -2413,7 +2460,7 @@ msgid "Name"
 msgstr "Name"
 
 msgid "Name (at creation)"
-msgstr "Name (at creation)"
+msgstr "Tên (lúc tạo)"
 
 msgid "Native Currency"
 msgstr "Native Currency"
@@ -2428,7 +2475,7 @@ msgid "Needs backup"
 msgstr "Needs backup"
 
 msgid "Network"
-msgstr "Network"
+msgstr "Mạng"
 
 msgid "Network Cost"
 msgstr "Network Cost"
@@ -2456,7 +2503,7 @@ msgid "New"
 msgstr "New"
 
 msgid "New Key"
-msgstr "New Key"
+msgstr "Khóa mới (12 từ)"
 
 msgid "New Session Request"
 msgstr "New Session Request"
@@ -2518,7 +2565,7 @@ msgid "No thanks"
 msgstr "No thanks"
 
 msgid "No transactions"
-msgstr "No transactions"
+msgstr "Không có giao dịch"
 
 msgid "No wallet available"
 msgstr "No wallet available"
@@ -2569,15 +2616,14 @@ msgid "Not enough funds for fee"
 msgstr "Not enough funds for fee"
 
 msgid ""
-"Not including the private key allows to check the wallet balance, "
+"Not including the private key allows to check the account balance, "
 "transaction history, and create spend proposals from the export. However, "
 "does not allow to approve (sign) proposals, so funds will not be accessible "
 "from the export."
 msgstr ""
-"Not including the private key allows to check the wallet balance, "
-"transaction history, and create spend proposals from the export. However, "
-"does not allow to approve (sign) proposals, so funds will not be accessible "
-"from the export."
+"Không bao gồm 'private key' chỉ cho phép kiểm tra số dư tài khoản, lịch sử giao dịch "
+"và tạo các đề xuất chi tiêu từ việc xuất tài khoản. Tuy nhiên, không cho phép phê duyệt "
+"(ký) đề xuất, do đó, nguồn vốn sẽ không thể tiếp cận được từ việc xuất tài khoản."
 
 msgid "Not right now"
 msgstr "Not right now"
@@ -2592,7 +2638,7 @@ msgid "Notes"
 msgstr "Notes"
 
 msgid "Notifications"
-msgstr "Notifications"
+msgstr "Thông Báo"
 
 msgid "Notifications Preferences"
 msgstr "Notifications Preferences"
@@ -2650,7 +2696,7 @@ msgstr ""
 "shown."
 
 msgid "Open"
-msgstr "Open"
+msgstr "Mở"
 
 msgid "Open Crowdin"
 msgstr "Open Crowdin"
@@ -2730,6 +2776,9 @@ msgstr "Passwords do not match"
 
 msgid "Paste from Clipboard"
 msgstr "Paste from Clipboard"
+
+msgid "Paste address here"
+msgstr "Dán địa chỉ vào đây"
 
 msgid "Paste the backup plain text code"
 msgstr "Paste the backup plain text code"
@@ -2814,7 +2863,13 @@ msgid "Payment was confirmed and is being exchanged."
 msgstr "Payment was confirmed and is being exchanged."
 
 msgid "Pending"
-msgstr "Pending"
+msgstr "Đang chờ"
+
+msgid "Immature"
+msgstr "Immature"
+
+msgid "Mined"
+msgstr "Mined"
 
 msgid "Pending Call Requests"
 msgstr "Pending Call Requests"
@@ -2862,8 +2917,8 @@ msgstr ""
 msgid "Please provide your email address to receive payment notifications"
 msgstr "Please provide your email address to receive payment notifications"
 
-msgid "Please select the coin of the wallet to import:"
-msgstr "Please select the coin of the wallet to import:"
+msgid "Please select the coin of the account to import:"
+msgstr "Vui lòng chọn loại tiền điện tử của tài khoản để khôi phục:"
 
 msgid "Please upgrade the app to perform this action"
 msgstr "Please upgrade the app to perform this action"
@@ -2901,14 +2956,17 @@ msgstr "Printed Gift Card Required"
 msgid "Priority"
 msgstr "Priority"
 
+msgid "Privacy"
+msgstr "Quyền riêng tư"
+
 msgid "Privacy Notice"
-msgstr "Privacy Notice"
+msgstr "Thông báo về quyền riêng tư"
 
 msgid "Privacy Notice update"
-msgstr "Privacy Notice update"
+msgstr "Cập nhật Thông báo về Quyền riêng tư"
 
 msgid "Privacy Policy"
-msgstr "Privacy Policy"
+msgstr "Chính sách bảo mật"
 
 msgid "Private Key"
 msgstr "Private Key"
@@ -2984,7 +3042,7 @@ msgid "Read more"
 msgstr "Read more"
 
 msgid "Read more in our support page"
-msgstr "Read more in our support page"
+msgstr "Đọc thêm trong trang hỗ trợ của chúng tôi"
 
 msgid "Read only wallet"
 msgstr "Read only wallet"
@@ -3043,6 +3101,9 @@ msgid "Recovery Key"
 msgstr "Khôi phục Khóa"
 
 msgid "Recovery Phrase"
+msgstr "Cụm từ khôi phục"
+
+msgid "Your recovery phrase"
 msgstr "Cụm từ khôi phục"
 
 msgid "Redeem Now"
@@ -3214,7 +3275,7 @@ msgid "Search for a country"
 msgstr "Search for a country"
 
 msgid "Security"
-msgstr "Security"
+msgstr "Bảo Mật"
 
 msgid "Select"
 msgstr "Select"
@@ -3264,6 +3325,12 @@ msgstr "Chọn số dư cho giao dịch"
 msgid "Select recipient"
 msgstr "Chọn người nhận"
 
+msgid "Add more recipient"
+msgstr "Thêm người nhận"
+
+msgid "RECIPIENT "
+msgstr "NGƯỜI NHẬN "
+
 msgid "Select source wallet"
 msgstr "Select source wallet"
 
@@ -3278,6 +3345,12 @@ msgstr "Selling Bitcoin..."
 
 msgid "Send"
 msgstr "Gửi"
+
+msgid "Send back"
+msgstr "Gửi lại"
+
+msgid "Send again"
+msgstr "Gửi lại"
 
 msgid "Send Feedback"
 msgstr "Gửi phản hồi"
@@ -3332,7 +3405,7 @@ msgid "Sending maximum amount"
 msgstr "Đang gửi số tiền tối đa"
 
 msgid "Sending to"
-msgstr "Đang gửi tới"
+msgstr "Đang gửi đến"
 
 msgid "Sending transaction..."
 msgstr "Đang gửi giao dịch..."
@@ -3346,11 +3419,14 @@ msgstr "Sensitive Data"
 msgid "Sent"
 msgstr "Đã gửi"
 
+msgid "From : unknown sender"
+msgstr "Gửi từ : chưa xác định"
+
 msgid "Sent to self"
 msgstr "Đã gửi cho tôi"
 
 msgid "Sent to {walletName}"
-msgstr "Đã gửi tới {walletName}"
+msgstr "Đã gửi đến {walletName}"
 
 msgid "Server response could not be verified"
 msgstr "Server response could not be verified"
@@ -3362,13 +3438,25 @@ msgid "Session Request"
 msgstr "Session Request"
 
 msgid "Set up a password"
-msgstr "Set up a password"
+msgstr "Thiết lập mật khẩu"
+
+msgid "Confirm the password"
+msgstr "Xác nhận mật khẩu"
 
 msgid "Setting parameters..."
 msgstr "Setting parameters..."
 
 msgid "Settings"
 msgstr "Cài đặt"
+
+msgid "Rename Key"
+msgstr "Đổi tên Khóa"
+
+msgid "Rename Account"
+msgstr "Đổi tên Tài Khoản"
+
+msgid "Contained Accounts"
+msgstr "Danh sách Tài Khoản"
 
 msgid "Share"
 msgstr "Chia sẻ"
@@ -3548,7 +3636,7 @@ msgid "Spend proposal not found"
 msgstr "Spend proposal not found"
 
 msgid "Spendable balance"
-msgstr "Spendable balance"
+msgstr "Số dư có thể chi tiêu"
 
 msgid "Spending this balance will need significant Bitcoin network fees"
 msgstr "Spending this balance will need significant Bitcoin network fees"
@@ -3592,18 +3680,18 @@ msgstr "Sweeping Wallet..."
 #, fuzzy
 #| msgid "Incomplete"
 msgid "Sync completed"
-msgstr "Incomplete"
+msgstr "Đã đồng bộ hoá"
 
 msgid "Sync gift card purchases"
 msgstr "Sync gift card purchases"
 
-msgid "Sync wallets across devices"
-msgstr "Sync wallets across devices"
+msgid "Sync accounts across devices"
+msgstr "Đồng bộ hóa tài khoản trên các thiết bị"
 
 #, fuzzy
 #| msgid "Joining Wallet..."
-msgid "Syncing Wallets..."
-msgstr "Joining Wallet..."
+msgid "Syncing Accounts..."
+msgstr "Đang đồng bộ hóa tài khoản..."
 
 msgid "System Default"
 msgstr "Mặc định hệ thống"
@@ -3612,7 +3700,7 @@ msgid "THIS ACTION CANNOT BE REVERSED"
 msgstr "THIS ACTION CANNOT BE REVERSED"
 
 msgid "TOTAL"
-msgstr "TOTAL"
+msgstr "Tổng Cộng"
 
 msgid "TOTAL TO RECEIVE"
 msgstr "TOTAL TO RECEIVE"
@@ -3691,26 +3779,25 @@ msgstr ""
 "The amount entered is lower than the minimum allowed: {{params.minAmount}} "
 "{{params.coin}}"
 
-msgid "The amount of {coinName} immediately spendable from this wallet."
-msgstr "The amount of {coinName} immediately spendable from this wallet."
+msgid "The amount of {coinName} immediately spendable from this account."
+msgstr "Số tiền {coinName} có thể chi tiêu ngay lập tức từ tài khoản."
 
 msgid ""
-"The amount of {coinName} stored in this wallet that is allocated as inputs "
+"The amount of {coinName} stored in this account that is allocated as inputs "
 "to your pending transaction proposals. The amount is determined using "
-"unspent transaction outputs associated with this wallet and may be more than "
+"unspent transaction outputs associated with this account and may be more than "
 "the actual amounts associated with your pending transaction proposals."
 msgstr ""
-"The amount of {coinName} stored in this wallet that is allocated as inputs "
-"to your pending transaction proposals. The amount is determined using "
-"unspent transaction outputs associated with this wallet and may be more than "
-"the actual amounts associated with your pending transaction proposals."
+"Số lượng {coinName} bị khoá trong các đề xuất giao dịch đang chờ xử lý."
+"Số tiền được xác định bằng cách sử dụng số dư trong các giao dịch chưa thể "
+"sử dụng được và có thể nhiều hơn số dư thực tế trong các đề xuất giao dịch "
+"đang chờ xử lý."
 
 msgid ""
-"The amount of {coinName} stored in this wallet with less than 1 blockchain "
+"The amount of {coinName} stored in this account with less than 1 blockchain "
 "confirmation."
 msgstr ""
-"The amount of {coinName} stored in this wallet with less than 1 blockchain "
-"confirmation."
+"Số lượng {coinName} được lưu trữ trong tài khoản với ít hơn 1 xác nhận."
 
 msgid ""
 "The amount on the transaction does not match the amount requested. This "
@@ -3861,8 +3948,8 @@ msgstr ""
 msgid "The total amount is the subtotal amount plus transaction fees."
 msgstr "The total amount is the subtotal amount plus transaction fees."
 
-msgid "The total amount of {coinName} stored in this wallet."
-msgstr "The total amount of {coinName} stored in this wallet."
+msgid "The total amount of {coinName} stored in this account."
+msgstr "Tổng số {coinName} được lưu trữ trong tài khoản."
 
 msgid ""
 "The transaction from {{walletName}} that you were waiting for has been "
@@ -3876,9 +3963,8 @@ msgid ""
 "app. Clearing the cache cleans up the transaction history and synchronizes "
 "again from the server."
 msgstr ""
-"The transaction history and every new incoming transaction are cached in the "
-"app. Clearing the cache cleans up the transaction history and synchronizes "
-"again from the server."
+"Lịch sử giao dịch và mọi giao dịch mới đến đều được lưu trữ trong ứng dụng. "
+"Xóa bộ nhớ cache sẽ xóa lịch sử giao dịch và đồng bộ hóa lại từ máy chủ."
 
 msgid ""
 "The transaction you sent does not have any output to the address on the "
@@ -3891,11 +3977,11 @@ msgid "The wallet is already in the app"
 msgstr "The wallet is already in the app"
 
 msgid ""
-"The wallet won't be removed from this device. You can hide it whenever you "
+"The account won't be removed from this device. You can hide it whenever you "
 "need it."
 msgstr ""
-"The wallet won't be removed from this device. You can hide it whenever you "
-"need it."
+"Tài khoản sẽ không bị xóa khỏi thiết bị này. Bạn có thể ẩn nó bất cứ khi "
+"nào bạn cần."
 
 msgid ""
 "The wallet you are using does not match the network and/or the currency of "
@@ -3911,13 +3997,14 @@ msgid "Themes"
 msgstr "Chủ đề"
 
 msgid ""
-"There are no records of your wallet on our servers. If you are importing a "
-"BIP44 compatible wallet from a 3rd party you can continue to recreate it. If "
-"you wallet is not BIP44 compatible, you will not be able to access its funds."
+"There are no records of your account on our servers. If you are importing a "
+"BIP44 compatible account from a 3rd party you can continue to recreate it. If "
+"you account is not BIP44 compatible, you will not be able to access its funds."
 msgstr ""
-"There are no records of your wallet on our servers. If you are importing a "
-"BIP44 compatible wallet from a 3rd party you can continue to recreate it. If "
-"you wallet is not BIP44 compatible, you will not be able to access its funds."
+"Không tìm thấy thông tin về tài khoản của bạn trên máy chủ. Nếu bạn đang nhập "
+"tài khoản bằng giao thức BIP44 từ bên thứ ba, bạn có thể tiếp tục tạo lại tài khoản đó. "
+"Nếu tài khoản của bạn không tương thích với BIP44, bạn sẽ không thể truy cập "
+"vào số dư của tài khoản."
 
 msgid "There are no wallets with enough funds to make the payment"
 msgstr "There are no wallets with enough funds to make the payment"
@@ -4031,8 +4118,8 @@ msgid ""
 "This password cannot be recovered. If this password is lost, funds can only "
 "be recovered by reimporting your 12-word recovery phrase."
 msgstr ""
-"This password cannot be recovered. If this password is lost, funds can only "
-"be recovered by reimporting your 12-word recovery phrase."
+"Mật khẩu này không thể được khôi phục. Nếu mật khẩu này bị mất, bạn chỉ có thể "
+"lấy lại tiền bằng cách sử dụng cụm từ (12 từ) của bạn để khôi phục."
 
 msgid "This payment requires a miner fee of:"
 msgstr "This payment requires a miner fee of:"
@@ -4092,7 +4179,10 @@ msgid "Timeline"
 msgstr "Timeline"
 
 msgid "To"
-msgstr "To"
+msgstr "Đến"
+
+msgid "To: {address}"
+msgstr "Gửi đến: {address}"
 
 msgid ""
 "To get started, you'll need to enter a valid address or select an existent "
@@ -4111,7 +4201,7 @@ msgid "Top-up with this cryptocurrency is not enabled"
 msgstr "Top-up with this cryptocurrency is not enabled"
 
 msgid "Total"
-msgstr "Total"
+msgstr "Tổng cộng"
 
 msgid "Total Locked Balance"
 msgstr "Total Locked Balance"
@@ -4135,36 +4225,39 @@ msgid "Transact"
 msgstr "Transact"
 
 msgid "Transaction"
-msgstr "Transaction"
+msgstr "Giao Dịch"
 
 msgid "Transaction History"
-msgstr "Transaction History"
+msgstr "Lịch Sử Giao Dịch"
+
+msgid "Search for transaction history"
+msgstr "Tìm kiếm lịch sử giao dịch"
 
 msgid "Transaction ID"
-msgstr "Transaction ID"
+msgstr "ID Giao dịch"
 
 msgid "Transaction already broadcasted"
-msgstr "Transaction already broadcasted"
+msgstr "Giao dịch đã được truyền đi"
 
 msgid "Transaction confirmed"
-msgstr "Transaction confirmed"
+msgstr "Giao dịch đã xác nhận"
 
 msgid "Transaction fee is below the current minimum threshold"
-msgstr "Transaction fee is below the current minimum threshold"
+msgstr "Hiện tại phí giao dịch dưới ngưỡng tối thiểu"
 
 msgid "Transaction fees are currently high"
-msgstr "Transaction fees are currently high"
+msgstr "Phí giao dịch hiện đang cao"
 
 msgid ""
 "Transaction has failed. In most cases, the amount was less than the minimum."
 msgstr ""
-"Transaction has failed. In most cases, the amount was less than the minimum."
+"Giao dịch không thành công. Trong hầu hết các trường hợp, số dư ít hơn mức cho phép tối thiểu."
 
 msgid "Transaction has not been created"
-msgstr "Transaction has not been created"
+msgstr "Giao dịch chưa được tạo"
 
 msgid "Transaction initiated"
-msgstr "Transaction initiated"
+msgstr "Giao dịch đã bắt đầu"
 
 msgid "Transaction is waiting for an incoming payment."
 msgstr "Transaction is waiting for an incoming payment."
@@ -4179,25 +4272,25 @@ msgid "Transaction still unconfirmed"
 msgstr "Transaction still unconfirmed"
 
 msgid "Transactions"
-msgstr "Transactions"
+msgstr "Giao Dịch"
 
 msgid "Transactions without fee are not supported."
 msgstr "Transactions without fee are not supported."
 
 msgid "Transfer from"
-msgstr "Transfer from"
+msgstr "Chuyển từ"
 
 msgid "Transfer from AbcPay"
-msgstr "Transfer from AbcPay"
+msgstr "Chuyển từ AbcPay"
 
 msgid "Transfer to"
-msgstr "Transfer to"
+msgstr "Chuyển tới"
 
 msgid "Transfer to AbcPay"
-msgstr "Transfer to AbcPay"
+msgstr "Chuyển tới AbcPay"
 
 msgid "Transfer to Multiple Recipients"
-msgstr "Transfer to Multiple Recipients"
+msgstr "Chuyển cho nhiều người nhận"
 
 msgid "Translate address"
 msgstr "Translate address"
@@ -4206,10 +4299,10 @@ msgid "Try \"create new wallet\" option instead"
 msgstr "Try \"create new wallet\" option instead"
 
 msgid "Try again"
-msgstr "Try again"
+msgstr "Thử lại"
 
 msgid "Try again in {{expires}}"
-msgstr "Try again in {{expires}}"
+msgstr "Hãy thử lại sau {{expires}}"
 
 msgid "Try entering any passwords you may have set in the past"
 msgstr "Try entering any passwords you may have set in the past"
@@ -4268,7 +4361,7 @@ msgid "Unsupported network"
 msgstr "Unsupported network"
 
 msgid "Unused addresses"
-msgstr "Unused addresses"
+msgstr "Địa chỉ không sử dụng"
 
 msgid "Updating Gift Card..."
 msgstr "Updating Gift Card..."
@@ -4295,7 +4388,7 @@ msgid "Use Unconfirmed Funds"
 msgstr "Use Unconfirmed Funds"
 
 msgid "Use default url"
-msgstr "Use default url"
+msgstr "Sử dụng url mặc định"
 
 msgid "Use facial recognition to unlock?"
 msgstr "Use facial recognition to unlock?"
@@ -4326,10 +4419,13 @@ msgid "Verification Required"
 msgstr "Verification Required"
 
 msgid "Verify Your Phrase"
-msgstr "Verify Your Phrase"
+msgstr "Xác minh cụm từ khôi phục"
+
+msgid "Verify your phrase"
+msgstr "Xác minh cụm từ khôi phục"
 
 msgid "Version"
-msgstr "Version"
+msgstr "Phiên bản"
 
 msgid "View"
 msgstr "View"
@@ -4359,7 +4455,7 @@ msgid "View Redemption Code"
 msgstr "View Redemption Code"
 
 msgid "View Transaction"
-msgstr "View Transaction"
+msgstr "Xem Giao Dịch"
 
 msgid "View Wallet Terms of Use"
 msgstr "View Wallet Terms of Use"
@@ -4371,13 +4467,13 @@ msgid "View complete Terms of Use"
 msgstr "View complete Terms of Use"
 
 msgid "View details"
-msgstr "View details"
+msgstr "Xem chi tiết"
 
 msgid "View my recovery key"
-msgstr "View my recovery key"
+msgstr "Xem khóa khôi phục"
 
 msgid "View on blockchain"
-msgstr "View on blockchain"
+msgstr "Xem trên blockchain"
 
 msgid "Virtual"
 msgstr "Virtual"
@@ -4393,22 +4489,25 @@ msgstr ""
 "cannot be performed on this wallet?."
 
 msgid "Waiting"
-msgstr "Waiting"
+msgstr "Đang chờ"
 
 msgid "Waiting for authorized copayers to join"
-msgstr "Waiting for authorized copayers to join"
+msgstr "Đang chờ những người đồng thanh toán được ủy quyền tham gia"
 
-msgid "Wallet Addresses"
-msgstr "Wallet Addresses"
+msgid "Account Addresses"
+msgstr "Địa chỉ tài khoản"
 
-msgid "Wallet Information"
-msgstr "Wallet Information"
+msgid "Account Information"
+msgstr "Thông tin tài khoản"
 
 msgid "Wallet Inputs"
 msgstr "Wallet Inputs"
 
-msgid "Wallet Invitation"
-msgstr "Wallet Invitation"
+msgid "Account Invitation"
+msgstr "Mã mời"
+
+msgid "Account invitation"
+msgstr "Mã mời"
 
 msgid "Account Name"
 msgstr "Tên Tài Khoản"
@@ -4522,8 +4621,8 @@ msgstr ""
 "We could not find one or more inputs for your transaction on the blockchain. "
 "Make sure you're not trying to use unconfirmed change"
 
-msgid "We couldn't find your wallet!"
-msgstr "We couldn't find your wallet!"
+msgid "We couldn't find your account!"
+msgstr "Không thể tìm thấy tài khoản của bạn!"
 
 msgid ""
 "We were unable to parse the transaction you sent. Please try again or "
@@ -4557,9 +4656,10 @@ msgid ""
 "leave us a review in the app store or request a new feature. Also, let us "
 "know if you experience any technical issues."
 msgstr ""
-"We're always listening for ways we can improve your experience. Feel free to "
-"leave us a review in the app store or request a new feature. Also, let us "
-"know if you experience any technical issues."
+"Chúng tôi luôn lắng nghe những cách có thể cải thiện trải nghiệm của bạn. "
+"Vui lòng để lại đánh giá cho chúng tôi trong cửa hàng ứng dụng hoặc yêu "
+"cầu một tính năng mới. Ngoài ra, hãy cho chúng tôi biết nếu bạn gặp bất "
+"kỳ vấn đề kỹ thuật nào."
 
 msgid ""
 "We're always listening for ways we can improve your experience. Is there "
@@ -4589,10 +4689,10 @@ msgid "What could have happened?"
 msgstr "What could have happened?"
 
 msgid "What do you call this key?"
-msgstr "What do you call this key?"
+msgstr "Bạn gọi khóa này là gì?"
 
-msgid "What do you call this wallet?"
-msgstr "What do you call this wallet?"
+msgid "What do you call this account?"
+msgstr "Bạn gọi tài khoản này là gì?"
 
 msgid "What is the status of my payment?"
 msgstr "What is the status of my payment?"
@@ -4756,7 +4856,7 @@ msgstr ""
 msgid ""
 "You can import this Key into other devices through the {appName} scanner"
 msgstr ""
-"You can import this Key into other devices through the {appName} scanner"
+"Bạn có thể nhập Khóa này vào các thiết bị khác thông qua chức năng quét của {appName}"
 
 msgid ""
 "You can make contributions by signing up on our Crowdin community "
@@ -4863,11 +4963,11 @@ msgid ""
 "with external services, you take responsibility for the risk of theft or "
 "breach."
 msgstr ""
-"Your Key is all that is needed to access your funds. Be sure to protect your "
-"key and store it only on secure devices. AbcPay does not have access to your "
-"keys, so you alone are responsible for your keys. If you share key access "
-"with external services, you take responsibility for the risk of theft or "
-"breach."
+"Khóa là tất cả những gì cần thiết để truy cập tài sản của bạn. Bảo vệ cẩn thận Khóa của "
+"bạn và chỉ lưu trữ trên các thiết bị an toàn. AbcPay không có quyền truy cập vào "
+"các Khóa của bạn, vì vậy bạn sẽ chịu trách nhiệm về các Khóa của mình. Nếu bạn "
+"chia sẻ quyền truy cập Khóa của mình với các dịch vụ bên ngoài, bạn phải chịu "
+"trách nhiệm về rủi ro bị đánh cắp hoặc vi phạm."
 
 msgid ""
 "Your extended private keys are all that is needed to access your funds. Be "
@@ -4877,12 +4977,12 @@ msgid ""
 "you take responsibility for the risk of theft or breach. Only advanced users "
 "should handle extended private keys directly."
 msgstr ""
-"Your extended private keys are all that is needed to access your funds. Be "
-"sure to protect your private keys and store them only on secure devices. "
-"AbcPay does not have access to your private keys, so you alone are "
-"responsible for your keys. If you share key access with external services, "
-"you take responsibility for the risk of theft or breach. Only advanced users "
-"should handle extended private keys directly."
+"Khóa ‘extended private’ là tất cả những gì cần thiết để truy cập tài sản của bạn. "
+"Bảo vệ cẩn thận Khóa cá nhân của bạn và chỉ lưu trữ trên các thiết bị an toàn. "
+"AbcPay không có quyền truy cập vào các Khóa của bạn, vì vậy bạn sẽ chịu trách "
+"nhiệm về các Khóa của mình. Nếu bạn chia sẻ quyền truy cập Khóa của mình với các "
+"dịch vụ bên ngoài, bạn phải chịu trách nhiệm về rủi ro bị đánh cắp hoặc vi phạm. "
+"Chỉ những người dùng nâng cao mới nên xử lý trực tiếp các khóa ‘extended private’."
 
 msgid "Your fee is lower than recommended."
 msgstr "Your fee is lower than recommended."
@@ -4894,7 +4994,7 @@ msgid "Your funds, on your device"
 msgstr "Your funds, on your device"
 
 msgid "Your key is already synced"
-msgstr "Your key is already synced"
+msgstr "Khóa của bạn đã được đồng bộ hóa"
 
 msgid "Your linked ETH wallet does not have enough ETH for fee"
 msgstr "Your linked ETH wallet does not have enough ETH for fee"
@@ -4906,8 +5006,24 @@ msgid ""
 "Your recovery key is composed of 12 randomly selected words. Please "
 "carefully write down each word in the order it appears."
 msgstr ""
-"Your recovery key is composed of 12 randomly selected words. Please "
-"carefully write down each word in the order it appears."
+"Khóa khôi phục của bạn bao gồm 12 từ được chọn ngẫu nhiên. Hãy cẩn thận "
+"viết ra từng từ theo thứ tự xuất hiện."
+
+msgid ""
+"Never share your recovery phrase with anyone, store it securely !"
+msgstr ""
+"Không bao giờ chia sẻ cụm từ khôi phục của bạn với bất kỳ ai, hãy lưu trữ "
+"nó một cách an toàn!"
+
+msgid ""
+"Let check your wrote down the phrase correctly. Please select each word in "
+"the numbered order."
+msgstr ""
+"Hãy kiểm tra lại cụm từ đã viết của bạn một cách chính xác. Vui lòng chọn "
+"từng từ theo thứ tự được đánh số."
+
+msgid "Word #{countWord+1 > 12 ? 12 : countWord+1}"
+msgstr "Từ #{countWord+1 > 12 ? 12 : countWord+1}"
 
 msgid ""
 "Your request did not include a transaction. Please try again or contact your "
@@ -4967,7 +5083,7 @@ msgid "of total amount"
 msgstr "of total amount"
 
 msgid "preparing..."
-msgstr "preparing..."
+msgstr "đang chuẩn bị..."
 
 msgid "using your 12 words recovery phrase"
 msgstr "using your 12 words recovery phrase"
@@ -5029,10 +5145,9 @@ msgid ""
 "configuration points to https://aws.abcpay.cash (AbcPros's public AWS "
 "instance)."
 msgstr ""
-"{{appName}} depends on AbcPros Wallet Service (AWS) for blockchain "
-"information, networking and Copayer synchronization. The default "
-"configuration points to https://aws.abcpay.cash (AbcPros's public AWS "
-"instance)."
+"{{appName}} phụ thuộc vào Dịch vụ ví AbcPros (AWS) để truy cập thông tin "
+"mạng blockchain và đồng bộ hóa Copayer. Cấu hình mặc định trỏ đến "
+"https://aws.abcpay.cash (phiên bản AWS công khai của AbcPros)."
 
 msgid ""
 "{{appName}} only supports Bitcoin Cash using new version numbers addresses."

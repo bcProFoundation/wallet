@@ -85,10 +85,8 @@
 <ion-footer class="ion-no-border footer" *ngIf="!shouldShowZeroState()">
   <ion-toolbar>
     <div class="btn-function-group">
-      <ion-button *ngIf="!token && !isDonation" class="btn-add-more" fill="outline" (click)="addNewRecipient()">{{'Add
-        more recipient' | translate}}</ion-button>
-      <ion-button [disabled]="checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()">{{'Continue'
-        | translate}}</ion-button>
+      <ion-button *ngIf="!token && !isDonation" class="btn-add-more" fill="outline" (click)="addNewRecipient()">{{ 'Add more recipient' | translate }}</ion-button>
+      <ion-button [disabled]="checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()">{{ 'Continue' | translate }}</ion-button>
     </div>
   </ion-toolbar>
 </ion-footer>

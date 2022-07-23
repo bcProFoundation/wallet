@@ -144,6 +144,7 @@
 
     <info-sheet-template *ngSwitchCase="'delete-key'" sheetSecondBtnGroup={{params?.secondBtnGroup}} type="danger">
       <span sheet-title-text translate>Permanently delete?</span>
+      <!-- TODO : add support language translate -->
       <span sheet-text translate>All accounts using this key are permanently deleted. <span class="text-danger" translate>This action cannot be reversed</span></span>
       <span sheet-third-button-text translate>Cancel</span>
       <span sheet-fourth-button-text translate>Delete</span>

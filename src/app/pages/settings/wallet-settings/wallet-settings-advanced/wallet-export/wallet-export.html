@@ -6,14 +6,14 @@
           <div class="group-container">
             <mat-form-field appearance="outline">
               <mat-label translate>Set up a password</mat-label>
-              <input matInput type="password" formControlName="password" [placeholder]="'Set up a password'" translate>
+              <input matInput type="password" formControlName="password" [placeholder]="'Set up a password' | translate">
             </mat-form-field>
             <mat-form-field class="confirm-password" [ngClass]="{'error-form-field' : exportWalletForm.controls.confirmPassword.touched && exportWalletForm.hasError('mismatchedPasswords') && exportWalletForm.controls.password.valid}" appearance="outline">
               <mat-label translate>Confirm the password</mat-label>
-              <input matInput type="password" formControlName="confirmPassword" [placeholder]="'Confirm the password'" translate>
+              <input matInput type="password" formControlName="confirmPassword" [placeholder]="'Confirm the password' | translate">
             </mat-form-field>
             <mat-hint class="text-danger" *ngIf="exportWalletForm.controls.confirmPassword.touched && exportWalletForm.hasError('mismatchedPasswords') && exportWalletForm.controls.password.valid">
-              {{'Unmatched' | translate}}
+              {{'Password unmatched!' | translate}}
             </mat-hint>
             <label-tip class="no-arrowhead warning-message" *ngIf="!canSign" type="warn">
               <span label-tip-title translate>No Private Key</span>
@@ -30,7 +30,7 @@
             </ion-item>
   
             <div *ngIf="exportWalletForm.value.noSignEnabled" class="sub-include-private" translate>
-              Not including the private key allows to check the wallet balance, transaction history, and create spend proposals from the export. However, does not allow to approve (sign) proposals, so funds will not be accessible from the export.
+              Not including the private key allows to check the account balance, transaction history, and create spend proposals from the export. However, does not allow to approve (sign) proposals, so funds will not be accessible from the export.
             </div>
           </div>
           

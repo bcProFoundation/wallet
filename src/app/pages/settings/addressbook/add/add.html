@@ -8,12 +8,12 @@
     <form [formGroup]="addressBookAdd">
       <mat-form-field class="form-field" appearance="outline">
         <mat-label translate>Name</mat-label>
-        <input matInput type="text" formControlName="name" [placeholder]="'Name'" translate>
+        <input matInput type="text" formControlName="name" [placeholder]="'Name' | translate">
       </mat-form-field>
   
       <mat-form-field [ngClass]="{'mobile-view': isCordova}" class="form-field" appearance="outline">
         <mat-label translate>Address</mat-label>
-        <input matInput type="text" formControlName="address" [value]="addressBookAdd.value.address" address-validator [placeholder]="'Address'" translate>
+        <input matInput type="text" formControlName="address" [value]="addressBookAdd.value.address" address-validator [placeholder]="'Address' | translate">
         <mat-icon matSuffix>
           <ion-icon *ngIf="addressBookAdd.controls['address'].status == 'VALID'" name="checkmark-circle" class="check success" slot="end"></ion-icon>
           <ion-icon *ngIf="addressBookAdd.value.address && addressBookAdd.controls['address'].status == 'INVALID'" class="check fail" name="close-circle" slot="end"></ion-icon>

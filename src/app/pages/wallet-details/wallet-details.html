@@ -265,8 +265,7 @@
                   <ng-container *ngIf="tx.inputAddresses && tx.inputAddresses[0]">
                     <span class="tx-action"
                       *ngIf="(!addressbook || !tx.inputAddresses[0] || !getContactName(tx.inputAddresses[0]))">{{'From:
-                      {address}'
-                      | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
+                      {address}' | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
                     <span class="tx-action"
                       *ngIf="addressbook && tx.inputAddresses[0] && getContactName(tx.inputAddresses[0])">
                       {{'From: ' + getContactName(tx.inputAddresses[0])| translate}}

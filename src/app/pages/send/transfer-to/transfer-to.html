@@ -1,7 +1,7 @@
 <div class="wallets-container" *ngIf="listRecentTransaction && listRecentTransaction[0]">
   <div class="section-header">
     <ion-label class="key-name">
-      <span>RECENT TRANSACTIONS</span>
+      <span translate>RECENT TRANSACTIONS</span>
     </ion-label>
   </div>
   <ion-list lines="none" class="bp-list custom-list" ng-class="{ 'disabled':itemTapped}">
@@ -21,10 +21,10 @@
 
 <ion-segment (ionChange)="showContactTab= !showContactTab" value="1">
   <ion-segment-button value="1" layout="icon-start">
-    <ion-label>MY ACCOUNTS</ion-label>
+    <ion-label translate>MY ACCOUNTS</ion-label>
   </ion-segment-button>
   <ion-segment-button value="2" layout="icon-start">
-    <ion-label>ADDRESS BOOK</ion-label>
+    <ion-label translate>ADDRESS BOOK</ion-label>
   </ion-segment-button>
 </ion-segment>
 

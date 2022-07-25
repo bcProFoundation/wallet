@@ -141,8 +141,8 @@ msgid ""
 "5-star ratings help us get AbcPay Wallet into more hands, and more users "
 "means more resources can be committed to the app!"
 msgstr ""
-"Đánh giá 5 sao giúp chúng tôi đưa Ví AbcPay đến nhiều người dùng hơn"
-"Điều đó có nghĩa thêm nguồn lực được bổ sung cho ứng dụng"
+"Đánh giá 5 sao giúp chúng tôi đưa Ví AbcPay đến nhiều người dùng hơn "
+"Điều đó giúp chúng tôi có thêm động lực để hoàn thiện ứng dụng tốt hơn!"
 
 msgid ""
 "A Destination Tag is an optional number that corresponds to an invoice or a "
@@ -339,8 +339,11 @@ msgstr ""
 "Tất cả {tên tiền} trong số dư tại ví của bạn có thể không phù hợp để thanh toán"
 "ngay."
 
-msgid "Allo camera access"
-msgstr "Cho phép tiếp cận máy ảnh"
+msgid "Allow camera access"
+msgstr "Cho phép truy cập máy ảnh"
+
+msgid "Camera not supported"
+msgstr "Máy ảnh không hỗ trợ"
 
 msgid "Already duplicated"
 msgstr "Đã trùng lập"
@@ -957,7 +960,7 @@ msgid "Continue to the exchange page"
 msgstr "Tiếp tục đến trang quy đổi"
 
 msgid "Continue to {storeName}"
-msgstr "Tiếp tục với {tên gian hàng}"
+msgstr "Tiếp tục với {storeName}"
 
 msgid "Contribute translations"
 msgstr "Đóng góp phần dịch"
@@ -981,7 +984,7 @@ msgid "Copayers"
 msgstr "Người đồng thanh toán"
 
 msgid "waiting for copayers"
-msgstr "chờ xác nhận tham gia"
+msgstr "chờ xác nhận"
 
 msgid "Copy"
 msgstr "Sao chép"
@@ -1856,7 +1859,7 @@ msgid "Help and support information is available at the website"
 msgstr "Thông in về giúp đỡ và hỗ trợ có tại trang web"
 
 msgid "Help and support information is available at the website."
-msgstr "hông in về giúp đỡ và hỗ trợ có tại trang web."
+msgstr "Thông in về giúp đỡ và hỗ trợ có tại trang web."
 
 msgid "Hidden"
 msgstr "Đã ẩn"
@@ -2381,6 +2384,10 @@ msgstr "Khóa"
 
 msgid "Lock App"
 msgstr "Khóa ứng dụng"
+
+msgid "Tap to unlock App"
+msgstr "Chạm để mở khóa ứng dụng"
+
 
 msgid "Locked"
 msgstr "Đã khóa"
@@ -2981,7 +2988,7 @@ msgid "Please upgrade the app to perform this action"
 msgstr "Please upgrade the app to perform this action"
 
 msgid "Please wait..."
-msgstr "Please wait..."
+msgstr "Vui lòng chờ..."
 
 msgid "Please, select your backup file"
 msgstr "Please, select your backup file"
@@ -3385,6 +3392,18 @@ msgstr "Chọn số dư"
 msgid "Select Inputs"
 msgstr "Chọn số dư"
 
+msgid "Send total selected amount"
+msgstr "Gửi tổng số tiền đã chọn"
+
+msgid "Choose the account inputs"
+msgstr "Chọn số dư tài khoản"
+
+msgid "(from select inputs)"
+msgstr "(từ số dư)"
+
+msgid "Total selected:"
+msgstr "Chọn tất cả:"
+
 msgid "Select inputs for transaction"
 msgstr "Chọn số dư cho giao dịch"
 
@@ -3411,6 +3430,9 @@ msgstr "Selling Bitcoin..."
 
 msgid "Send"
 msgstr "Gửi"
+
+msgid "Send "
+msgstr "Gửi "
 
 msgid "Send back"
 msgstr "Gửi lại"
@@ -3537,7 +3559,7 @@ msgid "Share logs"
 msgstr "Share logs"
 
 msgid "Share the love by inviting your friends."
-msgstr "Share the love by inviting your friends."
+msgstr "Chia sẻ tình yêu bằng cách mời bạn bè của bạn."
 
 msgid "Share this QR code to receive {amount} in your account {name}."
 msgstr "Chia sẻ mã QR này để nhận {money} trong tài khoản {name} của bạn."
@@ -3555,10 +3577,10 @@ msgid "Share this invitation"
 msgstr "Chia sẻ lời mời"
 
 msgid "Share with friends"
-msgstr "Share with friends"
+msgstr "Chia sẻ với bạn bè"
 
 msgid "Share {{appName}}"
-msgstr "Share {{appName}}"
+msgstr "Chia sẻ {{appName}}"
 
 msgid "Shared Account"
 msgstr "Tài khoản đa chữ ký"
@@ -4229,15 +4251,14 @@ msgstr ""
 "speed it up by using a higher fee."
 
 msgid ""
-"This wallet is not registered at the given AbcPros Wallet Service (AWS). As "
+"This account is not registered at the given AbcPros Wallet Service (AWS). As "
 "an advice, you could delete the key, under settings and selecting the "
-"specific key, and then use the Backup to import the wallet again (under Home "
+"specific key, and then use the Backup to import the account again (under Home "
 "> Wallet Tab)."
 msgstr ""
-"This wallet is not registered at the given AbcPros Wallet Service (AWS). As "
-"an advice, you could delete the key, under settings and selecting the "
-"specific key, and then use the Backup to import the wallet again (under Home "
-"> Wallet Tab)."
+"Tài khoản này chưa được đăng ký tại Dịch vụ Ví AbcPros (AWS). Theo lời khuyên, "
+"bạn có thể xóa Khóa, trong cài đặt và chọn khóa cụ thể, sau đó sử dụng Khôi "
+"phục để nhập lại tài khoản (trong Trang chủ> Tab Wallet)."
 
 msgid "This will open Coinbase.com, where you can create an account."
 msgstr "This will open Coinbase.com, where you can create an account."
@@ -4679,7 +4700,7 @@ msgid "Warning!"
 msgstr "Cảnh báo!"
 
 msgid "We appreciate your review"
-msgstr "We appreciate your review"
+msgstr "Chúng tôi rất cảm kích đánh giá của bạn"
 
 msgid ""
 "We are always looking for translation contributions! You can make "
@@ -4839,7 +4860,7 @@ msgid "Write Down Recovery Phrase"
 msgstr "Write Down Recovery Phrase"
 
 msgid "Write a Review"
-msgstr "Write a Review"
+msgstr "Viết đánh giá"
 
 msgid "Write down each word."
 msgstr "Write down each word."

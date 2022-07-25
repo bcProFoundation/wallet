@@ -100,11 +100,11 @@ export class SendPage {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
-    this.titlePage = "Send " + (this.wallet.coin as String).toUpperCase();
+    this.titlePage = this.translate.instant("Send ") + (this.wallet.coin as String).toUpperCase();
     if (this.token) this.titlePage = `Send ${this.token.tokenInfo.name}`
     this.isDonation = this.navPramss.isDonation;
     if (this.isDonation) {
-      this.titlePage = "Send Donation";
+      this.titlePage = this.translate.instant("Send Donation");
       this.dataDonation = this.navPramss;
       this.wallet.donationCoin = this.navPramss.donationCoin;
       const coinDonation = _.get(this.dataDonation, 'donationCoin', 'xpi');

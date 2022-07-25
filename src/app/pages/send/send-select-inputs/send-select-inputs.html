@@ -47,14 +47,14 @@
     <ion-list class="content-list">
       <div class="select-inputs-header">
         <div class="title-choose-input">
-          <div class="name" >Choose the account inputs</div> 
+          <div class="name" translate>Choose the account inputs</div> 
           <ion-button slot='end' fill='clear' (click)="reverseInputs()" [ngClass]="{'reverse': !reverse}">
             <img src="assets/img/order-{{currentTheme}}.svg">
           </ion-button>
         </div>
         <div class="total-amount-wrapper">
           <ion-checkbox slot="start" (ionChange)="selectInputTotal($event)" [indeterminate]="indeterminateState" [checked]="checkParentChecked"  (click)="skipIonChange=false" ></ion-checkbox>
-          <div class="name-total">Total selected:</div>
+          <div class="name-total" translate>Total selected:</div>
           <div class="total-amount"> {{totalAmount}} {{wallet.coin | uppercase}}</div>
         </div>
       </div>
@@ -82,6 +82,6 @@
 
 <ion-footer class="ion-no-border footer">
   <ion-toolbar>
-    <ion-button [disabled]="!checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()">Continue</ion-button>
+    <ion-button [disabled]="!checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()" translate>Continue</ion-button>
   </ion-toolbar>
 </ion-footer>

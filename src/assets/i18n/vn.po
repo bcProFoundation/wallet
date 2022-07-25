@@ -24,8 +24,8 @@ msgstr "Mật khẩu không khớp!"
 msgid "Important"
 msgstr "Quan Trọng"
 
-msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
-msgstr "{appName} không thể khôi phục số dư nếu bạn mất cụm từ khóa (12 từ). Đồng nghĩa với việc tài sản của bạn sẽ bị mất vĩnh viễn."
+msgid " {appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
+msgstr " {appName} không thể khôi phục số dư nếu bạn mất cụm từ khóa (12 từ). Đồng nghĩa với việc tài sản của bạn sẽ bị mất vĩnh viễn."
 
 msgid "Once the App is deleted, the account data will be all deleted."
 msgstr "Khi ứng dụng bị xóa, tất cả dữ liệu tài khoản cũng sẽ bị xóa."
@@ -299,11 +299,17 @@ msgstr "Địa chỉ eToken"
 msgid "Address Book"
 msgstr "Danh bạ"
 
+msgid "Address Book"
+msgstr "Danh bạ"
+
 msgid "ADDRESS BOOK"
 msgstr "DANH BẠ"
 
-msgid "Address Book"
-msgstr "Danh bạ"
+msgid "Address book name"
+msgstr "Tên người nhận"
+
+msgid "Enter name to save to address book"
+msgstr "Lưu tên người nhận vào danh bạ"
 
 msgid "Address Type"
 msgstr "Loại địa chỉ"
@@ -1948,8 +1954,9 @@ msgstr "Tôi chắc"
 msgid "I've used this card"
 msgstr "Tôi đã dùng thẻ này"
 
-msgid "If enabled, wallets will also try to spend unconfirmed funds."
-msgstr "Nếu được kích hoạt, các ví sẽ cố gắng chi các tiền ảo chưa xác nhận"
+msgid "If enabled, accounts will also try to spend unconfirmed funds."
+msgstr "Nếu được thiết lập, các tài khoản của bạn sẽ cố gắng sử dụng cả các khoản "
+"tiền của các giao dịch chưa được xác nhận."
 
 msgid ""
 "If enabled, your gift card purchases will be associated with your AbcPay ID, "
@@ -2590,7 +2597,7 @@ msgid "New wallet found"
 msgstr "Không tìm thấy ví"
 
 msgid "Next"
-msgstr "Next"
+msgstr "Kế tiếp"
 
 msgid "No"
 msgstr "No"
@@ -2971,6 +2978,18 @@ msgstr "Please enter the wallet recovery phrase"
 msgid "Please enter your PIN"
 msgstr "Vui lòng nhập mã PIN"
 
+msgid "Create your PIN"
+msgstr "Tạo mã PIN"
+
+msgid "Please enter your PIN"
+msgstr "Vui lòng nhập mã PIN"
+
+msgid "Re-type PIN"
+msgstr "Nhập lại mã PIN"
+
+msgid "Incorrect PIN, try again."
+msgstr "Mã PIN không chính xác, hãy thử lại."
+
 msgid ""
 "Please make sure {{peerMetaName}} request is still waiting for confirmation, "
 "and that the amount is correct before proceeding to the confirmation step"
@@ -3158,8 +3177,8 @@ msgstr "Reconnect Account"
 msgid "Reconnect to quickly withdraw and deposit funds."
 msgstr "Reconnect to quickly withdraw and deposit funds."
 
-msgid "Recover old wallets"
-msgstr "Recover old wallets"
+msgid "Recover old accounts"
+msgstr "Khôi phục tài khoản cũ"
 
 msgid "Recover your account using your passphrase"
 msgstr "Khôi phục tài khoản của bạn bằng cụm từ khoá (12 từ) của bạn"
@@ -4482,7 +4501,7 @@ msgid "Use Min Amount"
 msgstr "Use Min Amount"
 
 msgid "Use Unconfirmed Funds"
-msgstr "Use Unconfirmed Funds"
+msgstr "Sử dụng số dư chưa xác nhận"
 
 msgid "Use default url"
 msgstr "Sử dụng url mặc định"
@@ -5192,7 +5211,7 @@ msgstr "{appName} BCH wallets use the CashAddr format by default"
 msgid ""
 "{appName} cannot recover your funds for you if you lose your recovery key"
 msgstr ""
-"{appName} cannot recover your funds for you if you lose your recovery key"
+"{appName} không thể lấy lại tiền cho bạn nếu bạn mất Khóa khôi phục"
 
 msgid "{coinName} Address"
 msgstr "{coinName} Address"

@@ -224,7 +224,7 @@
 
           <ion-item-divider (click)="viewOnBlockchain()" sticky class="tx-history-header">
             <ion-label>
-              <!-- TODO add month calendar to Vietnamese -->
+              <!-- TODO language translate: add month calendar to Vietnamese -->
               <span *ngIf="isDateInCurrentMonth(getDate(group[0].time))">{{ 'Recent' | translate }} </span>
               <span *ngIf="!isDateInCurrentMonth(getDate(group[0].time))">{{getDate(group[0].time) |
                 amDateFormat:'MMMM'}}</span>
@@ -308,7 +308,7 @@
                   <p class="status" *ngIf="tx.isGenesis">Genesis</p>
                   <p class="status" *ngIf="tx.action == 'mined'">Mined</p>
                   <p class="status" *ngIf="tx.action == 'immature'">Immature</p>
-                  <!-- TODO need to convert datetime to Vietnamese-->
+                  <!-- TODO language translate: need to convert datetime to Vietnamese -->
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |

@@ -24,8 +24,8 @@ msgstr "Mật khẩu không khớp!"
 msgid "Important"
 msgstr "Quan Trọng"
 
-msgid " {appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
-msgstr " {appName} không thể khôi phục số dư nếu bạn mất cụm từ khóa (12 từ). Đồng nghĩa với việc tài sản của bạn sẽ bị mất vĩnh viễn."
+msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
+msgstr "{appName} không thể khôi phục số dư nếu bạn mất cụm từ khóa (12 từ). Đồng nghĩa với việc tài sản của bạn sẽ bị mất vĩnh viễn."
 
 msgid "Once the App is deleted, the account data will be all deleted."
 msgstr "Khi ứng dụng bị xóa, tất cả dữ liệu tài khoản cũng sẽ bị xóa."
@@ -1479,8 +1479,17 @@ msgstr "Nhập mật khẩu"
 msgid "Retype encrypt password"
 msgstr "Nhập lại mật khẩu"
 
-msgid "Your account key will be encrypted. The encrypt password cannot be recovered. Be sure to write it down"
-msgstr "Khóa tài khoản của bạn sẽ được mã hóa. Không thể khôi phục mật khẩu mã hóa. Hãy chắc chắn để viết nó ra"
+msgid "Your wallet key will be encrypted. The encrypt password cannot be recovered. Be sure to write it down."
+msgstr "Khóa tài khoản của bạn sẽ được mã hóa. Khóa tài khoản của bạn sẽ được mã hóa. Hãy chắc chắn để viết nó ra."
+
+msgid "Your account key will be encrypted."
+msgstr "Khóa tài khoản của bạn sẽ được mã hóa."
+
+msgid "The encrypt password cannot be recovered."
+msgstr "Không thể khôi phục mật khẩu mã hóa."
+
+msgid "Be sure to write it down"
+msgstr "Hãy chắc chắn để viết nó ra."
 
 msgid ""
 "Enter your recovery phrase (usually 12-words) in the correct order. Separate "
@@ -2111,6 +2120,13 @@ msgstr ""
 "In order to protect your funds from being accessible to hackers and thieves, "
 "the Master Key to your wallet must be kept somewhere safe and remain a "
 "secret."
+
+msgid ""
+"In order to protect your funds from being accessible to hackers and thieves, "
+"store this recovery phrase in a safe and secure place."
+msgstr ""
+"Để bảo vệ tiền của bạn không bị tin tặc và kẻ trộm truy cập, hãy lưu trữ "
+"cụm từ khôi phục này ở một nơi an toàn và bảo mật."
 
 msgid ""
 "In order to speed up the confirmation of your ETH transaction, the original "
@@ -2949,10 +2965,16 @@ msgid "Pending Proposals"
 msgstr "Đề xuất chờ xử lý"
 
 msgid "Perfect!"
-msgstr "Perfect!"
+msgstr "Tuyệt vời!"
 
 msgid "Permanently delete all wallets using this key."
 msgstr "Permanently delete all wallets using this key."
+
+msgid "All accounts using this key are permanently deleted."
+msgstr "Tất cả các tài khoản sử dụng Khóa này sẽ bị xóa vĩnh viễn."
+
+msgid "This action cannot be reversed."
+msgstr "Hành động xóa sẽ không quay trở lại được."
 
 msgid "Permanently delete this wallet."
 msgstr "Permanently delete this wallet."
@@ -5139,8 +5161,8 @@ msgstr ""
 "Hãy kiểm tra lại cụm từ đã viết của bạn một cách chính xác. Vui lòng chọn "
 "từng từ theo thứ tự được đánh số."
 
-msgid "Word #{countWord+1 > 12 ? 12 : countWord+1}"
-msgstr "Từ #{countWord+1 > 12 ? 12 : countWord+1}"
+msgid "Word #"
+msgstr "Từ #"
 
 msgid ""
 "Your request did not include a transaction. Please try again or contact your "

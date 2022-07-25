@@ -145,7 +145,7 @@
     <info-sheet-template *ngSwitchCase="'delete-key'" sheetSecondBtnGroup={{params?.secondBtnGroup}} type="danger">
       <span sheet-title-text translate>Permanently delete?</span>
       <!-- TODO language translate: add support language translate -->
-      <span sheet-text translate>All accounts using this key are permanently deleted. <span class="text-danger" translate>This action cannot be reversed</span></span>
+      <span sheet-text translate>All accounts using this key are permanently deleted. <span class="text-danger" translate>This action cannot be reversed.</span></span>
       <span sheet-third-button-text translate>Cancel</span>
       <span sheet-fourth-button-text translate>Delete</span>
     </info-sheet-template>
@@ -159,7 +159,7 @@
 
     <info-sheet-template *ngSwitchCase="'help-and-support'" isShowTitle={{params?.isShowTitle}} sheetSecondBtnGroup={{params?.secondBtnGroup}}>
       <!-- TODO language translate: handle language translate -->
-      <span sheet-text translate>Help and support information is avalable at the website</span>
+      <span sheet-text translate>Help and support information is available at the website</span>
       <span sheet-third-button-text translate>Cancel</span>
       <span sheet-fourth-button-text translate>Open</span>
     </info-sheet-template>
@@ -589,7 +589,7 @@
 
     <info-sheet-template *ngSwitchCase="'correct-recovery-prhase'" type="success" sheetSecondBtnGroup="true">
       <span sheet-title-text translate>Perfect!</span>
-      <span sheet-text>
+      <span sheet-text translate>
         In order to protect your funds from being accessible to hackers and thieves, store this recovery phrase in a safe and secure place.
       </span>
       <span sheet-third-button-text translate>OK</span>

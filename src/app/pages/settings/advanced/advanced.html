@@ -6,7 +6,7 @@
       </ion-item>
       <ion-item class="item-end">
         <ion-label>{{ 'Use Unconfirmed Funds' | translate }}</ion-label>
-        <ion-toggle [(ngModel)]="spendUnconfirmed" (ionChange)="spendUnconfirmedChange()"></ion-toggle>
+        <ion-toggle [(ngModel)]="spendUnconfirmed" ng-checked="true" (ionChange)="spendUnconfirmedChange()"></ion-toggle>
       </ion-item>
       <label-tip type="info" header="no-header">
         <div label-tip-body>

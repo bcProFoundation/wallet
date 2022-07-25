@@ -42,6 +42,7 @@
             </div>
           </ng-container>
           <ng-container *ngIf="btx.action === 'sent' || btx.action === 'received'">
+            <!-- TODO language translate: Send back is ok but not affect Send again translated-->
             <ion-button fill="outline" class="btn-custom" (click)="sendBack(btx)">
               {{ btx.action === 'sent' ? 'Send again' : 'Send back' | translate}}
             </ion-button>

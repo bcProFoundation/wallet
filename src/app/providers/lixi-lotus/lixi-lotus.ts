@@ -47,12 +47,13 @@ export class LixiLotusProvider {
       }
 
       const options = {
-        url: this.apiUrl + '/pages/address/' + address
+        url: this.apiUrl + '/pages/address/' + address,
+        headers: {'Content-Type': 'application/json; charset=utf-8'}
       };
 
       return Http.get(options)
         .then(response => {
-          if(response.status === 200){
+          if(response.status === 201 || response.status === 200){
           resolve(response.data as PageDto);
           } else {
             reject(response);
@@ -72,11 +73,12 @@ export class LixiLotusProvider {
       }
       const options = {
         url: this.apiUrl + '/claims',
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
         data: body
       };
       Http.post(options).then(
         response => {
-          if(response.status === 200){
+          if(response.status === 201 || response.status === 200){
             resolve(response.data as any);
           } else{
             reject(response);

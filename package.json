@@ -60,6 +60,7 @@
     "@capacitor-community/fcm": "^2.0.2",
     "@capacitor/android": "3.5.0",
     "@capacitor/core": "^3.2.3",
+    "@capacitor/device": "^1.1.2",
     "@capacitor/ios": "^3.2.3",
     "@capacitor/keyboard": "^1.2.2",
     "@capacitor/project": "^1.0.28",

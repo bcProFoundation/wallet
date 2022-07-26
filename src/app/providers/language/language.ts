@@ -84,7 +84,6 @@ export class LanguageProvider {
       // Get from browser
       // const browserLang = this.translate.getBrowserLang();
       let languageDevice = await this.detectLanguageDevice();
-      console.log('LANGUAGE LOCAL ' + languageDevice);
       this.current = this.getName(languageDevice)
         ? languageDevice
         : this.getDefault();

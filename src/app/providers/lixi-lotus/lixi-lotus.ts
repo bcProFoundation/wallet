@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import env from 'src/environments';
 import { Logger } from '../logger/logger';
+import { Http, HttpResponse } from '@capacitor-community/http';
 
 type Nullable<T> = T | null;
 export declare class PageDto {
@@ -30,29 +30,39 @@ export declare class PageModel extends PageDto {
   providedIn: 'root'
 })
 export class LixiLotusProvider {
-  private apiUrl =
-    env.lixiLotusUrl && env.lixiLotusUrl.length > 0
-      ? env.lixiLotusUrl
-      : 'https://lixilotus.com/api';
-  constructor(private http: HttpClient, private logger: Logger) {
+  private apiUrl: string;
+  constructor(private logger: Logger) {
     this.logger.debug('LixiLotusProvider initialized');
+    this.apiUrl =
+      env.lixiLotusUrl && env.lixiLotusUrl.length > 0
+        ? env.lixiLotusUrl
+        : 'https://dev.lixilotus.test/api';
   }
 
   public getOfficialInfo(address: string): Promise<PageDto> {
     return new Promise((resolve, reject) => {
       let args = [];
       if (!address && address.length <= 0) {
-        reject(new Error('Not have address'));
+        return Promise.reject(new Error('Not have address'));
       }
-      this.http.get(this.apiUrl + '/pages/address/' + address).subscribe(
-        data => {
-          resolve(data as PageDto);
-        },
-        err => {
+
+      const options = {
+        url: this.apiUrl + '/pages/address/' + address,
+        headers: {'Content-Type': 'application/json; charset=utf-8'}
+      };
+
+      return Http.get(options)
+        .then(response => {
+          if(response.status === 201 || response.status === 200){
+          resolve(response.data as PageDto);
+          } else {
+            reject(response);
+          }
+        })
+        .catch(err => {
           this.logger.error(err);
           reject(err);
-        }
-      );
+        });
     });
   }
 
@@ -61,15 +71,23 @@ export class LixiLotusProvider {
       if (!body) {
         reject(new Error('Not have address'));
       }
-      this.http.post(this.apiUrl + '/claims', body).subscribe(
-        data => {
-          resolve(data as any);
-        },
-        err => {
-          this.logger.error(err);
-          reject(err);
+      const options = {
+        url: this.apiUrl + '/claims',
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
+        data: body
+      };
+      Http.post(options).then(
+        response => {
+          if(response.status === 201 || response.status === 200){
+            resolve(response.data as any);
+          } else{
+            reject(response);
+          }
         }
-      );
-    })
+      ).catch(e => {
+        this.logger.error(e);
+        reject(e);
+      });
+    });
   }
 }

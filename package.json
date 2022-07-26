@@ -58,6 +58,7 @@
     "@angular/service-worker": "^13.1.1",
     "@bcpros/cordova-plugin-qrscanner": "^3.0.1",
     "@capacitor-community/fcm": "^2.0.2",
+    "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "3.5.0",
     "@capacitor/core": "^3.2.3",
     "@capacitor/ios": "^3.2.3",

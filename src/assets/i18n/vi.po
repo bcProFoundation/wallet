@@ -1127,7 +1127,7 @@ msgstr "Tạo tài khoản mới"
 msgid "Create or Import a Key"
 msgstr "Tạo hoặc Khôi phục Khóa"
 
-msgid "Create or import a account"
+msgid "Create or import an account"
 msgstr "Tạo hoặc khôi phục tài khoản"
 
 msgid "Create {coinLabel} Account"
@@ -1784,7 +1784,7 @@ msgid "Get $10"
 msgstr "Nhận $10"
 
 msgid "Get Started"
-msgstr "Bắt đầu"
+msgstr "Bắt Đầu"
 
 msgid "Get crypto from another wallet"
 msgstr "Nhận tiền ảo từ ví khác"
@@ -3844,7 +3844,7 @@ msgid "TRY AGAIN"
 msgstr "TRY AGAIN"
 
 msgid "Take control of your crypto"
-msgstr "Take control of your crypto"
+msgstr "Kiểm soát tiền điện tử của bạn"
 
 msgid "Tap and hold to show"
 msgstr "Tap and hold to show"
@@ -3923,7 +3923,7 @@ msgid ""
 "unspent transaction outputs associated with this account and may be more than "
 "the actual amounts associated with your pending transaction proposals."
 msgstr ""
-"Số lượng {coinName} bị khoá trong các đề xuất giao dịch đang chờ xử lý."
+"Số lượng {coinName} bị khoá trong các đề xuất giao dịch đang chờ xử lý. "
 "Số tiền được xác định bằng cách sử dụng số dư trong các giao dịch chưa thể "
 "sử dụng được và có thể nhiều hơn số dư thực tế trong các đề xuất giao dịch "
 "đang chờ xử lý."
@@ -4084,6 +4084,11 @@ msgstr "The total amount is the subtotal amount plus transaction fees."
 
 msgid "The total amount of {coinName} stored in this account."
 msgstr "Tổng số {coinName} được lưu trữ trong tài khoản."
+
+msgid "The amount of {coinName} immediately spendable from this account."
+msgstr "Số tiền {coinName} có thể chi tiêu ngay lập tức từ tài khoản này."
+
+
 
 msgid ""
 "The transaction from {{walletName}} that you were waiting for has been "

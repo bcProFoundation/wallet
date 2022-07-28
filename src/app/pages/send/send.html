@@ -84,7 +84,7 @@
 
 <ion-footer class="ion-no-border footer" *ngIf="!shouldShowZeroState()">
     <ng-container *ngIf="isOfficialInfo ; else otherTemplate">
-      <page-slide-to-accept #slideButton *ngIf="isCordova &&  wallet"
+      <page-slide-to-accept #slideButton *ngIf="isCordova && wallet"
       [ngClass]="{'slide-confirm-fast': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}"
       [buttonText]="'Slide to send'" [isDogecoin]="false" (slideDone)="approve()">
     </page-slide-to-accept>

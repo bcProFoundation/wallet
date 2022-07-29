@@ -215,6 +215,9 @@ msgstr "Về {{ appName }}"
 msgid "About {{appName}}"
 msgstr "Về {{appName}}"
 
+msgid "About {appName}"
+msgstr "Về {appName}"
+
 msgid "Accept"
 msgstr "Chấp nhận"
 
@@ -545,8 +548,8 @@ msgid ""
 "Because you are sending the maximum amount contained in this account, the "
 "{coinName} miner fee ({fee} {coin}) will be deducted from the total.  {msg}"
 msgstr ""
-"Bởi Vì bạn đang gửi số tiền tối đa có trong tài khoản này nên phí khai thác "
- "coinName} ({fee} {coin}) sẽ bị trừ khỏi tổng số tiền đó.  {msg}"
+"Vì bạn đang gửi số tiền tối đa có trong tài khoản này nên phí giao dịch "
+"{coinName} ({fee} {coin}) sẽ bị trừ vào tổng số tiền gửi.  {msg}"
 
 msgid ""
 "Because you are speeding up this transaction, the {coinName} miner fee "
@@ -601,6 +604,24 @@ msgstr "Dưới giá trị tối thiểu"
 
 msgid "Biometric"
 msgstr "Sinh trắc học"
+
+msgid "First, set unlock method"
+msgstr "Đầu tiên, đặt cách thức mở khóa ứng dụng"
+
+msgid "Adding an extra layer of security to keep your balance and transactions private."
+msgstr "Thêm một lớp bảo mật bổ sung để giữ số dư và giao dịch của bạn ở chế độ riêng tư."
+
+msgid "Unlock with biometric"
+msgstr "Mở khóa bằng sinh trắc học"
+
+msgid "Unlock with passcode"
+msgstr "Mở khóa bằng mật mã"
+
+msgid "Your funds are in your custody"
+msgstr "Tiền đang trong tay của bạn"
+
+msgid "I understand that my funds are held and controlled securely on this device, not by a company."
+msgstr "Tôi hiểu rằng tài sản của tôi được lưu giữ và kiểm soát an toàn trên thiết bị này, không phải bởi một công ty."
 
 msgid "AbcPay Account"
 msgstr "Tài khoản AbcPay"
@@ -2473,7 +2494,7 @@ msgid "Miner Fee"
 msgstr "Phí Thợ Đào"
 
 msgid "Miner Fee Notice"
-msgstr "Miner Fee Notice"
+msgstr "Thông báo phí giao dịch"
 
 msgid "Miner fee"
 msgstr "Phí thợ đào"
@@ -3617,6 +3638,9 @@ msgstr "Share this invitation with your copayers"
 msgid "Share this invitation"
 msgstr "Chia sẻ lời mời"
 
+msgid "Share this"
+msgstr "Chia sẻ"
+
 msgid "Share with friends"
 msgstr "Chia sẻ với bạn bè"
 
@@ -4012,8 +4036,13 @@ msgid ""
 "The payment was created but could not be completed. Please try again from "
 "home screen"
 msgstr ""
-"The payment was created but could not be completed. Please try again from "
-"home screen"
+"Thanh toán đã được tạo nhưng không thể hoàn tất. Vui lòng thử lại từ màn hình chính"
+
+msgid "Your account is in a corrupt state. Please contact support and share "
+"the logs provided."
+msgstr "Tài khoản của bạn ở trạng thái bị hỏng. Vui lòng liên hệ với bộ phận hỗ "
+"trợ và chia sẻ các bản log để được trợ giúp."
+
 
 msgid "The payment was removed by creator"
 msgstr "Người tạo đã xóa khoản thanh toán"
@@ -4513,7 +4542,7 @@ msgid "Updating Gift Cards..."
 msgstr "Updating Gift Cards..."
 
 msgid "Updating transaction history. Please stand by."
-msgstr "Updating transaction history. Please stand by."
+msgstr "Cập nhật lịch sử giao dịch. Xin vui lòng chờ."
 
 msgid "Urgent"
 msgstr "Urgent"

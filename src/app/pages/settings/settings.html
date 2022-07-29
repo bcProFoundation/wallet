@@ -166,7 +166,7 @@
 
       <ion-item class="item-end" button (click)="openAboutPage()">
         <ion-label>
-          {{'About ' + appName | translate}} 
+          {{'About {appName}' | translate: {appName: appName} }} 
         </ion-label>
       </ion-item>
     </ion-list>

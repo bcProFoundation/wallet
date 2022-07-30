@@ -546,10 +546,10 @@ msgstr ""
 
 msgid ""
 "Because you are sending the maximum amount contained in this account, the "
-"{coinName} miner fee ({fee} {coin}) will be deducted from the total.  {msg}"
+"{coinName} miner fee ({fee} {coin}) will be deducted from the total."
 msgstr ""
 "Vì bạn đang gửi số tiền tối đa có trong tài khoản này nên phí giao dịch "
-"{coinName} ({fee} {coin}) sẽ bị trừ vào tổng số tiền gửi.  {msg}"
+"{coinName} ({fee} {coin}) sẽ bị trừ vào tổng số tiền gửi."
 
 msgid ""
 "Because you are speeding up this transaction, the {coinName} miner fee "

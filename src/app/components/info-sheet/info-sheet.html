@@ -19,7 +19,7 @@
     <info-sheet-template *ngSwitchCase="'miner-fee-notice'" type="warning" sheetSecondBtnGroup="true">
       <span sheet-title-text translate>Miner Fee Notice</span>
       <span sheet-text>
-        {{'Because you are sending the maximum amount contained in this account, the {coinName} miner fee ({fee} {coin}) will be deducted from the total.  {msg}' | translate: {coinName: params.coinName, fee: params.fee, coin:params.coin, msg: params.msg} }}
+        {{'Because you are sending the maximum amount contained in this account, the {coinName} miner fee ({fee} {coin}) will be deducted from the total.' | translate: {coinName: params.coinName, fee: params.fee, coin:params.coin} }}
       </span>
      <span sheet-third-button-text translate>GOT IT</span>
 

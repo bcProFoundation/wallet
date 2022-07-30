@@ -23,10 +23,10 @@ export class ClaimVoucherModalComponent implements OnInit {
     if (this.result) {
       // Call api to validate & get data voucher 
       this.dataModal = {
-        name: this.result.pageName || 'Shop',
+        name: this.result.pageName.toUpperCase() || 'Shop',
         voucher: {
           value: this.result.amount / this.currencyProvider.coinOpts[this.coinSupport].unitInfo.unitToSatoshi,
-          chain: this.coinSupport
+          chain: this.coinSupport.toUpperCase()
         },
         walletName: this.result.name,
         keyName: this.result.walletGroupName

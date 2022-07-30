@@ -1,11 +1,10 @@
 <div class="card-gift">
   <img slot="start" src="assets/img/gift-icon.svg" />
-  <h2 class="title-gift">Thanks from {{ dataModal.name | titlecase}}!</h2>
+  <h2 class="title-gift">{{'Thanks from {nameShop}!' | translate : {nameShop: dataModal.name} }}</h2>
   <p class="amount-gift">
-    You received {{ dataModal.voucher.value }} {{ dataModal.voucher.chain | uppercase}} to
-    account
+    {{'You received {voucherValue} {chain} to account' | translate : {voucherValue: dataModal.voucher.value, chain: dataModal.voucher.chain} }}
   </p>
   <p class="sub-gift">
-    {{ dataModal.walletName + ' (of ' + dataModal.keyName + ')' }}
+    {{ dataModal.walletName + ' (of ' + dataModal.keyName + ')' | translate}}
   </p>
 </div>

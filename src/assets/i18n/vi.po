@@ -50,6 +50,9 @@ msgstr "TÀI KHOẢN"
 msgid "{walletsGroupLength} Accounts"
 msgstr "{walletsGroupLength} Tài khoản"
 
+msgid "{walletsGroupLength} Account"
+msgstr "{walletsGroupLength} Tài khoản"
+
 msgid "(max 5)"
 msgstr "(tối đa 5)"
 
@@ -3509,13 +3512,13 @@ msgid "Send Max"
 msgstr "Gửi tối đa"
 
 msgid "Send addresses by email"
-msgstr "Send addresses by email"
+msgstr "Gửi địa chỉ qua email"
 
 msgid "Send by email"
-msgstr "Send by email"
+msgstr "Gửi qua email"
 
 msgid "Send crypto to another wallet"
-msgstr "Send crypto to another wallet"
+msgstr "Gửi tiền điện tử đến một ví khác"
 
 msgid "Send from"
 msgstr "Từ"
@@ -3524,7 +3527,7 @@ msgid "Send max"
 msgstr "Gửi tối đa"
 
 msgid "Send payment to this address"
-msgstr "Send payment to this address"
+msgstr "Gửi thanh toán đến địa chỉ này"
 
 msgid "Send to"
 msgstr "Đến"
@@ -4545,7 +4548,7 @@ msgid "Updating transaction history. Please stand by."
 msgstr "Cập nhật lịch sử giao dịch. Xin vui lòng chờ."
 
 msgid "Urgent"
-msgstr "Urgent"
+msgstr "Khẩn cấp"
 
 msgid "Use Basic QR Code"
 msgstr "Use Basic QR Code"

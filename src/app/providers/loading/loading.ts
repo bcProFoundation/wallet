@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingProvider {
   defaultDuration: any = 1000;
-  defaultMessage: any = 'Loading...';
+  defaultMessage: any = this.translate.instant('Loading...');
+  
   isLoading: boolean = false;
   constructor(
-    private loadingCtr: LoadingController
+    private loadingCtr: LoadingController,
+    private translate: TranslateService
   ) { }
 
   public async simpleLoader(message?) {

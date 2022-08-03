@@ -11,6 +11,8 @@ import { DecimalFormatBalance } from 'src/providers/decimal-format.ts/decimal-fo
 import { ClipboardProvider } from '../../../providers/clipboard/clipboard';
 import { Logger } from '../../../providers/logger/logger';
 import { PlatformProvider } from '../../../providers/platform/platform';
+import { TranslateService } from '@ngx-translate/core';
+
 
 // Pages
 import { RecipientModel } from '../../../components/recipient/recipient.model';
@@ -74,6 +76,7 @@ export class SelectInputsSendPage {
     private walletProvider: WalletProvider,
     private configProvider: ConfigProvider,
     private currencyProvider: CurrencyProvider,
+    private translate: TranslateService,
     private themeProvider: ThemeProvider
   ) {
     if (this.router.getCurrentNavigation()) {
@@ -90,7 +93,7 @@ export class SelectInputsSendPage {
     }))
 
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
-    this.titlePage = `Send  ${(this.wallet.coin as String).toUpperCase()}`;
+    this.titlePage = this.translate.instant("Send ") + (this.wallet.coin as String).toUpperCase();
     this.subTitle = `(from select inputs)`;
 
     this.isCordova = this.platformProvider.isCordova;

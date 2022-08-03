@@ -9,6 +9,8 @@ import { CopayersPage } from '../add/copayers/copayers';
 
 // Providers
 import { AnalyticsProvider } from '../../providers/analytics/analytics';
+import { TranslateService } from '@ngx-translate/core';
+
 // import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
@@ -65,7 +67,8 @@ export class AccountsPage {
     private modalCtrl: ModalController,
     private loadingCtr: LoadingController,
     private navParams: NavParams,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private translate: TranslateService
   ) {
     this.collapsedGroups = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -431,7 +434,7 @@ export class AccountsPage {
 
   async presentToast(finishText, cssClass?) {
     const toast = await this.toastController.create({
-      message: finishText,
+      message: this.translate.instant(finishText),
       duration: 3000,
       position: 'bottom',
       animated: true,

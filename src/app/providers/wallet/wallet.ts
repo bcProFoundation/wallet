@@ -1321,8 +1321,7 @@ export class WalletProvider {
           password
         );
       } catch (err) {
-        const title =
-          'Your wallet is in a corrupt state. Please contact support and share the logs provided';
+        const title = this.translate.instant('Your account is in a corrupt state. Please contact support and share the logs provided.');
         let message;
         try {
           message = err instanceof Error ? err.toString() : JSON.stringify(err);

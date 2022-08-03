@@ -3,7 +3,7 @@
     <div class="header-container">
       <ion-item class="search-input-ion-item">
         <ion-icon slot="start" src="assets/img/search-{{currentTheme}}.svg"></ion-icon>
-        <ion-input [(ngModel)]="search" (ngModelChange)="processInput()" placeholder="search">
+        <ion-input [(ngModel)]="search" (ngModelChange)="processInput()" [placeholder]=" 'Search a contact' | translate ">
         </ion-input>
         <ion-icon src="assets/img/recipient-component/Subtract.svg" *ngIf="search && search.length > 0" slot="end"
           class="erase-icon" (click)="cleanSearch()">

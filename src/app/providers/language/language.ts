@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { ConfigProvider } from '../config/config';
+import { Device } from '@capacitor/device';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -15,11 +16,15 @@ export class LanguageProvider {
     {
       name: 'English',
       isoCode: 'en'
+    },
+    {
+      name: 'Vietnamese',
+      isoCode: 'vi'
     }
     // {
-    //   name: 'Español',
-    //   isoCode: 'es'
-    // },
+    //    name: 'Español',
+    //    isoCode: 'es'
+    // }
     // {
     //   name: 'Français',
     //   isoCode: 'fr'
@@ -72,14 +77,15 @@ export class LanguageProvider {
     });
   }
 
-  public load() {
+  public async load() {
     let lang = this.configProvider.get().wallet.settings.defaultLanguage;
     if (!_.isEmpty(lang)) this.current = lang;
     else {
       // Get from browser
-      const browserLang = this.translate.getBrowserLang();
-      this.current = this.getName(browserLang)
-        ? browserLang
+      // const browserLang = this.translate.getBrowserLang();
+      let languageDevice = await this.detectLanguageDevice();
+      this.current = this.getName(languageDevice)
+        ? languageDevice
         : this.getDefault();
     }
     this.logger.info('Default language: ' + this.current);
@@ -103,6 +109,10 @@ export class LanguageProvider {
       }),
       'name'
     );
+  }
+
+  public async detectLanguageDevice() {
+    return await Device.getLanguageCode().then(lang => lang.value);
   }
 
   private getDefault(): string {

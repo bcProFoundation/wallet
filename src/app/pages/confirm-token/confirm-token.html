@@ -16,7 +16,7 @@
           </div>
 
           <div class="row-container">
-            <div class="item-name">Subtotal</div>
+            <div class="item-name" translate>Subtotal</div>
             <div class="item-detail ellipsis">
               <span>{{amountTokenToSend}} {{token?.tokenInfo?.symbol | uppercase}}</span>
             </div>
@@ -85,7 +85,7 @@
       <ion-item *ngIf="!toAddressName" class="add-address-book">
         <mat-form-field appearance="outline">
             <mat-label translate>Address book name</mat-label>
-            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book'" translate>
+            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book' | translate">
           </mat-form-field>
       </ion-item>
 

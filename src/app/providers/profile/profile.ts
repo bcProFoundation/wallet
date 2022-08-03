@@ -62,15 +62,15 @@ export class ProfileProvider {
   public resultPrimaryAccount = {
     added: {
       status: false,
-      message: 'Account added to home'
+      message: 'Account added successfully to Home!'
     },
     duplicate: {
       status: false,
-      message: 'Account already in list'
+      message: 'Account already existed!'
     },
     full: {
       status: false,
-      message: 'There’s no slot for adding to home. Please remove account from home.'
+      message: 'Maximum 5 accounts has reached. Please remove account from Home first.'
     }
   }
   public walletsGroupsHome: any = [];

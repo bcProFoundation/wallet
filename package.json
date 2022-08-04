@@ -15,7 +15,7 @@
     "config": "ts-node ./scripts/setenv.ts",
     "clean": "rm -rf android && rm -rf ios",
     "start:android": "ionic build && ionic cap sync android",
-    "start:ios": "ionic build && ionic cap sync ios && ionic cap open ios",
+    "start:ios": "ionic build && npm run apply-config-pushnotification && ionic cap sync ios && ionic cap open ios",
     "build:android": "npm run env:dev && ionic build && ionic cap sync android && cd android && ./gradlew assembleDebug && cd ..",
     "build:ios": "npm run env:dev && ionic build && ionic cap sync ios",
     "build:android-release": "npm run env:prod && npm run build-prod && ionic cap sync android && cd android && ./gradlew assembleRelease && cd ..",
@@ -39,7 +39,8 @@
     "final:android-release": "npm run build:android-release && rm -rf apks && npm run generate:android-bundle && npm run sign:android",
     "final:android-apk": "cd android && ./gradlew assembleRelease && cd ..",
     "final:android-debug": "npm run build:android && rm -rf apks && bundletool build-apks --bundle=./android/app/build/outputs/bundle/release/app-release.aab --output=./apks/apcpay-debug.apks",
-    "final:mobile": "ionic build --prod && npx cap copy && npx cap sync"
+    "final:mobile": "ionic build --prod && npx cap copy && npx cap sync",
+    "apply-config-pushnotification": "cp resources/ios/Podfile ios/App/Podfile && cp resources/ios/AppDelegate.swift ios/App/App/AppDelegate.swift"
   },
   "private": true,
   "dependencies": {

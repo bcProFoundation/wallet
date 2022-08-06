@@ -113,7 +113,7 @@ export class RecipientComponent implements OnInit {
 
   @Output() deleteEvent? = new EventEmitter<number>();
   @Output() sendMaxEvent? = new EventEmitter<boolean>();
-  @Output() sendOfficialInfo? = new EventEmitter<PageDto>();
+  @Output() sendOfficialInfo? = new EventEmitter<PageModel>();
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',

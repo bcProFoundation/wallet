@@ -19,7 +19,7 @@
     <info-sheet-template *ngSwitchCase="'miner-fee-notice'" type="warning" sheetSecondBtnGroup="true">
       <span sheet-title-text translate>Miner Fee Notice</span>
       <span sheet-text>
-        {{'Because you are sending the maximum amount contained in this account, the {coinName} miner fee ({fee} {coin}) will be deducted from the total.  {msg}' | translate: {coinName: params.coinName, fee: params.fee, coin:params.coin, msg: params.msg} }}
+        {{'Because you are sending the maximum amount contained in this account, the {coinName} miner fee ({fee} {coin}) will be deducted from the total.' | translate: {coinName: params.coinName, fee: params.fee, coin:params.coin} }}
       </span>
      <span sheet-third-button-text translate>GOT IT</span>
 
@@ -144,7 +144,8 @@
 
     <info-sheet-template *ngSwitchCase="'delete-key'" sheetSecondBtnGroup={{params?.secondBtnGroup}} type="danger">
       <span sheet-title-text translate>Permanently delete?</span>
-      <span sheet-text translate>All accounts using this key are permanently deleted. <span class="text-danger" translate>This action cannot be reversed</span></span>
+      <!-- TODO language translate: add support language translate -->
+      <span sheet-text translate>All accounts using this key are permanently deleted. <span class="text-danger" translate>This action cannot be reversed.</span></span>
       <span sheet-third-button-text translate>Cancel</span>
       <span sheet-fourth-button-text translate>Delete</span>
     </info-sheet-template>
@@ -157,13 +158,15 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'help-and-support'" isShowTitle={{params?.isShowTitle}} sheetSecondBtnGroup={{params?.secondBtnGroup}}>
-      <span sheet-text translate>Help and support information is avalable at the website</span>
-      <span sheet-third-button-text  translate>Cancel</span>
+      <!-- TODO language translate: handle language translate -->
+      <span sheet-text translate>Help and support information is available at the website</span>
+      <span sheet-third-button-text translate>Cancel</span>
       <span sheet-fourth-button-text translate>Open</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'no-amount-xec'" sheetSecondBtnGroup={{params?.secondBtnGroup}} type="info">
       <span sheet-title-text translate>Insufficient funds</span>
+      <!-- TODO language translate: handle language translate -->
       <span sheet-text translate>In order to send eToken, your eCash (XEC) account must have the minimum balance greater than {{eTokenFee}} XEC. Please see <a (click)="openInBrowser('https://docs.cashtab.com/docs/#send-etokens')">#send-etoken</a> for more detail!</span>
       <span sheet-third-button-text translate>Got it</span>
     </info-sheet-template>
@@ -391,7 +394,7 @@
     <info-sheet-template *ngSwitchCase="'network-coin-warning'" type="warning">
       <span sheet-title-text translate>Warning!</span>
       <span *ngIf="!params.isERCToken; else erc20Warning" sheet-text>
-        {{'Depositing any other crypto asset besides {coin} to this address may result in the total loss of your funds. AbcPay is not responsible for any funds loss  due to the deposit of a different asset, wallet or network.' | translate: {coin: params.coin } }}
+        {{'Depositing any other crypto asset besides {coin} to this address may result in the total loss of your funds. AbcPay is not responsible for any funds loss due to the deposit of a different asset, wallet or network.' | translate: {coin: params.coin } }}
         <span *ngIf="params.coin === 'XRP'">
           <br>
           <br>
@@ -592,7 +595,7 @@
 
     <info-sheet-template *ngSwitchCase="'correct-recovery-prhase'" type="success" sheetSecondBtnGroup="true">
       <span sheet-title-text translate>Perfect!</span>
-      <span sheet-text>
+      <span sheet-text translate>
         In order to protect your funds from being accessible to hackers and thieves, store this recovery phrase in a safe and secure place.
       </span>
       <span sheet-third-button-text translate>OK</span>

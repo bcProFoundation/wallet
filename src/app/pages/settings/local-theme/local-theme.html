@@ -3,7 +3,7 @@
     <ion-list class="settings-list bp-list">
       <ion-radio-group [value]="selectedTheme">
         <ion-item *ngFor="let t of availableThemes | keys">
-          <ion-label>
+          <ion-label translate>
             {{ t.value.name }}
           </ion-label>
           <ion-radio (click)="save(t.key)" [value]="t.key"></ion-radio>

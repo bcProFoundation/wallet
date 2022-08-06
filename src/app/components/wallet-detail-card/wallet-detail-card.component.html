@@ -105,7 +105,7 @@
             <div *ngIf="isHomeCard">
               <ion-button class="btn-send" fill="clear" (click)="goToSendPage()">
                 <ion-icon class="icon-refresh" slot="start" src="assets/img/wallet-details/ic-send-light.svg"></ion-icon>
-                Send
+                {{ 'Send' | translate }}
               </ion-button>
             </div>
           </div>
@@ -211,7 +211,7 @@
             <div *ngIf="isHomeCard">
               <ion-button class="btn-send" fill="clear" (click)="goToSendPageToken()">
                 <ion-icon class="icon-refresh" slot="start" src="assets/img/wallet-details/ic-send-light.svg"></ion-icon>
-                Send
+                {{ 'Send' | translate }}
               </ion-button>
             </div>
           </div>

@@ -394,6 +394,7 @@ export class ImportWalletPage {
         if (option || typeof option === 'undefined') {
           // Go back
           this.logger.debug('Go back clicked');
+          this.onGoingProcessProvider.clear();
         } else {
           // Continue anyway
           this.logger.debug('Continue anyway clicked');

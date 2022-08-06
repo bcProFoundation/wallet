@@ -367,7 +367,7 @@ export class WalletDetailCardComponent {
 
   public removeOutGroupsHome() {
     if (this.profileProvider.isLastItemPrimaryList()) {
-      this.presentToast('Can not remove last item in list', 'toast-warning');
+      this.presentToast('Can not remove the last account in Home!', 'toast-warning');
     } else {
       let walletObj = {
         walletId: this.wallet.id,
@@ -375,12 +375,12 @@ export class WalletDetailCardComponent {
       }
       let result = this.profileProvider.removeWalletGroupsHome(walletObj);
       if (result) {
-        this.presentToast('Remove account successful');
+        this.presentToast('Removed account successfully!');
         this.events.publish('Local/GetListPrimary', true);
         this.flagOptionRemove = !this.flagOptionRemove;
         this.handleOnDrag();
       } else {
-        this.presentToast('Remove account unsuccessful');
+        this.presentToast('Removed account unsuccessfully!');
       }
     }
   }
@@ -405,7 +405,7 @@ export class WalletDetailCardComponent {
 
   async presentToast(finishText, cssClass?) {
     const toast = await this.toastController.create({
-      message: finishText,
+      message: this.translate.instant(finishText),
       duration: 3000,
       position: 'bottom',
       animated: true,

@@ -12,7 +12,7 @@
 <ion-content>
   <ion-item lines="none" class="ion-padding search-container" lines="none">
     <ion-icon slot="start" name="search-outline"></ion-icon>
-    <ion-input class="search-tx-modal" placeholder="{{'search for transaction history' | translate}}" [(ngModel)]="search" (ngModelChange)="updateSearchInput(search)"></ion-input>
+    <ion-input class="search-tx-modal" [placeholder]="'Search for transaction history' | translate" [(ngModel)]="search" (ngModelChange)="updateSearchInput(search)"></ion-input>
   </ion-item>
 
   <ion-list lines="none" *ngIf="txHistorySearchResults && txHistorySearchResults[0]" class="tx-history">
@@ -82,17 +82,17 @@
         <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">
           <div class="tx-info">
             <ng-container *ngIf="tx.confirmations <= 0">
-              <p class="status" *ngIf="tx.action == 'sent'">{{'Pending'| translate}}</p>
-              <p class="status" *ngIf="tx.action == 'moved'">{{'Moving'| translate}}</p>
-              <p class="status" *ngIf="tx.action == 'received'">{{'Pending' | translate}}</p>
+              <p class="status" *ngIf="tx.action == 'sent'">{{ 'Pending' | translate }}</p>
+              <p class="status" *ngIf="tx.action == 'moved'">{{ 'Moving' | translate }}</p>
+              <p class="status" *ngIf="tx.action == 'received'">{{ 'Pending' | translate }}</p>
             </ng-container>
             <ng-container *ngIf="tx.confirmations > 0">
-              <p class="status" *ngIf="tx.action == 'invalid'">Invalid</p>
-              <p class="status" *ngIf="tx.action == 'moved'">Sent to self</p>
+              <p class="status" *ngIf="tx.action == 'invalid'">{{ 'Invalid' | translate }}</p>
+              <p class="status" *ngIf="tx.action == 'moved'">{{ 'Sent to self' | translate }}</p>
             </ng-container>
-            <p class="status" *ngIf="tx.isGenesis">Genesis</p>
-            <p class="status" *ngIf="tx.action == 'mined'">Mined</p>
-            <p class="status" *ngIf="tx.action == 'immature'">Immature</p>
+            <p class="status" *ngIf="tx.isGenesis">{{ 'Genesis' | translate }}</p>
+            <p class="status" *ngIf="tx.action == 'mined'">{{ 'Mined' | translate }}</p>
+            <p class="status" *ngIf="tx.action == 'immature'">{{ 'Immature' | translate</p>
             <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |
               amTimeAgo}}</p>
             <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |

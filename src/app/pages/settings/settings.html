@@ -45,7 +45,7 @@
         <ion-label>
           {{ 'Theme' | translate }}
         </ion-label>
-        <ion-note *ngIf="appTheme" slot="end">
+        <ion-note *ngIf="appTheme" slot="end" translate>
           {{ appTheme }}
         </ion-note>
       </ion-item>
@@ -159,14 +159,14 @@
       </ion-item>
 
       <ion-item button (click)="openHelpExternal()">
-        <ion-label translate="">
+        <ion-label translate>
           Help &amp; Support
         </ion-label>
       </ion-item>
 
       <ion-item class="item-end" button (click)="openAboutPage()">
         <ion-label>
-          {{'About ' + appName | translate}} 
+          {{'About {appName}' | translate: {appName: appName} }} 
         </ion-label>
       </ion-item>
     </ion-list>

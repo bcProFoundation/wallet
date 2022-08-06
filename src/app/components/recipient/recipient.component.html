@@ -1,5 +1,5 @@
 <div class="recipient-header" [ngClass]="{'lines-top': index > 0}" *ngIf="index >= 0">
-  <p *ngIf="isShowDelete && !recipient.isOfficialInfo" [ngClass]="{'first-item': index == 0}" class="recipient-header-title">{{'RECIPIENT ' + (index + 1) | translate}}</p>
+  <p *ngIf="isShowDelete && !recipient.isOfficialInfo" [ngClass]="{'first-item': index == 0}" class="recipient-header-title">{{'RECIPIENT ' | translate}} {{(index + 1)}}</p>
   <img *ngIf="isShowDelete && !recipient.isOfficialInfo" (click)="informDelete()" class="x-button"
     src="assets/img/recipient-component/x-{{darkThemeString}}.svg">
 </div>
@@ -12,7 +12,7 @@
     <ion-item *ngIf="!isDonation"  lines="none" class="search-address-wrapper">
       <ion-input class="transfer-to-input" 
         [readonly]="recipient.name.length > 0 || recipient.isSpecificAmount"
-        placeholder="{{'Paste address here' | translate}}"
+        [placeholder]="'Paste address here' | translate"
         [(ngModel)]="recipient.name || searchValue"
         [value]="recipient.name"
         (ionChange)="processInput()">
@@ -60,7 +60,7 @@
         src="assets/img/recipient-component/Union-{{darkThemeString}}.svg">
     </div>
     <ion-item *ngIf="isShowReceiveLotus" lines="none" class="search-address-wrapper">
-      <ion-input class="transfer-to-input" [readonly]="recipient.name.length > 0" placeholder="Paste address here"
+      <ion-input class="transfer-to-input" [readonly]="recipient.name.length > 0" [placeholder]="'Paste address here' | translate"
         [(ngModel)]="searchValue" [value]="recipient.name" (ionChange)="processInput()">
       </ion-input>
       <ion-icon src="assets/img/recipient-component/Subtract.svg"

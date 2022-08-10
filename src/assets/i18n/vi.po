@@ -2224,6 +2224,9 @@ msgstr "URL không hợp lệ"
 msgid "Invalid address"
 msgstr "Địa chỉ không hợp lệ"
 
+msgid "Invalid QR code"
+msgstr "Mã QR không hợp lệ"
+
 msgid "Invalid data"
 msgstr "Dữ liệu không hợp lệ"
 

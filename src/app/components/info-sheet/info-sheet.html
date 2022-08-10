@@ -358,8 +358,9 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'process-fail-voucher'" sheetSecondBtnGroup="true" type="danger">
-      <span sheet-title-text translate>Proccess failed</span>
-      <span sheet-text translate>Because you are sending the maximum amount contained in this account, the Lotus miner fee will be deducted from the total.</span>
+      <span sheet-title-text translate>Could not process!</span>
+      <!-- TODO: handling error code return to determine correct message of failure -->
+      <span sheet-text translate>Something wrong with the claim code (i.e. not existed, expried or run out of funds). Please contact {registeredBiz} or AbcPay team for support!</span>
       <span sheet-fourth-button-text translate>Scan again</span>
     </info-sheet-template>
 

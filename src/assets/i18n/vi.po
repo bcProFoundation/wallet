@@ -3897,6 +3897,23 @@ msgstr "Text"
 msgid "Thanks!"
 msgstr "Thanks!"
 
+msgid "Thanks from {nameShop}!"
+msgstr "Lời cám ơn từ {nameShop}!"
+
+msgid "{walletName} (of {keyName})"
+msgstr "{walletName} (của khoá {keyName})"
+
+msgid "You received {voucherValue} {chain} to account"
+msgstr "Bạn đã nhận được {voucherValue} {chain} vào tài khoản"
+
+msgid "Could not process!"
+msgstr "Không thể xử lý!"
+
+msgid "Something wrong with the claim code (i.e. not existed, expried or "
+"run out of funds). Please contact {registeredBiz} or AbcPay team for support!"
+msgstr "Đã xảy ra lỗi với mã xác nhận quyền sở hữu (mã có thể không tồn tại, "
+"hết hạn hoặc hết số dư). Vui lòng liên hệ với {registeredBiz} hoặc AbcPay để được hỗ trợ!"
+
 msgid "The \"Key\" to your funds"
 msgstr "The \"Key\" to your funds"
 

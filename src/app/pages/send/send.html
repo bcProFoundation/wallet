@@ -86,12 +86,12 @@
     <ng-container *ngIf="isOfficialInfo ; else otherTemplate">
       <page-slide-to-accept #slideButton *ngIf="isCordova && wallet"
       [ngClass]="{'slide-confirm-fast': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}"
-      [buttonText]="'Slide to send'" [isDogecoin]="false" (slideDone)="approve()">
+      [buttonText]="'Slide to send' | translate" [isDogecoin]="false" (slideDone)="approve()">
     </page-slide-to-accept>
     <ion-toolbar *ngIf="!isCordova && wallet">
       <ion-button expand="full" class="button-footer" (click)="approve()"
         [disabled]="!wallet || checkBeforeGoToConfirmPage()">
-        Click to send
+        {{'Click to send' | translate}}
       </ion-button>
     </ion-toolbar>
     </ng-container >

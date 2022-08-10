@@ -5,6 +5,6 @@
     {{'You received {voucherValue} {chain} to account' | translate : {voucherValue: dataModal.voucher.value, chain: dataModal.voucher.chain} }}
   </p>
   <p class="sub-gift">
-    {{ dataModal.walletName + ' (of ' + dataModal.keyName + ')' | translate}}
+    {{'{walletName} (of {keyName})' | translate : {walletName: dataModal.walletName, keyName: dataModal.keyName} }}
   </p>
 </div>

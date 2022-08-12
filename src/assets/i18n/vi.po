@@ -2712,19 +2712,19 @@ msgid "Nonce"
 msgstr "Nonce"
 
 msgid "Normal"
-msgstr "Normal"
+msgstr "Bình thường"
 
 msgid "Not authorized"
-msgstr "Not authorized"
+msgstr "Không được phép"
 
 msgid "Not enough confirmed funds"
-msgstr "Not enough confirmed funds"
+msgstr "Không đủ số dư đã xác nhận"
 
 msgid "Not enough funds"
-msgstr "Not enough funds"
+msgstr "Không đủ số dư"
 
 msgid "Not enough funds for fee"
-msgstr "Not enough funds for fee"
+msgstr "Không đủ số dư để trả phí"
 
 msgid ""
 "Not including the private key allows to check the account balance, "
@@ -2737,16 +2737,16 @@ msgstr ""
 "(ký) đề xuất, do đó, nguồn vốn sẽ không thể tiếp cận được từ việc xuất tài khoản."
 
 msgid "Not right now"
-msgstr "Not right now"
+msgstr "Không phải bây giờ"
 
 msgid "Not set"
-msgstr "Not set"
+msgstr "Không được thiết lập"
 
 msgid "Not valid bitcoin address"
-msgstr "Not valid bitcoin address"
+msgstr "Địa chỉ bitcoin không hợp lệ"
 
 msgid "Notes"
-msgstr "Notes"
+msgstr "Ghi chú"
 
 msgid "No notifications"
 msgstr "Không có thông báo"
@@ -2827,11 +2827,11 @@ msgstr "Open Help Center"
 msgid "Open Translation Community"
 msgstr "Open Translation Community"
 
-msgid "Open Wallet"
-msgstr "Open Wallet"
+msgid "Open Account"
+msgstr "Mở tài khoản"
 
 msgid "Open settings"
-msgstr "Open settings"
+msgstr "Mở cài đặt"
 
 msgid "Or its equivalent in {{ fiatCurrency?.toUpperCase() }}."
 msgstr "Or its equivalent in {{ fiatCurrency?.toUpperCase() }}."
@@ -2889,7 +2889,7 @@ msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
 msgid "Paste from Clipboard"
-msgstr "Paste from Clipboard"
+msgstr "Dán từ Clipboard"
 
 msgid "Paste address here"
 msgstr "Dán địa chỉ vào đây"
@@ -3153,7 +3153,7 @@ msgid "RBF transaction"
 msgstr "RBF transaction"
 
 msgid "Random"
-msgstr "Random"
+msgstr "Ngẫu nhiên"
 
 msgid "Re-Import Wallets"
 msgstr "Re-Import Wallets"
@@ -3285,7 +3285,7 @@ msgid "Reminder"
 msgstr "Reminder"
 
 msgid "Remove"
-msgstr "Remove"
+msgstr "Loại bỏ"
 
 msgid "Removing Payment Request Data"
 msgstr "Removing Payment Request Data"
@@ -3345,7 +3345,7 @@ msgid "Restore from backup"
 msgstr "Khôi phục lại từ bản sao lưu"
 
 msgid "Retrieving inputs information..."
-msgstr "Retrieving inputs information..."
+msgstr "Truy xuất thông tin đầu vào ..."
 
 msgid "Retry camera"
 msgstr "Thử lại máy ảnh"
@@ -3669,7 +3669,7 @@ msgid "Shop with Crypto"
 msgstr "Shop with Crypto"
 
 msgid "Show"
-msgstr "Show"
+msgstr "Hiển thị"
 
 msgid "Show \"Buy Crypto\""
 msgstr "Show \"Buy Crypto\""

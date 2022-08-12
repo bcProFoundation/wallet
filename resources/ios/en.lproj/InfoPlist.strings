@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  App
+
+  Created by Binh Vo on 8/12/22.
+  
+*/
+
+"NSCameraUsageDescription" = "This app needs Camera Permission to scan QR code.";
+"NSFaceIDUsageDescription" = "This allows you to securely sign into \"AbcPay Wallet\".";
+"NSUserNotificationsUsageDescription" = "Notification may include alerts, sounds and icon badges. These can be configured in Settings.";

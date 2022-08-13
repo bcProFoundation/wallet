@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  App
+
+  Created by Binh Vo on 8/12/22.
+  
+*/
+
+"NSCameraUsageDescription" = "Ứng dụng này cần Quyền máy ảnh để quét mã QR.";
+"NSFaceIDUsageDescription" = "Điều này cho phép bạn đăng nhập an toàn vào \"Ví AbcPay\".";
+"NSUserNotificationsUsageDescription" = "Thông báo có thể bao gồm cảnh báo, âm thanh và biểu tượng. Chúng có thể được cấu hình trong Cài Đặt.";

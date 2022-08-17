@@ -4746,6 +4746,16 @@ msgstr ""
 msgid "Wallets"
 msgstr "Wallets"
 
+msgid ""
+"Vietnamese"
+msgstr ""
+"Vietnamese"
+
+msgid ""
+"English"
+msgstr ""
+"English"
+
 msgid "Warning"
 msgstr "Warning"
 

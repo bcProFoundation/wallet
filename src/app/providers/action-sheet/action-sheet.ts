@@ -91,6 +91,7 @@ export type InfoSheetType =
   | 'delete-contact'
   | 'no-amount-xec'
   | 'process-fail-voucher'
+  | 'process-select-wallet'
 
 export type OptionsSheetType =
   | 'wallet-options'

@@ -364,6 +364,13 @@
       <span sheet-fourth-button-text translate>Scan again</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'process-select-wallet'" sheetSecondBtnGroup="true" type="warning">
+      <span sheet-title-text>{{'Missing primary account' | translate }}</span>
+      <span sheet-text translate>{{'Please ensure {chain} account is available and add to home as primary account in order to process a claim {coinName}. Then try again!' | translate : {coinName: 'XPI', chain: 'Lotus'} }}</span>
+      <span sheet-third-button-text translate>Got it</span>
+      <span sheet-fourth-button-text translate>Continue</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'new-key'" type="warning">
       <span sheet-title-text translate>Store this key separately</span>
       <span sheet-text translate>

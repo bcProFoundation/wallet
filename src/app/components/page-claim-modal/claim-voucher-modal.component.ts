@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavParams } from '@ionic/angular';
 import { CurrencyProvider } from 'src/app/providers';
 
@@ -6,6 +6,7 @@ import { CurrencyProvider } from 'src/app/providers';
   selector: 'claim-voucher-modal',
   templateUrl: './claim-voucher-modal.component.html',
   styleUrls: ['./claim-voucher-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ClaimVoucherModalComponent implements OnInit {
   name: string;

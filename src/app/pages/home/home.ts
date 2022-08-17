@@ -23,7 +23,8 @@ import {
   RateProvider,
   ReleaseProvider,
   ThemeProvider,
-  TokenProvider
+  TokenProvider,
+  WalletProvider
 } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../providers/config/config';
@@ -129,7 +130,8 @@ export class HomePage {
     private tokenProvider: TokenProvider,
     private loadingProvider: LoadingProvider,
     private lixiLotusProvider: LixiLotusProvider,
-    private recaptchaV3Service: ReCaptchaV3Service
+    private recaptchaV3Service: ReCaptchaV3Service,
+    private walletProvider: WalletProvider
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -564,10 +566,12 @@ export class HomePage {
     this.router.navigate(['/chart-view']);
   }
 
-  public addToHome() {
+  public addToHome(coin?: string, network?: string) {
     this.router.navigateByUrl('/accounts-page', {
       state: {
-        isAddToHome: true
+        isAddToHome: true,
+        coin: coin,
+        network: network
       }
     });
   }
@@ -576,19 +580,25 @@ export class HomePage {
     // Get first wallet lotus in home list
     let wallet = this.profileProvider.getFirstLotusWalletHome();
     this.executeImportantAction();
-    if (wallet) {
+    if (!_.isEmpty(wallet)) {
       let message = 'Loading...';
+      let claimWalletAddress = '';
       let codeClaimSplit = claimCode?.value ? claimCode.value.replace('lixi_','') : '';
       this.loadingProvider.simpleLoader(message);
+      await this.walletProvider
+      .getAddress(wallet, false)
+      .then(addr => {
+        return addr ? claimWalletAddress = addr : claimWalletAddress = '';
+      })
       if (claimCode?.value) claimCode.value.replace('lixi_','')
       const bodyClaim = {
         captchaToken: 'isAbcpay',
-        claimAddress: wallet.lastAddress,
+        claimAddress: claimWalletAddress,
         claimCode: codeClaimSplit
       }
       // lixi_w6YfK1qp5
       // Call provider to claim xpi from lixilotus/api
-      this.lixiLotusProvider.claimVoucher(bodyClaim)
+      await this.lixiLotusProvider.claimVoucher(bodyClaim)
       .then(async (data) => {
         const copayerModal = await this.modalCtrl.create({
           component: ClaimVoucherModalComponent,
@@ -617,6 +627,17 @@ export class HomePage {
             this.router.navigate(['/tabs/scan']);
           }
         });
+      });
+    } else {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'process-select-wallet'
+      );
+      infoSheet.present();
+      this.loadingProvider.dismissLoader();
+      infoSheet.onDidDismiss(async option => {
+        if (option) {
+          this.addToHome('xpi', 'livenet');
+        }
       });
     }
   }

@@ -1,17 +1,20 @@
-.card-gift {
-    text-align: center;
-    padding: 2rem 0;
-    .title-gift {
-        line-height: 32px;
-    }
-    p {
-        color: rgba(224, 228, 230, 0.6); 
-        font-size: 16px;
-        &.amount-gift {
-            margin-bottom: 0;
+claim-voucher-modal {
+    .card-gift {
+        text-align: center;
+        padding: 2rem 0;
+        .title-gift {
+            line-height: 32px;
+            color: #060606;
         }
-        &.sub-gift {
-            margin-top: 0;
+        p {
+            color: rgba(0, 30, 46, 0.6);
+            font-size: 16px;
+            &.amount-gift {
+                margin-bottom: 0;
+            }
+            &.sub-gift {
+                margin-top: 0;
+            }
         }
     }
 }

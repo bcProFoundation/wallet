@@ -110,6 +110,7 @@ import { TokenInforPage } from './token-info/token-info';
 import { AccountsPage } from './accounts/accounts';
 import { SearchContactPage } from './search/search-contact/search-contact.component';
 import { SelectFlowPage } from './onboarding/select-flow/select-flow';
+import { SwapPage } from './swap/swap.component';
 
 export const PAGES = [
   AddPage,
@@ -203,6 +204,7 @@ export const PAGES = [
   CoinSelectorPage,
   DisclaimerModal,
   SlideToAcceptPage,
+  SwapPage,
   LocalThemePage,
   NavigationPage,
   NewFeaturePage,

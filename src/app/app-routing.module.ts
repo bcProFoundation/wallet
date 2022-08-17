@@ -67,15 +67,21 @@ import { SettingsPage } from './pages/settings/settings';
 import { SearchContactPage } from './pages/search/search-contact/search-contact.component';
 import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
 import { ChartViewPage } from './pages/chart-view/chart-view';
+import { FeatureGuard } from './providers/feature-gaurd.service';
+import { SwapPage } from './pages/swap/swap.component';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
   },
   {
     path: 'select-flow',
-    component: SelectFlowPage
+    component: SelectFlowPage,
+    canLoad: [FeatureGuard],
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'feature-education',
@@ -346,6 +352,14 @@ const routes: Routes = [
   {
     path: 'chart-view',
     component: ChartViewPage
+  },
+  {
+    path: 'swap',
+    component: SwapPage,
+    canActivate: [FeatureGuard],
+    data: {
+      feature: 'swap'
+    }
   }
 ];
 

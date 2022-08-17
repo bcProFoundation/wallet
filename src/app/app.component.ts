@@ -91,14 +91,14 @@ export class CopayApp {
     private imageLoaderConfig: ImageLoaderConfigService,
     private navasd: NavController
   ) {
-    this.imageLoaderConfig.setFileNameCachedWithExtension(true);
-    this.imageLoaderConfig.useImageTag(true);
-    this.imageLoaderConfig.enableSpinner(false);
-    this.initializeApp();
-    this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    if (!this.platformProvider.isCordova) {
-      this.renderer.addClass(document.body, 'bg-desktop');
-    }
+    // this.imageLoaderConfig.setFileNameCachedWithExtension(true);
+    // this.imageLoaderConfig.useImageTag(true);
+    // this.imageLoaderConfig.enableSpinner(false);
+    // this.initializeApp();
+    // this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
+    // if (!this.platformProvider.isCordova) {
+    //   this.renderer.addClass(document.body, 'bg-desktop');
+    // }
   }
 
   ngOnDestroy() {
@@ -111,15 +111,15 @@ export class CopayApp {
   }
 
   initializeApp() {
-    this.platform
-      .ready()
-      .then(async readySource => {
+    // this.platform
+    //   .ready()
+    //   .then(async readySource => {
        
-        this.onPlatformReady(readySource);
-      })
-      .catch(e => {
-        this.logger.error('Platform is not ready.', e);
-      });
+    //     this.onPlatformReady(readySource);
+    //   })
+    //   .catch(e => {
+    //     this.logger.error('Platform is not ready.', e);
+    //   });
   }
 
   private onPlatformReady(readySource): void {

@@ -5398,7 +5398,7 @@ msgstr ""
 msgid ""
 "Please ensure {chain} account is available and add to home as primary account in order to process a claim {coinName}. Then try again!"
 msgstr ""
-"Hãy đảm bảo bạn đã có tài khoản tài khoản {chain} có sẵn và thêm vào nhà làm tài khoản chính để xử lý yêu cầu {coinName}. Sau đó, hãy thử lại!"
+"Hãy đảm bảo bạn đã có tài khoản {chain} có sẵn và thêm vào nhà làm tài khoản chính để xử lý yêu cầu {coinName}. Sau đó, hãy thử lại!"
 
 msgid ""
 "English"

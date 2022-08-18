@@ -569,6 +569,16 @@ msgstr ""
 "thiết lập lại."
 
 msgid ""
+"If you need to regain access to your account because you have forgotten or lost the encrypt password, you must restore the account using the 12 word recovery phrase."
+msgstr ""
+"Nếu bạn cần lấy lại quyền truy cập vào tài khoản của mình do quên hoặc mất mật khẩu mã hóa, bạn phải khôi phục lại tài khoản bằng cách sử dụng cụm từ khôi phục 12 từ."
+
+msgid ""
+"If you do not have the recovery phrase, you will not be able to regain access to your account."
+msgstr ""
+"Nếu bạn không có cụm từ khôi phục, bạn sẽ không thể lấy lại quyền truy cập vào tài khoản của mình."
+
+msgid ""
 "Before duplicating your wallet, it's recommended that you first write down "
 "your recovery phrase and store it securely so that your wallet can be "
 "recovered in the case your device was lost or stolen."

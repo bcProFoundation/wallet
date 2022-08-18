@@ -17,16 +17,7 @@ import { ThemeProvider } from 'src/app/providers/theme/theme';
 export class SelectFlowPage {
   public unregister;
   public currentTheme: string;
-  public flowOptions = [
-    {
-      isSimpleFlow: false,
-      content: this.translate.instant('Most secure way to store cryptocurrency (Highly Recommended).')
-    },
-    {
-      isSimpleFlow: true,
-      content: this.translate.instant('I’m just playing around. Skip all the security steps and show me the wallet.')
-    }
-  ]
+  public flowOptions = [];
   constructor(
     public navCtrl: NavController,
     private logger: Logger,
@@ -46,6 +37,20 @@ export class SelectFlowPage {
     // Get Theme
     this.currentTheme = this.themeProvider.currentAppTheme;
   }
+
+  ionViewWillEnter() {
+    this.flowOptions= [
+      {
+        isSimpleFlow: false,
+        content: this.translate.instant('Most secure way to store cryptocurrency (Highly Recommended).')
+      },
+      {
+        isSimpleFlow: true,
+        content: this.translate.instant('I’m just playing around. Skip all the security steps and show me the wallet.')
+      }
+    ]
+  }
+
   public navigateNextView(isSimpleFlow) {
     if (isSimpleFlow) {
       this.createSimpleFlow();

@@ -12,58 +12,14 @@ import { Logger } from '../logger/logger';
   providedIn: 'root'
 })
 export class LanguageProvider {
-  private languages = [
-    {
-      name: 'English',
-      isoCode: 'en'
-    },
-    {
-      name: 'Vietnamese',
-      isoCode: 'vi'
-    }
-    // {
-    //    name: 'Español',
-    //    isoCode: 'es'
-    // }
-    // {
-    //   name: 'Français',
-    //   isoCode: 'fr'
-    // },
-    // {
-    //   name: 'Italiano',
-    //   isoCode: 'it'
-    // },
-    // {
-    //   name: 'Nederlands',
-    //   isoCode: 'nl'
-    // },
-    // {
-    //   name: 'Polski',
-    //   isoCode: 'pl'
-    // },
-    // {
-    //   name: 'Deutsch',
-    //   isoCode: 'de'
-    // },
-    // {
-    //   name: '日本語',
-    //   isoCode: 'ja',
-    //   useIdeograms: true
-    // },
-    // {
-    //   name: '中文（简体）',
-    //   isoCode: 'zh',
-    //   useIdeograms: true
-    // },
-    // {
-    //   name: 'Pусский',
-    //   isoCode: 'ru'
-    // },
-    // {
-    //   name: 'Português',
-    //   isoCode: 'pt'
-    // }
-  ];
+  private languages = [{
+    name: this.translate.instant('English'),
+    isoCode: 'en'
+  },
+  {
+    name: this.translate.instant('Vietnamese'),
+    isoCode: 'vi'
+  }];
   private current: string;
 
   constructor(

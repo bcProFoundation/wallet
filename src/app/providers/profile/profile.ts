@@ -922,7 +922,7 @@ export class ProfileProvider {
   private addAndBindWalletClients(data, opts?): Promise<any> {
     opts = opts || {};
 
-    return this.clearEncryptPassword(opts.keyIdToReImport, data.key)
+    return this.clearEncryptPassword(opts.keyId, data.key)
       .then(res => {
         this.logger.warn('Clear Encrypt Password? ', res);
         this.onGoingProcessProvider.pause();

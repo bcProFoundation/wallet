@@ -310,7 +310,7 @@ export class ImportWalletPage {
           }
         });
       } else {
-        this.goToWalletsPage(wallets[0].credentials.keyId);
+        this.goToSettingPage();
       }
     });
   }
@@ -327,12 +327,9 @@ export class ImportWalletPage {
       });
   }
 
-  private goToHomePage(keyId) {
+  private goToSettingPage() {
     this.router
-      .navigate([''], {
-        state: {
-          keyId: keyId
-        },
+      .navigate(['/setting'], {
         replaceUrl: true
       })
       .then(() => {

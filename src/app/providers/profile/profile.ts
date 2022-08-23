@@ -922,7 +922,7 @@ export class ProfileProvider {
   private addAndBindWalletClients(data, opts?): Promise<any> {
     opts = opts || {};
 
-    return this.clearEncryptPassword(opts.keyId, data.key)
+    return this.clearEncryptPassword(opts.keyIdToReImport, data.key)
       .then(res => {
         this.logger.warn('Clear Encrypt Password? ', res);
         this.onGoingProcessProvider.pause();
@@ -1125,6 +1125,7 @@ export class ProfileProvider {
       // If the key already exists, bind the new wallets to it.
       const key = this.keyProvider.getMatchedKey(data.key);
       // skip if re-importing to clear encrypt
+      const isReimport = !_.isNil(opts.keyId);
       if (key && !opts.keyId) {
         data.key = this.keyProvider.getKey(key.id);
         opts.keyId = key.id;
@@ -1132,10 +1133,17 @@ export class ProfileProvider {
           walletClient.credentials.keyId = walletClient.keyId = key.id;
         });
       }
-      return this.addAndBindWalletClients(data, {
-        bwsurl: opts.bwsurl,
-        keyId: opts.keyId
-      });
+      if (isReimport) {
+        return this.addAndBindWalletClients(data, {
+          bwsurl: opts.bwsurl,
+          keyIdToReImport: opts.keyId
+        });
+      } else {
+        return this.addAndBindWalletClients(data, {
+          bwsurl: opts.bwsurl,
+          keyId: opts.keyId
+        });
+      }
     });
   }
 
@@ -1147,6 +1155,7 @@ export class ProfileProvider {
       // If the key already exists, bind the new wallets to it.
       const key = this.keyProvider.getMatchedKey(data.key);
       // skip if re-importing to clear encrypt
+      const isReimport = !_.isNil(opts.keyId);
       if (key && !opts.keyId) {
         data.key = this.keyProvider.getKey(key.id);
         opts.keyId = key.id;
@@ -1154,10 +1163,17 @@ export class ProfileProvider {
           walletClient.credentials.keyId = walletClient.keyId = key.id;
         });
       }
-      return this.addAndBindWalletClients(data, {
-        bwsurl: opts.bwsurl,
-        keyId: opts.keyId
-      });
+      if (isReimport) {
+        return this.addAndBindWalletClients(data, {
+          bwsurl: opts.bwsurl,
+          keyIdToReImport: opts.keyId
+        });
+      } else {
+        return this.addAndBindWalletClients(data, {
+          bwsurl: opts.bwsurl,
+          keyId: opts.keyId
+        });
+      }
     });
   }
 

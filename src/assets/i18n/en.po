@@ -12,6 +12,94 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Most secure way to store cryptocurrency (Highly Recommended)."
+msgstr "Most secure way to store cryptocurrency (Highly Recommended)."
+
+msgid "I’m just playing around. Skip all the security steps and show me the wallet."
+msgstr "I’m just playing around. Skip all the security steps and show me the wallet."
+
+msgid "Password unmatched!"
+msgstr "Password unmatched!"
+
+msgid "Important"
+msgstr "Important"
+
+msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
+msgstr "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
+
+msgid "Once the App is deleted, the account data will be all deleted."
+msgstr "Once the App is deleted, the account data will be all deleted."
+
+msgid "Please backup the recovery phrase in the secure environment. "
+"Make sure there is no third party or camera around you during the back-up."
+msgstr "Please backup the recovery phrase in the secure environment. "
+"Make sure there is no third party or camera around you during the back-up."
+
+msgid "Primary Accounts"
+msgstr "Primary Accounts"
+
+msgid "Account ID"
+msgstr "Account ID"
+
+msgid "MY ACCOUNTS"
+msgstr "MY ACCOUNTS"
+
+msgid "MY ACCOUNT"
+msgstr "MY ACCOUNT"
+
+msgid "{walletsGroupLength} Accounts"
+msgstr "{walletsGroupLength} Accounts"
+
+msgid "{walletsGroupLength} Account"
+msgstr "{walletsGroupLength} Account"
+
+msgid "(max 5)"
+msgstr "(max 5)"
+
+msgid "Add to home"
+msgstr "Add to home"
+
+msgid "Add account to home"
+msgstr "Add account to home"
+
+msgid "Account added successfully to Home!"
+msgstr "Account added successfully to Home!"
+
+msgid "Maximum 5 accounts has reached. Please remove account from Home first."
+msgstr "Maximum 5 accounts has reached. Please remove account from Home first."
+
+msgid "Account already existed!"
+msgstr "Account already existed!"
+
+msgid "Remove account from home"
+msgstr "Remove account from home"
+
+msgid "Removed account successfully!"
+msgstr "Removed account successfully!"
+
+msgid "Removed account unsuccessfully!"
+msgstr "Removed account unsuccessfully!"
+
+msgid "Can not remove the last account in Home!"
+msgstr "Can not remove the last account in Home!"
+
+msgid "Other"
+msgstr "Other"
+
+msgid "Your Keys"
+msgstr "Your Keys"
+
+msgid "Your keys"
+msgstr "Your keys"
+
+msgid "Request"
+msgstr "Request"
+
+msgid "Request amount"
+msgstr "Request amount"
+
+msgid "No token available yet!"
+msgstr "No token available yet!"
 msgid "(possible double spend)"
 msgstr "(possible double spend)"
 
@@ -130,9 +218,13 @@ msgstr "About {{ appName }}"
 
 msgid "About {{appName}}"
 msgstr "About {{appName}}"
+msgid "About {appName}"
+msgstr "About {appName}"
 
 msgid "Accept"
 msgstr "Accept"
+msgid "I've accepted this!"
+msgstr "I've accepted this!"
 
 msgid "Accepted"
 msgstr "Accepted"
@@ -142,6 +234,11 @@ msgstr "Access denied"
 
 msgid "Account"
 msgstr "Account"
+msgid "Accounts"
+msgstr "Accounts"
+
+msgid "Hide Account"
+msgstr "Hide Account"
 
 msgid "Activation Fee"
 msgstr "Activation Fee"
@@ -163,6 +260,8 @@ msgstr "Add Encryption?"
 
 msgid "Add Me"
 msgstr "Add Me"
+msgid "Add Wallet"
+msgstr "Add Wallet"
 
 msgid "Add Account"
 msgstr "Add Account"
@@ -193,9 +292,25 @@ msgstr "Additional third-party fees may apply."
 
 msgid "Address"
 msgstr "Address"
+msgid "eCash Address"
+msgstr "eCash Address"
+
+msgid "Etoken Address"
+msgstr "Etoken Address"
 
 msgid "Address Book"
 msgstr "Address Book"
+msgid "Address Book"
+msgstr "Address Book"
+
+msgid "ADDRESS BOOK"
+msgstr "ADDRESS BOOK"
+
+msgid "Address book name"
+msgstr "Address book name"
+
+msgid "Enter name to save to address book"
+msgstr "Enter name to save to address book"
 
 msgid "Address Type"
 msgstr "Address Type"
@@ -233,6 +348,8 @@ msgstr ""
 
 msgid "Allow camera access"
 msgstr "Allow camera access"
+msgid "Camera not supported"
+msgstr "Camera not supported"
 
 msgid "Already duplicated"
 msgstr "Already duplicated"
@@ -264,6 +381,15 @@ msgstr ""
 "An encrypted passphrase is an extra layer of security that can prevent "
 "hackers from accessing your cryptocurrency if this device were ever stolen "
 "or compromised by malicious software."
+msgid ""
+"Encrypted passphrase"
+msgstr ""
+"Encrypted passphrase"
+
+msgid ""
+"Confirm passphrase"
+msgstr ""
+"Confirm passphrase"
 
 msgid "An update to this app is available."
 msgstr "An update to this app is available."
@@ -345,6 +471,8 @@ msgstr "Attempted payment request"
 
 msgid "Available"
 msgstr "Available"
+msgid "Available:"
+msgstr "Available:"
 
 msgid "Average"
 msgstr "Average"
@@ -366,6 +494,19 @@ msgstr "Back up your account before using this function"
 
 msgid "Backup"
 msgstr "Backup"
+msgid "Backup recovery phrase"
+msgstr "Backup recovery phrase"
+
+msgid "Backup Phrase"
+msgstr "Backup Phrase"
+
+msgid "You will now be shown a recovery phrase which is very important. If you write down "
+"and store it safely, you will always be able to recover your accounts."
+msgstr "You will now be shown a recovery phrase which is very important. If you write down "
+"and store it safely, you will always be able to recover your accounts."
+
+msgid "You can choose to back up your recovery phrase now or later in the account settings."
+msgstr "You can choose to back up your recovery phrase now or later in the account settings."
 
 msgid "Backup now"
 msgstr "Backup now"
@@ -457,6 +598,23 @@ msgstr "Below Minimum Amount"
 
 msgid "Biometric"
 msgstr "Biometric"
+msgid "First, set unlock method"
+msgstr "First, set unlock method"
+
+msgid "Adding an extra layer of security to keep your balance and transactions private."
+msgstr "Adding an extra layer of security to keep your balance and transactions private."
+
+msgid "Unlock with biometric"
+msgstr "Unlock with biometric"
+
+msgid "Unlock with passcode"
+msgstr "Unlock with passcode"
+
+msgid "Your funds are in your custody"
+msgstr "Your funds are in your custody"
+
+msgid "I understand that my funds are held and controlled securely on this device, not by a company."
+msgstr "I understand that my funds are held and controlled securely on this device, not by a company."
 
 msgid "AbcPay Account"
 msgstr "AbcPay Account"
@@ -844,6 +1002,11 @@ msgstr "Copayer {{idx+1}}"
 
 msgid "Copayers"
 msgstr "Copayers"
+msgid "waiting for copayers"
+msgstr "waiting for copayers"
+
+msgid "Copy"
+msgstr "Copy"
 
 msgid "Copied"
 msgstr "Copied"
@@ -964,6 +1127,14 @@ msgstr "Create Account"
 
 msgid "Create a new account"
 msgstr "Create a new account"
+msgid "Create Account"
+msgstr "Create Account"
+
+msgid "Create account"
+msgstr "Create account"
+
+msgid "Create a new account"
+msgstr "Create a new account"
 
 msgid "Create or Import a Key"
 msgstr "Create or Import a Key"
@@ -994,6 +1165,8 @@ msgstr "Creating Gift Card..."
 
 msgid "Creating Account..."
 msgstr "Creating Account..."
+msgid "Creating account..."
+msgstr "Creating account..."
 
 msgid "Creating transaction..."
 msgstr "Creating transaction..."
@@ -1046,6 +1219,9 @@ msgstr "Debit Cards"
 
 msgid "Delete"
 msgstr "Delete"
+
+msgid "Permanently delete?"
+msgstr "Permanently delete?"
 
 msgid "Delete Key"
 msgstr "Delete Key"
@@ -1102,6 +1278,11 @@ msgstr "Derivation Path"
 
 msgid "Derivation path"
 msgstr "Derivation path"
+msgid "eToken Path"
+msgstr "eToken Path"
+
+msgid "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"
+msgstr "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"
 
 msgid "Description"
 msgstr "Description"
@@ -1305,8 +1486,20 @@ msgstr "Enter email address"
 msgid "Enter encrypt password"
 msgstr "Enter encrypt password"
 
-msgid "Enter name to save to address book"
-msgstr "Enter name to save to address book"
+msgid "Retype encrypt password"
+msgstr "Retype encrypt password"
+
+msgid "Your wallet key will be encrypted. The encrypt password cannot be recovered. Be sure to write it down."
+msgstr "Your wallet key will be encrypted. The encrypt password cannot be recovered. Be sure to write it down."
+
+msgid "Your account key will be encrypted."
+msgstr "Your account key will be encrypted."
+
+msgid "The encrypt password cannot be recovered."
+msgstr "The encrypt password cannot be recovered."
+
+msgid "Be sure to write it down"
+msgstr "Be sure to write it down"
 
 msgid ""
 "Enter your recovery phrase (usually 12-words) in the correct order. Separate "
@@ -1318,6 +1511,12 @@ msgstr ""
 "each word with a single space only (no commas or any other punctuation). For "
 "backup phrases in non-English languages: Some words may include special "
 "symbols (ñ, è, っ, etc.), so be sure to spell all the words correctly."
+msgid ""
+"Enter your recovery phrase (12 words) in the correct order. Separate "
+"each word with a single space only (no commas or any other punctuation)."
+msgstr ""
+"Enter your recovery phrase (12 words) in the correct order. Separate "
+"each word with a single space only (no commas or any other punctuation)."
 
 msgid "Enter {coinName} address"
 msgstr "Enter {coinName} address"
@@ -1536,6 +1735,8 @@ msgstr ""
 
 msgid "From"
 msgstr "From"
+msgid "From: {address}"
+msgstr "From: {address}"
 
 msgid "From AbcPay account"
 msgstr "From AbcPay account"
@@ -1729,6 +1930,8 @@ msgstr ""
 
 msgid "I Understand"
 msgstr "I Understand"
+msgid "I understood"
+msgstr "I understood"
 
 msgid "I already have an account"
 msgstr "I already have an account"
@@ -1926,6 +2129,13 @@ msgstr ""
 "secret."
 
 msgid ""
+"In order to protect your funds from being accessible to hackers and thieves, "
+"store this recovery phrase in a safe and secure place."
+msgstr ""
+"In order to protect your funds from being accessible to hackers and thieves, "
+"store this recovery phrase in a safe and secure place."
+
+msgid ""
 "In order to speed up the confirmation of your ETH transaction, the original "
 "transaction will be replaced by a new one that uses a higher miner fee."
 msgstr ""
@@ -1988,11 +2198,16 @@ msgstr "Invalid"
 msgid "Invalid Email"
 msgstr "Invalid Email"
 
+msgid "Wallet Service URL"
+msgstr "Wallet Service URL"
+
 msgid "Invalid URL"
 msgstr "Invalid URL"
 
 msgid "Invalid address"
 msgstr "Invalid address"
+msgid "Invalid QR code"
+msgstr "Invalid QR code"
 
 msgid "Invalid data"
 msgstr "Invalid data"
@@ -2020,6 +2235,8 @@ msgstr "It could take a while to confirm transaction"
 
 msgid "It's a ghost town in here"
 msgstr "It's a ghost town in here"
+msgid "It's an empty pond here"
+msgstr "It's an empty pond here"
 
 msgid ""
 "It's a good idea to avoid reusing addresses - this both protects your "
@@ -2053,6 +2270,17 @@ msgstr "Join the waitlist and be the first to experience our new card."
 
 msgid "Joining Account..."
 msgstr "Joining Account..."
+msgid "Someone asked you to join a multisig account?"
+msgstr "Someone asked you to join a multisig account?"
+
+msgid "You are about to join a shared account. This is an advanced feature, "
+"make sure you understand how multisig accounts work before putting funds in "
+"it. If a third party invited you to join, make sure you trust them, if "
+"you have purchased cryptocurrency they may be scamming you."
+msgstr "You are about to join a shared account. This is an advanced feature, "
+"make sure you understand how multisig accounts work before putting funds in "
+"it. If a third party invited you to join, make sure you trust them, if "
+"you have purchased cryptocurrency they may be scamming you."
 
 msgid "Just a second, we're setting a few things up."
 msgstr "Just a second, we're setting a few things up."
@@ -2077,6 +2305,8 @@ msgstr "Key Name"
 
 msgid "Key Settings"
 msgstr "Key Settings"
+msgid "Account Settings"
+msgstr "Account Settings"
 
 msgid "Key already associated with an existing wallet"
 msgstr "Key already associated with an existing wallet"
@@ -2163,9 +2393,13 @@ msgstr "Bitcoin Address"
 msgid "Live on crypto."
 msgstr "Live on crypto."
 
+msgid "Loading..."
+msgstr "Loading..."
 msgid "Loading accounts..."
 msgstr "Loading accounts..."
 
+msgid "Loading addresses..."
+msgstr "Loading addresses..."
 msgid "Loading addresses..."
 msgstr "Loading addresses..."
 
@@ -2177,6 +2411,9 @@ msgstr "Lock"
 
 msgid "Lock App"
 msgstr "Lock App"
+msgid "Tap to unlock App"
+msgstr "Tap to unlock App"
+
 
 msgid "Locked"
 msgstr "Locked"
@@ -2274,6 +2511,8 @@ msgid ""
 msgstr ""
 "Multi-user account requires multiple devices to set up. It takes longer to "
 "complete but it's recommended security configuration for long term storage."
+msgid "This account requires {m} copayers to sign a transaction (out of {n} copayers total)."
+msgstr "This account requires {m} copayers to sign a transaction (out of {n} copayers total)."
 
 msgid "Multiple Recipients"
 msgstr "Multiple Recipients"
@@ -2347,6 +2586,20 @@ msgstr "New contact"
 
 msgid "New contact name"
 msgstr "New contact name"
+msgid "Add contact"
+msgstr "Add contact"
+
+msgid "Delete contact"
+msgstr "Delete contact"
+
+msgid "Add New Contact"
+msgstr "Add New Contact"
+
+msgid "Add Contact"
+msgstr "Add Contact"
+
+msgid "Delete Contact"
+msgstr "Delete Contact"
 
 msgid "New copayer"
 msgstr "New copayer"
@@ -2472,6 +2725,8 @@ msgstr "Not valid bitcoin address"
 msgid "Notes"
 msgstr "Notes"
 
+msgid "No notifications"
+msgstr "No notifications"
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -2592,6 +2847,8 @@ msgstr "Passphrases do not match"
 
 msgid "Password"
 msgstr "Password"
+msgid "This to protect the recovery phrase. This field is not used for your encrypt password"
+msgstr "This to protect the recovery phrase. This field is not used for your encrypt password"
 
 msgid "Password Not Recoverable"
 msgstr "Password Not Recoverable"
@@ -2609,6 +2866,8 @@ msgstr "Passwords do not match"
 msgid "Paste from Clipboard"
 msgstr "Paste from Clipboard"
 
+msgid "Paste address here"
+msgstr "Paste address here"
 msgid "Paste the backup plain text code"
 msgstr "Paste the backup plain text code"
 
@@ -2693,6 +2952,11 @@ msgstr "Payment was confirmed and is being exchanged."
 
 msgid "Pending"
 msgstr "Pending"
+msgid "Immature"
+msgstr "Immature"
+
+msgid "Mined"
+msgstr "Mined"
 
 msgid "Pending Call Requests"
 msgstr "Pending Call Requests"
@@ -2705,6 +2969,12 @@ msgstr "Perfect!"
 
 msgid "Permanently delete all accounts using this key."
 msgstr "Permanently delete all accounts using this key."
+
+msgid "All accounts using this key are permanently deleted."
+msgstr "All accounts using this key are permanently deleted."
+
+msgid "This action cannot be reversed."
+msgstr "This action cannot be reversed."
 
 msgid "Permanently delete this account."
 msgstr "Permanently delete this account."
@@ -2729,6 +2999,17 @@ msgstr "Please enter the account recovery phrase"
 
 msgid "Please enter your PIN"
 msgstr "Please enter your PIN"
+msgid "Create your PIN"
+msgstr "Create your PIN"
+
+msgid "Please enter your PIN"
+msgstr "Please enter your PIN"
+
+msgid "Re-type PIN"
+msgstr "Re-type PIN"
+
+msgid "Incorrect PIN, try again."
+msgstr "Incorrect PIN, try again."
 
 msgid ""
 "Please make sure {{peerMetaName}} request is still waiting for confirmation, "
@@ -2779,6 +3060,8 @@ msgstr "Printed Gift Card Required"
 msgid "Priority"
 msgstr "Priority"
 
+msgid "Privacy"
+msgstr "Privacy"
 msgid "Privacy Notice"
 msgstr "Privacy Notice"
 
@@ -2863,6 +3146,8 @@ msgstr "Read Only accounts don't include the private key."
 
 msgid "Read more"
 msgstr "Read more"
+msgid "READ MORE"
+msgstr "READ MORE"
 
 msgid "Read more in our support page"
 msgstr "Read more in our support page"
@@ -2925,6 +3210,8 @@ msgstr "Recovery Key"
 
 msgid "Recovery Phrase"
 msgstr "Recovery Phrase"
+msgid "Your recovery phrase"
+msgstr "Your recovery phrase"
 
 msgid "Redeem Now"
 msgstr "Redeem Now"
@@ -2940,6 +3227,8 @@ msgstr "Refund address"
 
 msgid "Reject"
 msgstr "Reject"
+msgid "I've rejected this!"
+msgstr "I've rejected this!"
 
 msgid "Reject Payment Proposal"
 msgstr "Reject Payment Proposal"
@@ -2998,6 +3287,8 @@ msgstr "Request Fingerprint"
 
 msgid "Request Specific Amount"
 msgstr "Request Specific Amount"
+msgid "Request specific amount"
+msgstr "Request specific amount"
 
 msgid "Request a Feature"
 msgstr "Request a Feature"
@@ -3048,6 +3339,8 @@ msgstr "SUMMARY"
 
 msgid "Save"
 msgstr "Save"
+msgid "Save & Continue"
+msgstr "Save & Continue"
 
 msgid "Scan"
 msgstr "Scan"
@@ -3132,12 +3425,31 @@ msgstr "Select destination wallet"
 
 msgid "Select inputs"
 msgstr "Select inputs"
+msgid "Select Inputs"
+msgstr "Select Inputs"
+
+msgid "Send total selected amount"
+msgstr "Send total selected amount"
+
+msgid "Choose the account inputs"
+msgstr "Choose the account inputs"
+
+msgid "(from select inputs)"
+msgstr "(from select inputs)"
+
+msgid "Total selected:"
+msgstr "Total selected:"
 
 msgid "Select inputs for transaction"
 msgstr "Select inputs for transaction"
 
 msgid "Select recipient"
 msgstr "Select recipient"
+msgid "Add more recipient"
+msgstr "Add more recipient"
+
+msgid "RECIPIENT "
+msgstr "RECIPIENT "
 
 msgid "Select source wallet"
 msgstr "Select source wallet"
@@ -3153,6 +3465,14 @@ msgstr "Selling Bitcoin..."
 
 msgid "Send"
 msgstr "Send"
+msgid "Send "
+msgstr "Send "
+
+msgid "Send back"
+msgstr "Send back"
+
+msgid "Send again"
+msgstr "Send again"
 
 msgid "Send Feedback"
 msgstr "Send Feedback"
@@ -3220,6 +3540,8 @@ msgstr "Sensitive Data"
 
 msgid "Sent"
 msgstr "Sent"
+msgid "From : unknown sender"
+msgstr "From : unknown sender"
 
 msgid "Sent to self"
 msgstr "Sent to self"
@@ -3239,11 +3561,22 @@ msgstr "Session Request"
 msgid "Set up a password"
 msgstr "Set up a password"
 
+msgid "Confirm the password"
+msgstr "Confirm the password"
+
 msgid "Setting parameters..."
 msgstr "Setting parameters..."
 
 msgid "Settings"
 msgstr "Settings"
+msgid "Rename Key"
+msgstr "Rename Key"
+
+msgid "Rename Account"
+msgstr "Rename Account"
+
+msgid "Contained Accounts"
+msgstr "Contained Accounts"
 
 msgid "Share"
 msgstr "Share"
@@ -3275,6 +3608,9 @@ msgstr "Share this invitation with your copayers"
 msgid "Share this invitation"
 msgstr "Share this invitation"
 
+msgid "Share this"
+msgstr "Share this"
+
 msgid "Share with friends"
 msgstr "Share with friends"
 
@@ -3283,6 +3619,8 @@ msgstr "Share {{appName}}"
 
 msgid "Shared Account"
 msgstr "Shared Account"
+msgid "(Shared account)"
+msgstr "(Shared account)"
 
 msgid "Shop"
 msgstr "Shop"
@@ -3307,6 +3645,8 @@ msgstr "Show Portfolio Value"
 
 msgid "Show advanced options"
 msgstr "Show advanced options"
+msgid "Advanced options"
+msgstr "Advanced options"
 
 msgid "Show in Home tab"
 msgstr "Show in Home tab"
@@ -3340,6 +3680,8 @@ msgstr "Simple Account"
 
 msgid "Single address"
 msgstr "Single address"
+msgid "Single Address"
+msgstr "Single Address"
 
 msgid "Skip"
 msgstr "Skip"
@@ -3519,6 +3861,22 @@ msgstr "Text"
 msgid "Thanks!"
 msgstr "Thanks!"
 
+msgid "Thanks from {nameShop}!"
+msgstr "Thanks from {nameShop}!"
+
+msgid "{walletName} (of {keyName})"
+msgstr "{walletName} (of {keyName})"
+
+msgid "You received {voucherValue} {chain} to account"
+msgstr "You received {voucherValue} {chain} to account"
+
+msgid "Could not process!"
+msgstr "Could not process!"
+
+msgid "Something wrong with the claim code (i.e. not existed, expried or "
+"run out of funds). Please contact shop or AbcPay team for support!"
+msgstr "Something wrong with the claim code (i.e. not existed, expried or "
+"run out of funds). Please contact shop or AbcPay team for support!"
 msgid "The \"Key\" to your funds"
 msgstr "The \"Key\" to your funds"
 
@@ -3665,6 +4023,11 @@ msgstr ""
 "The payment was created but could not be completed. Please try again from "
 "home screen"
 
+msgid "Your account is in a corrupt state. Please contact support and share "
+"the logs provided."
+msgstr "Your account is in a corrupt state. Please contact support and share "
+"the logs provided."
+
 msgid "The payment was removed by creator"
 msgstr "The payment was removed by creator"
 
@@ -3735,6 +4098,8 @@ msgstr "The total amount is the subtotal amount plus transaction fees."
 
 msgid "The total amount of {coinName} stored in this wallet."
 msgstr "The total amount of {coinName} stored in this wallet."
+msgid "The amount of {coinName} immediately spendable from this account."
+msgstr "The amount of {coinName} immediately spendable from this account."
 
 msgid ""
 "The transaction from {{walletName}} that you were waiting for has been "
@@ -3965,6 +4330,11 @@ msgstr "Timeline"
 
 msgid "To"
 msgstr "To"
+msgid "To: {address}"
+msgstr "To: {address}"
+
+msgid "To: {walletName}"
+msgstr "To: {walletName}"
 
 msgid ""
 "To get started, you'll need to enter a valid address or select an existent "
@@ -4008,9 +4378,13 @@ msgstr "Transact"
 
 msgid "Transaction"
 msgstr "Transaction"
+msgid "RECENT TRANSACTIONS"
+msgstr "RECENT TRANSACTIONS"
 
 msgid "Transaction History"
 msgstr "Transaction History"
+msgid "Search for transaction history"
+msgstr "Search for transaction history"
 
 msgid "Transaction ID"
 msgstr "Transaction ID"
@@ -4199,6 +4573,8 @@ msgstr "Verification Required"
 
 msgid "Verify Your Phrase"
 msgstr "Verify Your Phrase"
+msgid "Verify your phrase"
+msgstr "Verify your phrase"
 
 msgid "Version"
 msgstr "Version"
@@ -4281,9 +4657,13 @@ msgstr "Wallet Inputs"
 
 msgid "Account Invitation"
 msgstr "Account Invitation"
+msgid "Account invitation"
+msgstr "Account invitation"
 
 msgid "Account Name"
 msgstr "Account Name"
+msgid "Account name"
+msgstr "Account name"
 
 msgid "Wallet Needs Backup"
 msgstr "Wallet Needs Backup"
@@ -4366,6 +4746,16 @@ msgstr ""
 msgid "Wallets"
 msgstr "Wallets"
 
+msgid ""
+"Vietnamese"
+msgstr ""
+"Vietnamese"
+
+msgid ""
+"English"
+msgstr ""
+"English"
+
 msgid "Warning"
 msgstr "Warning"
 
@@ -4446,6 +4836,13 @@ msgstr ""
 "manage, and use your crypto funds without having to trust a centralized bank "
 "or exchange."
 
+msgid ""
+"AbcPay allows you to privately store, manage, and use your crypto funds without "
+"having to trust a centralized bank or exchange"
+
+msgstr ""
+"AbcPay allows you to privately store, manage, and use your crypto funds without "
+"having to trust a centralized bank or exchange"
 msgid "What could have happened?"
 msgstr "What could have happened?"
 
@@ -4769,6 +5166,20 @@ msgid ""
 msgstr ""
 "Your recovery key is composed of 12 randomly selected words. Please "
 "carefully write down each word in the order it appears."
+msgid ""
+"Never share your recovery phrase with anyone, store it securely !"
+msgstr ""
+"Never share your recovery phrase with anyone, store it securely !"
+
+msgid ""
+"Let check your wrote down the phrase correctly. Please select each word in "
+"the numbered order."
+msgstr ""
+"Let check your wrote down the phrase correctly. Please select each word in "
+"the numbered order."
+
+msgid "Word #"
+msgstr "Word #"
 
 msgid ""
 "Your request did not include a transaction. Please try again or contact your "

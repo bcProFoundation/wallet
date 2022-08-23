@@ -88,10 +88,10 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'invalid-qr'" type="danger" class="custom-sheet">
-      <span sheet-title-text>{{params.title}}</span>
-      <span sheet-text>{{params.msg}}</span>
+      <span sheet-title-text translate>{{params.title}}</span>
+      <span sheet-text translate>{{params.msg}}</span>
       <span sheet-second-button-text translate>Cancel</span>
-      <span sheet-button-text translate>Try agian</span>
+      <span sheet-button-text translate>Try again</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'backup-later-warning'" type="warning">
@@ -420,7 +420,7 @@
             Keep in mind your encrypt password is not the 12-word recovery phrase
           </li>
           <li translate>
-            You can always reset your encrypt password on your key settings under the option <b>Clear Encrypt Password</b> using your 12 words recovery phrase
+            You can always reset your encrypt password on your key settings under the option <b translate>Clear Encrypt Password</b> using your 12 words recovery phrase
           </li>
         </ul>
       </span>

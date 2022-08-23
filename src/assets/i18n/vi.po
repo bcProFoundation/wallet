@@ -210,7 +210,7 @@ msgid "ACTIVATED"
 msgstr "KÍCH HOẠT"
 
 msgid "AML/KYC Policy"
-msgstr "AML/KYC chính sách"
+msgstr "Chính sách AML/KYC"
 
 msgid "About {{ appName }}"
 msgstr "Về {{ appName }}"
@@ -569,6 +569,16 @@ msgstr ""
 "thiết lập lại."
 
 msgid ""
+"If you need to regain access to your account because you have forgotten or lost the encrypt password, you must restore the account using the 12 word recovery phrase."
+msgstr ""
+"Nếu bạn cần lấy lại quyền truy cập vào tài khoản của mình do quên hoặc mất mật khẩu mã hóa, bạn phải khôi phục lại tài khoản bằng cách sử dụng cụm từ khôi phục 12 từ."
+
+msgid ""
+"If you do not have the recovery phrase, you will not be able to regain access to your account."
+msgstr ""
+"Nếu bạn không có cụm từ khôi phục, bạn sẽ không thể lấy lại quyền truy cập vào tài khoản của mình."
+
+msgid ""
 "Before duplicating your wallet, it's recommended that you first write down "
 "your recovery phrase and store it securely so that your wallet can be "
 "recovered in the case your device was lost or stolen."
@@ -825,7 +835,7 @@ msgid "Clear"
 msgstr "Xóa"
 
 msgid "Clear Encrypt Password"
-msgstr "Xóa mật khẩu được mã hóa"
+msgstr "Xóa mật khẩu mã hóa"
 
 msgid "Clear cache"
 msgstr "Xóa bộ nhớ đệm"
@@ -1070,8 +1080,8 @@ msgstr "Không thể tạo: Mã phục hồi tài khoản không chính xác"
 msgid "Could not decrypt file, check your password"
 msgstr "Không thể giải mã tập tin, vui lòng kiểm tra mật mã"
 
-msgid "Could not decrypt wallet"
-msgstr "Không thể giải mã ví"
+msgid "Could not decrypt account"
+msgstr "Không thể giải mã tài khoản"
 
 msgid "Could not delete payment proposal"
 msgstr "Không thể xóa đề nghị thanh toán"
@@ -1582,7 +1592,7 @@ msgid "Error pairing AbcPay Account"
 msgstr "Lỗi không liên kết được với tài khoản AbcPay"
 
 msgid "Error scanning funds:"
-msgstr "Lỗi dò quỹ"
+msgstr "Lỗi quét số dư:"
 
 msgid "Error sweeping wallet:"
 msgstr "Lỗi quét ví:"
@@ -2224,6 +2234,9 @@ msgstr "URL không hợp lệ"
 msgid "Invalid address"
 msgstr "Địa chỉ không hợp lệ"
 
+msgid "Invalid QR code"
+msgstr "Mã QR không hợp lệ"
+
 msgid "Invalid data"
 msgstr "Dữ liệu không hợp lệ"
 
@@ -2315,7 +2328,7 @@ msgstr ""
 "linked wallet ("
 
 msgid "Keep in mind your encrypt password is not the 12-word recovery phrase"
-msgstr "Keep in mind your encrypt password is not the 12-word recovery phrase"
+msgstr "Hãy nhớ rằng mật khẩu bảo mật của bạn không phải là cụm từ khôi phục 12 từ"
 
 msgid "Key Name"
 msgstr "Tên Khóa"
@@ -2658,7 +2671,7 @@ msgid "No funds found"
 msgstr "No funds found"
 
 msgid "No password"
-msgstr "No password"
+msgstr "Không mật khẩu"
 
 msgid "No pending call requests"
 msgstr "No pending call requests"
@@ -2709,19 +2722,19 @@ msgid "Nonce"
 msgstr "Nonce"
 
 msgid "Normal"
-msgstr "Normal"
+msgstr "Bình thường"
 
 msgid "Not authorized"
-msgstr "Not authorized"
+msgstr "Không được phép"
 
 msgid "Not enough confirmed funds"
-msgstr "Not enough confirmed funds"
+msgstr "Không đủ số dư đã xác nhận"
 
 msgid "Not enough funds"
-msgstr "Not enough funds"
+msgstr "Không đủ số dư"
 
 msgid "Not enough funds for fee"
-msgstr "Not enough funds for fee"
+msgstr "Không đủ số dư để trả phí"
 
 msgid ""
 "Not including the private key allows to check the account balance, "
@@ -2734,16 +2747,16 @@ msgstr ""
 "(ký) đề xuất, do đó, nguồn vốn sẽ không thể tiếp cận được từ việc xuất tài khoản."
 
 msgid "Not right now"
-msgstr "Not right now"
+msgstr "Không phải bây giờ"
 
 msgid "Not set"
-msgstr "Not set"
+msgstr "Không được thiết lập"
 
 msgid "Not valid bitcoin address"
-msgstr "Not valid bitcoin address"
+msgstr "Địa chỉ bitcoin không hợp lệ"
 
 msgid "Notes"
-msgstr "Notes"
+msgstr "Ghi chú"
 
 msgid "No notifications"
 msgstr "Không có thông báo"
@@ -2824,11 +2837,11 @@ msgstr "Open Help Center"
 msgid "Open Translation Community"
 msgstr "Open Translation Community"
 
-msgid "Open Wallet"
-msgstr "Open Wallet"
+msgid "Open Account"
+msgstr "Mở tài khoản"
 
 msgid "Open settings"
-msgstr "Open settings"
+msgstr "Mở cài đặt"
 
 msgid "Or its equivalent in {{ fiatCurrency?.toUpperCase() }}."
 msgstr "Or its equivalent in {{ fiatCurrency?.toUpperCase() }}."
@@ -2886,7 +2899,7 @@ msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
 msgid "Paste from Clipboard"
-msgstr "Paste from Clipboard"
+msgstr "Dán từ Clipboard"
 
 msgid "Paste address here"
 msgstr "Dán địa chỉ vào đây"
@@ -3000,8 +3013,8 @@ msgstr "Tất cả các tài khoản sử dụng Khóa này sẽ bị xóa vĩnh
 msgid "This action cannot be reversed."
 msgstr "Hành động xóa sẽ không quay trở lại được."
 
-msgid "Permanently delete this wallet."
-msgstr "Permanently delete this wallet."
+msgid "Permanently delete this account."
+msgstr "Xóa tài khoản này."
 
 msgid "Personal Wallet"
 msgstr "Personal Wallet"
@@ -3150,7 +3163,7 @@ msgid "RBF transaction"
 msgstr "RBF transaction"
 
 msgid "Random"
-msgstr "Random"
+msgstr "Ngẫu nhiên"
 
 msgid "Re-Import Wallets"
 msgstr "Re-Import Wallets"
@@ -3275,14 +3288,14 @@ msgid ""
 "Remember there are no special requirements for the password (numbers, "
 "symbols, etc.)"
 msgstr ""
-"Remember there are no special requirements for the password (numbers, "
-"symbols, etc.)"
+"Hãy nhớ rằng không có yêu cầu đặc biệt nào đối với mật khẩu "
+"(số, ký hiệu, v.v.)"
 
 msgid "Reminder"
 msgstr "Reminder"
 
 msgid "Remove"
-msgstr "Remove"
+msgstr "Loại bỏ"
 
 msgid "Removing Payment Request Data"
 msgstr "Removing Payment Request Data"
@@ -3342,7 +3355,7 @@ msgid "Restore from backup"
 msgstr "Khôi phục lại từ bản sao lưu"
 
 msgid "Retrieving inputs information..."
-msgstr "Retrieving inputs information..."
+msgstr "Truy xuất thông tin đầu vào ..."
 
 msgid "Retry camera"
 msgstr "Thử lại máy ảnh"
@@ -3666,7 +3679,7 @@ msgid "Shop with Crypto"
 msgstr "Shop with Crypto"
 
 msgid "Show"
-msgstr "Show"
+msgstr "Hiển thị"
 
 msgid "Show \"Buy Crypto\""
 msgstr "Show \"Buy Crypto\""
@@ -3896,6 +3909,23 @@ msgstr "Text"
 
 msgid "Thanks!"
 msgstr "Thanks!"
+
+msgid "Thanks from {nameShop}!"
+msgstr "Lời cám ơn từ {nameShop}!"
+
+msgid "{walletName} (of {keyName})"
+msgstr "{walletName} (của khoá {keyName})"
+
+msgid "You received {voucherValue} {chain} to account"
+msgstr "Bạn đã nhận được {voucherValue} {chain} vào tài khoản"
+
+msgid "Could not process!"
+msgstr "Không thể xử lý!"
+
+msgid "Something wrong with the claim code (i.e. not existed, expried or "
+"run out of funds). Please contact shop or AbcPay team for support!"
+msgstr "Đã xảy ra lỗi với mã xác nhận quyền sở hữu (mã có thể không tồn tại, "
+"hết hạn hoặc hết số dư). Vui lòng liên hệ với cửa hàng hoặc AbcPay để được hỗ trợ!"
 
 msgid "The \"Key\" to your funds"
 msgstr "The \"Key\" to your funds"
@@ -4480,7 +4510,7 @@ msgid "Try again in {{expires}}"
 msgstr "Hãy thử lại sau {{expires}}"
 
 msgid "Try entering any passwords you may have set in the past"
-msgstr "Try entering any passwords you may have set in the past"
+msgstr "Thử nhập bất kỳ mật khẩu nào bạn có thể đã đặt trước đây"
 
 msgid "Try it"
 msgstr "Try it"
@@ -4944,7 +4974,7 @@ msgid "Write down each word."
 msgstr "Write down each word."
 
 msgid "Wrong password"
-msgstr "Wrong password"
+msgstr "Sai mật khẩu"
 
 msgid "XRP Address"
 msgstr "XRP Address"
@@ -5011,8 +5041,8 @@ msgid ""
 "You can always reset your encrypt password on your key settings under the "
 "option"
 msgstr ""
-"You can always reset your encrypt password on your key settings under the "
-"option"
+"Bạn luôn có thể đặt lại mật khẩu mã hóa bằng cách vào mục cài đặt Khóa của "
+"bạn sau đó trọn Bảo mật / "
 
 msgid "You can change the name displayed on this device below."
 msgstr "You can change the name displayed on this device below."
@@ -5244,7 +5274,7 @@ msgid "[Balance Hidden]"
 msgstr "[Balance Hidden]"
 
 msgid "[Scanning Funds]"
-msgstr "[Scanning Funds]"
+msgstr "[Đang quét số dư]"
 
 msgid "add your AbcPay Visa card(s)"
 msgstr "add your AbcPay Visa card(s)"
@@ -5262,7 +5292,7 @@ msgid "preparing..."
 msgstr "đang chuẩn bị..."
 
 msgid "using your 12 words recovery phrase"
-msgstr "using your 12 words recovery phrase"
+msgstr "và sử dụng cụm từ khôi phục 12 từ để tiến hành cài đặt."
 
 msgid "{appName} BCH wallets use the CashAddr format by default"
 msgstr "{appName} BCH wallets use the CashAddr format by default"
@@ -5369,3 +5399,23 @@ msgid ""
 msgstr ""
 "{{walletName}} will be disconected from your actual connection to "
 "{{peerMetaName}} ({{peerMetaUrl}})"
+
+msgid ""
+"Missing primary account"
+msgstr ""
+"Thiếu tài khoản chính!"
+
+msgid ""
+"Please ensure {chain} account is available and add to home as primary account in order to process a claim {coinName}. Then try again!"
+msgstr ""
+"Hãy đảm bảo bạn đã có tài khoản {chain} có sẵn và thêm vào nhà làm tài khoản chính để xử lý yêu cầu {coinName}. Sau đó, hãy thử lại!"
+
+msgid ""
+"English"
+msgstr ""
+"Tiếng Anh"
+
+msgid ""
+"Vietnamese"
+msgstr ""
+"Tiếng Việt"

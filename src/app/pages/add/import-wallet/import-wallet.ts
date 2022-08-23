@@ -309,6 +309,8 @@ export class ImportWalletPage {
             this.goToWalletsPage(wallets[0].credentials.keyId);
           }
         });
+      } else if (this.keyId) {
+        this.goToKeySettingPage(wallets[0].credentials.keyId);
       } else {
         this.goToWalletsPage(wallets[0].credentials.keyId);
       }
@@ -327,9 +329,9 @@ export class ImportWalletPage {
       });
   }
 
-  private goToHomePage(keyId) {
-    this.router
-      .navigate([''], {
+  private goToKeySettingPage(keyId) {
+    this.router.navigate(['']).then(() => {
+      this.router.navigate(['/key-settings'], {
         state: {
           keyId: keyId
         },
@@ -338,6 +340,7 @@ export class ImportWalletPage {
       .then(() => {
         this.events.publish('Local/FetchWallets');
       });
+    })
   }
 
 

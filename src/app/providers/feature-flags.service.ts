@@ -1,8 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { get, has } from "lodash";
+import { truncateSync } from "fs";
+import { get, has, truncate } from "lodash";
 import { of } from "rxjs";
 import { tap } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { SwapPage } from "../pages/swap/swap.component";
+
 
 export interface FeatureConfig {
     abcpay: boolean,
@@ -16,7 +20,7 @@ export interface FeatureConfig {
     config: FeatureConfig = null;
     configUrl = ``; // <-- URL for getting the config
   
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private Router: Router) {}
   
     /**
      * We convert it to promise so that this function can
@@ -27,10 +31,19 @@ export interface FeatureConfig {
     //     .get<FeatureConfig>(this.configUrl)
     //     .pipe(tap(data => (this.config = data)))
     //     .toPromise();
-        return Promise.resolve({
-            abcpay: true,
-            swap: false
-        } as FeatureConfig);
+        return of({
+            abcpay: false,
+            swap: true
+        } as FeatureConfig).pipe(tap(data =>{
+          if(!data.abcpay && data.swap){
+            const routes = this.Router.config;
+            routes.shift();
+            routes.unshift({ path: '', component: SwapPage });
+            this.Router.resetConfig(routes);
+          }
+          this.config = data;
+        } ))
+            .toPromise();;
     }
   
     isFeatureEnabled(key: string) {

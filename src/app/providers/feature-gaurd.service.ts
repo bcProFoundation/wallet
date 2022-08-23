@@ -21,8 +21,9 @@ export class FeatureGuard implements CanActivate, CanLoad {
               return true;
             }
           }
-          this.router.navigate(['/swap']);
-          return false;    }
+          this.router.navigate(['/']);
+          return false;    
+        }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         const {
             data: { feature }, // <-- Get the module name from route data
@@ -33,7 +34,7 @@ export class FeatureGuard implements CanActivate, CanLoad {
               return true;
             }
           }
-          this.router.navigate(['/swap']);
+          this.router.navigate(['/']);
           return false;
     }
 //   canActivate(

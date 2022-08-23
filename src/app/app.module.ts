@@ -49,10 +49,18 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
 import { FeatureFlagsService } from './providers/feature-flags.service';
+import { AppInitService } from './app-init.service';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
+
+export function initializeApp(appInitService: AppInitService) {
+  return (): Promise<any> => { 
+    return appInitService.init();
+  }
+}
+
 
 export class InterpolatedTranslateParser extends TranslateDefaultParser {
   public templateMatcher: RegExp = /{\s?([^{}\s]*)\s?}/g;
@@ -133,6 +141,7 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: env.name === 'production' })
     ],
     providers: [
+      AppInitService,
         {
             provide: APP_INITIALIZER,
             useFactory: featureFactory,

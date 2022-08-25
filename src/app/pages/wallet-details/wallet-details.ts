@@ -82,6 +82,7 @@ export class WalletDetailsPage {
   public finishParam: any;
   public isScroll = false;
   public isSendFromHome: boolean = false;
+  public isGenNewAddress: boolean = false;
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -171,6 +172,10 @@ export class WalletDetailsPage {
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl = defaults.blockExplorerUrl[this.wallet.coin];
     this.blockexplorerUrlTestnet = defaults.blockExplorerUrlTestnet[this.wallet.coin];
+  }
+
+  handleGenNewAddress(event){
+    this.isGenNewAddress = event;
   }
 
   async handleScrolling(event) {
@@ -1023,6 +1028,11 @@ export class WalletDetailsPage {
   public handleNavigateBack() {
     if (this.isSendFromHome) {
       this.router.navigate(['/tabs/home']);
+    } else if(this.isGenNewAddress){
+      this.isGenNewAddress = false;
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.router.navigate(['/tabs/wallets']);
+      })
     } else {
       this.router.navigate(['/tabs/wallets']);
     }

@@ -177,7 +177,7 @@
         [ngClass]="{'with-label': createForm.value.singleAddress}">
         <div class="option-line">
           <p>{{ 'Single Address' | translate }}</p>
-          <ion-toggle [disabled]="isSlpToken" [checked]="isSlpToken" formControlName="singleAddress"></ion-toggle>
+          <ion-toggle [checked]="isSlpToken" formControlName="singleAddress"></ion-toggle>
         </div>
         <div class="option-line-info" *ngIf="createForm.value.singleAddress">
           <span translate>The single address feature will force the account to only use one address rather than

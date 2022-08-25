@@ -74,6 +74,10 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
+    path: 'swap',
+    loadChildren: () => import('./swap/swap.module').then(m => m.SwapModule)
+  },
+  {
     path: 'select-flow',
     component: SelectFlowPage
   },

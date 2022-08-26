@@ -3873,10 +3873,8 @@ msgstr "You received {voucherValue} {chain} to account"
 msgid "Could not process!"
 msgstr "Could not process!"
 
-msgid "Something wrong with the claim code (i.e. not existed, expried or "
-"run out of funds). Please contact shop or AbcPay team for support!"
-msgstr "Something wrong with the claim code (i.e. not existed, expried or "
-"run out of funds). Please contact shop or AbcPay team for support!"
+msgid "Please ensure {chain} account is available and add to home as primary account in order to process a claim {coinName}. Then try again!"
+msgstr "Please ensure {chain} account is available and add to home as primary account in order to process a claim {coinName}. Then try again!"
 msgid "The \"Key\" to your funds"
 msgstr "The \"Key\" to your funds"
 

@@ -596,7 +596,6 @@ export class HomePage {
         claimAddress: claimWalletAddress,
         claimCode: codeClaimSplit
       }
-      // lixi_w6YfK1qp5
       // Call provider to claim xpi from lixilotus/api
       await this.lixiLotusProvider.claimVoucher(bodyClaim)
       .then(async (data) => {

@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -48,10 +48,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
+import { FeatureFlagsService } from './providers/feature-flags.service';
+import { AppInitService } from './app-init.service';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
+
+export function initializeApp(appInitService: AppInitService) {
+  return (): Promise<any> => { 
+    return appInitService.init();
+  }
+}
+
 
 export class InterpolatedTranslateParser extends TranslateDefaultParser {
   public templateMatcher: RegExp = /{\s?([^{}\s]*)\s?}/g;
@@ -63,7 +72,8 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     return this.parser.interpolate(params.key, params.interpolateParams);
   }
 }
-
+const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
+  featureFlagsService.loadConfig();
 @NgModule({
     declarations: [
         /* Pipes */
@@ -131,6 +141,13 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: env.name === 'production' })
     ],
     providers: [
+      AppInitService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: featureFactory,
+            deps: [FeatureFlagsService],
+            multi: true
+          },
         {
             provide: RouteReuseStrategy,
             useClass: IonicRouteStrategy
@@ -139,6 +156,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
             provide: ErrorHandler,
             useClass: CustomErrorHandler
         },
+        
         FormatCurrencyPipe,
         NavParams,
         FormBuilder,

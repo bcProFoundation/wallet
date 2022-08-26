@@ -67,11 +67,13 @@ import { SettingsPage } from './pages/settings/settings';
 import { SearchContactPage } from './pages/search/search-contact/search-contact.component';
 import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
 import { ChartViewPage } from './pages/chart-view/chart-view';
+import { FeatureGuard } from './providers/feature-gaurd.service';
+import { SwapPage } from './pages/swap/swap.component';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
   },
   {
     path: 'swap',
@@ -79,277 +81,622 @@ const routes: Routes = [
   },
   {
     path: 'select-flow',
-    component: SelectFlowPage
+    component: SelectFlowPage,
+    canActivate: [FeatureGuard],
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'feature-education',
-    component: FeatureEducationPage
+    component: FeatureEducationPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'about',
     component: AboutPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'accounts-page',
-    component: AccountsPage
+    component: AccountsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'token-details',
-    component: TokenDetailsPage
+    component: TokenDetailsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'token-info',
-    component: TokenInforPage
+    component: TokenInforPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'confirm-token',
-    component: ConfirmTokenPage
+    component: ConfirmTokenPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   
   {
     path: 'alt-curency',
     component: AltCurrencyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'language',
     component: LanguagePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'advanced',
     component: AdvancedPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'local-theme',
     component: LocalThemePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'navigation',
     component: NavigationPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'addressbook',
     component: AddressbookPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'fee-policy',
     component: FeePolicyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'notifications',
     component: NotificationsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-settings',
     component: WalletSettingsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'share',
     component: SharePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'lock',
     component: LockPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'key-settings',
     component: KeySettingsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'add',
     component: AddPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-recover',
     component: WalletRecoverPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'address-book-add',
     component: AddressbookAddPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'address-book-view',
     component: AddressbookViewPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'scan',
     component: ScanPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'price',
     component: PricePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'session-log',
     component: SessionLogPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'send-feedback',
     component: SendFeedbackPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'share',
     component: SharePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'select-currency',
     component: SelectCurrencyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'join-wallet',
     component: JoinWalletPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'create-wallet',
     component: CreateWalletPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'import-wallet',
     component: ImportWalletPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'recovery-key',
     component: RecoveryKeyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-details',
     component: WalletDetailsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'send-page',
     component: SendPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'add-wallet',
     component: AddWalletPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'amount',
     component: AmountPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-name',
     component: WalletNamePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-information',
     component: WalletInformationPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-addresses',
     component: WalletAddressesPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-export',
     component: WalletExportPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-service-url',
     component: WalletServiceUrlPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-transaction-history',
     component: WalletTransactionHistoryPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-duplicate',
     component: WalletDuplicatePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-delete',
     component: WalletDeletePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'wallet-mnemonic-recover',
     component: WalletMnemonicRecoverPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'backup-key',
     component: BackupKeyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'backup-game',
     component: BackupGamePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'clear-encrypt-password',
     component: ClearEncryptPasswordPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'key-delete',
     component: KeyDeletePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'key-qr-export',
     component: KeyQrExportPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'extended-private-key',
     component: ExtendedPrivateKeyPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'key-name',
     component: KeyNamePage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'lock-method',
     component: LockMethodPage,
-    canActivate: [RedirectGuard]
+    canActivate: [RedirectGuard],
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'proposals-notifications',
     component: ProposalsNotificationsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'confirm',
     component: ConfirmPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'multi-send',
     component: MultiSendPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'select-inputs',
     component: SelectInputsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'send-select-inputs',
     component: SelectInputsSendPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'transfer-to-modal',
     component: TransferToModalPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'custom-amount',
     component: CustomAmountPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'add-funds',
     component: AddFundsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'copayers',
     component: CopayersPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   }, 
   {
     path: 'paper-wallet',
     component: PaperWalletPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'address-book-add',
     component: AddressbookAddPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'setting',
-    component: SettingsPage
+    component: SettingsPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'search-contact',
-    component: SearchContactPage
+    component: SearchContactPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
   },
   {
     path: 'chart-view',
-    component: ChartViewPage
+    component: ChartViewPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'abcpay'
+    }
+  },
+  {
+    path: 'swap',
+    component: SwapPage,
+    canActivate: [FeatureGuard],
+    data: {
+      feature: 'swap'
+    }
   }
 ];
 

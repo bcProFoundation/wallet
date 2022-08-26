@@ -17,6 +17,7 @@ import _ from 'lodash';
 import { PreviousRouteService } from 'src/app/providers/previous-route/previous-route';
 import { ActionSheetProvider } from 'src/app/providers/action-sheet/action-sheet';
 import { AddressProvider } from 'src/app/providers/address/address';
+import { LixiLotusProvider } from 'src/app/providers';
 
 @Component({
   selector: 'page-scan',
@@ -72,7 +73,8 @@ export class ScanPage {
     private routerOutlet: IonRouterOutlet,
     private previousRouteService: PreviousRouteService,
     private actionSheetProvider: ActionSheetProvider,
-    private addressProvider: AddressProvider
+    private addressProvider: AddressProvider,
+    private lixiLotusProvider: LixiLotusProvider
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -300,47 +302,60 @@ export class ScanPage {
 
 
   private handleSendAddress(data, addrData): void {
-    if (data.data.includes('amount')) {
+    this.lixiLotusProvider.getOfficialInfo(data.data).then(() => {
       this.router.navigateByUrl('/accounts-page', {
         state: {
           coin: addrData.coin,
           network: addrData.network,
-          toAddress: data.data,
-          isSpecificAmount: true
+          toAddress: data.data
         }
       });
-    }
-    else {
-      const dataMenu = this.actionSheetProvider.createIncomingDataMenu({ data });
-      dataMenu.present();
-      dataMenu.onDidDismiss(dataDismiss => {
-        if (dataDismiss && dataDismiss.redirTo == 'SendPage') {
-          this.router.navigateByUrl('/accounts-page', {
-            state: {
-              coin: addrData.coin,
-              network: addrData.network,
-              toAddress: data.data
-            }
-          });
-        }
-      });
-    }
-
+    }).catch(err => {
+      if (data.data.includes('amount')) {
+        this.router.navigateByUrl('/accounts-page', {
+          state: {
+            coin: addrData.coin,
+            network: addrData.network,
+            toAddress: data.data,
+            isSpecificAmount: true
+          }
+        });
+      }
+      else {
+        const dataMenu = this.actionSheetProvider.createIncomingDataMenu({ data });
+        dataMenu.present();
+        dataMenu.onDidDismiss(dataDismiss => {
+          if (dataDismiss && dataDismiss.redirTo == 'SendPage') {
+            this.router.navigateByUrl('/accounts-page', {
+              state: {
+                coin: addrData.coin,
+                network: addrData.network,
+                toAddress: data.data
+              }
+            });
+          }
+        });
+      }
+    })
   }
 
   private redirScanAddress(address) {
-    const parsedData = this.incomingDataProvider.parseData(address);
-    if (parsedData) {
-      const addrData = this.addressProvider.getCoinAndNetwork(address);
-      if (addrData && addrData.coin && addrData.network) {
-        return this.handleSendAddress({
-          data: address,
-          type: parsedData.type,
-          coin: addrData.coin
-        }, addrData)
+    if (address.includes('lixi_')) {
+      this.events.publish('Local/ClaimVoucher', { value: address });
+    } else {
+      const parsedData = this.incomingDataProvider.parseData(address);
+      if (parsedData) {
+        const addrData = this.addressProvider.getCoinAndNetwork(address);
+        if (addrData && addrData.coin && addrData.network) {
+          return this.handleSendAddress({
+            data: address,
+            type: parsedData.type,
+            coin: addrData.coin
+          }, addrData)
+        }
       }
+      return this.showErrorInvalidQr(' ', 'Invalid QR code');
     }
-    return this.showErrorInvalidQr(' ', 'Invalid QR code');
   }
 
   public authorize(): void {

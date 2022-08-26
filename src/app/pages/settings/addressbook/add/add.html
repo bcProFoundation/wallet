@@ -8,7 +8,10 @@
     <form [formGroup]="addressBookAdd">
       <mat-form-field class="form-field" appearance="outline">
         <mat-label translate>Name</mat-label>
-        <input matInput type="text" formControlName="name" [placeholder]="'Name' | translate">
+        <input matInput type="text" formControlName="name" [placeholder]="'Name' | translate" [readonly]="!nameEditable" translate>
+        <mat-icon matSuffix>
+          <ion-icon *ngIf="!nameEditable" name="checkmark-circle" class="check success" slot="end"></ion-icon>
+        </mat-icon>
       </mat-form-field>
   
       <mat-form-field [ngClass]="{'mobile-view': isCordova}" class="form-field" appearance="outline">

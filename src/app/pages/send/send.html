@@ -17,8 +17,8 @@
       </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="showOptions(wallet?.coin) && !isDonation && !token">
-      <ion-button fill="clear" class="option-button" (click)="goToSelectInput()">
-        <span>{{ 'Select Inputs' | translate }}</span>
+      <ion-button *ngIf="!isOfficialInfo" fill="clear" class="option-button" (click)="goToSelectInput()">
+        <span>{{"Select Inputs" | translate}}</span>
       </ion-button>
     </ion-buttons>
     <ion-title>
@@ -75,7 +75,7 @@
       <ng-container *ngFor="let recipient of listRecipient; let i = index">
         <recipient-component [index]="i" [wallet]="wallet" [recipient]="recipient"
           (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
-          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)">
+          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)" (sendOfficialInfo)="handleOfficialInfo($event)">
         </recipient-component>
       </ng-container>
     </div>
@@ -83,10 +83,26 @@
 </ion-content>
 
 <ion-footer class="ion-no-border footer" *ngIf="!shouldShowZeroState()">
-  <ion-toolbar>
-    <div class="btn-function-group">
-      <ion-button *ngIf="!token && !isDonation" class="btn-add-more" fill="outline" (click)="addNewRecipient()">{{ 'Add more recipient' | translate }}</ion-button>
-      <ion-button [disabled]="checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()">{{ 'Continue' | translate }}</ion-button>
-    </div>
-  </ion-toolbar>
+    <ng-container *ngIf="isOfficialInfo ; else otherTemplate">
+      <page-slide-to-accept #slideButton *ngIf="isCordova && wallet"
+      [ngClass]="{'slide-confirm-fast': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}"
+      [buttonText]="'Slide to send' | translate" [isDogecoin]="false" (slideDone)="approve()">
+    </page-slide-to-accept>
+    <ion-toolbar *ngIf="!isCordova && wallet">
+      <ion-button expand="full" class="button-footer" (click)="approve()"
+        [disabled]="!wallet || checkBeforeGoToConfirmPage()">
+        {{'Click to send' | translate}}
+      </ion-button>
+    </ion-toolbar>
+    </ng-container >
+    <ng-template #otherTemplate>
+      <ion-toolbar>
+        <div class="btn-function-group">
+          <ion-button *ngIf="!token && !isDonation" class="btn-add-more" fill="outline" (click)="addNewRecipient()">{{'Add
+            more recipient' | translate}}</ion-button>
+          <ion-button [disabled]="checkBeforeGoToConfirmPage()" class="button-standard" (click)="goToConfirm()">{{'Continue'
+            | translate}}</ion-button>
+        </div>
+      </ion-toolbar>
+    </ng-template>
 </ion-footer>

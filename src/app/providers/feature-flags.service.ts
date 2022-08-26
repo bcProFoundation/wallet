@@ -5,7 +5,8 @@ import { get, has, truncate } from "lodash";
 import { of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Router } from '@angular/router';
-import { SwapPage } from "../pages/swap/swap.component";
+import { CreateSwapPage } from "../pages/swap/create-swap/create-swap.component";
+import { OrderSwapPage } from "../pages/swap/order-swap/order-swap.component";
 
 
 export interface FeatureConfig {
@@ -35,12 +36,20 @@ export interface FeatureConfig {
             abcpay: false,
             swap: true
         } as FeatureConfig).pipe(tap(data =>{
+
           if(!data.abcpay && data.swap){
             const routes = this.Router.config;
             routes.shift();
-            routes.unshift({ path: '', component: SwapPage });
+            routes.unshift({ path: '', component: CreateSwapPage });
+            routes.push({ path: 'order', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
+          // if(!data.abcpay && data.swap){
+          //   const routes = this.Router.config;
+          //   routes.shift();
+          //   routes.unshift({ path: '', component: SwapPage });
+          //   this.Router.resetConfig(routes);
+          // }
           this.config = data;
         } ))
             .toPromise();;

@@ -16,7 +16,7 @@ export class AppInitService {
         //     component: 'SwapPage'
         // }]
         const routes = this.Router.config;
-        routes.push({ path: '', component: SwapPage });
+        // routes.push({ path: '', component: SwapPage });
         this.Router.resetConfig(routes);
         resolve();
     });

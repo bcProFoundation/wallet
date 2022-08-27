@@ -30,6 +30,7 @@ import { PinModalPage } from './pages/pin/pin-modal/pin-modal';
 import { FingerprintModalPage } from './pages/fingerprint/fingerprint';
 import { ImageLoaderConfigService } from 'ionic-image-loader-v5';
 import { CopayersPage } from './pages/add/copayers/copayers';
+import { FeatureFlagsService } from './providers/feature-flags.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -60,6 +61,7 @@ export class CopayApp {
   private onResumeSubscription: Subscription;
   private isCopayerModalOpen: boolean;
   private copayerModal: any;
+  private isSwap: boolean = false;
   constructor(
     private config: Config,
     private platform: Platform,
@@ -89,16 +91,18 @@ export class CopayApp {
     private addressBookProvider: AddressBookProvider,
     private router: Router,
     private imageLoaderConfig: ImageLoaderConfigService,
-    private navasd: NavController
+    private navasd: NavController,
+    private featureFlagService: FeatureFlagsService
   ) {
-    // this.imageLoaderConfig.setFileNameCachedWithExtension(true);
-    // this.imageLoaderConfig.useImageTag(true);
-    // this.imageLoaderConfig.enableSpinner(false);
-    // this.initializeApp();
-    // this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    // if (!this.platformProvider.isCordova) {
-    //   this.renderer.addClass(document.body, 'bg-desktop');
-    // }
+    this.isSwap = this.featureFlagService.isFeatureEnabled('swap');
+    this.imageLoaderConfig.setFileNameCachedWithExtension(true);
+    this.imageLoaderConfig.useImageTag(true);
+    this.imageLoaderConfig.enableSpinner(false);
+    this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
+    if (!this.platformProvider.isCordova) {
+      this.renderer.addClass(document.body, 'bg-desktop');
+    }
+    this.initializeApp();
   }
 
   ngOnDestroy() {
@@ -111,15 +115,15 @@ export class CopayApp {
   }
 
   initializeApp() {
-    // this.platform
-    //   .ready()
-    //   .then(async readySource => {
+    this.platform
+      .ready()
+      .then(async readySource => {
        
-    //     this.onPlatformReady(readySource);
-    //   })
-    //   .catch(e => {
-    //     this.logger.error('Platform is not ready.', e);
-    //   });
+        this.onPlatformReady(readySource);
+      })
+      .catch(e => {
+        this.logger.error('Platform is not ready.', e);
+      });
   }
 
   private onPlatformReady(readySource): void {
@@ -250,12 +254,9 @@ export class CopayApp {
 
     this.themeProvider.apply();
     if (this.platformProvider.isElectron) this.updateDesktopOnFocus();
-
     this.incomingDataRedirEvent();
-    this.events.subscribe('OpenWallet', (wallet, params) =>
-      this.openWallet(wallet, params)
-    );
-    let profile;
+    if(!this.isSwap){
+      let profile;
     this.keyProvider
       .load()
       .then(() => {
@@ -309,6 +310,11 @@ export class CopayApp {
             this.logsProvider.get(this.appProvider.info.nameCase, platform);
           });
       });
+    }
+    this.events.subscribe('OpenWallet', (wallet, params) =>
+      this.openWallet(wallet, params)
+    );
+   
     await this.persistenceProvider.setTempMdesCertOnlyFlag('disabled');
 
     this.addressBookProvider.migrateOldContacts();

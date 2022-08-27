@@ -143,21 +143,11 @@ const routes: Routes = [
   
   {
     path: 'alt-curency',
-    component: AltCurrencyPage,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'abcpay'
-    }
+    component: AltCurrencyPage
   },
   {
     path: 'language',
-    component: LanguagePage,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'abcpay'
-    }
+    component: LanguagePage
   },
   {
     path: 'advanced',
@@ -170,12 +160,7 @@ const routes: Routes = [
   },
   {
     path: 'local-theme',
-    component: LocalThemePage,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'abcpay'
-    }
+    component: LocalThemePage
   },
   {
     path: 'navigation',
@@ -664,12 +649,7 @@ const routes: Routes = [
   },
   {
     path: 'setting',
-    component: SettingsPage,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'abcpay'
-    }
+    component: SettingsPage
   },
   {
     path: 'search-contact',

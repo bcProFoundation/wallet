@@ -1,0 +1,27 @@
+
+page-create-swap{
+    .header-container{
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        margin: 0 1rem;
+        .header-title{
+            font-weight: 400;
+            font-size: 24px;
+            color: #001E2E;
+        }
+        .header-search-container{
+            &::part(native) {
+                --background: transparent;
+                --border-color: 0.5px;
+                --border-color: rgba(112, 129, 138, 0.38);
+                --border-width: 3px;
+                --border-style: solid;
+                /* --padding-top: 6px; */
+                /* padding-inline-start: 3px; */
+                height: 32px;
+                --color: rgba(112, 129, 138, 0.38);
+              }
+        }
+    }
+}

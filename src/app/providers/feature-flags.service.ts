@@ -7,6 +7,7 @@ import { tap } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { CreateSwapPage } from "../pages/swap/create-swap/create-swap.component";
 import { OrderSwapPage } from "../pages/swap/order-swap/order-swap.component";
+import { SettingsPage } from "../pages/settings/settings";
 
 
 export interface FeatureConfig {

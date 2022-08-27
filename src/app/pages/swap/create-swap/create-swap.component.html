@@ -1,3 +1,38 @@
-<p>
-  create-swap works!
-</p>
+<ion-header [translucent]="true" class="bp-header">
+  <ion-toolbar class="toolbar-desktop" translucent>
+    <div class="header-container-desktop">
+      <img class="logo-abcpay" src="../../../assets/img/abcpay-logo.svg" alt="">
+      <img src="../../../assets/img/abcpay-text.svg" alt="">
+    </div>
+  </ion-toolbar>
+  <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
+    <ion-buttons slot="start">
+      <!-- <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button> -->
+      <ion-button fill="clear" slot="icon-only" (click)="openSettingPage()">
+        <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
+  <div class="wrapper">
+    <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+    </expandable-header>
+
+  </div>
+
+  <div class="header-container">
+    <div class="header-title">
+      {{'Select recipient' | translate}}
+    </div>
+    <ion-item class="header-search-container">
+      <ion-input [placeholder]="'search order' | translate">
+
+      </ion-input>
+      <ion-icon  slot="start" src="assets/img/search-{{currentTheme}}.svg">
+
+      </ion-icon>
+    </ion-item>
+  </div>
+</ion-content>

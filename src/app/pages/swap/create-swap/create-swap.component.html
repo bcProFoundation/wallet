@@ -35,4 +35,16 @@
       </ion-icon>
     </ion-item>
   </div>
+  <div class="swap-exchange-rate-container">
+   <span>1 BTC</span>
+   <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
+   <span>1,000,000 XEC</span>
+   <countdown #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
+  </div>
+
+  <div class="swap-exchange-container">
+    <div>
+
+    </div>
+  </div>
 </ion-content>

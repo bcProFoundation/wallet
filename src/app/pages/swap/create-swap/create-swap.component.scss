@@ -5,6 +5,7 @@ page-create-swap{
         flex-flow: row;
         justify-content: space-between;
         margin: 0 1rem;
+        align-items: center;
         .header-title{
             font-weight: 400;
             font-size: 24px;
@@ -17,10 +18,17 @@ page-create-swap{
                 --border-color: rgba(112, 129, 138, 0.38);
                 --border-width: 3px;
                 --border-style: solid;
-                /* --padding-top: 6px; */
-                /* padding-inline-start: 3px; */
-                height: 32px;
-                --color: rgba(112, 129, 138, 0.38);
+                --border-radius: 4px;
+                --highlight-color-focused: rgba(112, 129, 138, 0.38);
+                --highlight-color-valid: rgba(112, 129, 138, 0.38);
+                --highlight-color-invalid: rgba(112, 129, 138, 0.38);
+                height: 49px;
+                font-size: 14px;
+              }
+              ion-input{
+                --padding-top: 0;
+                --padding-bottom: 0;
+                color: rgba(112, 129, 138, 0.38);
               }
         }
     }

@@ -50,6 +50,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
 import { FeatureFlagsService } from './providers/feature-flags.service';
 import { AppInitService } from './app-init.service';
+import { FeatureFlagDirective } from './directives/feature-flags/feature-flags';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -85,6 +86,7 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
         /* Directives */
         CopyToClipboard,
         ExternalizeLinks,
+        FeatureFlagDirective,
         FixedScrollBgColor,
         IonContentBackgroundColor,
         IonMask,

@@ -39,7 +39,7 @@
    <span>1 BTC</span>
    <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
    <span>1,000,000 XEC</span>
-   <countdown #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
+   <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
   </div>
 
   <div class="swap-exchange-container">

@@ -15,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
+<ion-content [fullscreen]="true" [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
   <div class="wrapper">
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
     </expandable-header>
@@ -36,15 +36,56 @@
     </ion-item>
   </div>
   <div class="swap-exchange-rate-container">
-   <span>1 BTC</span>
-   <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
-   <span>1,000,000 XEC</span>
-   <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
+    <ng-container *ngIf="coinSwapSelected && coinReceiveSelected">
+      <span>1</span> <span>{{coinSwapSelected.code}}</span>
+      <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
+      <span>{{(coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD)}}</span> <span> {{coinReceiveSelected.code}}</span>
+      <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
+    </ng-container>
   </div>
 
   <div class="swap-exchange-container">
-    <div>
+    <div class="send-receive-container">
+      <div class="title">You send</div>
+      <div class="list-coin">
+        <ion-item>
+          <ion-select value="{{listConfig.coinSwap[0].code}}" (ionChange)="handleCoinSwapChange($event)">
+            <ng-container *ngFor="let coin of listConfig.coinSwap">
+              <ion-select-option value="{{coin.code}}">{{coin.code}}</ion-select-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
 
+        <mat-form-field class="derivation-item" appearance="outline">
+          <input id="input-swap" matInput type="number" [placeholder]="'0'" [(ngModel)]="swapValue" (keydown)="inputChanged(true)">
+        </mat-form-field>
+
+        <!-- <span></span> <span>{{fiatCode}}</span> -->
+      </div>
     </div>
+    <div class="send-receive-container">
+      <div>You receive</div>
+      <ion-item>
+        <ion-select value="{{listConfig.coinReceived[0].code}}" (ionChange)="handleCoinReceiveChange($event)">
+          <ng-container *ngFor="let coin of listConfig.coinReceived">
+            <ion-select-option value="{{coin.code}}">{{coin.code}}</ion-select-option>
+          </ng-container>
+        </ion-select>
+      </ion-item>
+      <mat-form-field class="derivation-item" appearance="outline">
+        <input id="input-receive" matInput type="number" [placeholder]="'0'" [(ngModel)]="receiveValue"  (keydown)="inputChanged(false)">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>Network fee: </span>
+      <span *ngIf="!coinReceiveSelected.isToken">                 
+         {{ coinReceiveSelected.networkFee | satToUnit: getChain(coinReceiveSelected.code) }}
+      </span>
+      <span *ngIf="coinReceiveSelected.isToken">                 
+        {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
+     </span>
+    </div>
+
   </div>
 </ion-content>

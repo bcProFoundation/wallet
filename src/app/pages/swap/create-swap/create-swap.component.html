@@ -39,7 +39,7 @@
     <ng-container *ngIf="coinSwapSelected && coinReceiveSelected">
       <span>1</span> <span>{{coinSwapSelected.code}}</span>
       <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
-      <span>{{(coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD)}}</span> <span> {{coinReceiveSelected.code}}</span>
+      <span>{{formatAmountWithLimitDecimal((coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD),8)}}</span> <span> {{coinReceiveSelected.code}}</span>
       <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
     </ng-container>
   </div>
@@ -57,13 +57,13 @@
         </ion-item>
 
         <mat-form-field class="derivation-item" appearance="outline">
-          <input id="input-swap" matInput type="number" [placeholder]="'0'" [(ngModel)]="swapValue" (keydown)="inputChanged(true)">
+          <input #inputSwap matInput [placeholder]="'0'" [(ngModel)]="swapValue" (keydown)="inputChanged(true)" (ngModelChange)="validateInputSwap(inputSwap)">
         </mat-form-field>
 
-        <!-- <span></span> <span>{{fiatCode}}</span> -->
+        <p>{{formatAmountWithLimitDecimal((swapValue * coinSwapSelected.rate[fiatCode]),8)}} {{fiatCode}}</p>      
       </div>
     </div>
-    <div class="send-receive-container">
+    <div class="send-receive-container right-part">
       <div>You receive</div>
       <ion-item>
         <ion-select value="{{listConfig.coinReceived[0].code}}" (ionChange)="handleCoinReceiveChange($event)">
@@ -72,20 +72,24 @@
           </ng-container>
         </ion-select>
       </ion-item>
+
       <mat-form-field class="derivation-item" appearance="outline">
-        <input id="input-receive" matInput type="number" [placeholder]="'0'" [(ngModel)]="receiveValue"  (keydown)="inputChanged(false)">
+        <input #inputReceive matInput [placeholder]="'0'" [(ngModel)]="receiveValue"  (keydown)="inputChanged(false)" (ngModelChange)="validateInputReceive(inputReceive)">
       </mat-form-field>
+      <ng-container *ngIf="coinReceiveSelected && coinReceiveSelected.rate && coinReceiveSelected.rate[fiatCode]">
+        <p>{{formatAmountWithLimitDecimal((receiveValue * coinReceiveSelected.rate[fiatCode]),8)}} {{fiatCode}}</p>
+      </ng-container>
     </div>
-
-    <div>
-      <span>Network fee: </span>
-      <span *ngIf="!coinReceiveSelected.isToken">                 
-         {{ coinReceiveSelected.networkFee | satToUnit: getChain(coinReceiveSelected.code) }}
-      </span>
-      <span *ngIf="coinReceiveSelected.isToken">                 
-        {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
-     </span>
-    </div>
-
   </div>
+
+  <div class="network-fee-line">
+    <span>Network fee: </span>
+    <span *ngIf="!coinReceiveSelected.isToken">                 
+       {{ coinReceiveSelected.networkFee | satToUnit: getChain(coinReceiveSelected.code) }}
+    </span>
+    <span *ngIf="coinReceiveSelected.isToken">                 
+      {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
+   </span>
+  </div>
+
 </ion-content>

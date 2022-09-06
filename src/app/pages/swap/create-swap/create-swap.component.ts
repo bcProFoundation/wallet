@@ -22,7 +22,7 @@ export class CreateSwapPage implements OnInit {
   public coinReceiveSelected: any;
   public swapValue = 0;
   public receiveValue= 0;
-  public swapAltValue = 0;
+  public altValue = 0;
   public receiveAltValue= 0;
   private modelChanged: Subject<Boolean> = new Subject<Boolean>();
   private subscription: Subscription;
@@ -147,35 +147,50 @@ export class CreateSwapPage implements OnInit {
         const result = Number((this.swapValue * ( this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD)));
         this.receiveValue = this.formatAmountWithLimitDecimal(result, 8);
       } else{
-        const result = Number((this.receiveValue * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD)).toFixed(this.coinSwapSelected.unitDecimals));
+        const result = Number((this.receiveValue * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD)));;
         this.swapValue = this.formatAmountWithLimitDecimal(result, 8);
       }
     }
 
     validateInputSwap(input){
-      if(this.swapValue.toString().split('.').length > 1){
-        if(this.swapValue.toString().split('.')[1].length > this.coinSwapSelected.unitDecimals){
-          const valueFixed = Number(Number(this.swapValue).toFixed(this.coinSwapSelected.unitDecimals));
-          this.swapValue = valueFixed;
-          input.value = this.swapValue;
-        }
-      }
+      this.swapValue = this.formatAmountWithLimitDecimal(this.swapValue, 8);
+      input.value = this.swapValue;
     }
 
     validateInputReceive(input){
-      if(this.receiveValue.toString().split('.').length > 1){
-        if(this.receiveValue.toString().split('.')[1].length > this.coinReceiveSelected.unitDecimals){
-          const valueFixed = Number(Number(this.receiveValue).toFixed(this.coinReceiveSelected.unitDecimals));
-          this.receiveValue = valueFixed;
-          input.value = this.receiveValue;
+      this.receiveValue = this.formatAmountWithLimitDecimal(this.receiveValue, 8);
+      input.value = this.receiveValue;
+    }
+
+    handleKeyUp(isSwap: boolean, input, event){
+      const keyInput = event.key;
+      const pattern = /^[a-zA-Z]*$/;   
+      if(isSwap){
+        if (pattern.test(keyInput)) {
+          // this.swapValue = Number(this.swapValue.toString().replace(/[^a-zA-Z]/g, ""));
+          input.value =  Number(this.swapValue.toString().replace(/[a-zA-Z]/g, ""));
+          // invalid character, prevent input
         }
+        else{
+          this.modelChanged.next(isSwap);
+          this.altValue = this.formatAmountWithLimitDecimal(Number(this.swapValue) * this.coinSwapSelected.rate[this.fiatCode], 8);
+        } 
+      }
+      else{
+        if (pattern.test(keyInput)) {
+          input.value = Number(this.swapValue.toString().replace(/[a-zA-Z]/g, ""));
+        }
+        else{
+          this.modelChanged.next(isSwap);
+          this.altValue = this.formatAmountWithLimitDecimal(Number(this.receiveValue) * this.coinReceiveSelected.rate[this.fiatCode], 8);
+        } 
       }
     }
 
     formatAmountWithLimitDecimal(amount:number, maxDecimals):number {
       if(amount.toString().split('.').length > 1){
         if(amount.toString().split('.')[1].length > maxDecimals){
-          return Number(amount.toFixed(maxDecimals));
+          return Number(amount.toString().split('.')[0] + '.' + amount.toString().split('.')[1].substr(0, maxDecimals));
         }
         return amount;      
       } else {
@@ -197,9 +212,9 @@ export class CreateSwapPage implements OnInit {
     }
     }
 
-    inputChanged(isSwap:boolean){
+    inputChanged(isSwap:boolean, input, event){
       this.modelChanged.next(isSwap);
-      
+     
     }
 
     handleUpdateRate(){
@@ -208,19 +223,19 @@ export class CreateSwapPage implements OnInit {
           const code = coin.code.toLowerCase();
           coin.rate = data[code];
           const coinCode = coin.isToken ? 'xec' : coin.code;
-          if(coin.unitDecimals <= 0){
-            const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
-            coin.unitDecimals = unitDecimals;
-          }
+          // if(coin.unitDecimals <= 0){
+          //   const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
+          //   coin.unitDecimals = unitDecimals;
+          // }
         });
         this.listConfig.coinReceived.forEach(coin =>{
           const code = coin.code.toLowerCase();
           coin.rate = data[code];
           const coinCode = coin.isToken ? 'xec' : coin.code;
-          if(coin.unitDecimals <= 0){
-            const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
-            coin.unitDecimals = unitDecimals;
-          }
+          // if(coin.unitDecimals <= 0){
+          //   const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
+          //   coin.unitDecimals = unitDecimals;
+          // }
         });
         this.usdRate = data['eat'];
       });

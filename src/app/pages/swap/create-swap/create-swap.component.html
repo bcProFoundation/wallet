@@ -57,10 +57,10 @@
         </ion-item>
 
         <mat-form-field class="derivation-item" appearance="outline">
-          <input #inputSwap matInput [placeholder]="'0'" [(ngModel)]="swapValue" (keydown)="inputChanged(true)" (ngModelChange)="validateInputSwap(inputSwap)">
+          <input #inputSwap matInput [placeholder]="'0'" [(ngModel)]="swapValue" (ngModelChange)="validateInputSwap(inputSwap)" (keyup)="handleKeyUp(true, inputSwap, $event)">
         </mat-form-field>
 
-        <p>{{formatAmountWithLimitDecimal((swapValue * coinSwapSelected.rate[fiatCode]),8)}} {{fiatCode}}</p>      
+        <!-- <p>{{swapAltValue}} {{fiatCode}}</p>       -->
       </div>
     </div>
     <div class="send-receive-container right-part">
@@ -74,14 +74,16 @@
       </ion-item>
 
       <mat-form-field class="derivation-item" appearance="outline">
-        <input #inputReceive matInput [placeholder]="'0'" [(ngModel)]="receiveValue"  (keydown)="inputChanged(false)" (ngModelChange)="validateInputReceive(inputReceive)">
+        <input #inputReceive matInput [placeholder]="'0'" [(ngModel)]="receiveValue" (ngModelChange)="validateInputReceive(inputReceive)" (keyup)="handleKeyUp(false, inputSwap, $event)">
       </mat-form-field>
-      <ng-container *ngIf="coinReceiveSelected && coinReceiveSelected.rate && coinReceiveSelected.rate[fiatCode]">
-        <p>{{formatAmountWithLimitDecimal((receiveValue * coinReceiveSelected.rate[fiatCode]),8)}} {{fiatCode}}</p>
-      </ng-container>
+      <!-- <ng-container *ngIf="coinReceiveSelected && coinReceiveSelected.rate && coinReceiveSelected.rate[fiatCode]">
+        <p>{{receiveAltValue}} {{fiatCode}}</p>
+      </ng-container> -->
     </div>
   </div>
-
+  <div class="convert-rate-line">
+    {{altValue}} {{fiatCode}}
+  </div>
   <div class="network-fee-line">
     <span>Network fee: </span>
     <span *ngIf="!coinReceiveSelected.isToken">                 

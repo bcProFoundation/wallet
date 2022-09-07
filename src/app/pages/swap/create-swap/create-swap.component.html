@@ -37,13 +37,23 @@
   </div>
   <div class="swap-exchange-rate-container">
     <ng-container *ngIf="coinSwapSelected && coinReceiveSelected">
-      <span>1</span> <span>{{coinSwapSelected.code}}</span>
+      <span>1</span>&nbsp; <span>{{coinSwapSelected.code}}</span>
       <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
-      <span>{{formatAmountWithLimitDecimal((coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD),8)}}</span> <span> {{coinReceiveSelected.code}}</span>
+      <span>{{formatAmountWithLimitDecimal((coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD),8)}}</span>&nbsp; <span> {{coinReceiveSelected.code}}</span>
       <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
     </ng-container>
   </div>
-
+<div>
+  <form>
+    
+  <div class="address-container">
+    <p>Your {{ coinReceiveSelected.code }} address</p>
+    <!-- <mat-form-field class="derivation-item" appearance="outline">
+      <input #addressSwap matInput [placeholder]="'paste address here'" [(ngModel)]="addressSwapValue" (ngModelChange)="validateAddress()">
+    </mat-form-field> -->
+    <p>{{ validAddress }}</p>
+  </div>
+  </form>
   <div class="swap-exchange-container">
     <div class="send-receive-container">
       <div class="title">You send</div>
@@ -57,8 +67,9 @@
         </ion-item>
 
         <mat-form-field class="derivation-item" appearance="outline">
-          <input #inputSwap matInput [placeholder]="'0'" [(ngModel)]="swapValue" (ngModelChange)="validateInputSwap(inputSwap)" (keyup)="handleKeyUp(true, inputSwap, $event)">
+          <input #inputSwap matInput [placeholder]="'0'" [(ngModel)]="swapValue" (ngModelChange)="validateInput(true)" (keydown)="handleKeyDown(true, $event)">
         </mat-form-field>
+
 
         <!-- <p>{{swapAltValue}} {{fiatCode}}</p>       -->
       </div>
@@ -74,7 +85,7 @@
       </ion-item>
 
       <mat-form-field class="derivation-item" appearance="outline">
-        <input #inputReceive matInput [placeholder]="'0'" [(ngModel)]="receiveValue" (ngModelChange)="validateInputReceive(inputReceive)" (keyup)="handleKeyUp(false, inputSwap, $event)">
+        <input #inputReceive matInput [placeholder]="'0'" [(ngModel)]="receiveValue" (ngModelChange)="validateInput(false)" (keydown)="handleKeyDown(false, $event)">
       </mat-form-field>
       <!-- <ng-container *ngIf="coinReceiveSelected && coinReceiveSelected.rate && coinReceiveSelected.rate[fiatCode]">
         <p>{{receiveAltValue}} {{fiatCode}}</p>
@@ -82,8 +93,10 @@
     </div>
   </div>
   <div class="convert-rate-line">
-    {{altValue}} {{fiatCode}}
+    {{altValueStr}} {{fiatCode}}
   </div>
+  <mat-err *ngIf="!validSwapAmount">You need to deposit at least {{ minWithCurrentFiatStr }} {{fiatCode}} </mat-err>
+
   <div class="network-fee-line">
     <span>Network fee: </span>
     <span *ngIf="!coinReceiveSelected.isToken">                 
@@ -94,4 +107,22 @@
    </span>
   </div>
 
+  <div class="address-container">
+    <p>Your {{ coinReceiveSelected.code }} address</p>
+    <mat-form-field class="derivation-item" appearance="outline">
+      <input #addressSwap matInput [placeholder]="'paste address here'" [(ngModel)]="addressSwapValue" (ngModelChange)="validateAddress()">
+    </mat-form-field>
+    <p>{{ validAddress }}</p>
+  </div>
+</div>
+
+
 </ion-content>
+
+<ion-footer class="ion-no-border footer">
+  <ion-toolbar>
+    <div class="btn-function-group">
+      <ion-button class="button-standard">{{ 'Swap' | translate }}</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

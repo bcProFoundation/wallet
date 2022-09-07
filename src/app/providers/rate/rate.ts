@@ -118,10 +118,8 @@ export class RateProvider {
             _.map(res, (rates, coin) => {
               const coinRates = {};
               _.each(rates, r => {
-                if (r.code && r.rate && r.code === 'USD') {
-                  const rate = { [r.code]: r.rate };
-                  Object.assign(coinRates, rate);
-                }
+                const rate = { [r.code]: r.rate };
+                Object.assign(coinRates, rate);
 
                 // set alternative currency list
                 if (r.code && r.name) {

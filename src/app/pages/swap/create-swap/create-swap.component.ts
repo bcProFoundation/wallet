@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
+import { truncateSync } from 'fs';
 import _ from 'lodash';
 import { CountdownComponent } from 'ngx-countdown';
 import { Subject, Subscription } from 'rxjs';
@@ -12,7 +14,8 @@ import { Config, ConfigProvider } from '../../../providers/config/config';
   selector: 'page-create-swap',
   templateUrl: './create-swap.component.html',
   styleUrls: ['./create-swap.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateSwapPage implements OnInit {
   public isScroll = false;
@@ -35,8 +38,9 @@ export class CreateSwapPage implements OnInit {
   public minAmount : any;
   public minStr : any;
   public validSwapAmount = true;
+  public minWithCurrentFiat: any;
   public minWithCurrentFiatStr: any;
-
+  public createForm: FormGroup
   debounceTime = 500;
   // public config: Config;
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
@@ -120,11 +124,28 @@ export class CreateSwapPage implements OnInit {
     private currencyProvider: CurrencyProvider,
     private configProvider: ConfigProvider,
     private incomingDataProvider: IncomingDataProvider,
-    private addressProvider: AddressProvider
+    private addressProvider: AddressProvider,
+    private form: FormBuilder,
+    private _cdRef: ChangeDetectorRef
     ) 
     { 
-      // this.router.navigate(['/setting']);
-      // this.config = this.configProvider.get();
+      this.createForm = this.form.group({
+        swapAmount:[0,{
+          validators: [this.amountMinValidator()],
+          updateOn: 'change'
+        }],
+        // swapAmount: [null],
+        receiveAmount:[0,{
+          validators: [this.amountMinValidator()],
+          updateOn: 'change'
+        }],
+        address: [
+          null, {
+            validators: [this.addressValidator()],
+            updateOn: 'change'
+          }
+        ]
+      });
     }
 
     public getChain(coin: Coin): string {
@@ -158,7 +179,8 @@ export class CreateSwapPage implements OnInit {
     }
 
     ngOnInit() {
-     this.handleUpdateRate();
+      this.handleUpdateRate();
+     
      this.coinReceiveSelected = this.listConfig.coinReceived[0];
      this.coinSwapSelected = this.listConfig.coinSwap[0];
      this.subscription = this.modelChanged
@@ -172,75 +194,119 @@ export class CreateSwapPage implements OnInit {
 
     handleInputChange(isSwap: Boolean){
       if(!!isSwap){
-        const result = Number((this.swapValue * ( this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD)));
-        this.receiveValue = this.formatAmountWithLimitDecimal(result, 8);
-        this.inputReceive.nativeElement.value = this.receiveValue;
+        const result = Number(this.createForm.controls['swapAmount'].value * ( this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD));
+        this.createForm.controls['receiveAmount'].setValue(this.formatAmountWithLimitDecimal(result, 8));
       } else{
-        const result = Number((this.receiveValue * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD)));;
-        this.swapValue = this.formatAmountWithLimitDecimal(result, 8);
-        this.inputSwap.nativeElement.value = this.swapValue;
+        const result = Number((this.createForm.controls['receiveAmount'].value * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD)));;
+        this.createForm.controls['swapAmount'].setValue(this.formatAmountWithLimitDecimal(result, 8));
       }
+    }
 
-      if(this.altValue > 0 ){
-        const minWithCurrentFiat = this.coinSwapSelected.min * this.usdRate[this.fiatCode];
-        if(this.altValue < minWithCurrentFiat){
-          this.validSwapAmount = false;
-          this.minWithCurrentFiatStr = new Intl.NumberFormat('en-GB').format(minWithCurrentFiat);
+    amountMinValidator(): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        if(control.value === 0){
+          return { amountNotInput: true };
+        }
+        if(this.altValue > 0 ){
+          this.minWithCurrentFiat = this.coinSwapSelected.min * this.usdRate[this.fiatCode];
+          if(this.altValue < this.minWithCurrentFiat){
+            this.minWithCurrentFiatStr = new Intl.NumberFormat('en-GB').format(this.minWithCurrentFiat);
+            return { amountMinValidator: true };
+          } else{
+            return null;
+          }
+        }
+        else{
+          return null;
+        }
+      };
+    }
+
+    addressValidator():ValidatorFn{
+      return (control: AbstractControl): ValidationErrors | null => {
+        // handle case no address input
+        if(!control.value){
+          return null;
+        }
+        if(control.value.length === 0){
+          return { addressNotInput: true };
+        }
+        
+        // handle case token
+        if(this.coinReceiveSelected.isToken){
+          try {
+            const addressInputValue = this.createForm.controls['address'].value;
+            const { prefix, type, hash } = this.addressProvider.decodeAddress(addressInputValue);
+            if(prefix === 'etoken' || prefix === 'ecash'){
+              return null;
+            } else{
+              return { addressInvalid: true }
+            }
+          }
+          catch(e){
+            return { addressInvalid: true }
+          }
+        }
+       
+        // handle case coin
+        const parsedData = this.incomingDataProvider.parseData(this.addressSwapValue);
+        if (
+          parsedData &&
+          _.indexOf(this.validDataTypeMap, parsedData.type) != -1
+        ) {
+          this.validAddress = this.checkCoinAndNetwork(this.addressSwapValue);
+          if(this.validAddress){
+            return null;
+          } else {
+            return { addressInvalid: true }
+          }
         } else{
-          this.validSwapAmount = true;
+          return { addressInvalid: true }
         }
       }
-      else{
-        this.validSwapAmount = true;
-      }
-      // this.inputReceive.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.receiveValue);
-      // this.inputSwap.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
     }
 
     validateInput(isSwap){
       if(!!isSwap){
-        this.swapValue = this.formatAmountWithLimitDecimal(this.swapValue, 8);
+        // this.createForm.controls['receiveAmount'].setValue
+        // this.swapValue = this.formatAmountWithLimitDecimal(this.swapValue, 8);
+        // this._cdRef.markForCheck();
         // this.inputSwap.nativeElement.value = this.swapValue;
       } else{
         this.receiveValue = this.formatAmountWithLimitDecimal(this.receiveValue, 8);
         // this.inputReceive.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
       }
-      // this.inputSwap.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
+      this.inputSwap.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
       //   this.inputReceive.nativeElement.value = this.receiveValue;
 
     }
 
     handleKeyDown(isSwap: boolean, event){
       const keyInput = event.key;
-      // const pattern = /[^a-zA-Z]*$/;   
       const pattern = /[^0-9\.]/;
       const keyCode = event.keyCode;
       const allowSpecialKeyCode = [37, 39, 8, 46];
-      this.swapValue = Number(this.swapValue.toString().replace(/,/g, ''));
-      this.receiveValue = Number(this.receiveValue.toString().replace(/,/g, ''));
+      const swapValueInputStr = this.createForm.controls['swapAmount'].value.toString();
+      const receiveValueInputStr = this.createForm.controls['receiveAmount'].value.toString();
       if(isSwap){
         if(keyInput === '.'){
-          if(this.swapValue.toString().split('.').length > 1) {
-            // input.value = this.swapValue.toString().substring(0, this.swapValue.toString().length-1);
+          if(swapValueInputStr.split('.').length > 1) {
             event.preventDefault();
           }
         }
         else if (!allowSpecialKeyCode.includes(keyCode) && pattern.test(keyInput)) {
-          // this.swapValue = Number(this.swapValue.toString().replace(/[^a-zA-Z]/g, ""));
-          // input.value =  this.swapValue.toString().replace(/[^0-9\.]/g, "");
-          // invalid character, prevent input
           event.preventDefault();
         }
         else{
           let swapValue;
-          if(keyCode === 8){
-            swapValue = Number(this.swapValue.toString().substring(0, this.swapValue.toString().length -1));
+          if(keyCode === 8 || keyCode === 46){
+            swapValue = Number(swapValueInputStr.substring(0, swapValueInputStr.length -1));
           } else if(!allowSpecialKeyCode.includes(keyCode)){
-            swapValue = Number(this.swapValue + event.key);
+            swapValue = Number(swapValueInputStr + event.key);
           } else{
-            swapValue = this.swapValue;
+            swapValue = swapValueInputStr;
           }   
-          swapValue = isNaN(swapValue) ? 0 : swapValue;
+          swapValue = isNaN(swapValueInputStr) ? 0 : swapValue;
           this.modelChanged.next(isSwap);
           this.altValue = this.formatAmountWithLimitDecimal(swapValue * this.coinSwapSelected.rate[this.fiatCode], 8);
           this.altValueStr = new Intl.NumberFormat('en-GB').format(this.altValue);
@@ -248,17 +314,16 @@ export class CreateSwapPage implements OnInit {
       }
       else{
         if (!allowSpecialKeyCode.includes(keyCode) && pattern.test(keyInput)) {
-          // input.value =  this.swapValue.toString().replace(/[^0-9\.]/g, "");
           event.preventDefault();
         }
         else{
           let receiveValue;
-          if(keyCode === 8){
-            receiveValue = Number(this.receiveValue.toString().substring(0, this.receiveValue.toString().length -1));
+          if(keyCode === 8 || keyCode === 46){
+            receiveValue = Number(receiveValueInputStr.substring(0, receiveValueInputStr.length -1));
           } else if(!allowSpecialKeyCode.includes(keyCode)){
-            receiveValue = Number(this.receiveValue + event.key);
+            receiveValue = Number(receiveValueInputStr + event.key);
           } else{
-            receiveValue = this.receiveValue;
+            receiveValue = receiveValueInputStr;
           }
           receiveValue = isNaN(receiveValue) ? 0 : receiveValue;   
           this.modelChanged.next(isSwap);
@@ -266,12 +331,8 @@ export class CreateSwapPage implements OnInit {
           this.altValueStr = new Intl.NumberFormat('en-GB').format(this.altValue);
         } 
       }
+      this.modelChanged.next(isSwap);
     }
-
-    // handleKeyUp(){
-    //     this.inputSwap.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
-    //     this.inputReceive.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.receiveValue);
-    //   }
 
     formatAmountWithLimitDecimal(amount:number, maxDecimals):number {
       if(amount.toString().split('.').length > 1){
@@ -304,49 +365,48 @@ export class CreateSwapPage implements OnInit {
         this.listConfig.coinSwap.forEach(coin =>{
           const code = coin.code.toLowerCase();
           coin.rate = data[code];
-          // const coinCode = coin.isToken ? 'xec' : coin.code;
-          // if(coin.unitDecimals <= 0){
-          //   const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
-          //   coin.unitDecimals = unitDecimals;
-          // }
         });
         this.listConfig.coinReceived.forEach(coin =>{
           const code = coin.code.toLowerCase();
           coin.rate = data[code];
-          // const coinCode = coin.isToken ? 'xec' : coin.code;
-          // if(coin.unitDecimals <= 0){
-          //   const { unitDecimals } = this.currencyProvider.getPrecision(coinCode as Coin);
-          //   coin.unitDecimals = unitDecimals;
-          // }
         });
-        
       });
     }
 
     handleCoinSwapChange(event){
       const coinSwapCodeSelected = event.detail.value;
       this.coinSwapSelected = this.listConfig.coinSwap.find(s => s.code === coinSwapCodeSelected);
-      this.swapValue = 0;
-      this.receiveValue = 0;
+      this.resetFormControl();
+      // this.swapValue = 0;
+      // this.receiveValue = 0;
     }
 
     handleCoinReceiveChange(event){
       const coinReceiveCodeSelected = event.detail.value;
       this.coinReceiveSelected = this.listConfig.coinReceived.find(s => s.code === coinReceiveCodeSelected);
-      this.swapValue = 0;
-      this.receiveValue = 0;
-      this.addressSwapValue = '';
+      this.resetFormControl();
+      // this.swapValue = 0;
+      // this.receiveValue = 0;
+      // this.addressSwapValue = '';
+    }
+
+    resetFormControl(){
+      this.createForm.controls['swapAmount'].setValue(0);
+      this.createForm.controls['receiveAmount'].setValue(0);
+      this.createForm.controls['address'].setValue('');
     }
 
     ionViewWillEnter() {
-      this.currentTheme = this.themeProvider.getCurrentAppTheme() === 'Dark Mode' ? 'dark' : 'light';
       this.config = this.configProvider.get();
       this.fiatCode = this.config.wallet.settings.alternativeIsoCode;
-
+      this.currentTheme = this.themeProvider.getCurrentAppTheme() === 'Dark Mode' ? 'dark' : 'light';
+      this._cdRef.markForCheck();
     }
 
     validateAddress(){
+      
       const parsedData = this.incomingDataProvider.parseData(this.addressSwapValue);
+
       if (
         parsedData &&
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1
@@ -376,4 +436,5 @@ export class CreateSwapPage implements OnInit {
     public openSettingPage() {
       this.router.navigate(['/setting']);
     }
+
 }

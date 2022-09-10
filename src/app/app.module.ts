@@ -52,6 +52,9 @@ import { FeatureFlagsService } from './providers/feature-flags.service';
 import { AppInitService } from './app-init.service';
 import { FeatureFlagDirective } from './directives/feature-flags/feature-flags';
 
+import { NgxMaskModule } from 'ngx-mask'
+
+
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -106,6 +109,7 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
             backButtonText: '',
             navAnimation: enterAnimation
         }),
+        NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,
         BrowserAnimationsModule,

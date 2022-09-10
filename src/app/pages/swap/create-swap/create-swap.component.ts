@@ -1,14 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
-import { truncateSync } from 'fs';
 import _ from 'lodash';
 import { CountdownComponent } from 'ngx-countdown';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AddressProvider, Coin, CurrencyProvider, FilterProvider, IncomingDataProvider, RateProvider, ThemeProvider } from 'src/app/providers';
 import { Config, ConfigProvider } from '../../../providers/config/config';
-// import { Config } from 'src/app/providers/config/config';
 
 @Component({
   selector: 'page-create-swap',
@@ -23,11 +21,7 @@ export class CreateSwapPage implements OnInit {
   public rates: any;
   public coinSwapSelected: any;
   public coinReceiveSelected: any;
-  public swapValue = 0;
-  public receiveValue= 0;
   public altValue = 0;
-  public altValueStr : any;
-  public receiveAltValue= 0;
   private modelChanged: Subject<Boolean> = new Subject<Boolean>();
   private subscription: Subscription;
   public usdRate: any;
@@ -36,10 +30,7 @@ export class CreateSwapPage implements OnInit {
   public addressSwapValue: any;
   public validAddress: any;
   public minAmount : any;
-  public minStr : any;
-  public validSwapAmount = true;
   public minWithCurrentFiat: any;
-  public minWithCurrentFiatStr: any;
   public createForm: FormGroup
   debounceTime = 500;
   // public config: Config;
@@ -193,12 +184,15 @@ export class CreateSwapPage implements OnInit {
     }
 
     handleInputChange(isSwap: Boolean){
+
       if(!!isSwap){
-        const result = Number(this.createForm.controls['swapAmount'].value * ( this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD));
-        this.createForm.controls['receiveAmount'].setValue(this.formatAmountWithLimitDecimal(result, 8));
+        const result = this.createForm.controls['swapAmount'].value * ( this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD);
+        this.createForm.controls['receiveAmount'].setValue(result);
+        this.altValue = this.createForm.controls['swapAmount'].value * this.coinSwapSelected.rate[this.fiatCode];
       } else{
-        const result = Number((this.createForm.controls['receiveAmount'].value * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD)));;
-        this.createForm.controls['swapAmount'].setValue(this.formatAmountWithLimitDecimal(result, 8));
+        const result = (this.createForm.controls['receiveAmount'].value * ( this.coinReceiveSelected.rate.USD / this.coinSwapSelected.rate.USD));;
+        this.createForm.controls['swapAmount'].setValue(result);
+        this.altValue = this.createForm.controls['receiveAmount'].value * this.coinReceiveSelected.rate[this.fiatCode];
       }
     }
 
@@ -210,7 +204,6 @@ export class CreateSwapPage implements OnInit {
         if(this.altValue > 0 ){
           this.minWithCurrentFiat = this.coinSwapSelected.min * this.usdRate[this.fiatCode];
           if(this.altValue < this.minWithCurrentFiat){
-            this.minWithCurrentFiatStr = new Intl.NumberFormat('en-GB').format(this.minWithCurrentFiat);
             return { amountMinValidator: true };
           } else{
             return null;
@@ -266,21 +259,6 @@ export class CreateSwapPage implements OnInit {
       }
     }
 
-    validateInput(isSwap){
-      if(!!isSwap){
-        // this.createForm.controls['receiveAmount'].setValue
-        // this.swapValue = this.formatAmountWithLimitDecimal(this.swapValue, 8);
-        // this._cdRef.markForCheck();
-        // this.inputSwap.nativeElement.value = this.swapValue;
-      } else{
-        this.receiveValue = this.formatAmountWithLimitDecimal(this.receiveValue, 8);
-        // this.inputReceive.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
-      }
-      this.inputSwap.nativeElement.value = new Intl.NumberFormat('en-GB').format(this.swapValue);
-      //   this.inputReceive.nativeElement.value = this.receiveValue;
-
-    }
-
     handleKeyDown(isSwap: boolean, event){
       const keyInput = event.key;
       const pattern = /[^0-9\.]/;
@@ -298,18 +276,7 @@ export class CreateSwapPage implements OnInit {
           event.preventDefault();
         }
         else{
-          let swapValue;
-          if(keyCode === 8 || keyCode === 46){
-            swapValue = Number(swapValueInputStr.substring(0, swapValueInputStr.length -1));
-          } else if(!allowSpecialKeyCode.includes(keyCode)){
-            swapValue = Number(swapValueInputStr + event.key);
-          } else{
-            swapValue = swapValueInputStr;
-          }   
-          swapValue = isNaN(swapValueInputStr) ? 0 : swapValue;
           this.modelChanged.next(isSwap);
-          this.altValue = this.formatAmountWithLimitDecimal(swapValue * this.coinSwapSelected.rate[this.fiatCode], 8);
-          this.altValueStr = new Intl.NumberFormat('en-GB').format(this.altValue);
         } 
       }
       else{
@@ -317,18 +284,7 @@ export class CreateSwapPage implements OnInit {
           event.preventDefault();
         }
         else{
-          let receiveValue;
-          if(keyCode === 8 || keyCode === 46){
-            receiveValue = Number(receiveValueInputStr.substring(0, receiveValueInputStr.length -1));
-          } else if(!allowSpecialKeyCode.includes(keyCode)){
-            receiveValue = Number(receiveValueInputStr + event.key);
-          } else{
-            receiveValue = receiveValueInputStr;
-          }
-          receiveValue = isNaN(receiveValue) ? 0 : receiveValue;   
           this.modelChanged.next(isSwap);
-          this.altValue = this.formatAmountWithLimitDecimal(receiveValue * this.coinReceiveSelected.rate[this.fiatCode], 8);
-          this.altValueStr = new Intl.NumberFormat('en-GB').format(this.altValue);
         } 
       }
       this.modelChanged.next(isSwap);
@@ -377,17 +333,12 @@ export class CreateSwapPage implements OnInit {
       const coinSwapCodeSelected = event.detail.value;
       this.coinSwapSelected = this.listConfig.coinSwap.find(s => s.code === coinSwapCodeSelected);
       this.resetFormControl();
-      // this.swapValue = 0;
-      // this.receiveValue = 0;
     }
 
     handleCoinReceiveChange(event){
       const coinReceiveCodeSelected = event.detail.value;
       this.coinReceiveSelected = this.listConfig.coinReceived.find(s => s.code === coinReceiveCodeSelected);
       this.resetFormControl();
-      // this.swapValue = 0;
-      // this.receiveValue = 0;
-      // this.addressSwapValue = '';
     }
 
     resetFormControl(){
@@ -401,18 +352,6 @@ export class CreateSwapPage implements OnInit {
       this.fiatCode = this.config.wallet.settings.alternativeIsoCode;
       this.currentTheme = this.themeProvider.getCurrentAppTheme() === 'Dark Mode' ? 'dark' : 'light';
       this._cdRef.markForCheck();
-    }
-
-    validateAddress(){
-      
-      const parsedData = this.incomingDataProvider.parseData(this.addressSwapValue);
-
-      if (
-        parsedData &&
-        _.indexOf(this.validDataTypeMap, parsedData.type) != -1
-      ) {
-        this.validAddress = this.checkCoinAndNetwork(this.addressSwapValue);
-      }
     }
 
     private checkCoinAndNetwork(data): boolean {

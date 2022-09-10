@@ -58,7 +58,7 @@
           </ion-item>
           
           <mat-form-field class="derivation-item">
-            <input type="text" formControlName="swapAmount" #inputSwap matInput [value]="createForm.value.swapAmount" (keydown)="handleKeyDown(true, $event)">
+            <input type="text" formControlName="swapAmount" #inputSwap matInput (keydown)="handleKeyDown(true, $event)" mask="separator.8" thousandSeparator=",">
           </mat-form-field>
   
         </div>
@@ -74,17 +74,14 @@
         </ion-item>
   
         <mat-form-field class="derivation-item">
-          <input formControlName="receiveAmount" #inputReceive matInput [value]="createForm.value.receiveAmount" (keydown)="handleKeyDown(false, $event)">
+          <input formControlName="receiveAmount" #inputReceive matInput (keydown)="handleKeyDown(false, $event)" mask="separator.8" thousandSeparator=",">
         </mat-form-field>
-        <!-- <ng-container *ngIf="coinReceiveSelected && coinReceiveSelected.rate && coinReceiveSelected.rate[fiatCode]">
-          <p>{{receiveAltValue}} {{fiatCode}}</p>
-        </ng-container> -->
       </div>
     </div>
     <div class="convert-rate-line">
-      {{altValueStr}} {{fiatCode}}
+      {{altValue | mask: 'separator.8':',' }} {{fiatCode}}
     </div>
-    <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator">You need to deposit at least {{ minWithCurrentFiatStr }} {{fiatCode}} </mat-error>
+    <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator">You need to deposit at least {{ minWithCurrentFiat | mask: 'separator.8':',' }} {{fiatCode}} </mat-error>
   
     <div class="network-fee-line">
       <span>Network fee: </span>
@@ -105,14 +102,6 @@
     <mat-error *ngIf="createForm.controls['address'].errors?.addressInvalid">Wrong format addresss </mat-error>
   </div>
   </form>
-<!-- 
-  <div class="address-container">
-    <p>Your {{ coinReceiveSelected.code }} address</p>
-    <mat-form-field class="derivation-item" appearance="outline">
-      <input #addressSwap matInput [placeholder]="'paste address here'" [(ngModel)]="addressSwapValue" (ngModelChange)="validateAddress()">
-    </mat-form-field>
-    <p>{{ validAddress }}</p>
-  </div> -->
 </div>
 
 

@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -50,6 +50,14 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
 
+import { NgxMaskModule } from 'ngx-mask';
+import { FeatureFlagsService } from './providers/feature-flags.service';
+
+const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
+  featureFlagsService.loadConfig();
+
+
+
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -95,6 +103,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
             backButtonText: '',
             navAnimation: enterAnimation
         }),
+        NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
@@ -133,6 +142,13 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: env.name === 'production' })
     ],
     providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: featureFactory,
+            deps: [FeatureFlagsService],
+            multi: true
+        },
+
         {
             provide: RouteReuseStrategy,
             useClass: IonicRouteStrategy

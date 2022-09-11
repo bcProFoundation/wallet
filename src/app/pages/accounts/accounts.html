@@ -14,7 +14,7 @@
 
 <ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
   <div class="wrapper">
-    <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+    <expandable-header [ngClass]="{'not-show-expandable-header' : isShowCreateNewWallet}" [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
       <ion-toolbar class="wide-header__title">
         <expandable-header-primary>
           <span class="expandable-header-primary"> {{ titlePage | translate }} </span>

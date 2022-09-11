@@ -257,6 +257,9 @@
 
   ion-modal {
     --background: var(--bg-color-dark-theme);
+    &.walletGroupName {
+      --background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+    }
   }
 
   form {
@@ -3707,6 +3710,17 @@
       box-shadow: unset !important;
       .button-container {
         color: #ffb4a9;
+      }
+    }
+  }
+
+  claim-voucher-modal {
+    .card-gift {
+      .title-gift {
+        color: var(--text-color-dark-theme) !important;
+      }
+      p {
+        color: rgba(224, 228, 230, 0.6) !important;
       }
     }
   }

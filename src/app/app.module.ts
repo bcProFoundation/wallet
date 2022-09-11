@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -48,23 +48,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
-import { FeatureFlagsService } from './providers/feature-flags.service';
-import { AppInitService } from './app-init.service';
-import { FeatureFlagDirective } from './directives/feature-flags/feature-flags';
-
-import { NgxMaskModule } from 'ngx-mask'
-
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
-
-export function initializeApp(appInitService: AppInitService) {
-  return (): Promise<any> => { 
-    return appInitService.init();
-  }
-}
-
 
 export class InterpolatedTranslateParser extends TranslateDefaultParser {
   public templateMatcher: RegExp = /{\s?([^{}\s]*)\s?}/g;
@@ -76,8 +64,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     return this.parser.interpolate(params.key, params.interpolateParams);
   }
 }
-const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
-  featureFlagsService.loadConfig();
+
 @NgModule({
     declarations: [
         /* Pipes */
@@ -89,7 +76,6 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
         /* Directives */
         CopyToClipboard,
         ExternalizeLinks,
-        FeatureFlagDirective,
         FixedScrollBgColor,
         IonContentBackgroundColor,
         IonMask,
@@ -109,7 +95,6 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
             backButtonText: '',
             navAnimation: enterAnimation
         }),
-        NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
@@ -131,6 +116,7 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
         AppRoutingModule,
         ProvidersModule,
         SwiperModule,
+        RecaptchaV3Module,
         ClickOutsideModule,
         CountdownModule,
         TranslateModule.forRoot({
@@ -147,13 +133,6 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: env.name === 'production' })
     ],
     providers: [
-      AppInitService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: featureFactory,
-            deps: [FeatureFlagsService],
-            multi: true
-          },
         {
             provide: RouteReuseStrategy,
             useClass: IonicRouteStrategy
@@ -162,11 +141,11 @@ const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
             provide: ErrorHandler,
             useClass: CustomErrorHandler
         },
-        
         FormatCurrencyPipe,
         NavParams,
         FormBuilder,
-        WebView
+        WebView,
+        { provide: RECAPTCHA_V3_SITE_KEY, useValue: "6Lc1rGwdAAAAABrD2AxMVIj4p_7ZlFKdE5xCFOrb" }
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [CopayApp]

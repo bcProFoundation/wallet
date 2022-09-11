@@ -1,37 +1,41 @@
 require('dotenv').config();
 var fs = require('fs');
-const yargs = require('yargs')
-const environments = ["development", "production", "desktop"]
-const argv =   yargs.alias('v', 'version')
-                    .alias('h', 'help')
-                    .usage('Usage: Set environment variables to the angular environment file')
-                    .showHelpOnFail(false, 'Specify --help for avalable options')
-                    .options({
-                        a: {
-                            type: 'string',
-                            alias: 'awsUrl',
-                        },
-                        env: {
-                            type: 'string',
-                            alias: 'environment',
-                            choices: environments,
-                            demandOption: true
-                        }
-                    })
-                    .argv;
+const yargs = require('yargs');
+const environments = ['development', 'production', 'desktop'];
+const argv = yargs
+  .alias('v', 'version')
+  .alias('h', 'help')
+  .usage('Usage: Set environment variables to the angular environment file')
+  .showHelpOnFail(false, 'Specify --help for avalable options')
+  .options({
+    a: {
+      type: 'string',
+      alias: 'awsUrl'
+    },
+    env: {
+      type: 'string',
+      alias: 'environment',
+      choices: environments,
+      demandOption: true
+    }
+  }).argv;
 
 const environment = argv.env;
 const awsUrlCLI = argv.a;
 let nameEnv = '';
 let enableAnimations = process.env.ENABLE_ANIMATIONS;
 let activateScanner = process.env.ACTIVATE_SCANNER;
-let awsUrl = awsUrlCLI && (awsUrlCLI as string).length > 0 ? awsUrlCLI : process.env.AWS_URL_CONFIG;
+let awsUrl =
+  awsUrlCLI && (awsUrlCLI as string).length > 0
+    ? awsUrlCLI
+    : process.env.AWS_URL_CONFIG;
+let lixiLotusUrl = process.env.LIXI_LOTUS_URL;
 if (environment === 'production') {
-    nameEnv = 'production';
+  nameEnv = 'production';
 } else if (environment === 'development') {
-    nameEnv = 'development';
-} else if(environment === 'desktop'){
-    nameEnv = 'production';
+  nameEnv = 'development';
+} else if (environment === 'desktop') {
+  nameEnv = 'production';
 }
 let targetPath = `./src/environments/index.ts`;
 let envConfigFile = `
@@ -44,14 +48,15 @@ export const env = {
     enableAnimations: ${enableAnimations},
     ratesAPI: new CurrencyProvider().getRatesApi(),
     activateScanner: ${activateScanner},
-    awsUrl: '${awsUrl}' 
+    awsUrl: '${awsUrl}',
+    lixiLotusUrl: '${lixiLotusUrl}' 
 };
-    export default env;`
+    export default env;`;
 
-fs.writeFile(targetPath, envConfigFile, (err) => {
-    if (err) {
-        console.log(err);
-    }
+fs.writeFile(targetPath, envConfigFile, err => {
+  if (err) {
+    console.log(err);
+  }
 });
 
 const shell = require('shelljs');
@@ -81,13 +86,13 @@ function jsonReader(filePath, cb) {
   });
 }
 
-jsonReader("src/assets/appConfig.json", (err, appConfig) => {
+jsonReader('src/assets/appConfig.json', (err, appConfig) => {
   if (err) {
-    console.log("Error reading file:", err);
+    console.log('Error reading file:', err);
     return;
   }
   appConfig.commitHash = getCommitHash();
-  fs.writeFile("src/assets/appConfig.json", JSON.stringify(appConfig), err => {
-    if (err) console.log("Error writing file:", err);
+  fs.writeFile('src/assets/appConfig.json', JSON.stringify(appConfig), err => {
+    if (err) console.log('Error writing file:', err);
   });
 });

@@ -7,6 +7,7 @@ import { Subject } from 'rxjs/Subject';
 import { Logger } from '../logger/logger';
 import { PersistenceProvider } from '../persistence/persistence';
 import { Coin, CurrencyProvider } from '../currency/currency';
+import { LixiLotusProvider } from '../lixi-lotus/lixi-lotus';
 
 export interface Contact {
   name: string;
@@ -15,6 +16,7 @@ export interface Contact {
   tag?: number;
   coin: string;
   network?: string;
+  isOfficialInfo?: boolean;
 }
 @Injectable({
   providedIn: 'root'
@@ -100,7 +102,7 @@ export class AddressBookProvider {
     });
   }
 
-  public getContact(contactStr : any): Contact {
+  public getContact(contactStr: any): Contact {
     const coinInfo: CoinNetwork =
       contactStr.coin && contactStr.network
         ? {
@@ -121,7 +123,10 @@ export class AddressBookProvider {
         network: coinInfo.network,
         name: _.isObject(contactStr) ? (<any>contactStr).name : contactStr,
         tag: _.isObject(contactStr) ? (<any>contactStr).tag : null,
-        email: _.isObject(contactStr) ? (<any>contactStr).email : null
+        email: _.isObject(contactStr) ? (<any>contactStr).email : null,
+        isOfficialInfo: _.isObject(contactStr)
+          ? (<any>contactStr).isOfficialInfo
+          : false
       };
       return contact;
     }
@@ -136,11 +141,11 @@ export class AddressBookProvider {
         entry.network
       );
       if (
-        !addrData.address.includes('etoken') && 
+        !addrData.address.includes('etoken') &&
         (_.isNull(_addrData) ||
-        _.isEmpty(_addrData) ||
-        !_addrData.coin ||
-        !_addrData.network)
+          _.isEmpty(_addrData) ||
+          !_addrData.coin ||
+          !_addrData.network)
       ) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);

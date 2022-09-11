@@ -1,5 +1,12 @@
 page-transfer-to,
 page-search-contact {
+  .check {
+    margin: 0 !important;
+    font-size: 22px;
+    &.success {
+      color: var(--ion-color-success);
+    }
+  }
   .no-info-container {
     display: flex;
     justify-content: center;
@@ -69,7 +76,12 @@ page-search-contact {
   }
 
   .wallet-item-content-container {
+    display: flex;
+    align-items: center;
     background: #fafafb;
+    .wallet-item-content{
+      width: 100%;
+    }
 
     &:last-child {
       ::ng-deep ion-item {
@@ -78,6 +90,7 @@ page-search-contact {
 
       .contact-name {
         border-bottom: none !important;
+        width: 100%;
       }
     }
   }

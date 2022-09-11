@@ -5,6 +5,10 @@ accounts-page {
     justify-content: center;
   }
 
+  .not-show-expandable-header {
+    display: none;
+  }
+
   .wrapper {
     expandable-header {
       margin-bottom: 1rem;

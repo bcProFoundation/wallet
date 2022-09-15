@@ -1,3 +1,18 @@
-<p>
-  order-swap works!
-</p>
+<wide-header-page title="{{('Order detail'  | translate) }}">
+<div page-content>
+  <p>status: {{ order.status}}</p>
+  <p>
+    <span>1 {{ order.fromCoinCode}} </span> 
+    <span> {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate) }} </span>
+    <countdown class="count-down" #cd [config]="{leftTime: 5, format: 's'}" (event)="handleEvent($event)"></countdown>
+  </p> 
+  <p>Deposit address : {{ order.adddressUserDeposit }}</p>
+  <p>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
+  <p>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}}</p>
+  
+  <ng-container *ngIf="order.txId">
+    <p>TxId: {{order.txId}}</p>
+  `</ng-container>
+</div>
+</wide-header-page>
+

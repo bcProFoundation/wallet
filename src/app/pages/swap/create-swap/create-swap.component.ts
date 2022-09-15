@@ -6,7 +6,69 @@ import { CountdownComponent } from 'ngx-countdown';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AddressProvider, Coin, CurrencyProvider, FilterProvider, IncomingDataProvider, RateProvider, ThemeProvider } from 'src/app/providers';
+import { OrderProvider } from 'src/app/providers/order/order-provider';
 import { Config, ConfigProvider } from '../../../providers/config/config';
+import { TokenInforPage } from '../../token-info/token-info';
+interface TokenInfo {
+  coin: string;
+  blockCreated?: number;
+  circulatingSupply?: number;
+  containsBaton: true;
+  decimals: number;
+  documentHash?: string;
+  documentUri: string;
+  id: string;
+  initialTokenQty: number;
+  name: string;
+  symbol: string;
+  timestamp: string;
+  timestamp_unix?: number;
+  totalBurned: number;
+  totalMinted: number;
+  versionType: number;
+}
+
+interface OrderOpts{
+  fromCoinCode: string;
+  amountFrom: number;
+  isFromToken: boolean;
+  fromTokenId?: string;
+  toCoinCode: string;
+  isToToken: boolean;
+  toTokenId?: string;
+  createdRate: number;
+  addressUserReceive: string;
+  fromSatUnit: number;
+  toSatUnit: number;
+}
+
+interface IOrder {
+  id: string | number;
+  version: number;
+  priority: number;
+  fromCoinCode: string;
+  fromTokenId?: string;
+  amountFrom: number;
+  fromSatUnit: number;
+  isFromToken: boolean;
+  toCoinCode: string;
+  isToToken: boolean;
+  toSatUnit: number;
+  amountSentToUser: number;
+  amountUserDeposit: number;
+  createdRate: number;
+  updatedRate: number;
+  addressUserReceive: string;
+  adddressUserDeposit: string;
+  toTokenId?: string;
+  txId?: string;
+  status?: string;
+  isSentToFund?: boolean;
+  isSentToUser?: boolean;
+  endedOn?: number;
+  createdOn?: number;
+  error?: string;
+}
 
 @Component({
   selector: 'page-create-swap',
@@ -56,6 +118,7 @@ export class CreateSwapPage implements OnInit {
     'ECashUri',
     'LotusUri'
   ];
+
   public listConfig = {
     "coinSwap": [
       {
@@ -63,47 +126,66 @@ export class CreateSwapPage implements OnInit {
         "isToken": false,
         "networkFee": 226,
         "rate": {},
-        "min": 10, // USD
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
       },
       {
         "code": "xec",
         "isToken": false,
         "networkFee": 226,
         "rate": {},
-        "min": 10, // USD
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
       },
       {
         "code": "bch",
         "isToken": false,
         "networkFee": 226,
         "rate": {},
-        "min": 10, // USD
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
+      },
+      {
+        "code": "abcslp",
+        "isToken": true,
+        "networkFee": 1342,
+        "rate": {},
+        "min": 0, // USD
+        "tokenInfo": {}
       }
     ],
     "coinReceived": [
+      {
+        "code": "abcslp",
+        "isToken": true,
+        "networkFee": 1342,
+        "rate": {},
+        "min": 0, // USD
+        "tokenInfo": {}
+      },
       {
         "code": "EAT",
         "isToken": true,
         "networkFee": 1342,
         "rate": {},
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
       },
       {
         "code": "bcPro",
         "isToken": true,
         "networkFee": 1342,
         "rate": {},
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
       },
       {
         "code": "xpi",
         "isToken": false,
         "networkFee": 226,
         "rate": {},
-        "unitDecimals": 0
+        "min": 0, // USD
+        "tokenInfo": {}
       }
     ]
   }
@@ -117,7 +199,8 @@ export class CreateSwapPage implements OnInit {
     private incomingDataProvider: IncomingDataProvider,
     private addressProvider: AddressProvider,
     private form: FormBuilder,
-    private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef,
+    private orderProvider: OrderProvider
     ) 
     { 
       this.createForm = this.form.group({
@@ -142,6 +225,26 @@ export class CreateSwapPage implements OnInit {
     public getChain(coin: Coin): string {
       // return '';
       return this.currencyProvider.getChain(coin).toLowerCase();
+    }
+
+    public convertAmountToSatoshiAmount(coinConfig, amount): number{
+      if(coinConfig.isToken){
+        const decimals = coinConfig.tokenInfo.decimals;
+        return amount * Math.pow(10, decimals);
+      } else{
+        const precision = _.get(this.currencyProvider.getPrecision(coinConfig.code), 'unitToSatoshi', 0);
+        return amount * precision;
+      }
+    }
+
+    public getSatUnitFromCoin(coinConfig){
+      if(coinConfig.isToken){
+        const decimals = coinConfig.tokenInfo.decimals;
+        return Math.pow(10, decimals);
+      } else{
+        const precision = _.get(this.currencyProvider.getPrecision(coinConfig.code), 'unitToSatoshi', 0);
+        return precision;
+      }
     }
     
     handleEvent(event){
@@ -171,7 +274,16 @@ export class CreateSwapPage implements OnInit {
 
     ngOnInit() {
       this.handleUpdateRate();
-     
+     this.orderProvider.getTokenInfo().then( (listTokenInfo : TokenInfo[] )=> {
+      const allConig = this.listConfig.coinSwap.concat(this.listConfig.coinReceived);
+      allConig.forEach(coinConfig => {
+        if(coinConfig.isToken){
+          coinConfig.tokenInfo = listTokenInfo.find(s => s.symbol.toLowerCase() === coinConfig.code)
+        }
+      })
+     }).catch(err => {
+      console.log(err);
+     })
      this.coinReceiveSelected = this.listConfig.coinReceived[0];
      this.coinSwapSelected = this.listConfig.coinSwap[0];
      this.subscription = this.modelChanged
@@ -224,11 +336,10 @@ export class CreateSwapPage implements OnInit {
         if(control.value.length === 0){
           return { addressNotInput: true };
         }
-        
+        const addressInputValue = this.createForm.controls['address'].value;
         // handle case token
         if(this.coinReceiveSelected.isToken){
           try {
-            const addressInputValue = this.createForm.controls['address'].value;
             const { prefix, type, hash } = this.addressProvider.decodeAddress(addressInputValue);
             if(prefix === 'etoken' || prefix === 'ecash'){
               return null;
@@ -242,12 +353,12 @@ export class CreateSwapPage implements OnInit {
         }
        
         // handle case coin
-        const parsedData = this.incomingDataProvider.parseData(this.addressSwapValue);
+        const parsedData = this.incomingDataProvider.parseData(addressInputValue);
         if (
           parsedData &&
           _.indexOf(this.validDataTypeMap, parsedData.type) != -1
         ) {
-          this.validAddress = this.checkCoinAndNetwork(this.addressSwapValue);
+          this.validAddress = this.checkCoinAndNetwork(addressInputValue);
           if(this.validAddress){
             return null;
           } else {
@@ -374,6 +485,31 @@ export class CreateSwapPage implements OnInit {
 
     public openSettingPage() {
       this.router.navigate(['/setting']);
+    }
+
+    public createOrder(){
+      const orderOpts = {
+        fromCoinCode : this.coinSwapSelected.code,
+        amountFrom : this.convertAmountToSatoshiAmount(this.coinSwapSelected, (this.createForm.controls['swapAmount'].value as number)),
+        isFromToken: this.coinSwapSelected.isToken,
+        fromTokenId: this.coinSwapSelected.isToken ? this.coinSwapSelected.tokenInfo.id : null,
+        toCoinCode: this.coinReceiveSelected.code,
+        toTokenId: this.coinReceiveSelected.isToken? this.coinReceiveSelected.tokenInfo.id : null,
+        isToToken: this.coinReceiveSelected.isToken,
+        createdRate: this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD,
+        addressUserReceive: this.createForm.controls['address'].value,
+        fromSatUnit: this.getSatUnitFromCoin(this.coinSwapSelected),
+        toSatUnit: this.getSatUnitFromCoin(this.coinReceiveSelected)
+      } as OrderOpts;
+      this.orderProvider.createOrder(orderOpts).then((result : IOrder) =>{
+        this.router.navigate(['/order'], {
+          state: {
+            order: result
+          }
+        });
+      }).catch(err => {
+        console.log(err);
+      })
     }
 
 }

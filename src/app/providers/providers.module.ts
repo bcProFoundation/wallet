@@ -53,6 +53,7 @@ import {
   QRScanner,
   RateProvider,
   LixiLotusProvider,
+  OrderProvider,
   TokenProvider,
   ReleaseProvider,
   ReplaceParametersProvider,
@@ -72,7 +73,7 @@ import {
   CustomErrorHandler,
   ThemeDetection,
   RedirectGuard,
-  PreviousRouteService
+  PreviousRouteService,
 } from './index';
 
 @NgModule({
@@ -122,6 +123,7 @@ import {
     PushNotificationsProvider,
     RateProvider,
     LixiLotusProvider,
+    OrderProvider,
     TokenProvider,
     ReplaceParametersProvider,
     ReleaseProvider,

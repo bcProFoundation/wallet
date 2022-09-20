@@ -10,8 +10,12 @@
   <p>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
   <p>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}}</p>
   
-  <ng-container *ngIf="order.txId">
-    <p>TxId: {{order.txId}}</p>
+  <ng-container *ngIf="order.txIdUserDeposit">
+    <p>TxId User deposit: {{order.txIdUserDeposit}}</p>
+  `</ng-container>
+
+  <ng-container *ngIf="order.txIdUserReceive">
+    <p>TxId User receive: {{order.txIdUserReceive}}</p>
   `</ng-container>
 </div>
 </wide-header-page>

@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { ConfigSwap } from "src/app/pages/swap/config-swap";
 import { ConfigProvider } from "../config/config";
 import { Logger } from "../logger/logger";
 
@@ -24,6 +25,14 @@ import { Logger } from "../logger/logger";
         return new Promise(resolve =>{
             this.http.get(`${this.bwsURL}/v3/tokenInfo/`).subscribe(res =>{
                 resolve(res);
+            });
+        });
+      }
+
+      public getConfigSwap(): Promise<ConfigSwap> {
+        return new Promise(resolve =>{
+            this.http.get(`${this.bwsURL}/v3/configSwap/`).subscribe(res =>{
+                resolve(ConfigSwap.fromObj(res));
             });
         });
       }

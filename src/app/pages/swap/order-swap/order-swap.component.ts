@@ -22,7 +22,8 @@ interface IOrder {
   addressUserReceive: string;
   adddressUserDeposit: string;
   toTokenId?: string;
-  txId?: string;
+  txIdUserDeposit?: string;
+  txIdUserReceive?: string;   
   status?: string;
   isSentToFund?: boolean;
   isSentToUser?: boolean;

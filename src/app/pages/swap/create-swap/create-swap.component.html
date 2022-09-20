@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="convert-rate-line">
-        {{altValue | mask: 'separator.8':',' }} {{fiatCode}}
+        {{altValue.toNumber() | mask: 'separator.8':',' }} {{fiatCode}}
       </div>
       <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator">You need to deposit at least {{ minWithCurrentFiat | mask: 'separator.8':',' }} {{fiatCode}} </mat-error>
       <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMaxValidator">You can not deposit above {{ maxWithCurrentFiat | mask: 'separator.8':',' }} {{fiatCode}} </mat-error>

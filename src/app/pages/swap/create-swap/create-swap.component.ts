@@ -22,8 +22,10 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import {
   AddressProvider,
+  BwcErrorProvider,
   Coin,
   CurrencyProvider,
+  ErrorsProvider,
   FilterProvider,
   IncomingDataProvider,
   RateProvider,
@@ -33,6 +35,9 @@ import { OrderProvider } from 'src/app/providers/order/order-provider';
 import { Config, ConfigProvider } from '../../../providers/config/config';
 import { TokenInforPage } from '../../token-info/token-info';
 import { CoinConfig, ConfigSwap } from '../config-swap';
+import BigNumber from "bignumber.js";
+import { TranslateService } from '@ngx-translate/core';
+
 interface TokenInfo {
   coin: string;
   blockCreated?: number;
@@ -111,7 +116,7 @@ export class CreateSwapPage implements OnInit {
   public rates: any;
   public coinSwapSelected: CoinConfig;
   public coinReceiveSelected: CoinConfig;
-  public altValue = 0;
+  public altValue : BigNumber = new BigNumber(0);
   private modelChanged: Subject<Boolean> = new Subject<Boolean>();
   private subscription: Subscription;
   public usdRate: any;
@@ -231,7 +236,10 @@ export class CreateSwapPage implements OnInit {
     private addressProvider: AddressProvider,
     private form: FormBuilder,
     private _cdRef: ChangeDetectorRef,
-    private orderProvider: OrderProvider
+    private orderProvider: OrderProvider,
+    private errorsProvider: ErrorsProvider,
+    private translate: TranslateService,
+    private bwcErrorProvider: BwcErrorProvider
   ) {
     this.createForm = this.form.group({
       swapAmount: [
@@ -370,19 +378,20 @@ export class CreateSwapPage implements OnInit {
       if (control.value === 0) {
         return { amountNotInput: true };
       }
+      
       if (!!isSwap) {
         this.altValue =
-        control.value *
-          this.coinSwapSelected.rate[this.fiatCode];
+        new BigNumber(control.value).multipliedBy(this.coinSwapSelected.rate[this.fiatCode]);
       } else {
         this.altValue =
-        control.value *
-          this.coinReceiveSelected.rate[this.fiatCode];
+        new BigNumber(control.value).multipliedBy(this.coinReceiveSelected.rate[this.fiatCode]);
       }
-      if (this.altValue > 0) {
+      if (this.altValue.isGreaterThan(0)) {
+        // const result = new BigNumber(this.altValue).toString();
+        // this.altValue = new BigNumber(this.altValue).toNumber();
         this.minWithCurrentFiat =
           this.coinSwapSelected.min * this.usdRate[this.fiatCode];
-        if (this.altValue < this.minWithCurrentFiat) {
+        if (this.altValue.toNumber() < this.minWithCurrentFiat) {
           return { amountMinValidator: true };
         } else {
           return null;
@@ -398,10 +407,10 @@ export class CreateSwapPage implements OnInit {
       if (control.value === 0) {
         return { amountNotInput: true };
       }
-      if (this.altValue > 0) {
+      if (this.altValue.isGreaterThan(0)) {
         this.maxWithCurrentFiat =
           this.coinSwapSelected.max * this.usdRate[this.fiatCode];
-        if (this.altValue > this.maxWithCurrentFiat) {
+        if (this.altValue.toNumber() > this.maxWithCurrentFiat) {
           return { amountMaxValidator: true };
         } else {
           return null;
@@ -609,8 +618,6 @@ export class CreateSwapPage implements OnInit {
       createdRate:
         this.coinSwapSelected.rate.USD / this.coinReceiveSelected.rate.USD,
       addressUserReceive: this.createForm.controls['address'].value,
-      // fromSatUnit: this.getSatUnitFromCoin(this.coinSwapSelected),
-      // toSatUnit: this.getSatUnitFromCoin(this.coinReceiveSelected),
       toTokenInfo : this.coinReceiveSelected.tokenInfo || null,
       fromTokenInfo : this.coinSwapSelected.tokenInfo || null,
     } as OrderOpts;
@@ -622,9 +629,35 @@ export class CreateSwapPage implements OnInit {
             order: result
           }
         });
+      }, err => {
+        this.showErrorInfoSheet(err);
       })
-      .catch(err => {
-        console.log(err);
-      });
+  }
+
+  public showErrorInfoSheet(
+    error: Error | string,
+    title?: string,
+    exit?: boolean
+  ): void {
+    let msg: string;
+    if (!error) return;
+    // Currently the paypro error is the following string: 500 - "{}"
+    if (error.toString().includes('500 - "{}"')) {
+      msg = this.translate.instant(
+        'Error 500 - There is a temporary problem, please try again later.'
+      );
+    }
+
+    const infoSheetTitle = title ? title : this.translate.instant('Error');
+
+    this.errorsProvider.showDefaultError(
+      msg || this.bwcErrorProvider.msg(error),
+      infoSheetTitle,
+      () => {
+        // if (exit) {
+        //   this.location.back()
+        // }
+      }
+    );
   }
 }

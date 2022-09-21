@@ -1,22 +1,48 @@
-<wide-header-page title="{{('Order detail'  | translate) }}">
+<wide-header-page title="{{('Order detail'  | translate) }}" (back)="back()" [isCustomBack]='true'>
 <div page-content>
   <p>status: {{ order.status}}</p>
   <p>
     <span>1 {{ order.fromCoinCode}} </span> 
-    <span> {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate) }} </span>
+    <span> {{ 1 * ( order.updatedRate || order.createdRate ) }} {{ order.toCoinCode }}</span>
     <countdown class="count-down" #cd [config]="{leftTime: 5, format: 's'}" (event)="handleEvent($event)"></countdown>
   </p> 
   <p>Deposit address : {{ order.adddressUserDeposit }}</p>
-  <p>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
-  <p>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}}</p>
-  
-  <ng-container *ngIf="order.txIdUserDeposit">
-    <p>TxId User deposit: {{order.txIdUserDeposit}}</p>
-  `</ng-container>
 
-  <ng-container *ngIf="order.txIdUserReceive">
-    <p>TxId User receive: {{order.txIdUserReceive}}</p>
-  `</ng-container>
+  <ng-container *ngIf="order.amountFrom">
+    <p>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
+    <p>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}} {{ order.toCoinCode }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="!order.amountFrom">
+    <p>send between: {{ minSwapAmount }} {{ order.fromCoinCode }}</p>
+    <p> and:  {{ maxSwapAmount }} {{ order.fromCoinCode }}</p>
+  </ng-container>
+  
+  <ng-container *ngIf="order.listTxIdUserDeposit">
+    <p>TxId User deposit:</p>
+    <ng-container *ngFor="let txId of order.listTxIdUserDeposit">
+      <ion-button fill="clear" (click)="viewOnBlockchain(order.fromCoinCode, order.isFromToken, txId)">
+        {{ txId }}
+      </ion-button>
+    </ng-container>
+    <!-- <p>TxId User deposit: {{order.txIdUserDeposit}}</p> -->
+  </ng-container>
+
+  <ng-container *ngIf="order.listTxIdUserReceive">
+    <p>TxId User receive:</p>
+    <ng-container *ngFor="let txId of order.listTxIdUserReceive">
+      <ion-button fill="clear" (click)="viewOnBlockchain(order.toCoinCode, order.isToToken, txId)">
+        {{ txId }}
+      </ion-button>
+    </ng-container>
+    <!-- <p>TxId User deposit: {{order.txIdUserDeposit}}</p> -->
+  </ng-container>
+
+  <ng-container *ngIf="order.error">
+    <p>Error: {{ order.error }}</p>
+  </ng-container>
+
+  <p>Created on : {{ dateStr }}</p>
 </div>
 </wide-header-page>
 

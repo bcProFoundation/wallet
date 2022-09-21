@@ -41,30 +41,11 @@ import { Logger } from "../logger/logger";
       }
 
       public getOrderInfo(orderId): Promise<any> {
-        return new Promise(resolve =>{
-            this.http.get(`${this.bwsURL}/v3/order/${orderId}`).subscribe(res =>{
-                resolve(res);
-            });
-        });
+        return this.http.get(`${this.bwsURL}/v3/order/${orderId}`).toPromise();
       }
 
       public createOrder(orderOpts): Promise<any> {
-        return new Promise(resolve =>{
-          try{
-            this.http.post(`${this.bwsURL}/v3/order/create/`, orderOpts).pipe(
-              catchError(this.handleError)
-            ).subscribe(
-              (res: any) =>{
-                if(res.status === 201 || res.status === 200)
-                resolve(res);
-                else reject(res);
-
-            }, err => reject(err));
-          }catch(e){
-            reject(e);
-          }
-           
-        });
+          return this.http.post(`${this.bwsURL}/v3/order/create/`, orderOpts).toPromise();
       }
 
       private handleError(error: HttpErrorResponse) {

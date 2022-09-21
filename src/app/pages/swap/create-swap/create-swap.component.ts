@@ -91,8 +91,8 @@ interface IOrder {
   addressUserReceive: string;
   adddressUserDeposit: string;
   toTokenId?: string;
-  txIdUserDeposit?: string;
-  txIdUserReceive?: string;
+  listTxIdUserDeposit?: string[];
+  listTxIdUserReceive?: string[];
   status?: string;
   isSentToFund?: boolean;
   isSentToUser?: boolean;
@@ -128,6 +128,7 @@ export class CreateSwapPage implements OnInit {
   public minWithCurrentFiat: any;
   public maxWithCurrentFiat: any;
   public createForm: FormGroup;
+  public searchValue = '';
   debounceTime = 500;
   // public config: Config;
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
@@ -245,7 +246,7 @@ export class CreateSwapPage implements OnInit {
       swapAmount: [
         0,
         {
-          validators: [this.amountMinValidator(true), this.amountMaxValidator()],
+          validators: [this.amountMinValidator(true)],
           updateOn: 'change'
         }
       ],
@@ -376,7 +377,7 @@ export class CreateSwapPage implements OnInit {
   amountMinValidator(isSwap: boolean): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value === 0) {
-        return { amountNotInput: true };
+        return null;
       }
       
       if (!!isSwap) {
@@ -405,7 +406,7 @@ export class CreateSwapPage implements OnInit {
   amountMaxValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value === 0) {
-        return { amountNotInput: true };
+        return null;
       }
       if (this.altValue.isGreaterThan(0)) {
         this.maxWithCurrentFiat =
@@ -484,17 +485,24 @@ export class CreateSwapPage implements OnInit {
         pattern.test(keyInput)
       ) {
         event.preventDefault();
-      } else {
-        this.modelChanged.next(isSwap);
       }
     } else {
       if (!allowSpecialKeyCode.includes(keyCode) && pattern.test(keyInput)) {
         event.preventDefault();
-      } else {
-        this.modelChanged.next(isSwap);
       }
     }
     this.modelChanged.next(isSwap);
+  }
+
+  handleSearchInput(){
+    if(this.searchValue.trim().length > 1){
+      this.router.navigate(['/order'], {
+        replaceUrl: true,
+        state: {
+          orderId: this.searchValue
+        }
+      });
+    }
   }
 
   formatAmountWithLimitDecimal(amount: number, maxDecimals): number {
@@ -625,27 +633,26 @@ export class CreateSwapPage implements OnInit {
       .createOrder(orderOpts)
       .then((result: IOrder) => {
         this.router.navigate(['/order'], {
+          replaceUrl: true,
           state: {
-            order: result
+            orderId: result.id
           }
         });
-      }, err => {
-        this.showErrorInfoSheet(err);
+      }).catch(e => {
+        this.showErrorInfoSheet(e);
       })
   }
 
   public showErrorInfoSheet(
-    error: Error | string,
+    error: any,
     title?: string,
     exit?: boolean
   ): void {
     let msg: string;
     if (!error) return;
     // Currently the paypro error is the following string: 500 - "{}"
-    if (error.toString().includes('500 - "{}"')) {
-      msg = this.translate.instant(
-        'Error 500 - There is a temporary problem, please try again later.'
-      );
+    if (error.status === 500) {
+      msg = error.error.error;
     }
 
     const infoSheetTitle = title ? title : this.translate.instant('Error');

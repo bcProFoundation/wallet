@@ -34,8 +34,8 @@ export interface FeatureConfig {
     //     .pipe(tap(data => (this.config = data)))
     //     .toPromise();
         return of({
-            abcpay: false,
-            swap: true
+            abcpay: true,
+            swap: false
         } as FeatureConfig).pipe(tap(data =>{
 
           if(!data.abcpay && data.swap){

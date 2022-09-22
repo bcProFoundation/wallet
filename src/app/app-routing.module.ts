@@ -68,6 +68,8 @@ import { SearchContactPage } from './pages/search/search-contact/search-contact.
 import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
 import { ChartViewPage } from './pages/chart-view/chart-view';
 import { FeatureGuard } from './providers/feature-gaurd.service';
+import { CreateSwapPage } from './pages/swap/create-swap/create-swap.component';
+import { OrderSwapPage } from './pages/swap/order-swap/order-swap.component';
 
 const routes: Routes = [
   {
@@ -667,6 +669,24 @@ const routes: Routes = [
 
     data: {
       feature: 'abcpay'
+    }
+  },
+  {
+    path: 'create-swap',
+    component: CreateSwapPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'swap'
+    }
+  },
+  {
+    path: 'order-swap',
+    component: OrderSwapPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'swap'
     }
   }
 ];

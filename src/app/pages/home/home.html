@@ -18,6 +18,9 @@
               {{ 'Home' | translate }}
             </h2>
             <div class="group-btn-top">
+              <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openCreateSwapPage()">
+                <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
+              </ion-button>
               <ion-button fill="clear" slot="icon-only" class="chart-btn" (click)="openChartViewPage()">
                 <ion-icon slot="end" src="assets/img/home-chart-icon-{{currentTheme}}.svg"></ion-icon>
               </ion-button>

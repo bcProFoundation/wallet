@@ -157,6 +157,8 @@ export const PAGES = [
   FingerprintModalPage,
   HomePage,
   ChartViewPage,
+  CreateSwapPage,
+  OrderSwapPage,
   // CardsPage,
   WalletsPage,
   AccountsPage,

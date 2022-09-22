@@ -95,6 +95,9 @@ export class CopayApp {
     private featureFlagService: FeatureFlagsService
   ) {
     this.isSwap = this.featureFlagService.isFeatureEnabled('swap');
+    if(this.featureFlagService.isFeatureEnabled('abcpay')){
+      this.isSwap = false;
+    }
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
     this.imageLoaderConfig.enableSpinner(false);

@@ -59,7 +59,7 @@
             </ion-item>
             
             <mat-form-field class="derivation-item">
-              <input type="text" formControlName="swapAmount" #inputSwap matInput (keydown)="handleKeyDown(true, $event)" mask="separator.8" thousandSeparator=",">
+              <input type="text" formControlName="swapAmount" #inputSwap matInput (keyup)="handleInputChange(true)" (keydown)="handleKeyDown(true, $event)" mask="separator.8" thousandSeparator=",">
             </mat-form-field>
     
           </div>
@@ -75,7 +75,7 @@
           </ion-item>
     
           <mat-form-field class="derivation-item">
-            <input formControlName="receiveAmount" #inputReceive matInput (keydown)="handleKeyDown(false, $event)" mask="separator.8" thousandSeparator=",">
+            <input formControlName="receiveAmount" #inputReceive matInput (keyup)="handleInputChange(false)"  (keydown)="handleKeyDown(false, $event)" mask="separator.8" thousandSeparator=",">
           </mat-form-field>
         </div>
       </div>

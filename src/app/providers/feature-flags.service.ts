@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { CreateSwapPage } from "../pages/swap/create-swap/create-swap.component";
 import { OrderSwapPage } from "../pages/swap/order-swap/order-swap.component";
 import { SettingsPage } from "../pages/settings/settings";
-
+import env from 'src/environments';
 
 export interface FeatureConfig {
     abcpay: boolean,
@@ -33,16 +33,23 @@ export interface FeatureConfig {
     //     .get<FeatureConfig>(this.configUrl)
     //     .pipe(tap(data => (this.config = data)))
     //     .toPromise();
+      let buildSwapAlone = false;
         return of({
             abcpay: true,
-            swap: false
+            swap: true
         } as FeatureConfig).pipe(tap(data =>{
-
-          if(!data.abcpay && data.swap){
+          if(data.abcpay && data.swap){
+            if(env.buildSwapALone){
+              buildSwapAlone = true;
+            }
+          }
+          if(buildSwapAlone || !data.abcpay && data.swap){
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: CreateSwapPage });
-            routes.push({ path: 'order', component: OrderSwapPage });
+            const indexPath = routes.findIndex(r => r.path === 'create-swap');
+            routes.splice(indexPath, 1);
+            routes.push({ path: 'order-swap', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
           // if(!data.abcpay && data.swap){

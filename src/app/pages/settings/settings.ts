@@ -27,7 +27,7 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { NewFeaturePage } from '../new-feature/new-feature';
 import { ActionSheetProvider } from 'src/app/providers';
-
+import { FeatureFlagsService } from '../../providers/feature-flags.service';
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
@@ -76,6 +76,7 @@ export class SettingsPage {
   public navigation: string;
   public featureList: any;
   public isScroll = false;
+  public isAbcpay = false;
   useLegacyQrCode;
   constructor(
     private app: AppProvider,
@@ -95,12 +96,14 @@ export class SettingsPage {
     private themeProvider: ThemeProvider,
     private events: EventManagerService,
     private newFeatureData: NewFeatureData,
-    private router: Router
+    private router: Router,
+    private featureFlagsService: FeatureFlagsService
   ) {
     this.appName = this.app.info.nameCase;
     this.appVersion = this.app.info.version;
     this.isCordova = this.platformProvider.isCordova;
     this.isCopay = this.app.info.name === 'copay';
+    this.isAbcpay = this.featureFlagsService.isFeatureEnabled('abcpay');
   }
 
   async handleScrolling(event) {

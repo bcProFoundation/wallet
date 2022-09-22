@@ -491,7 +491,6 @@ export class CreateSwapPage implements OnInit {
         event.preventDefault();
       }
     }
-    this.modelChanged.next(isSwap);
   }
 
   handleSearchInput(){
@@ -632,7 +631,7 @@ export class CreateSwapPage implements OnInit {
     this.orderProvider
       .createOrder(orderOpts)
       .then((result: IOrder) => {
-        this.router.navigate(['/order'], {
+        this.router.navigate(['/order-swap'], {
           replaceUrl: true,
           state: {
             orderId: result.id

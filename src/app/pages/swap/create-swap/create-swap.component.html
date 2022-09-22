@@ -2,116 +2,210 @@
   <ion-header [translucent]="true" class="bp-header">
     <ion-toolbar class="toolbar-desktop" translucent>
       <div class="header-container-desktop">
-        <img class="logo-abcpay" src="../../../assets/img/abcpay-logo.svg" alt="">
-        <img src="../../../assets/img/abcpay-text.svg" alt="">
+        <img
+          class="logo-abcpay"
+          src="../../../assets/img/abcpay-logo.svg"
+          alt=""
+        />
+        <img src="../../../assets/img/abcpay-text.svg" alt="" />
       </div>
     </ion-toolbar>
-    <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
+    <ion-toolbar [ngClass]="{ 'add-box-shadow-scroll': isScroll }">
       <ion-buttons slot="start">
         <!-- <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button> -->
         <ion-button fill="clear" slot="icon-only" (click)="openSettingPage()">
-          <ion-icon slot="end" src="assets/img/home-setting-icon-{{currentTheme}}.svg"></ion-icon>
+          <ion-icon
+            slot="end"
+            src="assets/img/home-setting-icon-{{ currentTheme }}.svg"
+          ></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  
-  <ion-content [fullscreen]="true" [forceOverscroll]="true" scrollEvents="true" #scrollArea (ionScroll)="handleScrolling($event)">
+
+  <ion-content
+    [fullscreen]="true"
+    [forceOverscroll]="true"
+    scrollEvents="true"
+    #scrollArea
+    (ionScroll)="handleScrolling($event)"
+  >
     <div class="wrapper">
-      <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+      <expandable-header
+        [scrollArea]="scrollArea"
+        [fadeFactor]="5"
+        [disableFade]="true"
+        #expandableHeader
+      >
       </expandable-header>
-  
     </div>
-  
+
     <div class="header-container">
       <div class="header-title">
-        {{'Swap' | translate}}
+        {{ 'Swap' | translate }}
       </div>
-      <ion-item class="header-search-container">
-        <ion-input [(ngModel)]="searchValue" [placeholder]="'search order' | translate" (keyup.enter)="handleSearchInput()">
-  
-        </ion-input>
-        <ion-icon  slot="start" src="assets/img/search-{{currentTheme}}.svg">
-  
-        </ion-icon>
+      <ion-item lines="none" class="ion-padding search-container" >
+        <ion-icon slot="start" name="search-outline"></ion-icon>
+        <ion-input
+          class="search-tx-modal"
+          [placeholder]="'search order' | translate"
+          [(ngModel)]="searchValue"
+          (keyup.enter)="handleSearchInput()"
+        ></ion-input>
       </ion-item>
     </div>
     <div class="swap-exchange-rate-container">
       <ng-container *ngIf="coinSwapSelected && coinReceiveSelected">
-        <span>1</span>&nbsp; <span>{{coinSwapSelected.code}}</span>
-        <img src="assets/img/swap/exchange-sign-{{currentTheme}}.svg">
-        <span>{{formatAmountWithLimitDecimal((coinSwapSelected.rate.USD /coinReceiveSelected.rate.USD),8)}}</span>&nbsp; <span> {{coinReceiveSelected.code}}</span>
-        <countdown class="count-down" #cd [config]="{leftTime: 5, format: 's'}" (event)="handleEvent($event)"></countdown>
+        <span>1</span>&nbsp;
+        <span>{{ coinSwapSelected.code.toUpperCase() }}</span>
+        <img
+          class="swap-ico"
+          src="assets/img/swap/exchange-sign-{{ currentTheme }}.svg"
+        />
+        <span>{{
+          formatAmountWithLimitDecimal(
+            coinSwapSelected.rate.USD / coinReceiveSelected.rate.USD,
+            8
+          )
+        }}</span
+        >&nbsp; <span> {{ coinReceiveSelected.code.toUpperCase() }}</span>
+        <div class="count-down-container">
+          <countdown
+            #cd
+            [config]="{ leftTime: 5, format: 's' }"
+            (event)="handleEvent($event)"
+          ></countdown>
+          <img src="assets/img/countdown-ico.svg" alt="" />
+        </div>
       </ng-container>
     </div>
-  <div>
-    <form [formGroup]="createForm">
-      <div class="swap-exchange-container">
-        <div class="send-receive-container">
-          <div class="title">You send</div>
-          <div class="list-coin">
-            <ion-item>
-              <ion-select value="{{listConfig.coinSwap[0].code}}" (ionChange)="handleCoinSwapChange($event)">
-                <ng-container *ngFor="let coin of listConfig.coinSwap">
-                  <ion-select-option value="{{coin.code}}">{{coin.code}}</ion-select-option>
-                </ng-container>
-              </ion-select>
-            </ion-item>
-            
-            <mat-form-field class="derivation-item">
-              <input type="text" formControlName="swapAmount" #inputSwap matInput (keyup)="handleInputChange(true)" (keydown)="handleKeyDown(true, $event)" mask="separator.8" thousandSeparator=",">
-            </mat-form-field>
-    
+    <div>
+      <form [formGroup]="createForm">
+        <div class="swap-exchange-container">
+          <div class="send-container">
+            <div class="title" translate>You send</div>
+            <div class="list-coin">
+              <ion-item lines="none">
+                <ion-select
+                  value="{{ listConfig.coinSwap[0].code }}"
+                  (ionChange)="handleCoinSwapChange($event)"
+                >
+                  <ng-container *ngFor="let coin of listConfig.coinSwap">
+                    <ion-select-option value="{{ coin.code }}">{{
+                      coin.code
+                    }}</ion-select-option>
+                  </ng-container>
+                </ion-select>
+              </ion-item>
+
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="text"
+                  #inputSwap
+                  formControlName="swapAmount"
+                  (keyup)="handleInputChange(true)"
+                  (keydown)="handleKeyDown(true, $event)"
+                  mask="separator.8"
+                  thousandSeparator=","
+                />
+              </mat-form-field>
+              <p class="hint">
+                {{ altValue.toFixed() | mask: 'separator.8':',' }}
+                {{ fiatCode }}
+              </p>
+            </div>
+          </div>
+          <div class="receive-container">
+            <div class="title" translate>You receive</div>
+            <div class="list-coin">
+              <ion-item lines="none">
+                <ion-select
+                  value="{{ listConfig.coinReceive[0].code }}"
+                  (ionChange)="handleCoinReceiveChange($event)"
+                >
+                  <ng-container *ngFor="let coin of listConfig.coinReceive">
+                    <ion-select-option value="{{ coin.code }}">{{
+                      coin.code
+                    }}</ion-select-option>
+                  </ng-container>
+                </ion-select>
+              </ion-item>
+
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="text"
+                  #inputReceive
+                  formControlName="receiveAmount"
+                  (keyup)="handleInputChange(false)"
+                  (keydown)="handleKeyDown(false, $event)"
+                  mask="separator.8"
+                  thousandSeparator=","
+                />
+              </mat-form-field>
+              <p class="hint">
+                {{ altValue.toFixed() | mask: 'separator.8':',' }}
+                {{ fiatCode }}
+              </p>
+            </div>
           </div>
         </div>
-        <div class="send-receive-container right-part">
-          <div>You receive</div>
-          <ion-item>
-            <ion-select value="{{listConfig.coinReceive[0].code}}" (ionChange)="handleCoinReceiveChange($event)">
-              <ng-container *ngFor="let coin of listConfig.coinReceive">
-                <ion-select-option value="{{coin.code}}">{{coin.code}}</ion-select-option>
-              </ng-container>
-            </ion-select>
-          </ion-item>
-    
-          <mat-form-field class="derivation-item">
-            <input formControlName="receiveAmount" #inputReceive matInput (keyup)="handleInputChange(false)"  (keydown)="handleKeyDown(false, $event)" mask="separator.8" thousandSeparator=",">
-          </mat-form-field>
+        <mat-error
+          *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator"
+          translate
+          >You need to deposit at least
+          {{ minWithCurrentFiat | mask: 'separator.8':',' }} {{ fiatCode }}
+        </mat-error>
+        <mat-error
+          *ngIf="createForm.controls['swapAmount'].errors?.amountMaxValidator"
+          translate
+          >You can not deposit above
+          {{ maxWithCurrentFiat | mask: 'separator.8':',' }} {{ fiatCode }}
+        </mat-error>
+        <div class="network-fee-line">
+          <span class="label-network" translate>Network fee: </span>
+          <span class="amount-fee-network" *ngIf="!coinReceiveSelected.isToken">
+            {{
+              coinReceiveSelected.networkFee
+                | satToUnit: getChain(coinReceiveSelected.code)
+            }}
+          </span>
+          <span class="amount-fee-network" *ngIf="coinReceiveSelected.isToken">
+            {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
+          </span>
         </div>
-      </div>
-      <div class="convert-rate-line">
-        {{ altValue.toFixed() | mask: 'separator.8':',' }} {{fiatCode}}
-      </div>
-      <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator">You need to deposit at least {{ minWithCurrentFiat | mask: 'separator.8':',' }} {{fiatCode}} </mat-error>
-      <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMaxValidator">You can not deposit above {{ maxWithCurrentFiat | mask: 'separator.8':',' }} {{fiatCode}} </mat-error>
-      <div class="network-fee-line">
-        <span>Network fee: </span>
-        <span *ngIf="!coinReceiveSelected.isToken">                 
-           {{ coinReceiveSelected.networkFee | satToUnit: getChain((coinReceiveSelected.code)) }}
-        </span>
-        <span *ngIf="coinReceiveSelected.isToken">                 
-          {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
-       </span>
-      </div>
-   
-  
-    <div class="address-container">
-      <p>Your {{ coinReceiveSelected.code }} address</p>
-      <mat-form-field class="derivation-item" appearance="outline">
-        <input  formControlName="address" #addressSwap matInput [placeholder]="'paste address here'">
-      </mat-form-field>
-      <mat-error *ngIf="createForm.controls['address'].errors?.addressInvalid">Wrong format addresss </mat-error>
+
+        <div class="address-container">
+          <p>Your {{ coinReceiveSelected.code }} address</p>
+          <mat-form-field class="derivation-item" appearance="outline">
+            <input
+              formControlName="address"
+              #addressSwap
+              matInput
+              [placeholder]="'paste address here'"
+            />
+          </mat-form-field>
+          <mat-error
+            style="font-size: 12px"
+            *ngIf="createForm.controls['address'].errors?.addressInvalid"
+            translate
+            >Wrong format addresss
+          </mat-error>
+        </div>
+      </form>
     </div>
-    </form>
-  </div>
-  
-  
   </ion-content>
-  
+
   <ion-footer class="ion-no-border footer">
     <ion-toolbar>
       <div class="btn-function-group">
-        <ion-button (click)="createOrder()" [disabled]="this.createForm.invalid" class="button-standard">{{ 'Swap' | translate }}</ion-button>
+        <ion-button
+          (click)="createOrder()"
+          [disabled]="this.createForm.invalid"
+          class="button-standard"
+          >{{ 'Swap' | translate }}</ion-button
+        >
       </div>
     </ion-toolbar>
   </ion-footer>

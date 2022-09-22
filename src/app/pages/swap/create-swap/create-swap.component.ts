@@ -403,6 +403,13 @@ export class CreateSwapPage implements OnInit {
     };
   }
 
+  getNameCoin(code) {
+    let nameCoin = '';
+    const coin = this.currencyProvider.getCoin(code.toUpperCase());
+    nameCoin = this.currencyProvider.getCoinName(coin) || '';
+    return nameCoin;
+  }
+
   amountMaxValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value === 0) {

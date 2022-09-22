@@ -495,7 +495,7 @@ export class CreateSwapPage implements OnInit {
 
   handleSearchInput(){
     if(this.searchValue.trim().length > 1){
-      this.router.navigate(['/order'], {
+      this.router.navigate(['/order-swap'], {
         replaceUrl: true,
         state: {
           orderId: this.searchValue

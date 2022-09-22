@@ -10,14 +10,18 @@
 
   <ng-container *ngIf="order.amountFrom">
     <p>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
-    <p>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}} {{ order.toCoinCode }}</p>
+    <p>You receive: {{ order.amountFrom / order.fromSatUnit * ( order.updatedRate || order.createdRate )}} {{ order.toCoinCode }}</p>
   </ng-container>
 
   <ng-container *ngIf="!order.amountFrom">
     <p>send between: {{ minSwapAmount }} {{ order.fromCoinCode }}</p>
     <p> and:  {{ maxSwapAmount }} {{ order.fromCoinCode }}</p>
   </ng-container>
-  
+
+  <p>Created rate: {{ order.createdRate }}</p>
+
+  <p>Last rate used: {{ order.updatedRate }}</p>
+
   <ng-container *ngIf="order.listTxIdUserDeposit">
     <p>TxId User deposit:</p>
     <ng-container *ngFor="let txId of order.listTxIdUserDeposit">
@@ -42,7 +46,9 @@
     <p>Error: {{ order.error }}</p>
   </ng-container>
 
-  <p>Created on : {{ dateStr }}</p>
+  <p>Created on : {{ createdDateStr }}</p>
+  <p>Ended on : {{ endedDateStr }}</p>
+
 </div>
 </wide-header-page>
 

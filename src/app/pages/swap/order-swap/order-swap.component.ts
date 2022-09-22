@@ -53,7 +53,8 @@ export class OrderSwapPage implements OnInit {
   coinReceive: CoinConfig = null;
   minSwapAmount = 0;
   maxSwapAmount = 0;
-  public dateStr = '';
+  public createdDateStr = '';
+  public endedDateStr = '';
   blockexplorerUrl = '';
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
   constructor(    private router: Router,
@@ -138,7 +139,8 @@ export class OrderSwapPage implements OnInit {
       this.coinReceive = this.order.coinConfig;
       this.maxSwapAmount = this.coinReceive.maxConvertToSat / this.order.toSatUnit / ( this.order.updatedRate || this.order.createdRate );
       this.minSwapAmount = this.coinReceive.minConvertToSat / this.order.toSatUnit / ( this.order.updatedRate || this.order.createdRate );
-      this.dateStr = new Date(this.order.createdOn).toUTCString();
+      this.createdDateStr = new Date(this.order.createdOn).toUTCString();
+      this.endedDateStr = new Date(this.order.endedOn).toUTCString();
       this._cdRef.markForCheck();
     }).catch(e => {
 

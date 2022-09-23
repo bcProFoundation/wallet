@@ -70,14 +70,22 @@ import { ChartViewPage } from './pages/chart-view/chart-view';
 import { FeatureGuard } from './providers/feature-gaurd.service';
 import { CreateSwapPage } from './pages/swap/create-swap/create-swap.component';
 import { OrderSwapPage } from './pages/swap/order-swap/order-swap.component';
+import { OrderTrackingComponent } from './pages/admin/order-tracking/order-tracking.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+  //   canLoad: [FeatureGuard],
+  //   data: {
+  //     feature: 'abcpay'
+  //   }
+  // },
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-    canLoad: [FeatureGuard],
+    component: OrderTrackingComponent,
     data: {
-      feature: 'abcpay'
+      feature: 'admin'
     }
   },
   {
@@ -683,6 +691,15 @@ const routes: Routes = [
   {
     path: 'order-swap',
     component: OrderSwapPage,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'swap'
+    }
+  },
+  {
+    path: 'order-tracking',
+    component: OrderTrackingComponent,
     canActivate: [FeatureGuard],
 
     data: {

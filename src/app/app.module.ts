@@ -53,6 +53,9 @@ import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
 import { NgxMaskModule } from 'ngx-mask';
 import { FeatureFlagsService } from './providers/feature-flags.service';
 
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
   featureFlagsService.loadConfig();
 
@@ -103,6 +106,8 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
             backButtonText: '',
             navAnimation: enterAnimation
         }),
+        MatTableModule,
+        MatPaginatorModule,
         NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,

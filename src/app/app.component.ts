@@ -61,7 +61,9 @@ export class CopayApp {
   private onResumeSubscription: Subscription;
   private isCopayerModalOpen: boolean;
   private copayerModal: any;
-  private isSwap: boolean = false;
+  public isSwap: boolean = false;
+  public isAbcpay: boolean = false;
+  public isAdmin: boolean = false;
   constructor(
     private config: Config,
     private platform: Platform,
@@ -95,16 +97,17 @@ export class CopayApp {
     private featureFlagService: FeatureFlagsService
   ) {
     this.isSwap = this.featureFlagService.isFeatureEnabled('swap');
-    if(this.featureFlagService.isFeatureEnabled('abcpay')){
-      this.isSwap = false;
-    }
+    this.isAbcpay = this.featureFlagService.isFeatureEnabled('abcpay');
+    this.isAdmin = this.featureFlagService.isFeatureEnabled('admin');
+    
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
     this.imageLoaderConfig.enableSpinner(false);
     this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    if (!this.platformProvider.isCordova) {
+    if (!this.platformProvider.isCordova && !this.isAdmin) {
       this.renderer.addClass(document.body, 'bg-desktop');
     }
+
     this.initializeApp();
   }
 
@@ -258,7 +261,7 @@ export class CopayApp {
     this.themeProvider.apply();
     if (this.platformProvider.isElectron) this.updateDesktopOnFocus();
     this.incomingDataRedirEvent();
-    if(!this.isSwap){
+    if(this.isAbcpay){
       let profile;
     this.keyProvider
       .load()

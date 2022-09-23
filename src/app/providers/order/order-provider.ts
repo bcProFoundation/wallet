@@ -44,6 +44,10 @@ import { Logger } from "../logger/logger";
         return this.http.get(`${this.bwsURL}/v3/order/${orderId}`).toPromise();
       }
 
+      public getAllOrderInfo(opts): Promise<any> {
+        return this.http.post(`${this.bwsURL}/v3/order/all`, opts).toPromise();
+      }
+
       public createOrder(orderOpts): Promise<any> {
           return this.http.post(`${this.bwsURL}/v3/order/create/`, orderOpts).toPromise();
       }

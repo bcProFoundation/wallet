@@ -12,7 +12,8 @@ import env from 'src/environments';
 
 export interface FeatureConfig {
     abcpay: boolean,
-    swap: boolean
+    swap: boolean,
+    admin: boolean
 }
 
 @Injectable({
@@ -35,8 +36,9 @@ export interface FeatureConfig {
     //     .toPromise();
       let buildSwapAlone = false;
         return of({
-            abcpay: true,
-            swap: true
+            abcpay: false,
+            swap: false,
+            admin: true
         } as FeatureConfig).pipe(tap(data =>{
           if(data.abcpay && data.swap){
             if(env.buildSwapALone){

@@ -57,7 +57,32 @@
       <!-- Symbol Column -->
       <ng-container matColumnDef="adddressUserDeposit">
         <th mat-header-cell *matHeaderCellDef> adddressUserDeposit </th>
-        <td mat-cell *matCellDef="let element"> {{element.adddressUserDeposit}} </td>
+        <td mat-cell *matCellDef="let element" class="truncate-cell"> {{element.adddressUserDeposit}} </td>
+      </ng-container>
+
+       <!-- Symbol Column -->
+       <ng-container matColumnDef="listTxIdUserDeposit">
+        <th mat-header-cell *matHeaderCellDef> listTxIdUserDeposit </th>
+        <td mat-cell *matCellDef="let element"> 
+          <ng-container *ngIf="element.listTxIdUserDeposit && element.listTxIdUserDeposit.length > 0">
+              <ng-container *ngFor="let txId of element.listTxIdUserDeposit">
+                <p> {{ txId }}</p>
+                <p> {{ txId }}</p>
+
+              </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="listTxIdUserReceive">
+        <th mat-header-cell *matHeaderCellDef> listTxIdUserReceive </th>
+        <td mat-cell *matCellDef="let element"> 
+          <ng-container *ngIf="element.listTxIdUserReceive && element.listTxIdUserReceive.length > 0">
+              <ng-container *ngFor="let txId of element.listTxIdUserReceive">
+                <p> {{ txId }}</p>
+              </ng-container>
+          </ng-container>
+        </td>
       </ng-container>
   
        <!-- Symbol Column -->
@@ -79,6 +104,16 @@
         <th mat-header-cell *matHeaderCellDef> endedOn </th>
         <td mat-cell *matCellDef="let element"> {{element.endedOn}} </td>
       </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="changeStatus">
+          <th mat-header-cell *matHeaderCellDef> Edit </th>
+          <td mat-cell *matCellDef="let element"> 
+            <ng-container *ngIf="element.status === 'waiting'">
+              <ion-button (click)="handleChangeStatus(element)">Change status</ion-button>
+            </ng-container>
+          </td>
+        </ng-container>
 
 
 

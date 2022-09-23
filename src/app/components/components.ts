@@ -18,6 +18,7 @@ import { RecipientComponent } from './recipient/recipient.component'
 import { WalletDetailCardComponent } from './wallet-detail-card/wallet-detail-card.component';
 import { SubMenuAccountComponent } from './sub-menu-account/sub-menu-account.component';
 import { ClaimVoucherModalComponent } from './page-claim-modal/claim-voucher-modal.component';
+import { DialogCustomComponent } from '../pages/admin/modal/modal.component';
 export const COMPONENTS = [
   ActionCardComponent,
   ActionCardV4Component,
@@ -38,5 +39,6 @@ export const COMPONENTS = [
   RecipientComponent,
   WalletDetailCardComponent,
   SubMenuAccountComponent,
-  ClaimVoucherModalComponent
+  ClaimVoucherModalComponent,
+  DialogCustomComponent
 ];

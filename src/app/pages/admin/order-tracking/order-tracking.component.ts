@@ -65,7 +65,7 @@ interface IOrder {
 })
 export class OrderTrackingComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id','fromCoinCode', 'amountFrom', 'isFromToken', 'toCoinCode', 
-  'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 'status', 'createdOn', 'endedOn'];
+  'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'changeStatus'];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   // displayedColumns: string[] = ['id','fromCoinCode', 'endedOn', 'abc'];
 
@@ -112,6 +112,10 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       this._cdRef.markForCheck();
     });  
 
+  }
+
+  handleChangeStatus(order){
+    console.log(order);
   }
 
   ionViewDidLoad() {

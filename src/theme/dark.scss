@@ -394,6 +394,21 @@
     }
   }
 
+  .mat-select {
+    .mat-select-arrow {
+      color: rgba(237, 239, 240, 0.6) !important;
+    }
+  }
+
+  mat-select-trigger {
+    .mat-coin-name {
+        color: #EDEFF0 !important;
+    }
+    .mat-symbol-name {
+        color: rgba(237, 239, 240, 0.6) !important;
+    }
+}
+
   .swiper-pagination-bullet-active {
     background-color: var(--swiper-pagination-bullet-active-dark);
   }
@@ -3758,6 +3773,8 @@
     }
     .search-container {
       --background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      border-color: rgba(112, 129, 138, 0.38) !important;
       ion-icon {
         color: rgba(237, 239, 240, 0.6) !important;
       }
@@ -3768,6 +3785,9 @@
     }
     .label-network {
       color: rgba(224, 228, 230, 0.6) !important;
+    }
+    .header-title {
+      color: var(--text-color-dark-theme) !important;
     }
   }
 
@@ -3793,6 +3813,9 @@
       }
       .status-oder {
         color: #FFB85D !important;
+      }
+      .status-completed {
+        color: #73DAA5 !important;
       }
       .card-exchange-rate-oder {
         .count-down-card {

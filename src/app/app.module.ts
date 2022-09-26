@@ -42,6 +42,7 @@ import { enterAnimation } from './animations/nav-animation';
 
 import { MatGridListModule } from '@angular/material/grid-list'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -106,6 +107,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,
+        MatSelectModule,
         BrowserAnimationsModule,
         MatIconModule,
         MatInputModule,

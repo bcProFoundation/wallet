@@ -101,6 +101,10 @@ export class OrderSwapPage implements OnInit {
     return nameCoin;
   }
 
+  back() {
+    this.router.navigate(['/'], { replaceUrl: true });
+  }
+
   getLabelStatus(order: IOrder) {
     if (order) {
       let label = '';
@@ -129,9 +133,9 @@ export class OrderSwapPage implements OnInit {
     }
   }
 
-  back() {
-    this.router.navigate[''];
-  }
+  // back() {
+  //   this.router.navigate[''];
+  // }
 
   getOrderInfo(){
     this.orderProvider.getOrderInfo(this.orderId).then((res: IOrder) => {

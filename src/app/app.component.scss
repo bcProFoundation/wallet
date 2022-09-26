@@ -132,7 +132,7 @@ body {
 
     wide-header-page {
         ion-content {
-            --padding-bottom: 7rem !important;
+            --padding-bottom: 7rem;
         }
     }
 
@@ -2284,4 +2284,89 @@ ion-popover {
             }
         }
     }
+}
+
+.mat-option {
+    height: fit-content !important;
+    background: #FAFAFB;
+    border: 1px solid rgba(0, 30, 46, 0.38);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    .mat-option-text {
+        display: flex;
+        align-items: center;
+        height: fit-content;
+        padding: 1rem 0;
+        img {
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+        }
+        .mat-coin-name {
+            margin: 0;
+            line-height: initial;
+            color: #001E2E;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .mat-symbol-name {
+            margin: 0;
+            line-height: initial;
+            color: rgba(0, 30, 46, 0.6);
+            letter-spacing: 0.4px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    }
+    &:first-child {
+        .mat-option-text {
+            padding: 0;
+            font-size: 14px;
+            line-height: 32px;
+            font-weight: 500;
+        }
+    }
+    &.dark {
+        background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+        border-color: #647a86;    
+        .mat-option-text {
+            color: #EDEFF0 !important;
+            .mat-coin-name {
+              color: #EDEFF0 !important;
+            }
+            .mat-symbol-name {
+              color: rgba(237, 239, 240, 0.6) !important;
+            }
+        }
+    }
+}
+
+mat-select-trigger {
+    display: flex !important;
+    img {
+        width: 40px;
+        height: 40px;
+        margin-right: 8px;
+    }
+    .mat-coin-name {
+        margin: 0;
+        line-height: initial;
+        color: #001E2E;
+        font-weight: 600;
+        font-size: 16px;
+    }
+    .mat-symbol-name {
+        margin: 0;
+        line-height: initial;
+        color: rgba(0, 30, 46, 0.6);
+        letter-spacing: 0.4px;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+}
+
+.mat-select-panel {
+    border: 1px solid #d5e9f4;
+    border-radius: 12px;
 }

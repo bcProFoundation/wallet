@@ -272,7 +272,6 @@ export class CreateSwapPage implements OnInit {
     return this.currencyProvider.getChain(coin as Coin).toLowerCase();
   }
   
-
   public convertAmountToSatoshiAmount(coinConfig, amount): number {
     if (coinConfig.isToken) {
       const decimals = coinConfig.tokenInfo.decimals;
@@ -358,6 +357,16 @@ export class CreateSwapPage implements OnInit {
           this.handleInputChange(isSwap);
         });
     });
+  }
+
+  getCoinName(coin: CoinConfig) {
+    const objCoin = this.currencyProvider.getCoin(coin.code.toUpperCase());
+    const nameCoin = this.currencyProvider.getCoinName(objCoin) || '';
+    return nameCoin;
+  }
+
+  getImageCoin(coin: CoinConfig) {
+    return !coin.isToken ? `assets/img/currencies/${coin.code}.svg` : `assets/img/currencies/${coin.tokenInfo.symbol}.svg`;
   }
 
   handleInputChange(isSwap: Boolean) {
@@ -639,7 +648,6 @@ export class CreateSwapPage implements OnInit {
       .createOrder(orderOpts)
       .then((result: IOrder) => {
         this.router.navigate(['/order-swap'], {
-          replaceUrl: true,
           state: {
             orderId: result.id
           }

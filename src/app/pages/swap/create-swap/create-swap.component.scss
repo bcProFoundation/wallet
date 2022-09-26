@@ -22,6 +22,7 @@ page-create-swap {
           rgba(0, 93, 141, 0.05)
         ),
         #fafafb;
+      --padding-start: 8px;
       --padding-top: 0;
       --padding-end: 0;
       --padding-bottom: 0;
@@ -40,7 +41,7 @@ page-create-swap {
 
       ion-icon {
         margin: 0;
-        margin-right: 1rem;
+        margin-right: 8px;
         width: 24px;
         height: 24px;
         color: rgba(28, 55, 69, 0.6);
@@ -75,6 +76,7 @@ page-create-swap {
     }
   }
   .swap-exchange-container {
+    width: 100%;
     background: #fafafb;
     border-radius: 12px;
     display: flex;
@@ -93,6 +95,7 @@ page-create-swap {
       --padding-start: 0;
     }
     mat-form-field {
+      max-height: 80px;
       padding: 0;
       .mat-form-field-infix {
         padding: 10px 0 1rem 0 !important;
@@ -106,13 +109,13 @@ page-create-swap {
     }
   }
   .send-container {
-    flex: none;
+    width: 50%;
     order: 0;
     flex-grow: 1;
     padding: 1rem;
   }
   .receive-container {
-    flex: none;
+    width: 50%;
     order: 2;
     flex-grow: 1;
     border-left: 1px rgba(112, 129, 138, 0.38) solid;
@@ -151,5 +154,17 @@ page-create-swap {
   mat-error {
     font-size: 12px;
     padding-left: 1rem;
+  }
+
+  @media screen and (max-width: 390px) {
+    .header-container {
+        padding: 0 1rem;
+    }
+    .swap-exchange-rate-container {
+        padding: 0 1rem;
+    }
+    .swap-form {
+        padding: 0 1rem;
+    }
   }
 }

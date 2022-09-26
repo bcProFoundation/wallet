@@ -36,9 +36,9 @@ export interface FeatureConfig {
     //     .toPromise();
       let buildSwapAlone = false;
         return of({
-            abcpay: false,
-            swap: false,
-            admin: true
+            abcpay: true,
+            swap: true,
+            admin: false
         } as FeatureConfig).pipe(tap(data =>{
           if(data.abcpay && data.swap){
             if(env.buildSwapALone){

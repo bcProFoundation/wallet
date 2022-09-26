@@ -34,74 +34,11 @@ import {
 import { OrderProvider } from 'src/app/providers/order/order-provider';
 import { Config, ConfigProvider } from '../../../providers/config/config';
 import { TokenInforPage } from '../../token-info/token-info';
-import { CoinConfig, ConfigSwap } from '../config-swap';
+import { CoinConfig, ConfigSwap, TokenInfo } from '../config-swap';
 import BigNumber from "bignumber.js";
 import { TranslateService } from '@ngx-translate/core';
+import { IOrder, OrderOpts } from '../model/order-model';
 
-interface TokenInfo {
-  coin: string;
-  blockCreated?: number;
-  circulatingSupply?: number;
-  containsBaton: true;
-  decimals: number;
-  documentHash?: string;
-  documentUri: string;
-  id: string;
-  initialTokenQty: number;
-  name: string;
-  symbol: string;
-  timestamp: string;
-  timestamp_unix?: number;
-  totalBurned: number;
-  totalMinted: number;
-  versionType: number;
-}
-
-interface OrderOpts {
-  fromCoinCode: string;
-  amountFrom: number;
-  isFromToken: boolean;
-  fromTokenId?: string;
-  toCoinCode: string;
-  isToToken: boolean;
-  toTokenId?: string;
-  createdRate: number;
-  addressUserReceive: string;
-  fromSatUnit?: number;
-  toSatUnit?: number;
-  toTokenInfo? : TokenInfo;
-  fromTokenInfo?: TokenInfo;
-}
-interface IOrder {
-  id: string | number;
-  version: number;
-  priority: number;
-  fromCoinCode: string;
-  fromTokenId?: string;
-  amountFrom: number;
-  fromSatUnit?: number;
-  isFromToken?: boolean;
-  toCoinCode: string;
-  isToToken: boolean;
-  toSatUnit: number;
-  amountSentToUser: number;
-  amountUserDeposit: number;
-  createdRate: number;
-  updatedRate: number;
-  addressUserReceive: string;
-  adddressUserDeposit: string;
-  toTokenId?: string;
-  listTxIdUserDeposit?: string[];
-  listTxIdUserReceive?: string[];
-  status?: string;
-  isSentToFund?: boolean;
-  isSentToUser?: boolean;
-  endedOn?: number;
-  createdOn?: number;
-  error?: string;
-  toTokenInfo? : TokenInfo;
-  fromTokenInfo?: TokenInfo;
-}
 
 @Component({
   selector: 'page-create-swap',
@@ -246,7 +183,7 @@ export class CreateSwapPage implements OnInit {
       swapAmount: [
         0,
         {
-          validators: [this.amountMinValidator(true)],
+          validators: [this.amountMinValidator(true), this.amountMaxValidator()],
           updateOn: 'change'
         }
       ],
@@ -333,23 +270,23 @@ export class CreateSwapPage implements OnInit {
     this.orderProvider.getConfigSwap().then(configSwap => {
       this.listConfig = configSwap;
       this._cdRef.markForCheck();
-      this.orderProvider
-        .getTokenInfo()
-        .then((listTokenInfo: TokenInfo[]) => {
-          const allConig = this.listConfig.coinSwap.concat(
-            this.listConfig.coinReceive
-          );
-          allConig.forEach(coinConfig => {
-            if (coinConfig.isToken) {
-              coinConfig.tokenInfo = listTokenInfo.find(
-                s => s.symbol.toLowerCase() === coinConfig.code
-              );
-            }
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      // this.orderProvider
+      //   .getTokenInfo()
+      //   .then((listTokenInfo: TokenInfo[]) => {
+      //     const allConig = this.listConfig.coinSwap.concat(
+      //       this.listConfig.coinReceive
+      //     );
+      //     allConig.forEach(coinConfig => {
+      //       if (coinConfig.isToken) {
+      //         coinConfig.tokenInfo = listTokenInfo.find(
+      //           s => s.symbol.toLowerCase() === coinConfig.code
+      //         );
+      //       }
+      //     });
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
       this.coinReceiveSelected = this.listConfig.coinReceive[0];
       this.coinSwapSelected = this.listConfig.coinSwap[0];
       this.subscription = this.modelChanged
@@ -410,7 +347,7 @@ export class CreateSwapPage implements OnInit {
       }
       if (this.altValue.isGreaterThan(0)) {
         this.maxWithCurrentFiat =
-          this.coinSwapSelected.max * this.usdRate[this.fiatCode];
+          this.coinReceiveSelected.max * this.usdRate[this.fiatCode];
         if (this.altValue.toNumber() > this.maxWithCurrentFiat) {
           return { amountMaxValidator: true };
         } else {

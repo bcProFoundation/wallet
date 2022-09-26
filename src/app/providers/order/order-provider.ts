@@ -52,6 +52,10 @@ import { Logger } from "../logger/logger";
           return this.http.post(`${this.bwsURL}/v3/order/create/`, orderOpts).toPromise();
       }
 
+      public updateOrder(orderOpts): Promise<any> {
+        return this.http.post(`${this.bwsURL}/v3/order/update/`, orderOpts).toPromise();
+      }
+      
       private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
           // A client-side or network error occurred. Handle it accordingly.

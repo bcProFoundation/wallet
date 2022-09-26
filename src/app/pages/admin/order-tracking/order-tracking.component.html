@@ -3,7 +3,7 @@
     <!-- Position Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> id </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      <td mat-cell *matCellDef="let element" class="truncate-cell id-cell"> {{element.id}} </td>
     </ng-container>
   
     <!-- Name Column -->
@@ -39,13 +39,13 @@
       <!-- Symbol Column -->
       <ng-container matColumnDef="createdRate">
         <th mat-header-cell *matHeaderCellDef> createdRate </th>
-        <td mat-cell *matCellDef="let element"> {{element.createdRate}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.createdRate && element.createdRate > 0 ? formatAmountWithLimitDecimal(element.createdRate, 8) : ''}} </td>
       </ng-container>
   
       <!-- Symbol Column -->
       <ng-container matColumnDef="updatedRate">
         <th mat-header-cell *matHeaderCellDef> updatedRate </th>
-        <td mat-cell *matCellDef="let element"> {{element.updatedRate}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.updatedRate && element.updatedRate > 0 ? formatAmountWithLimitDecimal(element.updatedRate, 8) : ''}} </td>
       </ng-container>
   
           <!-- Symbol Column -->
@@ -95,14 +95,20 @@
        <!-- Symbol Column -->
        <ng-container matColumnDef="createdOn">
         <th mat-header-cell *matHeaderCellDef> createdOn </th>
-        <td mat-cell *matCellDef="let element"> {{element.createdOn}} </td>
+        <td mat-cell *matCellDef="let element"> {{ handleDateTime(element.createdOn) }} </td>
       </ng-container>
   
   
        <!-- Symbol Column -->
        <ng-container matColumnDef="endedOn">
         <th mat-header-cell *matHeaderCellDef> endedOn </th>
-        <td mat-cell *matCellDef="let element"> {{element.endedOn}} </td>
+        <td mat-cell *matCellDef="let element"> {{ handleDateTime(element.endedOn) }} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="error">
+        <th mat-header-cell *matHeaderCellDef> error </th>
+        <td mat-cell *matCellDef="let element"> {{ element.error }} </td>
       </ng-container>
 
         <!-- Symbol Column -->
@@ -112,6 +118,7 @@
             <ng-container *ngIf="element.status === 'waiting'">
               <ion-button (click)="handleChangeStatus(element)">Change status</ion-button>
             </ng-container>
+            <ion-button (click)="handleOpenNoteDialog(element)">{{ element.note && element.note.trim().length > 0 ? 'update note' : 'add note'}}</ion-button>
           </td>
         </ng-container>
 

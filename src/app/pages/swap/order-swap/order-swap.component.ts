@@ -7,38 +7,8 @@ import { CoinConfig, TokenInfo } from '../config-swap';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { runInThisContext } from 'vm';
+import { IOrder } from '../model/order-model';
 
-interface IOrder {
-  id: string | number;
-  version: number;
-  priority: number;
-  fromCoinCode: string;
-  fromTokenId?: string;
-  amountFrom: number;
-  fromSatUnit?: number;
-  isFromToken?: boolean;
-  toCoinCode: string;
-  isToToken: boolean;
-  toSatUnit: number;
-  amountSentToUser: number;
-  amountUserDeposit: number;
-  createdRate: number;
-  updatedRate: number;
-  addressUserReceive: string;
-  adddressUserDeposit: string;
-  toTokenId?: string;
-  listTxIdUserDeposit?: string[];
-  listTxIdUserReceive?: string[];
-  status?: string;
-  isSentToFund?: boolean;
-  isSentToUser?: boolean;
-  endedOn?: number;
-  createdOn?: number;
-  error?: string;
-  toTokenInfo? : TokenInfo;
-  fromTokenInfo?: TokenInfo;
-  coinConfig?: CoinConfig
-}
 @Component({
   selector: 'app-order-swap',
   templateUrl: './order-swap.component.html',

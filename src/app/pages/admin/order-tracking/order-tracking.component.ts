@@ -4,6 +4,8 @@ import { OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
 import {PageEvent} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogCustomComponent } from '../modal/modal.component';
 
 
 export interface PeriodicElement {
@@ -11,6 +13,11 @@ export interface PeriodicElement {
   position: number;
   weight?: number;
   symbol: string;
+}
+
+export interface OrderReturnOpts{
+  listOrderInfo: IOrder[];
+  count: number;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -65,7 +72,8 @@ interface IOrder {
 })
 export class OrderTrackingComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id','fromCoinCode', 'amountFrom', 'isFromToken', 'toCoinCode', 
-  'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'changeStatus'];
+  'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 
+  'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'error', 'changeStatus' ];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   // displayedColumns: string[] = ['id','fromCoinCode', 'endedOn', 'abc'];
 
@@ -78,7 +86,8 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     pageEvent: PageEvent;
   constructor(
     private orderProvider: OrderProvider,
-    private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef,
+    public dialog: MatDialog
   ) { 
     const opts = {
       query: {_id : 1},
@@ -86,9 +95,9 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       skip: this.pageSize * 0
     };
 
-    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: IOrder[]) => {
-      this.length = listOrderinfo.length;
-      this.dataSource = listOrderinfo;
+    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
+      this.length = listOrderinfo.count;
+      this.dataSource = listOrderinfo.listOrderInfo;
       this._cdRef.markForCheck();
     });  
   }
@@ -106,9 +115,9 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       limit: this.pageEvent.pageSize,
       skip: this.pageEvent.pageSize * this.pageEvent.pageIndex
     };
-    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: IOrder[]) => {
-      this.length = listOrderinfo.length;
-      this.dataSource = listOrderinfo;
+    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
+      this.length = listOrderinfo.count;
+      this.dataSource = listOrderinfo.listOrderInfo;
       this._cdRef.markForCheck();
     });  
 
@@ -118,7 +127,52 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     console.log(order);
   }
 
+  handleOpenNoteDialog(order){
+    this.openDialog(order);
+  }
+  openDialog(order): void {
+    const dialogRef = this.dialog.open(DialogCustomComponent, {
+      width: '500px',
+      data: order,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        // order = result;
+        this.orderProvider.updateOrder(order).then(orderUpdated => {
+          if(orderUpdated){
+            order = result;
+          }
+          alert('update order succesfully');
+        }).catch(e => {
+          alert(e);
+        })
+      }
+    });
+  }
+
+  formatAmountWithLimitDecimal(amount: number, maxDecimals): number {
+    if (amount.toString().split('.').length > 1) {
+      if (amount.toString().split('.')[1].length > maxDecimals) {
+        return Number(
+          amount.toString().split('.')[0] +
+          '.' +
+          amount.toString().split('.')[1].substr(0, maxDecimals)
+        );
+      }
+      return amount;
+    } else {
+      return amount;
+    }
+  }
+
   ionViewDidLoad() {
    
   }
+
+  handleDateTime(timeMil){
+    return timeMil && timeMil > 0 ? new Date(timeMil).toUTCString() : '';
+  }
+
+
 }

@@ -73,21 +73,21 @@ import { OrderSwapPage } from './pages/swap/order-swap/order-swap.component';
 import { OrderTrackingComponent } from './pages/admin/order-tracking/order-tracking.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-  //   canLoad: [FeatureGuard],
-  //   data: {
-  //     feature: 'abcpay'
-  //   }
-  // },
   {
     path: '',
-    component: OrderTrackingComponent,
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+    canLoad: [FeatureGuard],
     data: {
-      feature: 'admin'
+      feature: 'abcpay'
     }
   },
+  // {
+  //   path: '',
+  //   component: OrderTrackingComponent,
+  //   data: {
+  //     feature: 'admin'
+  //   }
+  // },
   {
     path: 'select-flow',
     component: SelectFlowPage,

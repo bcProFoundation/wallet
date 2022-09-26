@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavParams } from '@ionic/angular';
 import { CountdownComponent } from 'ngx-countdown';
-import { BwcErrorProvider, ConfigProvider, ErrorsProvider, ExternalLinkProvider, OrderProvider } from 'src/app/providers';
+import { BwcErrorProvider, Coin, ConfigProvider, CurrencyProvider, ErrorsProvider, ExternalLinkProvider, OrderProvider } from 'src/app/providers';
 import { CoinConfig, TokenInfo } from '../config-swap';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,9 +40,10 @@ interface IOrder {
   coinConfig?: CoinConfig
 }
 @Component({
-  selector: 'app-order-swap',
+  selector: 'page-order-swap',
   templateUrl: './order-swap.component.html',
   styleUrls: ['./order-swap.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class OrderSwapPage implements OnInit {
   navPramss: any;
@@ -65,7 +66,8 @@ export class OrderSwapPage implements OnInit {
     private _cdRef: ChangeDetectorRef,
     private bwcErrorProvider: BwcErrorProvider,
     private externalLinkProvider: ExternalLinkProvider,
-    private configProvider: ConfigProvider) {
+    private configProvider: ConfigProvider,
+    private currencyProvider: CurrencyProvider) {
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
     } else {
@@ -86,6 +88,38 @@ export class OrderSwapPage implements OnInit {
     // setInterval(
     //   this.getOrderInfo(),
     // )
+  }
+
+  getNameCoin(order: IOrder) {
+    let nameCoin = '';
+    if (order && order.isToToken) {
+      nameCoin = order.toTokenInfo.name;
+    } else {
+      const coin = this.currencyProvider.getCoin(order.toCoinCode.toUpperCase());
+      nameCoin = this.currencyProvider.getCoinName(coin) || '';
+    }
+    return nameCoin;
+  }
+
+  getLabelStatus(order: IOrder) {
+    if (order) {
+      let label = '';
+      switch (order.status) {
+        case 'waiting':
+          label = `Waiting for ${order.toCoinCode.toUpperCase()} payment`
+          break;
+        case 'pending':
+          label = `Order is pending for review`
+          break;
+        case 'complete':
+          label = `Order completed`
+          break;
+        default:
+          break;
+      }
+      return label;
+    }
+    return '';
   }
 
   handleEvent(event){

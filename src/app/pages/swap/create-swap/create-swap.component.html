@@ -85,7 +85,7 @@
                     </div>
                   </mat-select-trigger>
                   <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
-                    Select Coin
+                    Select coin send
                   </mat-option>
                   <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" *ngFor="let coin of listConfig.coinSwap" [value]="coin">
                     <img [src]="getImageCoin(coin)">
@@ -140,7 +140,7 @@
                     </div>
                   </mat-select-trigger>
                   <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
-                    Select Coin
+                    Select coin receive
                   </mat-option>
                   <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" *ngFor="let coin of listConfig.coinReceive" [value]="coin">
                     <img [src]="getImageCoin(coin)">

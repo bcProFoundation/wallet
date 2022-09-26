@@ -1,24 +1,14 @@
 <ng-container *ngIf="this.listConfig">
   <ion-header [translucent]="true" class="bp-header">
-    <ion-toolbar class="toolbar-desktop" translucent>
-      <div class="header-container-desktop">
-        <img
-          class="logo-abcpay"
-          src="../../../assets/img/abcpay-logo.svg"
-          alt=""
-        />
-        <img src="../../../assets/img/abcpay-text.svg" alt="" />
-      </div>
-    </ion-toolbar>
     <ion-toolbar [ngClass]="{ 'add-box-shadow-scroll': isScroll }">
+      <ion-title>
+        <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+          {{ 'Swap'| translate }}
+        </div>
+      </ion-title>
       <ion-buttons slot="start">
-        <!-- <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button> -->
-        <ion-button fill="clear" slot="icon-only" (click)="openSettingPage()">
-          <ion-icon
-            slot="end"
-            src="assets/img/home-setting-icon-{{ currentTheme }}.svg"
-          ></ion-icon>
-        </ion-button>
+        <ion-back-button icon="chevron-back-outline" defaultHref="/">
+        </ion-back-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -44,7 +34,7 @@
       <div class="header-title">
         {{ 'Swap' | translate }}
       </div>
-      <ion-item lines="none" class="ion-padding search-container" >
+      <ion-item detail="false" lines="none" class="ion-padding search-container" >
         <ion-icon slot="start" name="search-outline"></ion-icon>
         <ion-input
           class="search-tx-modal"
@@ -79,24 +69,33 @@
         </div>
       </ng-container>
     </div>
-    <div>
+    <div class="swap-form">
       <form [formGroup]="createForm">
         <div class="swap-exchange-container">
           <div class="send-container">
             <div class="title" translate>You send</div>
             <div class="list-coin">
-              <ion-item lines="none">
-                <ion-select
-                  value="{{ listConfig.coinSwap[0].code }}"
-                  (ionChange)="handleCoinSwapChange($event)"
-                >
-                  <ng-container *ngFor="let coin of listConfig.coinSwap">
-                    <ion-select-option value="{{ coin.code }}">{{
-                      coin.code
-                    }}</ion-select-option>
-                  </ng-container>
-                </ion-select>
-              </ion-item>
+              <mat-form-field appearance="none">
+                <mat-select (selectionChange)="handleCoinSwapChange($event)" [(value)]="coinSwapSelected">
+                  <mat-select-trigger>
+                    <img [src]="getImageCoin(coinSwapSelected)">
+                    <div>
+                      <p class="mat-coin-name">{{coinSwapSelected.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coinSwapSelected)}}</p>
+                    </div>
+                  </mat-select-trigger>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                    Select Coin
+                  </mat-option>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" *ngFor="let coin of listConfig.coinSwap" [value]="coin">
+                    <img [src]="getImageCoin(coin)">
+                    <div>
+                      <p class="mat-coin-name">{{coin.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coin)}}</p>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <input
@@ -119,7 +118,7 @@
           <div class="receive-container">
             <div class="title" translate>You receive</div>
             <div class="list-coin">
-              <ion-item lines="none">
+              <!-- <ion-item lines="none">
                 <ion-select
                   value="{{ listConfig.coinReceive[0].code }}"
                   (ionChange)="handleCoinReceiveChange($event)"
@@ -130,7 +129,28 @@
                     }}</ion-select-option>
                   </ng-container>
                 </ion-select>
-              </ion-item>
+              </ion-item> -->
+              <mat-form-field appearance="none">
+                <mat-select (selectionChange)="handleCoinReceiveChange($event)" [(value)]="coinReceiveSelected">
+                  <mat-select-trigger>
+                    <img [src]="getImageCoin(coinReceiveSelected)">
+                    <div>
+                      <p class="mat-coin-name">{{coinReceiveSelected.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coinReceiveSelected)}}</p>
+                    </div>
+                  </mat-select-trigger>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                    Select Coin
+                  </mat-option>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" *ngFor="let coin of listConfig.coinReceive" [value]="coin">
+                    <img [src]="getImageCoin(coin)">
+                    <div>
+                      <p class="mat-coin-name">{{coin.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coin)}}</p>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <input
@@ -177,7 +197,7 @@
         </div>
 
         <div class="address-container">
-          <p>Your {{ coinReceiveSelected.code }} address</p>
+          <p>Your {{ getCoinName(coinReceiveSelected) }} address</p>
           <mat-form-field class="derivation-item" appearance="outline">
             <input
               formControlName="address"

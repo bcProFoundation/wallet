@@ -1,23 +1,23 @@
-<wide-header-page title="{{('Order detail'  | translate) }}" (back)="back()" [isCustomBack]='true'>
-<div page-content>
+<wide-header-page (back)="back()" [isCustomBack]='true' title="{{('Order Detail'  | translate) }}">
+<div page-content class="order-swap-content">
   <div *ngIf="order.status !== 'complete'" class="warning-order-swap">
     {{'Review the payment instructions carefully. Sending anything other than Bitcoin Cash to the specificed destination via the correct network can result in permanent loss of your finds.' | translate}}
   </div>
 
   <div class="order-swap-container">
     <p class="oder-number" translate>Order number: {{order.id.toString().slice(-10)}}</p>
-    <p class="status-oder" translate>{{ getLabelStatus(order)}}</p>
+    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>{{ getLabelStatus(order)}}</p>
     <div class="card-exchange-rate-oder">
       <div class="count-down-card">
         <span>1 {{ order.fromCoinCode.toUpperCase() }} </span>&nbsp; =
-        &nbsp; <span> {{ 1 * ( order.updatedRate || order.createdRate ) }} {{ order.toCoinCode.toUpperCase() }}</span>
+        &nbsp; <span> {{ (1 * ( order.updatedRate || order.createdRate )).toFixed(2) }} {{ order.toCoinCode.toUpperCase() }}</span>
         <div class="count-down-container">
           <countdown class="count-down" #cd [config]="{leftTime: 5, format: 's'}" (event)="handleEvent($event)"></countdown>
           <img src="assets/img/countdown-ico.svg" alt="" />
         </div>
       </div>
       <div class="sub-title">
-        {{'The final rate will be determined upon receipt of your {Coin} payment.' | translate}}
+        {{'The final rate will be determined upon receipt of your {coin} payment.' | translate: {coin: order.fromCoinCode.toUpperCase()} }}
       </div>
     </div>
 
@@ -44,11 +44,11 @@
         <div class="amount-container">
           <div class="start-amount">
             <p class="label-amount" translate>Send between</p>
-            <p class="amount">{{ minSwapAmount }} {{ order.fromCoinCode.toUpperCase() }}</p>
+            <p class="amount">{{ minSwapAmount.toFixed(2) }} {{ order.fromCoinCode.toUpperCase() }}</p>
           </div>
           <div class="end-amount">
             <p class="label-amount" translate>and</p>
-            <p>{{ maxSwapAmount }} {{ order.fromCoinCode.toUpperCase() }}</p>
+            <p>{{ maxSwapAmount.toFixed(2) }} {{ order.fromCoinCode.toUpperCase() }}</p>
           </div>
         </div>
 
@@ -56,7 +56,7 @@
           <ion-icon name="information-circle"></ion-icon>
           <div class="warning-message">
             <span class="title-message" translate>
-              {{'You can send more than ' + maxSwapAmount + ' ' + order.fromCoinCode.toUpperCase() }}
+              {{'You can send more than ' + maxSwapAmount.toFixed(2) + ' ' + order.fromCoinCode.toUpperCase() }}
             </span>
             <span>
               {{ ', however we will manually review the order which might cause a delay.' | translate }}
@@ -69,11 +69,11 @@
         <div class="amount-container">
           <div class="start-amount">
             <p class="label-amount" translate>You'll send</p>
-            <p class="amount">{{ order.fromCoinCode.toUpperCase() }}</p>
+            <p class="amount">{{ order.amountFrom + ' ' + order.fromCoinCode.toUpperCase() }}</p>
           </div>
           <div class="end-amount">
             <p class="label-amount" translate>You'll receive</p>
-            <p class="amount">{{ order.toCoinCode.toUpperCase() }}</p>
+            <p class="amount">{{ order.amountFrom + ' ' + order.toCoinCode.toUpperCase() }}</p>
             <p class="address-received">{{ order.addressUserReceive.slice(-10) }}</p>
           </div>
         </div>
@@ -110,8 +110,8 @@
     <div [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'" class="line-driver"></div>
 
     <div class="footer-order-swap">
-      <p translate>Created on: <span>{{ dateStr }}</span></p>
-      <p translate>Expireds at: <span>{{ dateStr }}</span></p>
+      <p translate>Created on: <span>{{ createdDateStr }}</span></p>
+      <p translate>Expireds at: <span>{{ endedDateStr }}</span></p>
     </div>
   </div>
  

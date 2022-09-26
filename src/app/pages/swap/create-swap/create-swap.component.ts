@@ -154,6 +154,19 @@ export class CreateSwapPage implements OnInit {
     'LotusUri'
   ];
 
+  categories = [
+    {value: 'lav', viewValue: 'Laravel', image: 'assets/img/currencies/xpi.svg'},
+    {value: 'ang', viewValue: 'Angular', image: 'assets/img/currencies/xec.svg'},
+    {value: 'boo', viewValue: 'Bootstrap', image: 'assets/img/currencies/btc.svg'},
+    {value: 'jsx', viewValue: 'JS', image: 'assets/img/currencies/bch.svg'},
+    {value: 'git', viewValue: 'Git', image: 'assets/img/currencies/doge.svg'}
+  ];
+
+  listCoinSwap = [];
+
+  selectedCoinSwap = null;
+  selectedCoinReceive = null;
+
   // public listConfig = {
   //   "coinSwap": [
   //     {
@@ -272,6 +285,10 @@ export class CreateSwapPage implements OnInit {
     return this.currencyProvider.getChain(coin as Coin).toLowerCase();
   }
   
+  public handleSelectOption(e) {
+    this.searchValue = e;
+    console.log('*********', e);
+  }
 
   public convertAmountToSatoshiAmount(coinConfig, amount): number {
     if (coinConfig.isToken) {
@@ -358,6 +375,18 @@ export class CreateSwapPage implements OnInit {
           this.handleInputChange(isSwap);
         });
     });
+    // this.selectedCoinSwap = this.listConfig.coinSwap[0];
+    // this.selectedCoinReceive = this.listConfig.coinReceive[0];
+  }
+
+  getCoinName(coin: CoinConfig) {
+    const objCoin = this.currencyProvider.getCoin(coin.code.toUpperCase());
+    const nameCoin = this.currencyProvider.getCoinName(objCoin) || '';
+    return nameCoin;
+  }
+
+  getImageCoin(coin: CoinConfig) {
+    return !coin.isToken ? `assets/img/currencies/${coin.code}.svg` : `assets/img/currencies/${coin.tokenInfo.symbol}.svg`;
   }
 
   handleInputChange(isSwap: Boolean) {
@@ -639,7 +668,6 @@ export class CreateSwapPage implements OnInit {
       .createOrder(orderOpts)
       .then((result: IOrder) => {
         this.router.navigate(['/order-swap'], {
-          replaceUrl: true,
           state: {
             orderId: result.id
           }

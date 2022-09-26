@@ -33,6 +33,9 @@ page-order-swap {
             line-height: 20px;
             margin: 1rem 0;
         }
+        .status-completed {
+            color: #006C44
+        }
         .card-exchange-rate-oder {
             padding: 8px 1rem;
             border: 1px solid rgba(112, 129, 138, 0.16);
@@ -57,12 +60,14 @@ page-order-swap {
                     align-items: center;
                     .count-down {
                         font-weight: 600;
-                        font-size: 12px;
                         line-height: 16px;
                         text-align: center;
                         letter-spacing: 0.5px;
                         color: rgba(0, 30, 46, 0.6);
                         margin-left: 8px;
+                        span {
+                            font-size: 12px;
+                        }
                     }
                     img {
                         position: absolute;
@@ -222,4 +227,21 @@ page-order-swap {
         height: 1px;
         background: rgba(112, 129, 138, 0.16);
     }
+    
+    .order-swap-content {
+        margin-bottom: 1rem;
+    }
+
+    @media screen and (max-width: 390px) {
+        .order-swap-content {
+            padding: 0 1rem;
+        }
+    }
+
+    wide-header-page {
+        ion-content {
+            --padding-bottom: 0 !important;
+        }
+    }
+    
 }

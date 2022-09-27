@@ -82,8 +82,12 @@ export class OrderSwapPage implements OnInit {
     }
     if(this.navPramss.order){
       this.order = this.navPramss.order;
+      this.orderId = this.order.id as string;
     }
-    // this.getOrderInfo();
+    if(this.navPramss.orderId){
+      this.orderId = this.navPramss.orderId;
+      this.getOrderInfo();
+    }
     // else(this.navPramss.orderId)
     // this.coinReceive = this.navPramss.coinReceive;
     // // this.coinSwap = this.navPramss.coinSwap;
@@ -146,7 +150,7 @@ export class OrderSwapPage implements OnInit {
   }
 
   getOrderInfo(){
-    this.orderProvider.getOrderInfo(this.order.id).then((res: IOrder) => {
+    this.orderProvider.getOrderInfo(this.orderId).then((res: IOrder) => {
       this.order = res;
       this.coinReceive = this.order.coinConfig;
       this.maxSwapAmount = this.coinReceive.maxConvertToSat / this.order.toSatUnit / ( this.order.updatedRate || this.order.createdRate );

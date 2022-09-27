@@ -6,13 +6,13 @@
 
   <div class="order-swap-container">
     <p class="oder-number" translate>Order number: {{order.id.toString().slice(-10)}}</p>
-    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>{{ getLabelStatus(order)}}</p>
+    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>{{ labelStatusString }}</p>
     <div class="card-exchange-rate-oder">
       <div class="count-down-card">
         <span>1 {{ order.fromCoinCode.toUpperCase() }} </span>&nbsp; =
         &nbsp; <span> {{ (1 * ( order.updatedRate || order.createdRate )).toFixed(2) }} {{ order.toCoinCode.toUpperCase() }}</span>
         <div class="count-down-container">
-          <countdown class="count-down" #cd [config]="{leftTime: 5, format: 's'}" (event)="handleEvent($event)"></countdown>
+          <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
           <img src="assets/img/countdown-ico.svg" alt="" />
         </div>
       </div>
@@ -36,11 +36,11 @@
       </div>
     </div>
     <div class="card-amount-order">
-      <ng-container *ngIf="order.amountFrom">
-        <p translate>Send exactly: {{ order.amountFrom / order.fromSatUnit}}</p>
-        <p translate>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}} {{ order.toCoinCode }}</p>
-      </ng-container>
-      <ng-container *ngIf="!order.amountFrom">
+      <!-- <ng-container *ngIf="order.amountFrom"> -->
+        <p translate>Send exactly: {{ order.amountFrom / order.fromSatUnit }} {{ order.fromCoinCode.toUpperCase() }}</p>
+        <p translate>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}} {{ order.toCoinCode.toUpperCase() }}</p>
+      <!-- </ng-container> -->
+      <!-- <ng-container *ngIf="!order.amountFrom"> -->
         <div class="amount-container">
           <div class="start-amount">
             <p class="label-amount" translate>Send between</p>
@@ -69,15 +69,15 @@
         <div class="amount-container">
           <div class="start-amount">
             <p class="label-amount" translate>You'll send</p>
-            <p class="amount">{{ order.amountFrom + ' ' + order.fromCoinCode.toUpperCase() }}</p>
+            <p class="amount">{{ order.amountFrom / order.fromSatUnit + ' ' + order.fromCoinCode.toUpperCase() }}</p>
           </div>
           <div class="end-amount">
             <p class="label-amount" translate>You'll receive</p>
-            <p class="amount">{{ order.amountFrom + ' ' + order.toCoinCode.toUpperCase() }}</p>
+            <p class="amount">{{ ( order.amountFrom / order.fromSatUnit * (order.updatedRate || order.createdRate) ) + ' ' + order.toCoinCode.toUpperCase() }}</p>
             <p class="address-received">{{ order.addressUserReceive.slice(-10) }}</p>
           </div>
         </div>
-      </ng-container>
+      <!-- </ng-container> -->
     </div>
 
     <div class="line-driver"></div>
@@ -94,7 +94,7 @@
       </ng-container>
     
       <ng-container *ngIf="order.listTxIdUserReceive.length > 0">
-        <p translate>TxId ser receive:</p>
+        <p translate>TxId user receive:</p>
         <ng-container *ngFor="let txId of order.listTxIdUserReceive">
           <ion-button fill="clear" (click)="viewOnBlockchain(order.toCoinCode, order.isToToken, txId)">
             {{ txId }}
@@ -102,9 +102,13 @@
         </ng-container>
       </ng-container>
     
-      <ng-container *ngIf="order.error">
-        <p translate>Error: {{ order.error }}</p>
-      </ng-container>
+      <p>{{ errorStr }}</p>
+      <!-- <ng-container *ngIf="order.status !== 'complete' && order.error">
+        <ng-container *ngIf="order.pendingReason === 'OUT_OF_FUND' || order.pendingReason === 'BELOW_MIN_LIMIT'">
+          <p translate></p>
+        </ng-container>
+        <p translate></p>
+      </ng-container> -->
     </div>
 
     <div [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'" class="line-driver"></div>

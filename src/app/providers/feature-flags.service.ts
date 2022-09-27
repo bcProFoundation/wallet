@@ -29,10 +29,6 @@ export interface FeatureConfig {
      * be called by the APP_INITIALIZER
      */
     loadConfig() : Promise<any> {
-    //   return this.http
-    //     .get<FeatureConfig>(this.configUrl)
-    //     .pipe(tap(data => (this.config = data)))
-    //     .toPromise();
       let buildSwapAlone = false;
         return of({
             abcpay: true,
@@ -52,12 +48,6 @@ export interface FeatureConfig {
             routes.push({ path: 'order-swap', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
-          // if(!data.abcpay && data.swap){
-          //   const routes = this.Router.config;
-          //   routes.shift();
-          //   routes.unshift({ path: '', component: SwapPage });
-          //   this.Router.resetConfig(routes);
-          // }
           this.config = data;
         } ))
             .toPromise();;

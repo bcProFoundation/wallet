@@ -15,8 +15,8 @@ interface IOrder {
   fromCoinCode: string;
   fromTokenId?: string;
   amountFrom: number;
-  fromSatUnit?: number;
-  isFromToken?: boolean;
+  fromSatUnit: number;
+  isFromToken: boolean;
   toCoinCode: string;
   isToToken: boolean;
   toSatUnit: number;
@@ -35,10 +35,15 @@ interface IOrder {
   endedOn?: number;
   createdOn?: number;
   error?: string;
-  toTokenInfo? : TokenInfo;
+  coinConfig?: CoinConfig;
+  toTokenInfo?: TokenInfo;
   fromTokenInfo?: TokenInfo;
-  coinConfig?: CoinConfig
+  note?: string;
+  pendingReason?: string;
+  lastModified?: number;
+  isResolve?: boolean;
 }
+
 @Component({
   selector: 'page-order-swap',
   templateUrl: './order-swap.component.html',
@@ -53,9 +58,11 @@ export class OrderSwapPage implements OnInit {
   coinReceive: CoinConfig = null;
   minSwapAmount = 0;
   maxSwapAmount = 0;
+  errorStr = '';
   public createdDateStr = '';
   public endedDateStr = '';
   blockexplorerUrl = '';
+  labelStatusString = '';
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
   constructor(    private router: Router,
     private navParams: NavParams,
@@ -73,10 +80,10 @@ export class OrderSwapPage implements OnInit {
     } else {
       this.navPramss = history ? history.state : {};
     }
-    if(this.navPramss.orderId){
-      this.orderId = this.navPramss.orderId;
+    if(this.navPramss.order){
+      this.order = this.navPramss.order;
     }
-    this.getOrderInfo();
+    // this.getOrderInfo();
     // else(this.navPramss.orderId)
     // this.coinReceive = this.navPramss.coinReceive;
     // // this.coinSwap = this.navPramss.coinSwap;
@@ -92,10 +99,10 @@ export class OrderSwapPage implements OnInit {
 
   getNameCoin(order: IOrder) {
     let nameCoin = '';
-    if (order && order.isToToken) {
-      nameCoin = order.toTokenInfo.name;
+    if (order && order.isFromToken) {
+      nameCoin = order.fromTokenInfo.name;
     } else {
-      const coin = this.currencyProvider.getCoin(order.toCoinCode.toUpperCase());
+      const coin = this.currencyProvider.getCoin(order.fromCoinCode.toUpperCase());
       nameCoin = this.currencyProvider.getCoinName(coin) || '';
     }
     return nameCoin;
@@ -110,20 +117,25 @@ export class OrderSwapPage implements OnInit {
       let label = '';
       switch (order.status) {
         case 'waiting':
-          label = `Waiting for ${order.toCoinCode.toUpperCase()} payment`
+          label = `Waiting for ${order.toCoinCode.toUpperCase()} payment`;
           break;
         case 'pending':
-          label = `Order is pending for review`
+          label = `Order is pending for review`;
           break;
+        case 'expired':
+        label = `Order is expired`;
+        break;
         case 'complete':
-          label = `Order completed`
+          label = `Order completed`;
           break;
         default:
           break;
       }
-      return label;
+      this.labelStatusString = label;
+      this._cdRef.markForCheck();
+    } else{
+      this.labelStatusString = '';
     }
-    return '';
   }
 
   handleEvent(event){
@@ -133,21 +145,19 @@ export class OrderSwapPage implements OnInit {
     }
   }
 
-  // back() {
-  //   this.router.navigate[''];
-  // }
-
   getOrderInfo(){
-    this.orderProvider.getOrderInfo(this.orderId).then((res: IOrder) => {
+    this.orderProvider.getOrderInfo(this.order.id).then((res: IOrder) => {
       this.order = res;
       this.coinReceive = this.order.coinConfig;
       this.maxSwapAmount = this.coinReceive.maxConvertToSat / this.order.toSatUnit / ( this.order.updatedRate || this.order.createdRate );
       this.minSwapAmount = this.coinReceive.minConvertToSat / this.order.toSatUnit / ( this.order.updatedRate || this.order.createdRate );
       this.createdDateStr = new Date(this.order.createdOn).toUTCString();
       this.endedDateStr = new Date(this.order.endedOn).toUTCString();
+      this.getLabelStatus(this.order);
+      this.getErrorStr(this.order);
       this._cdRef.markForCheck();
     }).catch(e => {
-
+      this.showErrorInfoSheet(e);
     })
   }
 
@@ -175,7 +185,20 @@ export class OrderSwapPage implements OnInit {
       }
     );
   }
-
+  public getErrorStr(order: IOrder){
+    if(order){
+      if(order.status !== 'complete' && order.error && order.error.length > 0){
+        if(order.pendingReason === 'OUT_OF_FUND'){
+          this.errorStr = 'This order need to be reviewed by admin';
+        } else{
+          this.errorStr = "Error: " + order.error;
+        }
+      }
+      else{
+        this.errorStr = '';
+      }
+    }
+  }
   public viewOnBlockchain(coin, isToken, txId): void {
     let defaults = this.configProvider.getDefaults();
     const coinSelected = isToken ? 'xec' : coin;

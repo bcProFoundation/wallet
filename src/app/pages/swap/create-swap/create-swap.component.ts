@@ -154,77 +154,6 @@ export class CreateSwapPage implements OnInit {
     'LotusUri'
   ];
 
-  // public listConfig = {
-  //   "coinSwap": [
-  //     {
-  //       "code": "xpi",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "xec",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "bch",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "abcslp",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     }
-  //   ],
-  //   "coinReceive": [
-  //     {
-  //       "code": "abcslp",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "EAT",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "bcPro",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "xpi",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     }
-  //   ]
-  // }
-
   public listConfig: ConfigSwap = null;
 
   constructor(
@@ -246,7 +175,7 @@ export class CreateSwapPage implements OnInit {
       swapAmount: [
         0,
         {
-          validators: [this.amountMinValidator(true)],
+          validators: [this.amountMinValidator(true), this.amountMaxValidator()],
           updateOn: 'change'
         }
       ],
@@ -254,7 +183,7 @@ export class CreateSwapPage implements OnInit {
       receiveAmount: [
         0,
         {
-          validators: [this.amountMinValidator(false)],
+          validators: [this.amountMinValidator(false), this.amountMaxValidator()],
           updateOn: 'change'
         }
       ],
@@ -426,7 +355,7 @@ export class CreateSwapPage implements OnInit {
       }
       if (this.altValue.isGreaterThan(0)) {
         this.maxWithCurrentFiat =
-          this.coinSwapSelected.max * this.usdRate[this.fiatCode];
+          this.coinReceiveSelected.max * this.usdRate[this.fiatCode];
         if (this.altValue.toNumber() > this.maxWithCurrentFiat) {
           return { amountMaxValidator: true };
         } else {
@@ -510,13 +439,18 @@ export class CreateSwapPage implements OnInit {
   }
 
   handleSearchInput(){
+  
     if(this.searchValue.trim().length > 1){
-      this.router.navigate(['/order-swap'], {
-        replaceUrl: true,
-        state: {
-          orderId: this.searchValue
-        }
-      });
+      this.orderProvider.getOrderInfo(this.searchValue).then((res: IOrder) => {
+        this.router.navigate(['/order-swap'], {
+          replaceUrl: true,
+          state: {
+            order: res
+          }
+        });
+      }).catch(e => {
+        this.showErrorInfoSheet(e);
+      })
     }
   }
 

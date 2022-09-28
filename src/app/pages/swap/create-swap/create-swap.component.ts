@@ -91,77 +91,6 @@ export class CreateSwapPage implements OnInit {
     'LotusUri'
   ];
 
-  // public listConfig = {
-  //   "coinSwap": [
-  //     {
-  //       "code": "xpi",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "xec",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "bch",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "abcslp",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     }
-  //   ],
-  //   "coinReceive": [
-  //     {
-  //       "code": "abcslp",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "EAT",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "bcPro",
-  //       "isToken": true,
-  //       "networkFee": 1342,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     },
-  //     {
-  //       "code": "xpi",
-  //       "isToken": false,
-  //       "networkFee": 226,
-  //       "rate": {},
-  //       "min": 0, // USD
-  //       "tokenInfo": {}
-  //     }
-  //   ]
-  // }
-
   public listConfig: ConfigSwap = null;
 
   constructor(
@@ -191,7 +120,7 @@ export class CreateSwapPage implements OnInit {
       receiveAmount: [
         0,
         {
-          validators: [this.amountMinValidator(false)],
+          validators: [this.amountMinValidator(false), this.amountMaxValidator()],
           updateOn: 'change'
         }
       ],
@@ -209,7 +138,6 @@ export class CreateSwapPage implements OnInit {
     return this.currencyProvider.getChain(coin as Coin).toLowerCase();
   }
   
-
   public convertAmountToSatoshiAmount(coinConfig, amount): number {
     if (coinConfig.isToken) {
       const decimals = coinConfig.tokenInfo.decimals;
@@ -297,6 +225,16 @@ export class CreateSwapPage implements OnInit {
     });
   }
 
+  getCoinName(coin: CoinConfig) {
+    const objCoin = this.currencyProvider.getCoin(coin.code.toUpperCase());
+    const nameCoin = this.currencyProvider.getCoinName(objCoin) || '';
+    return nameCoin;
+  }
+
+  getImageCoin(coin: CoinConfig) {
+    return !coin.isToken ? `assets/img/currencies/${coin.code}.svg` : `assets/img/currencies/${coin.tokenInfo.symbol}.svg`;
+  }
+
   handleInputChange(isSwap: Boolean) {
     if (!!isSwap) {
       const result =
@@ -338,6 +276,13 @@ export class CreateSwapPage implements OnInit {
         return null;
       }
     };
+  }
+
+  getNameCoin(code) {
+    let nameCoin = '';
+    const coin = this.currencyProvider.getCoin(code.toUpperCase());
+    nameCoin = this.currencyProvider.getCoinName(coin) || '';
+    return nameCoin;
   }
 
   amountMaxValidator(): ValidatorFn {
@@ -431,13 +376,18 @@ export class CreateSwapPage implements OnInit {
   }
 
   handleSearchInput(){
+  
     if(this.searchValue.trim().length > 1){
-      this.router.navigate(['/order-swap'], {
-        replaceUrl: true,
-        state: {
-          orderId: this.searchValue
-        }
-      });
+      this.orderProvider.getOrderInfo(this.searchValue).then((res: IOrder) => {
+        this.router.navigate(['/order-swap'], {
+          replaceUrl: true,
+          state: {
+            order: res
+          }
+        });
+      }).catch(e => {
+        this.showErrorInfoSheet(e);
+      })
     }
   }
 
@@ -569,7 +519,6 @@ export class CreateSwapPage implements OnInit {
       .createOrder(orderOpts)
       .then((result: IOrder) => {
         this.router.navigate(['/order-swap'], {
-          replaceUrl: true,
           state: {
             orderId: result.id
           }

@@ -1,53 +1,170 @@
-
-page-create-swap{
-    .header-container{
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-        align-items: center;
-        .header-title{
-            font-weight: 400;
-            font-size: 24px;
-            color: #001E2E;
-        }
-        .header-search-container{
-            &::part(native) {
-                --background: transparent;
-                --border-color: 0.5px;
-                --border-color: rgba(112, 129, 138, 0.38);
-                --border-width: 3px;
-                --border-style: solid;
-                --border-radius: 4px;
-                --highlight-color-focused: rgba(112, 129, 138, 0.38);
-                --highlight-color-valid: rgba(112, 129, 138, 0.38);
-                --highlight-color-invalid: rgba(112, 129, 138, 0.38);
-                height: 49px;
-                font-size: 14px;
-              }
-              ion-input{
-                --padding-top: 0;
-                --padding-bottom: 0;
-                color: rgba(112, 129, 138, 0.38);
-              }
-        }
+page-create-swap {
+  .header-container {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    .header-title {
+      font-weight: 400;
+      font-size: 32px;
+      color: #001e2e;
     }
-    .swap-exchange-rate-container{
+    .search-container {
+      --background: linear-gradient(
+          0deg,
+          rgba(0, 93, 141, 0.05),
+          rgba(0, 93, 141, 0.05)
+        ),
+        #fafafb;
+      background: linear-gradient(
+          0deg,
+          rgba(0, 93, 141, 0.05),
+          rgba(0, 93, 141, 0.05)
+        ),
+        #fafafb;
+      --padding-start: 8px;
+      --padding-top: 0;
+      --padding-end: 0;
+      --padding-bottom: 0;
+      --inner-padding-end: 0;
+      border: 1px solid rgba(28, 55, 69, 0.6);
+      border-radius: 4px;
+      padding: 0;
+      max-height: 40px;
+      display: flex;
+      .search-tx-modal {
+        --placeholder-color: #001e2e;
+        --color: #001e2e;
         font-size: 14px;
-        font-weight: 400;
-        margin-top: 38px;
-        display: flex;
-        align-items: center;
-        img{
-            margin: 0 8px;
-        }
-        .count-down{
-            margin-left: 7px;
-        }
+        letter-spacing: 0.5px;
+      }
+
+      ion-icon {
+        margin: 0;
+        margin-right: 8px;
+        width: 24px;
+        height: 24px;
+        color: rgba(28, 55, 69, 0.6);
+      }
     }
-    .swap-exchange-container{
-        display: flex;
+  }
+  .swap-exchange-rate-container {
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    .swap-ico {
+      margin: 0 8px;
     }
-    .right-part{
-        margin-left: 20px;
+    .count-down-container {
+      margin-left: 8px;
+      display: flex;
+      align-items: center;
+      .count-down {
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        letter-spacing: 0.5px;
+        color: rgba(0, 30, 46, 0.6);
+        margin-left: 8px;
+      }
+      img {
+        position: absolute;
+      }
     }
+  }
+  .swap-exchange-container {
+    width: 100%;
+    background: #fafafb;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    border: 1px #d5e9f4 solid;
+    .hint {
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0.4px;
+      color: rgba(0, 30, 46, 0.38);
+    }
+    ion-item {
+      margin: 1rem 0;
+      --background: #fafafb;
+      --padding-start: 0;
+    }
+    mat-form-field {
+      max-height: 80px;
+      padding: 0;
+      .mat-form-field-infix {
+        padding: 10px 0 1rem 0 !important;
+      }
+    }
+    .title {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.1px;
+      color: #001e2e;
+    }
+  }
+  .send-container {
+    width: 50%;
+    order: 0;
+    flex-grow: 1;
+    padding: 1rem;
+  }
+  .receive-container {
+    width: 50%;
+    order: 2;
+    flex-grow: 1;
+    border-left: 1px rgba(112, 129, 138, 0.38) solid;
+    padding: 1rem;
+  }
+  .network-fee-line {
+    text-align: right;
+    margin: 2rem 0;
+    .label-network {
+      color: rgba(28, 55, 69, 0.6);
+      font-size: 13px;
+    }
+    .amount-fee-network {
+      font-size: 13px;
+    }
+  }
+  .address-container {
+    padding: 1rem 1rem 2rem 1rem;
+    background: #fafafb;
+    border-radius: 12px;
+    border: 1px #d5e9f4 solid;
+    p {
+      color: #001e2e;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+      margin: 0 0 10px 0;
+    }
+    mat-form-field {
+      padding: 0;
+      .mat-form-field-infix {
+        padding: 10px 0 1em 0;
+        font-size: 14px;
+      }
+    }
+  }
+  mat-error {
+    font-size: 12px;
+    padding-left: 1rem;
+  }
+
+  @media screen and (max-width: 390px) {
+    .header-container {
+        padding: 0 1rem;
+    }
+    .swap-exchange-rate-container {
+        padding: 0 1rem;
+    }
+    .swap-form {
+        padding: 0 1rem;
+    }
+  }
 }

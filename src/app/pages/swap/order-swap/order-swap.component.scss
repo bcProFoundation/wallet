@@ -1,0 +1,247 @@
+page-order-swap {
+    p {
+        margin: 0;
+    }
+    
+    .warning-order-swap {
+        background: #FFDDB6;
+        color: #2B1700;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        line-height: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+    
+    .order-swap-container {
+        background: #FAFAFB;
+        border: 1px solid rgba(126, 208, 255, 0.16);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-top: 1rem;
+        .oder-number {
+            text-align: center;
+            color: rgba(0, 30, 46, 0.6);
+            font-size: 12px;
+            letter-spacing: 0.4px;
+        }
+        .status-oder {
+            text-align: center;
+            color: #CC8000;
+            letter-spacing: 0.1px;
+            font-weight: 600;
+            line-height: 20px;
+            margin: 1rem 0;
+        }
+        .status-completed {
+            color: #006C44
+        }
+        .card-exchange-rate-oder {
+            padding: 8px 1rem;
+            border: 1px solid rgba(112, 129, 138, 0.16);
+            border-radius: 16px;
+            width: 56%;
+            margin: auto;
+            margin-bottom: 24px;
+            .count-down-card {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 5px;
+                span {
+                    color: #001E2E;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                    letter-spacing: 0.1px;
+                }
+                .count-down-container {
+                    margin-left: 8px;
+                    display: flex;
+                    align-items: center;
+                    .count-down {
+                        font-weight: 600;
+                        line-height: 16px;
+                        text-align: center;
+                        letter-spacing: 0.5px;
+                        color: rgba(0, 30, 46, 0.6);
+                        margin-left: 8px;
+                        span {
+                            font-size: 12px;
+                        }
+                    }
+                    img {
+                        position: absolute;
+                    }
+                }
+            }
+            .sub-title {
+                font-size: 12px;
+                line-height: 16px;
+                text-align: center;
+                letter-spacing: 0.4px;
+                color: rgba(0, 30, 46, 0.6);
+            }
+        }
+        .info-card-account {
+            margin-top: 24px;
+            display: flex;
+            ngx-qrcode {
+                margin-right: 20px;
+                width: 90px;
+                height: 90px;
+                img {
+                    border-radius: 8px;
+                }
+            }
+            .coin-name {
+                margin-top: 5px;
+                font-size: 12px;
+                line-height: 16px;
+                letter-spacing: 0.4px;
+                color: rgba(0, 30, 46, 0.6);
+            }
+            .address {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                margin: 5px 0;
+                .coin-address {
+                    font-size: 16px;
+                    line-height: 24px;
+                    letter-spacing: 0.8px;
+                    color: #001E2E;
+                }
+                ion-icon {
+                    font-size: 23px;
+                    color: #001E2E;
+                }
+            }
+        }
+        .card-amount-order {
+            .amount-container {
+                display: flex;
+                justify-content: space-between;
+                margin: 24px 0;
+            }
+            .start-amount {
+                flex: none;
+                order: 0;
+                flex-grow: 1;
+                .label-amount {
+                    font-size: 12px;
+                    line-height: 16px;
+                    letter-spacing: 0.4px;
+                    color: rgba(0, 30, 46, 0.6);
+                }
+                .amount {
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                    letter-spacing: 0.1px;
+                    color: #001E2E;
+                }
+            }
+            .end-amount {
+                flex: none;
+                order: 2;
+                flex-grow: 1;
+                .label-amount {
+                    font-size: 12px;
+                    line-height: 16px;
+                    letter-spacing: 0.4px;
+                    color: rgba(0, 30, 46, 0.6);
+                }
+                .amount {
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                    letter-spacing: 0.1px;
+                    color: #001E2E;
+                }
+                .address-received {
+                    font-size: 12px;
+                    line-height: 16px;
+                    letter-spacing: 0.6px;
+                    color: rgba(0, 30, 46, 0.6);
+                }
+            }
+            .notify-content {
+                display: flex;
+                padding: 8px;
+                border: 1px solid rgba(112, 129, 138, 0.16);
+                border-radius: 16px;
+                margin-bottom: 24px;
+                ion-icon {
+                    font-size: 32px;
+                    color: rgba(0, 30, 46, 0.38);
+                }
+                .warning-message {
+                    margin-left: 10px;
+                    span {
+                        font-size: 12px;
+                        line-height: 16px;
+                        letter-spacing: 0.4px;
+                        color: rgba(0, 30, 46, 0.6);
+                    }
+                    .title-message {
+                        color: #CC8000;
+                    }
+                }
+            }
+        }
+    }
+    
+    .list-user-deposit {
+        margin: 24px 0;
+        p {
+            margin-bottom: 8px;
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0.4px;
+            color: rgba(0, 30, 46, 0.6);
+        }
+        .user-deposit {
+            margin-bottom: 8px;
+        }
+    }
+    
+    .footer-order-swap {
+        margin-top: 2rem;
+        text-align: center;
+        p {
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0.4px;
+            color: rgba(0, 30, 46, 0.6);
+        }
+        span {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0.4px;
+            color: #001E2E;
+        }
+    }
+    
+    .line-driver {
+        height: 1px;
+        background: rgba(112, 129, 138, 0.16);
+    }
+    
+    .order-swap-content {
+        margin-bottom: 1rem;
+    }
+
+    @media screen and (max-width: 390px) {
+        .order-swap-content {
+            padding: 0 1rem;
+        }
+    }
+
+    wide-header-page {
+        ion-content {
+            --padding-bottom: 0 !important;
+        }
+    }
+    
+}

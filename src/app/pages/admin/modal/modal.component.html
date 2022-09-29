@@ -1,4 +1,93 @@
 <div mat-dialog-content>
+ <p>
+  <span>Order Id: </span>
+  <span> {{ data.id }}</span>
+ </p>
+
+ <p>
+  <span>From coin: </span>
+  <span> {{ data.fromCoinCode }}</span>
+ </p>
+
+ <p>
+  <span>Is from token: </span>
+  <span> {{ data.isFromToken }}</span>
+ </p>
+
+ <p>
+  <span>To coin: </span>
+  <span> {{ data.toCoinCode }}</span>
+ </p>
+
+ <p>
+  <span> Is to Token: </span>
+  <span> {{ data.isToToken }}</span>
+ </p>
+
+ <p>
+  <span> Created rate: </span>
+  <span> {{ data.createdRate }}</span>
+ </p>
+
+ <p>
+  <span> Updated rate: </span>
+  <span> {{ data.updatedRate }}</span>
+ </p>
+ 
+ <p>
+  <span>listTxIdUserDeposit</span>
+  <ng-container *ngFor="let tx of data.listTxIdUserDeposit">
+    <a (click)="viewOnBlockchain(data.fromCoinCode, data.isFromToken, tx)">
+      {{ tx }}
+    </a>
+  </ng-container>
+  
+ </p>
+
+ <p>
+  <span>listTxIdUserReceive</span>
+  <ng-container *ngFor="let tx of data.listTxIdUserReceive">
+    <a (click)="viewOnBlockchain(data.toCoinCode, data.isToToken, tx)">
+      {{ tx }}
+    </a>
+  </ng-container>
+ </p>
+
+ <p>
+  <span>
+    Created on
+  </span>
+  <span>
+    {{ createdOnStr }}
+  </span>
+ </p>
+
+ <p>
+  <span>Ended on</span>
+  <span>{{ endedOnStr }}</span>
+ </p>
+
+ <p>
+  <span>Pending reason: </span>
+  <span> {{ data.pendingReason }}</span>
+ </p>
+
+ <p>
+  <span>Error: </span>
+  <span> {{ data.error }}</span>
+ </p>
+
+ <p>
+  <span>Status: </span>
+  <span> {{ data.status }}</span>
+ </p>
+
+
+ <p>
+  <span>Is resolve: </span>
+  <span>{{ data.isResolve }}</span>
+ </p>
+
   <mat-form-field appearance="fill">
     <mat-label>Note</mat-label>
     <textarea matInput [(ngModel)]="noteValue" placeholder="Take note here"></textarea>

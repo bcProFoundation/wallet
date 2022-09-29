@@ -54,7 +54,7 @@ export class ExternalLinkProvider {
     });
   }
 
-  private openBrowser(res: boolean, url: string) {
+  public openBrowser(res: boolean, url: string) {
     let old = (window as any).handleOpenURL;
 
     // Ignore external URLs: avoid opening action sheet

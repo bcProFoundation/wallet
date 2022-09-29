@@ -6,7 +6,7 @@
 
   <div class="order-swap-container">
     <p class="oder-number" translate>Order number: {{order.id.toString().slice(-10)}}</p>
-    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>{{ labelStatusString }}</p>
+    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}">{{ labelStatusString }}</p>
     <div class="card-exchange-rate-oder">
       <div class="count-down-card">
         <span>1 {{ order.fromCoinCode.toUpperCase() }} </span>&nbsp; =

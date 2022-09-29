@@ -64,8 +64,10 @@ export interface TokenInfo {
     toTokenInfo?: TokenInfo;
     fromTokenInfo?: TokenInfo;
     note?: string;
+    pendingReason?: string;
+    lastModified?: number;
+    isResolve?: boolean;
   }
-
   export interface CoinConfig {
     code: string;
     isToken: boolean;

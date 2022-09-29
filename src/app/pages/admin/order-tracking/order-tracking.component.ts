@@ -1,11 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TokenInfo } from 'src/app/models/tokens/tokens.model';
-import { OrderProvider } from 'src/app/providers';
+import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
 import {PageEvent} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogCustomComponent } from '../modal/modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { Sort } from '@angular/material/sort';
 
 
 export interface PeriodicElement {
@@ -62,7 +64,40 @@ interface IOrder {
   error?: string;
   toTokenInfo? : TokenInfo;
   fromTokenInfo?: TokenInfo;
-  coinConfig?: CoinConfig
+  coinConfig?: CoinConfig;
+  lastModified?: number;
+}
+interface IOrderCustom {
+  id: string | number;
+  version: number;
+  priority: number;
+  fromCoinCode: string;
+  fromTokenId?: string;
+  amountFrom: number;
+  fromSatUnit?: number;
+  isFromToken?: boolean;
+  toCoinCode: string;
+  isToToken: boolean;
+  toSatUnit: number;
+  amountSentToUser: number;
+  amountUserDeposit: number;
+  createdRate: number;
+  updatedRate: number;
+  addressUserReceive: string;
+  adddressUserDeposit: string;
+  toTokenId?: string;
+  listTxIdUserDeposit?: string[];
+  listTxIdUserReceive?: string[];
+  status?: string;
+  isSentToFund?: boolean;
+  isSentToUser?: boolean;
+  endedOn?: number;
+  createdOn?: number;
+  error?: string;
+  toTokenInfo? : TokenInfo;
+  fromTokenInfo?: TokenInfo;
+  coinConfig?: CoinConfig;
+  lastModified?: number;
 }
 
 @Component({
@@ -71,9 +106,10 @@ interface IOrder {
   styleUrls: ['./order-tracking.component.scss'],
 })
 export class OrderTrackingComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id','fromCoinCode', 'amountFrom', 'isFromToken', 'toCoinCode', 
-  'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 
-  'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'error', 'changeStatus' ];
+  // displayedColumns: string[] = ['id','fromCoinCode', 'amountFrom', 'isFromToken', 'toCoinCode', 
+  // 'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 
+  // 'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'error', 'changeStatus' ];
+  displayedColumns: string[] = ['id','swapPairCode', 'rate', 'pendingReason', 'status', 'lastModified', 'action'];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   // displayedColumns: string[] = ['id','fromCoinCode', 'endedOn', 'abc'];
 
@@ -84,10 +120,15 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
     // MatPaginator Output
     pageEvent: PageEvent;
+    sortedData: IOrder[];
+    // Date = new this.Date()
   constructor(
     private orderProvider: OrderProvider,
     private _cdRef: ChangeDetectorRef,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private errorsProvider: ErrorsProvider,
+    private translate: TranslateService,
+    private bwcErrorProvider: BwcErrorProvider
   ) { 
     const opts = {
       query: {_id : 1},
@@ -97,9 +138,12 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
 
     this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
       this.length = listOrderinfo.count;
-      this.dataSource = listOrderinfo.listOrderInfo;
+      this.dataSource = listOrderinfo.listOrderInfo.map(obj => ({ ...obj, lastModifiedStr: new Date(obj.lastModified || obj.createdOn).toUTCString() }));
+      this.sortedData = this.dataSource.slice();
       this._cdRef.markForCheck();
     });  
+
+    
   }
   ngAfterViewInit(): void {
  }
@@ -124,7 +168,50 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
   }
 
   handleChangeStatus(order){
-    console.log(order);
+    order.status = 'complete';
+    this.orderProvider.updateOrder(order).then(
+
+    ).catch(e => {
+      this.showErrorInfoSheet(e);
+    });
+  }
+
+  handleChangeResolve(order){
+    order.isResolve = true;
+    this.orderProvider.updateOrder(order).then(
+
+    ).catch(e => {
+      this.showErrorInfoSheet(e);
+    })
+  }
+
+  viewDetailOrder(order: IOrder){
+    this.handleOpenNoteDialog(order);
+  }
+
+  public showErrorInfoSheet(
+    error: any,
+    title?: string,
+    exit?: boolean
+  ): void {
+    let msg: string;
+    if (!error) return;
+    // Currently the paypro error is the following string: 500 - "{}"
+    if (error.status === 500) {
+      msg = error.error.error;
+    }
+
+    const infoSheetTitle = title ? title : this.translate.instant('Error');
+
+    this.errorsProvider.showDefaultError(
+      msg || this.bwcErrorProvider.msg(error),
+      infoSheetTitle,
+      () => {
+        // if (exit) {
+        //   this.location.back()
+        // }
+      }
+    );
   }
 
   handleOpenNoteDialog(order){
@@ -174,5 +261,32 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     return timeMil && timeMil > 0 ? new Date(timeMil).toUTCString() : '';
   }
 
+  sortData(sort: any) {
+    const data = this.dataSource.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
 
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'status':
+          return compare(a.status, b.status, isAsc);
+        case 'lastModified':
+          return compare(a.lastModified, b.lastModified, isAsc);
+        // case 'fat':
+        //   return compare(a.fat, b.fat, isAsc);
+        // case 'carbs':
+        //   return compare(a.carbs, b.carbs, isAsc);
+        // case 'protein':
+        //   return compare(a.protein, b.protein, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+}
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

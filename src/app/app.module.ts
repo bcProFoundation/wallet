@@ -57,6 +57,7 @@ import { FeatureFlagsService } from './providers/feature-flags.service';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatSortModule} from '@angular/material/sort';
 
 const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
   featureFlagsService.loadConfig();
@@ -111,6 +112,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         MatTableModule,
         MatPaginatorModule,
         MatDialogModule,
+        MatSortModule,
         NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,

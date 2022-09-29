@@ -316,6 +316,10 @@ export class CopayApp {
             this.logsProvider.get(this.appProvider.info.nameCase, platform);
           });
       });
+    } else{
+      this.router.navigate([''], {
+        replaceUrl: true
+      });
     }
     this.events.subscribe('OpenWallet', (wallet, params) =>
       this.openWallet(wallet, params)

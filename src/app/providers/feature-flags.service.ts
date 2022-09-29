@@ -9,6 +9,7 @@ import { CreateSwapPage } from "../pages/swap/create-swap/create-swap.component"
 import { OrderSwapPage } from "../pages/swap/order-swap/order-swap.component";
 import { SettingsPage } from "../pages/settings/settings";
 import env from 'src/environments';
+import { OrderTrackingComponent } from "../pages/admin/order-tracking/order-tracking.component";
 
 export interface FeatureConfig {
     abcpay: boolean,
@@ -32,9 +33,9 @@ export interface FeatureConfig {
     loadConfig() : Promise<any> {
       let buildSwapAlone = false;
         return of({
-            abcpay: true,
-            swap: true,
-            admin: false
+            abcpay: false,
+            swap: false,
+            admin: true
         } as FeatureConfig).pipe(tap(data =>{
           if(data.abcpay && data.swap){
             if(env.buildSwapALone){
@@ -45,6 +46,15 @@ export interface FeatureConfig {
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: CreateSwapPage });
+            const indexPath = routes.findIndex(r => r.path === 'create-swap');
+            routes.splice(indexPath, 1);
+            routes.push({ path: 'order-swap', component: OrderSwapPage });
+            this.Router.resetConfig(routes);
+          }
+          if(data.admin){
+            const routes = this.Router.config;
+            routes.shift();
+            routes.unshift({ path: '', component: OrderTrackingComponent });
             const indexPath = routes.findIndex(r => r.path === 'create-swap');
             routes.splice(indexPath, 1);
             routes.push({ path: 'order-swap', component: OrderSwapPage });

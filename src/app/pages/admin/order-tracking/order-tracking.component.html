@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table  matSort (matSortChange)="sortData($event)" [dataSource]="sortedData" class="mat-elevation-z8">
 
     <!-- Position Column -->
     <ng-container matColumnDef="id">
@@ -7,118 +7,49 @@
     </ng-container>
   
     <!-- Name Column -->
-    <ng-container matColumnDef="fromCoinCode">
-      <th mat-header-cell *matHeaderCellDef> fromCoinCode </th>
-      <td mat-cell *matCellDef="let element"> {{element.fromCoinCode}} </td>
+    <ng-container matColumnDef="swapPairCode">
+      <th mat-header-cell *matHeaderCellDef> Swap Pair </th>
+      <td mat-cell *matCellDef="let element"> {{element.fromCoinCode}} / {{ element.toCoinCode }} </td>
     </ng-container>
   
     <!-- Weight Column -->
-    <ng-container matColumnDef="amountFrom">
-      <th mat-header-cell *matHeaderCellDef> amountFrom </th>
-      <td mat-cell *matCellDef="let element"> {{element.amountFrom}} </td>
+    <ng-container matColumnDef="rate">
+      <th mat-header-cell *matHeaderCellDef> Rate </th>
+      <td mat-cell *matCellDef="let element"> {{ element.updatedRate || element.createdRate }} </td>
     </ng-container>
   
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="isFromToken">
-      <th mat-header-cell *matHeaderCellDef> isFromToken </th>
-      <td mat-cell *matCellDef="let element"> {{element.isFromToken}} </td>
-    </ng-container>
-  
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="toCoinCode">
-        <th mat-header-cell *matHeaderCellDef> toCoinCode </th>
-        <td mat-cell *matCellDef="let element"> {{element.toCoinCode}} </td>
-      </ng-container>
-  
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="isToToken">
-        <th mat-header-cell *matHeaderCellDef> isToToken </th>
-        <td mat-cell *matCellDef="let element"> {{element.isToToken}} </td>
-      </ng-container>
-      
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="createdRate">
-        <th mat-header-cell *matHeaderCellDef> createdRate </th>
-        <td mat-cell *matCellDef="let element"> {{ element.createdRate && element.createdRate > 0 ? formatAmountWithLimitDecimal(element.createdRate, 8) : ''}} </td>
-      </ng-container>
-  
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="updatedRate">
-        <th mat-header-cell *matHeaderCellDef> updatedRate </th>
-        <td mat-cell *matCellDef="let element"> {{ element.updatedRate && element.updatedRate > 0 ? formatAmountWithLimitDecimal(element.updatedRate, 8) : ''}} </td>
-      </ng-container>
-  
-          <!-- Symbol Column -->
-      <ng-container matColumnDef="addressUserReceive">
-        <th mat-header-cell *matHeaderCellDef> addressUserReceive </th>
-        <td mat-cell *matCellDef="let element"> {{element.addressUserReceive}} </td>
-      </ng-container>
-
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="adddressUserDeposit">
-        <th mat-header-cell *matHeaderCellDef> adddressUserDeposit </th>
-        <td mat-cell *matCellDef="let element" class="truncate-cell"> {{element.adddressUserDeposit}} </td>
-      </ng-container>
-
        <!-- Symbol Column -->
-       <ng-container matColumnDef="listTxIdUserDeposit">
-        <th mat-header-cell *matHeaderCellDef> listTxIdUserDeposit </th>
-        <td mat-cell *matCellDef="let element"> 
-          <ng-container *ngIf="element.listTxIdUserDeposit && element.listTxIdUserDeposit.length > 0">
-              <ng-container *ngFor="let txId of element.listTxIdUserDeposit">
-                <p> {{ txId }}</p>
-                <p> {{ txId }}</p>
-
-              </ng-container>
-          </ng-container>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="listTxIdUserReceive">
-        <th mat-header-cell *matHeaderCellDef> listTxIdUserReceive </th>
-        <td mat-cell *matCellDef="let element"> 
-          <ng-container *ngIf="element.listTxIdUserReceive && element.listTxIdUserReceive.length > 0">
-              <ng-container *ngFor="let txId of element.listTxIdUserReceive">
-                <p> {{ txId }}</p>
-              </ng-container>
-          </ng-container>
-        </td>
+       <ng-container matColumnDef="pendingReason">
+        <th mat-header-cell *matHeaderCellDef > Pending Reason </th>
+        <td mat-cell *matCellDef="let element"> {{ element.pendingReason }} </td>
       </ng-container>
   
        <!-- Symbol Column -->
        <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> status </th>
-        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-      </ng-container>
-  
-  
-       <!-- Symbol Column -->
-       <ng-container matColumnDef="createdOn">
-        <th mat-header-cell *matHeaderCellDef> createdOn </th>
-        <td mat-cell *matCellDef="let element"> {{ handleDateTime(element.createdOn) }} </td>
-      </ng-container>
-  
-  
-       <!-- Symbol Column -->
-       <ng-container matColumnDef="endedOn">
-        <th mat-header-cell *matHeaderCellDef> endedOn </th>
-        <td mat-cell *matCellDef="let element"> {{ handleDateTime(element.endedOn) }} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> Status </th>
+        <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="error">
-        <th mat-header-cell *matHeaderCellDef> error </th>
-        <td mat-cell *matCellDef="let element"> {{ element.error }} </td>
+       <!-- Symbol Column -->
+       <ng-container matColumnDef="lastModified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="lastModified"> Last Modified </th>
+        <td mat-cell *matCellDef="let element"> {{ element.lastModifiedStr }} </td>
       </ng-container>
 
         <!-- Symbol Column -->
-        <ng-container matColumnDef="changeStatus">
+        <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef> Edit </th>
           <td mat-cell *matCellDef="let element"> 
-            <ng-container *ngIf="element.status === 'waiting'">
+            <ion-button (click)="viewDetailOrder(element)">
+              View detail
+            </ion-button>
+            <ng-container *ngIf="element.status === 'pending'">
               <ion-button (click)="handleChangeStatus(element)">Change status</ion-button>
+              <ng-container *ngIf="element.isResolve">
+                <ion-button (click)="handleChangeResolve(element)">Resolve</ion-button>
+              </ng-container>
             </ng-container>
-            <ion-button (click)="handleOpenNoteDialog(element)">{{ element.note && element.note.trim().length > 0 ? 'update note' : 'add note'}}</ion-button>
+            <!-- <ion-button (click)="handleOpenNoteDialog(element)">{{ element.note && element.note.trim().length > 0 ? 'update note' : 'add note'}}</ion-button> -->
           </td>
         </ng-container>
 

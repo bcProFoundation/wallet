@@ -6,7 +6,6 @@ import { BwcErrorProvider, Coin, ConfigProvider, CurrencyProvider, ErrorsProvide
 import { CoinConfig, TokenInfo } from '../config-swap';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import { runInThisContext } from 'vm';
 
 interface IOrder {
   id: string | number;
@@ -88,17 +87,11 @@ export class OrderSwapPage implements OnInit {
       this.orderId = this.navPramss.orderId;
       this.getOrderInfo();
     }
-    // else(this.navPramss.orderId)
-    // this.coinReceive = this.navPramss.coinReceive;
-    // // this.coinSwap = this.navPramss.coinSwap;
-    // this.maxSwapAmount = this.coinReceive.maxConvertToSat / this.order.toSatUnit;
-    // this.minSwapAmount = this.coinReceive.minConvertToSat / this.order.toSatUnit;
+
    }
 
   ngOnInit() {
-    // setInterval(
-    //   this.getOrderInfo(),
-    // )
+
   }
 
   getNameCoin(order: IOrder) {
@@ -183,9 +176,7 @@ export class OrderSwapPage implements OnInit {
       msg || this.bwcErrorProvider.msg(error),
       infoSheetTitle,
       () => {
-        // if (exit) {
-        //   this.location.back()
-        // }
+
       }
     );
   }
@@ -203,12 +194,13 @@ export class OrderSwapPage implements OnInit {
       }
     }
   }
-  public viewOnBlockchain(coin, isToken, txId): void {
+  public viewOnBlockchain(coin, isToken, txId, network): void {
     let defaults = this.configProvider.getDefaults();
     const coinSelected = isToken ? 'xec' : coin;
+    if(network === 'livenet')
     this.blockexplorerUrl = defaults.blockExplorerUrl[coinSelected];
-    // let btx = this.btx;
-    // const coin = btx.coin;
+    else
+    this.blockexplorerUrl = defaults.blockExplorerUrlTestnet[coinSelected];
     const url = `https://${this.blockexplorerUrl}tx/${txId}`;
     let optIn = true;
     let title = null;

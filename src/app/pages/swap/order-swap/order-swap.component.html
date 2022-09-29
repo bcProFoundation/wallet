@@ -1,46 +1,49 @@
 <wide-header-page (back)="back()" [isCustomBack]='true' title="{{('Order Detail'  | translate) }}">
-<div page-content class="order-swap-content">
-  <div *ngIf="order.status !== 'complete'" class="warning-order-swap">
-    {{'Review the payment instructions carefully. Sending anything other than Bitcoin Cash to the specificed destination via the correct network can result in permanent loss of your finds.' | translate}}
-  </div>
-
-  <div class="order-swap-container">
-    <p class="oder-number" translate>Order number: {{order.id.toString().slice(-10)}}</p>
-    <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>{{ labelStatusString }}</p>
-    <div class="card-exchange-rate-oder">
-      <div class="count-down-card">
-        <span>1 {{ order.fromCoinCode.toUpperCase() }} </span>&nbsp; =
-        &nbsp; <span> {{ (1 * ( order.updatedRate || order.createdRate )).toFixed(2) }} {{ order.toCoinCode.toUpperCase() }}</span>
-        <div class="count-down-container">
-          <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)"></countdown>
-          <img src="assets/img/countdown-ico.svg" alt="" />
-        </div>
-      </div>
-      <div class="sub-title">
-        {{'The final rate will be determined upon receipt of your {coin} payment.' | translate: {coin: order.fromCoinCode.toUpperCase()} }}
-      </div>
+  <div page-content class="order-swap-content">
+    <div *ngIf="order.status !== 'complete'" class="warning-order-swap">
+      {{'Review the payment instructions carefully. Sending anything other than Bitcoin Cash to the specificed destination via the correct network can result in permanent loss of your finds.' | translate}}
     </div>
 
-    <div class="line-driver"></div>
-
-    <div class="info-card-account">
-      <ngx-qrcode *ngIf="order.adddressUserDeposit" hide-toast="true" value="{{order.adddressUserDeposit}}" cssClass="aclass"></ngx-qrcode>
-      <div>
-        <p class="coin-name" translate> {{getNameCoin(order)}} Address</p>
-        <div class="address">
-          <p class="coin-address">{{ order.adddressUserDeposit.slice(-10) }}</p>
-          <ion-icon copy-to-clipboard="{{ order.adddressUserDeposit }}" name="copy-outline"></ion-icon>
+    <div class="order-swap-container">
+      <p class="oder-number" translate>Order number: {{order.id.toString().slice(-10)}}</p>
+      <p class="status-oder" [ngClass]="{'status-completed': order.status === 'complete'}" translate>
+        {{ labelStatusString }}</p>
+      <div class="card-exchange-rate-oder">
+        <div class="count-down-card">
+          <span>1 {{ order.fromCoinCode.toUpperCase() }} </span>&nbsp; =
+          &nbsp; <span> {{ (1 * ( order.updatedRate || order.createdRate )).toFixed(2) }}
+            {{ order.toCoinCode.toUpperCase() }}</span>
+          <div class="count-down-container">
+            <countdown class="count-down" #cd [config]="{leftTime: 10, format: 's'}" (event)="handleEvent($event)">
+            </countdown>
+            <img src="assets/img/countdown-ico.svg" alt="" />
+          </div>
         </div>
-        <!-- TODO: intergate with AbcPay account -->
-        <!-- <ion-button fill=clear translate>Send with account</ion-button> -->
+        <div class="sub-title">
+          {{'The final rate will be determined upon receipt of your {coin} payment.' | translate: {coin: order.fromCoinCode.toUpperCase()} }}
+        </div>
       </div>
-    </div>
-    <div class="card-amount-order">
-      <!-- <ng-container *ngIf="order.amountFrom"> -->
+
+      <div class="line-driver"></div>
+
+      <div class="info-card-account">
+        <ngx-qrcode *ngIf="order.adddressUserDeposit" hide-toast="true" value="{{order.adddressUserDeposit}}"
+          cssClass="aclass"></ngx-qrcode>
+        <div>
+          <p class="coin-name" translate> {{getNameCoin(order)}} Address</p>
+          <div class="address">
+            <p class="coin-address">{{ order.adddressUserDeposit.slice(-10) }}</p>
+            <ion-icon copy-to-clipboard="{{ order.adddressUserDeposit }}" name="copy-outline"></ion-icon>
+          </div>
+          <!-- TODO: intergate with AbcPay account -->
+          <!-- <ion-button fill=clear translate>Send with account</ion-button> -->
+        </div>
+      </div>
+      <div class="card-amount-order">
         <p translate>Send exactly: {{ order.amountFrom / order.fromSatUnit }} {{ order.fromCoinCode.toUpperCase() }}</p>
-        <p translate>You receive: {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}} {{ order.toCoinCode.toUpperCase() }}</p>
-      <!-- </ng-container> -->
-      <!-- <ng-container *ngIf="!order.amountFrom"> -->
+        <p translate>You receive:
+          {{ order.amountFrom / order.fromSatUnit * ((order.updatedRate && order.updatedRate > 0) ? order.updatedRate : order.createdRate)}}
+          {{ order.toCoinCode.toUpperCase() }}</p>
         <div class="amount-container">
           <div class="start-amount">
             <p class="label-amount" translate>Send between</p>
@@ -73,52 +76,51 @@
           </div>
           <div class="end-amount">
             <p class="label-amount" translate>You'll receive</p>
-            <p class="amount">{{ ( order.amountFrom / order.fromSatUnit * (order.updatedRate || order.createdRate) ) + ' ' + order.toCoinCode.toUpperCase() }}</p>
+            <p class="amount">
+              {{ ( order.amountFrom / order.fromSatUnit * (order.updatedRate || order.createdRate) ) + ' ' + order.toCoinCode.toUpperCase() }}
+            </p>
             <p class="address-received">{{ order.addressUserReceive.slice(-10) }}</p>
           </div>
         </div>
-      <!-- </ng-container> -->
+      </div>
+
+      <div class="line-driver"></div>
+
+      <div
+        [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'"
+        class="list-user-deposit">
+        <ng-container *ngIf="order.listTxIdUserDeposit.length > 0">
+          <p class="user-deposit" translate>TxId user deposit:</p>
+          <ng-container *ngFor="let txId of order.listTxIdUserDeposit">
+            <ion-button fill="clear"
+              (click)="viewOnBlockchain(order.fromCoinCode, order.isFromToken, txId, order.fromNetwork)">
+              {{ txId }}
+            </ion-button>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="order.listTxIdUserReceive.length > 0">
+          <p translate>TxId user receive:</p>
+          <ng-container *ngFor="let txId of order.listTxIdUserReceive">
+            <ion-button fill="clear"
+              (click)="viewOnBlockchain(order.toCoinCode, order.isToToken, txId, order.toNetwork)">
+              {{ txId }}
+            </ion-button>
+          </ng-container>
+        </ng-container>
+
+        <p>{{ errorStr }}</p>
+      </div>
+
+      <div
+        [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'"
+        class="line-driver"></div>
+
+      <div class="footer-order-swap">
+        <p translate>Created on: <span>{{ createdDateStr }}</span></p>
+        <p translate>Expireds at: <span>{{ endedDateStr }}</span></p>
+      </div>
     </div>
 
-    <div class="line-driver"></div>
-
-    <div [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'" class="list-user-deposit">
-      <ng-container *ngIf="order.listTxIdUserDeposit.length > 0">
-        <p class="user-deposit" translate>TxId user deposit:</p>
-        <ng-container *ngFor="let txId of order.listTxIdUserDeposit">
-          <ion-button fill="clear" (click)="viewOnBlockchain(order.fromCoinCode, order.isFromToken, txId)">
-            {{ txId }}
-          </ion-button>
-        </ng-container>
-        <!-- <p>TxId User deposit: {{order.txIdUserDeposit}}</p> -->
-      </ng-container>
-    
-      <ng-container *ngIf="order.listTxIdUserReceive.length > 0">
-        <p translate>TxId user receive:</p>
-        <ng-container *ngFor="let txId of order.listTxIdUserReceive">
-          <ion-button fill="clear" (click)="viewOnBlockchain(order.toCoinCode, order.isToToken, txId)">
-            {{ txId }}
-          </ion-button>
-        </ng-container>
-      </ng-container>
-    
-      <p>{{ errorStr }}</p>
-      <!-- <ng-container *ngIf="order.status !== 'complete' && order.error">
-        <ng-container *ngIf="order.pendingReason === 'OUT_OF_FUND' || order.pendingReason === 'BELOW_MIN_LIMIT'">
-          <p translate></p>
-        </ng-container>
-        <p translate></p>
-      </ng-container> -->
-    </div>
-
-    <div [style]="order.listTxIdUserDeposit.length > 0 || order.listTxIdUserReceive.length > 0 ? 'display: block' : 'display: none'" class="line-driver"></div>
-
-    <div class="footer-order-swap">
-      <p translate>Created on: <span>{{ createdDateStr }}</span></p>
-      <p translate>Expireds at: <span>{{ endedDateStr }}</span></p>
-    </div>
   </div>
- 
-</div>
 </wide-header-page>
-

@@ -10,7 +10,6 @@ import {
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidationErrors,
   ValidatorFn
@@ -26,14 +25,12 @@ import {
   Coin,
   CurrencyProvider,
   ErrorsProvider,
-  FilterProvider,
   IncomingDataProvider,
   RateProvider,
   ThemeProvider
 } from 'src/app/providers';
 import { OrderProvider } from 'src/app/providers/order/order-provider';
 import { Config, ConfigProvider } from '../../../providers/config/config';
-import { TokenInforPage } from '../../token-info/token-info';
 import { CoinConfig, ConfigSwap } from '../config-swap';
 import BigNumber from "bignumber.js";
 import { TranslateService } from '@ngx-translate/core';
@@ -71,6 +68,8 @@ interface OrderOpts {
   toSatUnit?: number;
   toTokenInfo? : TokenInfo;
   fromTokenInfo?: TokenInfo;
+  fromNetwork: string;
+  toNetwork: string;
 }
 interface IOrder {
   id: string | number;
@@ -101,6 +100,8 @@ interface IOrder {
   error?: string;
   toTokenInfo? : TokenInfo;
   fromTokenInfo?: TokenInfo;
+  fromNetwork: string;
+  toNetwork: string;
 }
 
 @Component({
@@ -130,7 +131,6 @@ export class CreateSwapPage implements OnInit {
   public createForm: FormGroup;
   public searchValue = '';
   debounceTime = 500;
-  // public config: Config;
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
   @ViewChild('inputSwap') inputSwap: ElementRef;
   @ViewChild('inputReceive') inputReceive: ElementRef;
@@ -179,7 +179,6 @@ export class CreateSwapPage implements OnInit {
           updateOn: 'change'
         }
       ],
-      // swapAmount: [null],
       receiveAmount: [
         0,
         {
@@ -326,8 +325,6 @@ export class CreateSwapPage implements OnInit {
         new BigNumber(control.value).multipliedBy(this.coinReceiveSelected.rate[this.fiatCode]);
       }
       if (this.altValue.isGreaterThan(0)) {
-        // const result = new BigNumber(this.altValue).toString();
-        // this.altValue = new BigNumber(this.altValue).toNumber();
         this.minWithCurrentFiat =
           this.coinSwapSelected.min * this.usdRate[this.fiatCode];
         if (this.altValue.toNumber() < this.minWithCurrentFiat) {
@@ -399,7 +396,7 @@ export class CreateSwapPage implements OnInit {
         parsedData &&
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1
       ) {
-        this.validAddress = this.checkCoinAndNetwork(addressInputValue);
+        this.validAddress = this.checkCoinAndNetwork(addressInputValue, this.coinReceiveSelected.network);
         if (this.validAddress) {
           return null;
         } else {
@@ -536,14 +533,14 @@ export class CreateSwapPage implements OnInit {
     this._cdRef.markForCheck();
   }
 
-  private checkCoinAndNetwork(data): boolean {
+  private checkCoinAndNetwork(data, network): boolean {
     let isValid, addrData;
 
-    addrData = this.addressProvider.getCoinAndNetwork(data, 'livenet');
+    addrData = this.addressProvider.getCoinAndNetwork(data, network);
     isValid =
       this.currencyProvider
         .getChain(this.coinReceiveSelected.code as Coin)
-        .toLowerCase() == addrData.coin && addrData.network == 'livenet';
+        .toLowerCase() == addrData.coin && addrData.network == network;
 
     if (isValid) {
       return true;
@@ -577,6 +574,9 @@ export class CreateSwapPage implements OnInit {
       addressUserReceive: this.createForm.controls['address'].value,
       toTokenInfo : this.coinReceiveSelected.tokenInfo || null,
       fromTokenInfo : this.coinSwapSelected.tokenInfo || null,
+      fromNetwork: this.coinSwapSelected.network,
+      toNetwork: this.coinReceiveSelected.network
+
     } as OrderOpts;
     this.orderProvider
       .createOrder(orderOpts)
@@ -609,9 +609,6 @@ export class CreateSwapPage implements OnInit {
       msg || this.bwcErrorProvider.msg(error),
       infoSheetTitle,
       () => {
-        // if (exit) {
-        //   this.location.back()
-        // }
       }
     );
   }

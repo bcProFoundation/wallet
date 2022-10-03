@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { TokenInfo } from 'src/app/models/tokens/tokens.model';
 import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogCustomComponent } from '../modal/modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { Sort } from '@angular/material/sort';
+import jwt_decode from "jwt-decode";
 
 
 export interface PeriodicElement {
@@ -117,6 +118,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
   dataSource: any;
   length = 100;
   pageSize = 10;
+  isLoggedin: boolean = true; 
   pageSizeOptions: number[] = [5, 10, 25, 100];
     // MatPaginator Output
     pageEvent: PageEvent;
@@ -128,7 +130,9 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private errorsProvider: ErrorsProvider,
     private translate: TranslateService,
-    private bwcErrorProvider: BwcErrorProvider
+    private bwcErrorProvider: BwcErrorProvider,
+    private ngZone: NgZone
+
   ) { 
     const opts = {
       query: {_id : 1},
@@ -143,14 +147,22 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       this._cdRef.markForCheck();
     });  
 
+    window['handleCredentialResponse'] = user => ngZone.run(
+      ()=>{
+        this.afterSignInUser(user);
+      }
+    )
     
   }
   ngAfterViewInit(): void {
  }
 
+ afterSignInUser(user){
+   const userDecoded = jwt_decode(user.credential);
+   console.log(userDecoded);
+ }
   ngOnInit() {
-    // console.log(this.pageEvent);
-   
+ 
   }
 
   onPaginateChange(){
@@ -175,6 +187,17 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       this.showErrorInfoSheet(e);
     });
   }
+
+  handleCredentialResponse(response: any) {
+    // Decoding  JWT token...
+      let decodedToken: any | null = null;
+      try {
+        decodedToken = JSON.parse(atob(response?.credential.split('.')[1]));
+      } catch (e) {
+        console.error('Error while trying to decode token', e);
+      }
+      console.log('decodedToken', decodedToken);
+    }
 
   handleChangeResolve(order){
     order.isResolve = true;
@@ -290,3 +313,4 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
+

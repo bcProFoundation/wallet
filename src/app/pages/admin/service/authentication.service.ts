@@ -21,11 +21,10 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(email: string, name: string) {
+    login(credentials: string) {
         const user = {
-            email,
-            name
-        } as User;
+            credentials
+        };
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;

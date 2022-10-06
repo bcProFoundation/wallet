@@ -55,6 +55,20 @@ import { Logger } from "../logger/logger";
       public updateOrder(orderOpts): Promise<any> {
         return this.http.post(`${this.bwsURL}/v3/order/update/`, orderOpts).toPromise();
       }
+
+      public login(userOpts): Promise<any> {
+        const options = {
+          headers: {'authorization': userOpts.id_token}
+        };
+        return this.http.post(`${this.bwsURL}/v3/login`, userOpts, options).toPromise();
+      }
+
+      // public login(userOpts): Promise<any> {
+      //   const options = {
+      //     headers: {'authorization': userOpts.id_token}
+      //   };
+      //   return this.http.post(`${this.bwsURL}/v3/login`, userOpts, options).toPromise();
+      // }
       
       private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {

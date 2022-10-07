@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../model/user.model';
 import { Router } from '@angular/router';
 
 // import { environment } from '@environments/environment';
@@ -18,8 +17,8 @@ export class AuthenticationService {
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
+    public get currentUserValue(): string {
+        return this.currentUserSubject.value.credentials;
     }
 
     login(credentials: string) {

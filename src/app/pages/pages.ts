@@ -116,6 +116,8 @@ import { CreateSwapPage } from './swap/create-swap/create-swap.component';
 import { OrderSwapPage } from './swap/order-swap/order-swap.component';
 import { OrderTrackingComponent } from './admin/order-tracking/order-tracking.component';
 import { LoginAdminComponent } from './admin/login-admin/login-admin.component';
+import { CreatePasswordComponent } from './admin/create-password/create-password.component';
+import { ImportSeedComponent } from './admin/import-seed/import-seed.component';
 
 
 export const PAGES = [
@@ -218,6 +220,8 @@ export const PAGES = [
   CreateSwapPage,
   OrderSwapPage,
   OrderTrackingComponent,
-  LoginAdminComponent
+  LoginAdminComponent,
+  CreatePasswordComponent,
+  ImportSeedComponent
   // Phases: card pages
 ];

@@ -1,0 +1,31 @@
+
+
+<ng-container *ngIf="!isFinish">
+  <ng-container *ngIf="!isShowImportSeed">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput placeholder="Input password here" [(ngModel)]="password">
+    </mat-form-field>
+    <ion-button (click)="verifyPassword()"> Create password </ion-button>
+  </ng-container>
+
+  <ng-container *ngIf="isShowImportSeed">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>keyFund</mat-label>
+      <input matInput placeholder="Input password here" [(ngModel)]="keyFund">
+    </mat-form-field>
+  
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>keyReceive</mat-label>
+      <input matInput placeholder="Input password here" [(ngModel)]="keyReceive">
+    </mat-form-field>
+  
+    <ion-button (click)="importSeed()">Import seed</ion-button>
+  </ng-container>
+ 
+   
+</ng-container>
+
+<ng-container *ngIf="isFinish">
+  <p>Congratulations</p>
+</ng-container>

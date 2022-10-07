@@ -71,6 +71,8 @@ import { FeatureGuard } from './providers/feature-gaurd.service';
 import { CreateSwapPage } from './pages/swap/create-swap/create-swap.component';
 import { OrderSwapPage } from './pages/swap/order-swap/order-swap.component';
 import { OrderTrackingComponent } from './pages/admin/order-tracking/order-tracking.component';
+import { CreatePasswordComponent } from './pages/admin/create-password/create-password.component';
+import { ImportSeedComponent } from './pages/admin/import-seed/import-seed.component';
 
 const routes: Routes = [
   {
@@ -700,6 +702,24 @@ const routes: Routes = [
   {
     path: 'order-tracking',
     component: OrderTrackingComponent,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'admin'
+    }
+  },
+  {
+    path: 'create-password',
+    component: CreatePasswordComponent,
+    canActivate: [FeatureGuard],
+
+    data: {
+      feature: 'admin'
+    }
+  },
+  {
+    path: 'import-seed',
+    component: ImportSeedComponent,
     canActivate: [FeatureGuard],
 
     data: {

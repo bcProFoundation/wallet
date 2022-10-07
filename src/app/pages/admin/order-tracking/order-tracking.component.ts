@@ -10,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Sort } from '@angular/material/sort';
 import jwt_decode from "jwt-decode";
 import { AuthenticationService } from '../service/authentication.service';
+import { PassWordHandleCases } from '../create-password/create-password.component';
+import { Router } from '@angular/router';
 
 
 export interface PeriodicElement {
@@ -133,7 +135,8 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
     private ngZone: NgZone,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private router: Router
 
   ) { 
     const opts = {
@@ -158,7 +161,17 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
  }
+ redirectForgotPasswordPage(){
+  this.router.navigate(['/create-password'], {
+    state: {
+      passwordHandleCases :  PassWordHandleCases.ForgotPassword
+    }
+  })
+ }
 
+ redirectImportSeedPage(){
+  this.router.navigate(['/import-seed']);
+ }
  afterSignInUser(user){
    const userDecoded = jwt_decode(user.credential);
    this.orderProvider.login({id_token: user.credential}).then(approve => {

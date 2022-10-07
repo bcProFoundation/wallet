@@ -4,8 +4,13 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import jwt_decode from "jwt-decode";
 import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
+import { PassWordHandleCases } from '../create-password/create-password.component';
 import { AuthenticationService } from '../service/authentication.service';
 
+interface IApproveOpts {
+  isVerified: boolean;
+  isCreatePassword: boolean;
+}
 @Component({
   selector: 'app-login-admin',
   templateUrl: './login-admin.component.html',
@@ -38,10 +43,18 @@ export class LoginAdminComponent implements OnInit {
 
   afterSignInUser(user){
     const userDecoded = jwt_decode(user.credential);
-   this.orderProvider.login({id_token: user.credential}).then(approve => {
-    if(approve){
+   this.orderProvider.login({id_token: user.credential}).then( (approveReq : IApproveOpts) => {
+    if(approveReq.isVerified){
       this.authenticationService.login(user.credential);
+      if(!approveReq.isCreatePassword) {
+        this.router.navigate(['/create-password'], {
+          state: {
+            passwordHandleCases: PassWordHandleCases.CreateNewPassword
+          }
+        });
+      }else{
       this.router.navigate(['/order-tracking']);
+      }
     }
    }).catch(e => {
     this.showErrorInfoSheet(e);

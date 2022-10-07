@@ -63,6 +63,46 @@ import { Logger } from "../logger/logger";
         return this.http.post(`${this.bwsURL}/v3/login`, userOpts, options).toPromise();
       }
 
+      public createPassword(userOpts): Promise<any> {
+        const options = {
+          headers: {
+            'authorization': userOpts.id_token,
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/admin/password`, userOpts, options).toPromise();
+      }
+
+      public renewPassword(userOpts): Promise<any> {
+        const options = {
+          headers: {
+            'authorization': userOpts.id_token,
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/admin/password/renew`, userOpts, options).toPromise();
+      }
+
+      public verifyPassword(userOpts): Promise<any> {
+        const options = {
+          headers: {
+            'authorization': userOpts.id_token,
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/admin/password/verify`, userOpts, options).toPromise();
+      }
+
+      public importSeed(userOpts): Promise<any> {
+        const options = {
+          headers: {
+            'authorization': userOpts.id_token,
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/admin/seed/import`, userOpts, options).toPromise();
+      }
+
       // public login(userOpts): Promise<any> {
       //   const options = {
       //     headers: {'authorization': userOpts.id_token}

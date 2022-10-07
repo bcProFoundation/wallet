@@ -1,0 +1,171 @@
+<ng-container *ngIf="this.listConfig">
+  <ion-header [translucent]="true" class="bp-header">
+    <ion-toolbar [ngClass]="{ 'add-box-shadow-scroll': isScroll }">
+      <ion-title>
+        <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+          {{ 'Swap'| translate }}
+        </div>
+      </ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button icon="chevron-back-outline" defaultHref="/">
+        </ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true" [forceOverscroll]="true" scrollEvents="true" #scrollArea
+    (ionScroll)="handleScrolling($event)">
+    <div class="wrapper">
+      <expandable-header [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+      </expandable-header>
+    </div>
+
+    <div class="header-container">
+      <div class="header-title">
+        {{ 'Swap' | translate }}
+      </div>
+      <ion-item detail="false" lines="none" class="ion-padding search-container">
+        <ion-icon slot="start" name="search-outline"></ion-icon>
+        <ion-input class="search-tx-modal" [placeholder]="'search order' | translate" [(ngModel)]="searchValue"
+          (keyup.enter)="handleSearchInput()"></ion-input>
+      </ion-item>
+    </div>
+    <div class="swap-exchange-rate-container">
+      <ng-container *ngIf="coinSwapSelected && coinReceiveSelected">
+        <span>1</span>&nbsp;
+        <span>{{ coinSwapSelected.code.toUpperCase() }}</span>
+        <img class="swap-ico" src="assets/img/swap/exchange-sign-{{ currentTheme }}.svg" />
+        <span>{{
+          formatAmountWithLimitDecimal(
+            coinSwapSelected.rate.USD / coinReceiveSelected.rate.USD,
+            8
+          )
+        }}</span>&nbsp; <span> {{ coinReceiveSelected.code.toUpperCase() }}</span>
+        <div class="count-down-container">
+          <countdown #cd [config]="{ leftTime: 10, format: 's' }" (event)="handleEvent($event)"></countdown>
+          <img src="assets/img/countdown-ico.svg" alt="" />
+        </div>
+      </ng-container>
+    </div>
+    <div class="swap-form">
+      <form [formGroup]="createForm">
+        <div class="swap-exchange-container">
+          <div class="send-container">
+            <div class="title" translate>You send</div>
+            <div class="list-coin">
+              <mat-form-field appearance="none">
+                <mat-select (selectionChange)="handleCoinSwapChange($event)" [(value)]="coinSwapSelected">
+                  <mat-select-trigger>
+                    <img [ngClass]="{'testnet' : coinSwapSelected.network === 'testnet'}"
+                      [src]="getImageCoin(coinSwapSelected)">
+                    <div>
+                      <p class="mat-coin-name">{{coinSwapSelected.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coinSwapSelected)}}</p>
+                    </div>
+                  </mat-select-trigger>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                    Select coin send
+                  </mat-option>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+                    *ngFor="let coin of listConfig.coinSwap" [value]="coin">
+                    <img [ngClass]="{'testnet' : coin.network === 'testnet'}" [src]="getImageCoin(coin)">
+                    <div>
+                      <p class="mat-coin-name">{{coin.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coin)}}</p>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <input matInput type="text" #inputSwap formControlName="swapAmount" (keyup)="handleInputChange(true)"
+                  (keydown)="handleKeyDown(true, $event)" mask="separator.8" thousandSeparator="," />
+              </mat-form-field>
+              <p class="hint">
+                {{ altValue.toFixed() | mask: 'separator.8':',' }}
+                {{ fiatCode }}
+              </p>
+            </div>
+          </div>
+          <div class="receive-container">
+            <div class="title" translate>You receive</div>
+            <div class="list-coin">
+              <mat-form-field appearance="none">
+                <mat-select (selectionChange)="handleCoinReceiveChange($event)" [(value)]="coinReceiveSelected">
+                  <mat-select-trigger>
+                    <img [ngClass]="{'testnet' : coinReceiveSelected.network === 'testnet'}"
+                      [src]="getImageCoin(coinReceiveSelected)">
+                    <div>
+                      <p class="mat-coin-name">{{coinReceiveSelected.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coinReceiveSelected)}}</p>
+                    </div>
+                  </mat-select-trigger>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                    Select coin receive
+                  </mat-option>
+                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+                    *ngFor="let coin of listConfig.coinReceive" [value]="coin">
+                    <img [ngClass]="{'testnet' : coin.network === 'testnet'}" [src]="getImageCoin(coin)">
+                    <div>
+                      <p class="mat-coin-name">{{coin.code.toUpperCase()}}</p>
+                      <p class="mat-symbol-name">{{getCoinName(coin)}}</p>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <input matInput type="text" #inputReceive formControlName="receiveAmount"
+                  (keyup)="handleInputChange(false)" (keydown)="handleKeyDown(false, $event)" mask="separator.8"
+                  thousandSeparator="," />
+              </mat-form-field>
+              <p class="hint">
+                {{ altValue.toFixed() | mask: 'separator.8':',' }}
+                {{ fiatCode }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMinValidator" translate>You need to deposit at
+          least
+          {{ minWithCurrentFiat | mask: 'separator.8':',' }} {{ fiatCode }}
+        </mat-error>
+        <mat-error *ngIf="createForm.controls['swapAmount'].errors?.amountMaxValidator" translate>You can not deposit
+          above
+          {{ maxWithCurrentFiat | mask: 'separator.8':',' }} {{ fiatCode }}
+        </mat-error>
+        <div class="network-fee-line">
+          <span class="label-network" translate>Network fee: </span>
+          <span class="amount-fee-network" *ngIf="!coinReceiveSelected.isToken">
+            {{
+              coinReceiveSelected.networkFee
+                | satToUnit: getChain(coinReceiveSelected.code)
+            }}
+          </span>
+          <span class="amount-fee-network" *ngIf="coinReceiveSelected.isToken">
+            {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
+          </span>
+        </div>
+
+        <div class="address-container">
+          <p>Your {{ getCoinName(coinReceiveSelected) }} address</p>
+          <mat-form-field class="derivation-item" appearance="outline">
+            <input formControlName="address" #addressSwap matInput [placeholder]="'paste address here'" />
+          </mat-form-field>
+          <mat-error style="font-size: 12px" *ngIf="createForm.controls['address'].errors?.addressInvalid" translate>
+            Wrong format addresss
+          </mat-error>
+        </div>
+      </form>
+    </div>
+  </ion-content>
+
+  <ion-footer class="ion-no-border footer">
+    <ion-toolbar>
+      <div class="btn-function-group">
+        <ion-button (click)="createOrder()" [disabled]="this.createForm.invalid" class="button-standard">
+          {{ 'Swap' | translate }}</ion-button>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
+</ng-container>

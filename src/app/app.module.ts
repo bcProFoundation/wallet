@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -42,6 +42,7 @@ import { enterAnimation } from './animations/nav-animation';
 
 import { MatGridListModule } from '@angular/material/grid-list'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,6 +50,14 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
+
+import { NgxMaskModule } from 'ngx-mask';
+import { FeatureFlagsService } from './providers/feature-flags.service';
+
+const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
+  featureFlagsService.loadConfig();
+
+
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -95,8 +104,10 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
             backButtonText: '',
             navAnimation: enterAnimation
         }),
+        NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,
+        MatSelectModule,
         BrowserAnimationsModule,
         MatIconModule,
         MatInputModule,
@@ -133,6 +144,13 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: env.name === 'production' })
     ],
     providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: featureFactory,
+            deps: [FeatureFlagsService],
+            multi: true
+        },
+
         {
             provide: RouteReuseStrategy,
             useClass: IonicRouteStrategy

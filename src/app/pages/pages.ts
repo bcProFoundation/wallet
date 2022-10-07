@@ -111,6 +111,11 @@ import { AccountsPage } from './accounts/accounts';
 import { SearchContactPage } from './search/search-contact/search-contact.component';
 import { SelectFlowPage } from './onboarding/select-flow/select-flow';
 
+/* Swap */
+import { CreateSwapPage } from './swap/create-swap/create-swap.component';
+import { OrderSwapPage } from './swap/order-swap/order-swap.component';
+
+
 export const PAGES = [
   AddPage,
   AddWalletPage,
@@ -152,6 +157,8 @@ export const PAGES = [
   FingerprintModalPage,
   HomePage,
   ChartViewPage,
+  CreateSwapPage,
+  OrderSwapPage,
   // CardsPage,
   WalletsPage,
   AccountsPage,
@@ -166,7 +173,7 @@ export const PAGES = [
   ...PIN_COMPONENTS,
   PricePage,
   ProposalsNotificationsPage,
-  ScanPage,
+  ScanPage,  
   SendPage,
   SettingsPage,
   SelectCurrencyPage,
@@ -206,5 +213,7 @@ export const PAGES = [
   LocalThemePage,
   NavigationPage,
   NewFeaturePage,
+  CreateSwapPage,
+  OrderSwapPage
   // Phases: card pages
 ];

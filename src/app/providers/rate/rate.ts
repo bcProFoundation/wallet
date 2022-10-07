@@ -97,13 +97,43 @@ export class RateProvider {
               this.rates[coin] = !_.isEmpty(coinRates) ? coinRates : { USD: 0 };
               this.ratesAvailable[coin] = true;
             });
-            resolve(undefined);
+            resolve(this.rates);
           })
           .catch(err => {
             this.logger.error(err);
             reject(err);
           });
       }
+    });
+  }
+
+  public updateRatesCustom(chain?: string): Promise<any> {
+    let rateList= [];
+    for (const coin of this.currencyProvider.getAvailableCoins()) {
+      rateList[coin.toLowerCase()] = { USD: 0 };
+    }
+    return new Promise((resolve, reject) => {
+      this.getRates()
+          .then(res => {
+            _.map(res, (rates, coin) => {
+              const coinRates = {};
+              _.each(rates, r => {
+                const rate = { [r.code]: r.rate };
+                Object.assign(coinRates, rate);
+
+                // set alternative currency list
+                if (r.code && r.name) {
+                  this.alternatives[r.code] = { name: r.name };
+                }
+              });
+              rateList[coin.toLowerCase()] = !_.isEmpty(coinRates) ? coinRates : { USD: 0 };
+            });
+            resolve(rateList);
+          })
+          .catch(err => {
+            this.logger.error(err);
+            reject(err);
+          });
     });
   }
 

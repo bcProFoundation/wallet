@@ -566,6 +566,10 @@ export class HomePage {
     this.router.navigate(['/chart-view']);
   }
 
+  public openCreateSwapPage(): void {
+    this.router.navigate(['/create-swap']);
+  }
+
   public addToHome(coin?: string, network?: string) {
     this.router.navigateByUrl('/accounts-page', {
       state: {

@@ -394,6 +394,21 @@
     }
   }
 
+  .mat-select {
+    .mat-select-arrow {
+      color: rgba(237, 239, 240, 0.6) !important;
+    }
+  }
+
+  mat-select-trigger {
+    .mat-coin-name {
+        color: #EDEFF0 !important;
+    }
+    .mat-symbol-name {
+        color: rgba(237, 239, 240, 0.6) !important;
+    }
+}
+
   .swiper-pagination-bullet-active {
     background-color: var(--swiper-pagination-bullet-active-dark);
   }
@@ -3721,6 +3736,132 @@
       }
       p {
         color: rgba(224, 228, 230, 0.6) !important;
+      }
+    }
+  }
+
+  page-create-swap {
+    .swap-exchange-container {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E;
+      border-color: #01293d;
+      .title {
+        color: var(--text-color-dark-theme);
+      }
+      ion-item {
+        --background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E;
+      }
+      .hint {
+        color: rgba(224, 228, 230, 0.6);
+      }
+    }
+    .swap-exchange-rate-container {
+      span {
+        color: var(--text-color-dark-theme);
+      }
+      countdown {
+        color: var(--text-color-dark-theme);
+      }
+    }
+    .address-container {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E;
+      border-color: #01293d;
+    }
+    .address-container {
+      p {
+        color: var(--text-color-dark-theme);
+      }
+    }
+    .search-container {
+      --background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      border-color: rgba(112, 129, 138, 0.38) !important;
+      ion-icon {
+        color: rgba(237, 239, 240, 0.6) !important;
+      }
+      ion-input {
+        --color: var(--text-color-dark-theme) !important;
+        --placeholder-color: var(--text-color-dark-theme) !important;
+      }
+    }
+    .label-network {
+      color: rgba(224, 228, 230, 0.6) !important;
+    }
+    .header-title {
+      color: var(--text-color-dark-theme) !important;
+    }
+  }
+
+  page-order-swap {
+    .info-card-account {
+      .coin-name {
+        color: rgba(224, 228, 230, 0.6) !important;
+      }
+      .address {
+        .coin-address {
+          color: var(--text-color-dark-theme) !important;
+        }
+        ion-icon {
+          color: var(--text-color-dark-theme) !important;
+        }
+      }
+    }
+    .order-swap-container {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.11), rgba(126, 208, 255, 0.11)), #001E2E !important;
+      border-color: rgba(0, 101, 141, 0.08) !important;
+      .oder-number {
+        color: rgba(224, 228, 230, 0.6) !important;
+      }
+      .status-oder {
+        color: #FFB85D !important;
+      }
+      .status-completed {
+        color: #73DAA5 !important;
+      }
+      .card-exchange-rate-oder {
+        .count-down-card {
+          span {
+            color: var(--text-color-dark-theme) !important;
+          }
+          countdown {
+            color: var(--text-color-dark-theme) !important;
+          }
+        }
+        .sub-title {
+          color: rgba(224, 228, 230, 0.6) !important;
+        }
+      }
+    }
+    .card-amount-order {
+      .label-amount {
+        color: rgba(224, 228, 230, 0.6) !important;
+      }
+      .amount {
+        color: var(--text-color-dark-theme) !important;
+      }
+      .address-received {
+        color: rgba(224, 228, 230, 0.6) !important;
+      }
+    }
+    .notify-content {
+      ion-icon {
+        color: rgba(224, 228, 230, 0.38) !important;
+      }
+      .title-message {
+        color: #FFB85D !important;
+      }
+      span {
+        color: rgba(224, 228, 230, 0.6) !important;
+      }
+    }
+    .line-driver {
+      background: rgba(112, 129, 138, 0.38) !important;
+    }
+    .footer-order-swap {
+      p {
+        color: rgba(224, 228, 230, 0.6) !important;
+        span {
+          color: var(--text-color-dark-theme) !important;
+        }
       }
     }
   }

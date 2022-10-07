@@ -30,6 +30,7 @@ let awsUrl =
     ? awsUrlCLI
     : process.env.AWS_URL_CONFIG;
 let lixiLotusUrl = process.env.LIXI_LOTUS_URL;
+let buildSwapAlone = process.env.BUILD_SWAP_STANDALONE;
 if (environment === 'production') {
   nameEnv = 'production';
 } else if (environment === 'development') {
@@ -49,7 +50,8 @@ export const env = {
     ratesAPI: new CurrencyProvider().getRatesApi(),
     activateScanner: ${activateScanner},
     awsUrl: '${awsUrl}',
-    lixiLotusUrl: '${lixiLotusUrl}' 
+    lixiLotusUrl: '${lixiLotusUrl}' ,
+    buildSwapALone: ${buildSwapAlone}
 };
     export default env;`;
 

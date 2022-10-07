@@ -703,7 +703,7 @@ const routes: Routes = [
     canActivate: [FeatureGuard],
 
     data: {
-      feature: 'swap'
+      feature: 'admin'
     }
   }
 ];

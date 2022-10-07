@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, PlatformProvider, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
@@ -36,6 +36,8 @@ export class WalletDetailCardComponent {
   
   @Input()
   flagAllItemRemove: boolean = false;
+
+  @Output() genNewAddressEvent = new EventEmitter<boolean>();
 
   @ViewChild('slidingItem') slidingItem: IonItemSliding;
   @ViewChild('itemWallet') itemWallet: ElementRef;
@@ -274,7 +276,11 @@ export class WalletDetailCardComponent {
       await timer(400).toPromise();
     }
     this.address = address;
-
+    if(this.wallet && this.wallet.etokenAddress){
+      const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
+      this.wallet.etokenAddress = this.addressProvider.encodeAddress('etoken', type, hash, address);
+     }
+    this.genNewAddressEvent.emit(true);
     await timer(200).toPromise();
     this.playAnimation = false;
   }

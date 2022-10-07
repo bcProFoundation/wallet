@@ -25,7 +25,7 @@
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="1" [disableFade]="true" #expandableHeader>
       <expandable-header-primary class="balance-header">
         <!-- wallet card -->
-        <wallet-detail-card [isToken]="true" [wallet]="wallet" [token]="token"></wallet-detail-card>
+        <wallet-detail-card [isToken]="true" [wallet]="wallet" [token]="token" (genNewAddressEvent)="handleGenNewAddress($event)"></wallet-detail-card>
       </expandable-header-primary>
       <expandable-header-footer>
         <div class="action-buttons two-actions" >

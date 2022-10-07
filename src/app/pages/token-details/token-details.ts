@@ -62,6 +62,8 @@ export class TokenDetailsPage {
   public isShowZeroState = false;
   private tokenId;
   public isSendFromHome: boolean = false;
+  public isGenNewAddress: boolean = false;
+
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -119,6 +121,10 @@ export class TokenDetailsPage {
     else {
       this.isScroll = false;
     }
+  }
+
+  handleGenNewAddress(event){
+    this.isGenNewAddress = event;
   }
 
   ionViewDidEnter() {
@@ -557,9 +563,13 @@ export class TokenDetailsPage {
   public handleNavigateBack() {
     if (this.isSendFromHome) {
       this.router.navigate(['/tabs/home']);
+    } else if(this.isGenNewAddress){
+      this.isGenNewAddress = false;
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.router.navigate(['/tabs/wallets']);
+      })
     } else {
       this.router.navigate(['/tabs/wallets']);
     }
   }
-
 }

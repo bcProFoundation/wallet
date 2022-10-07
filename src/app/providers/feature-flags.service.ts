@@ -10,6 +10,7 @@ import { OrderSwapPage } from "../pages/swap/order-swap/order-swap.component";
 import { SettingsPage } from "../pages/settings/settings";
 import env from 'src/environments';
 import { OrderTrackingComponent } from "../pages/admin/order-tracking/order-tracking.component";
+import { LoginAdminComponent } from "../pages/admin/login-admin/login-admin.component";
 
 export interface FeatureConfig {
     abcpay: boolean,
@@ -54,10 +55,10 @@ export interface FeatureConfig {
           if(data.admin){
             const routes = this.Router.config;
             routes.shift();
-            routes.unshift({ path: '', component: OrderTrackingComponent });
-            const indexPath = routes.findIndex(r => r.path === 'create-swap');
-            routes.splice(indexPath, 1);
-            routes.push({ path: 'order-swap', component: OrderSwapPage });
+            routes.unshift({ path: '', component: LoginAdminComponent });
+            // const indexPath = routes.findIndex(r => r.path === 'create-swap');
+            // routes.splice(indexPath, 1);
+            // routes.push({ path: 'order-swap', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
           this.config = data;

@@ -115,6 +115,7 @@ import { SelectFlowPage } from './onboarding/select-flow/select-flow';
 import { CreateSwapPage } from './swap/create-swap/create-swap.component';
 import { OrderSwapPage } from './swap/order-swap/order-swap.component';
 import { OrderTrackingComponent } from './admin/order-tracking/order-tracking.component';
+import { LoginAdminComponent } from './admin/login-admin/login-admin.component';
 
 
 export const PAGES = [
@@ -216,6 +217,7 @@ export const PAGES = [
   NewFeaturePage,
   CreateSwapPage,
   OrderSwapPage,
-  OrderTrackingComponent
+  OrderTrackingComponent,
+  LoginAdminComponent
   // Phases: card pages
 ];

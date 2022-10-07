@@ -317,9 +317,7 @@ export class CopayApp {
           });
       });
     } else{
-      this.router.navigate([''], {
-        replaceUrl: true
-      });
+      this.router.navigate(['']);
     }
     this.events.subscribe('OpenWallet', (wallet, params) =>
       this.openWallet(wallet, params)

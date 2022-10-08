@@ -54,6 +54,7 @@ export class CoinConfig{
   maxConvertToSat?: number;
   tokenInfo?: TokenInfo;
   isEnable?: boolean;
+  network: string;
 
   static create(opts){
     const x = new CoinConfig();
@@ -67,7 +68,7 @@ export class CoinConfig{
     x.maxConvertToSat = opts.maxConvertToSat || 0;
     x.tokenInfo = opts.tokenInfo || null;
     x.isEnable = opts.isEnable || true;
-
+    x.network = opts.network;
     return x;
   }
 
@@ -83,7 +84,7 @@ export class CoinConfig{
     x.maxConvertToSat = opts.maxConvertToSat;
     x.tokenInfo = opts.tokenInfo;
     x.isEnable = opts.isEnable;
-
+    x.network = opts.network;
     return x;
   }
 }

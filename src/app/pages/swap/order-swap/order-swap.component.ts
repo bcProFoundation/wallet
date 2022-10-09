@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { NavParams } from '@ionic/angular';
 import { CountdownComponent } from 'ngx-countdown';
 import { BwcErrorProvider, Coin, ConfigProvider, CurrencyProvider, ErrorsProvider, ExternalLinkProvider, OrderProvider } from 'src/app/providers';
-import { CoinConfig, TokenInfo } from '../config-swap';
+import { CoinConfig } from '../config-swap';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { TokenInfo } from '../model/order-model';
 
 interface IOrder {
   id: string | number;

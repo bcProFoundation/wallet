@@ -47,13 +47,13 @@ export class LoginAdminComponent implements OnInit {
     if(approveReq.isVerified){
       this.authenticationService.login(user.credential);
       if(!approveReq.isCreatePassword) {
-        this.router.navigate(['/create-password'], {
+        this.router.navigate(['/dashboard/create-password'], {
           state: {
             passwordHandleCases: PassWordHandleCases.CreateNewPassword
           }
         });
       }else{
-      this.router.navigate(['/order-tracking']);
+      this.router.navigate(['/dashboard']);
       }
     }
    }).catch(e => {

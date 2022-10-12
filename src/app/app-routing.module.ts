@@ -73,6 +73,7 @@ import { OrderSwapPage } from './pages/swap/order-swap/order-swap.component';
 import { OrderTrackingComponent } from './pages/admin/order-tracking/order-tracking.component';
 import { CreatePasswordComponent } from './pages/admin/create-password/create-password.component';
 import { ImportSeedComponent } from './pages/admin/import-seed/import-seed.component';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -699,32 +700,43 @@ const routes: Routes = [
       feature: 'swap'
     }
   },
+ 
   {
-    path: 'order-tracking',
-    component: OrderTrackingComponent,
+    path: 'dashboard',
+    component: DashboardComponent,
     canActivate: [FeatureGuard],
-
     data: {
       feature: 'admin'
-    }
-  },
-  {
-    path: 'create-password',
-    component: CreatePasswordComponent,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'admin'
-    }
-  },
-  {
-    path: 'import-seed',
-    component: ImportSeedComponent,
-    canActivate: [FeatureGuard],
-
-    data: {
-      feature: 'admin'
-    }
+    },
+    children: [
+      {
+        path: 'order-tracking',
+        component: OrderTrackingComponent,
+        canActivate: [FeatureGuard],
+        data: {
+          feature: 'admin'
+        }
+      },
+      {
+        path: 'create-password',
+        component: CreatePasswordComponent,
+        canActivate: [FeatureGuard],
+    
+        data: {
+          feature: 'admin'
+        }
+      }
+      ,
+      {
+        path: 'import-seed',
+        component: ImportSeedComponent,
+        canActivate: [FeatureGuard],
+    
+        data: {
+          feature: 'admin'
+        }
+      },
+    ]
   }
 ];
 

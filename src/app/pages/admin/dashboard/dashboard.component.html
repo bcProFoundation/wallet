@@ -1,0 +1,28 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button class="menu-button" mat-button (click)="opened = !opened">
+      <ion-icon name="menu-outline"></ion-icon>    
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container
+    class="example-container" (backdropClick)="close('backdrop')">
+  <mat-sidenav #sidenav (keydown.escape)="close('escape')" disableClose mode="side" [(opened)]="opened">
+    <!-- <mat-list>
+        <mat-list-item>
+          <a>Account Management</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a routerLink="/dashboard/order-tracking">Order Tracking </a>
+        </mat-list-item>
+    </mat-list> -->
+    <div class="menu-list">
+      <a routerLink="/dashboard/import-seed">Import seed </a>
+      <a routerLink="/dashboard/order-tracking">Order Tracking </a>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,15 @@
+app-dashboard{
+    .mat-drawer-container{
+        height: 100%;
+    }
+    .menu-button{
+        font-size: 35px;
+    }
+    .menu-list{
+        display: flex;
+        flex-flow: column;
+        a{
+           margin: 20px;
+        }
+    }
+}

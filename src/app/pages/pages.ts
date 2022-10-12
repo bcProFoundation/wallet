@@ -118,6 +118,7 @@ import { OrderTrackingComponent } from './admin/order-tracking/order-tracking.co
 import { LoginAdminComponent } from './admin/login-admin/login-admin.component';
 import { CreatePasswordComponent } from './admin/create-password/create-password.component';
 import { ImportSeedComponent } from './admin/import-seed/import-seed.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
 
 
 export const PAGES = [
@@ -222,6 +223,7 @@ export const PAGES = [
   OrderTrackingComponent,
   LoginAdminComponent,
   CreatePasswordComponent,
-  ImportSeedComponent
+  ImportSeedComponent,
+  DashboardComponent
   // Phases: card pages
 ];

@@ -159,7 +159,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     )
     
   }
-  ngAfterViewInit(): void {
+  ngAfterViewInit(): void { 
  }
  redirectForgotPasswordPage(){
   this.router.navigate(['/dashboard/create-password'], {

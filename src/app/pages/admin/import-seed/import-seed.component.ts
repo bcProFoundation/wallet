@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
+import { PassWordHandleCases } from '../create-password/create-password.component';
+import { IApproveOpts } from '../login-admin/login-admin.component';
 import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
@@ -25,7 +27,21 @@ export class ImportSeedComponent implements OnInit {
 
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.orderProvider.login({id_token: this.authenticationService.currentUserValue}).then( (approveReq : IApproveOpts) => {
+      if(approveReq.isVerified){
+        if(!approveReq.isCreatePassword) {
+          this.router.navigate(['/dashboard/create-password'], {
+            state: {
+              passwordHandleCases: PassWordHandleCases.CreateNewPassword
+            }
+          });
+        }
+      }
+     }).catch(e => {
+      this.showErrorInfoSheet(e);
+     })
+  }
 
   verifyPassword(){
     const userOpts = {

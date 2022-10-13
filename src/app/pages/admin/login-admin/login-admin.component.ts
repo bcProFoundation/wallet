@@ -7,7 +7,7 @@ import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/provide
 import { PassWordHandleCases } from '../create-password/create-password.component';
 import { AuthenticationService } from '../service/authentication.service';
 
-interface IApproveOpts {
+export interface IApproveOpts {
   isVerified: boolean;
   isCreatePassword: boolean;
 }
@@ -42,19 +42,18 @@ export class LoginAdminComponent implements OnInit {
   }
 
   afterSignInUser(user){
-    const userDecoded = jwt_decode(user.credential);
    this.orderProvider.login({id_token: user.credential}).then( (approveReq : IApproveOpts) => {
     if(approveReq.isVerified){
       this.authenticationService.login(user.credential);
-      if(!approveReq.isCreatePassword) {
-        this.router.navigate(['/dashboard/create-password'], {
-          state: {
-            passwordHandleCases: PassWordHandleCases.CreateNewPassword
-          }
-        });
-      }else{
+      // if(!approveReq.isCreatePassword) {
+      //   this.router.navigate(['/dashboard/create-password'], {
+      //     state: {
+      //       passwordHandleCases: PassWordHandleCases.CreateNewPassword
+      //     }
+      //   });
+      // }else{
+      // }
       this.router.navigate(['/dashboard']);
-      }
     }
    }).catch(e => {
     this.showErrorInfoSheet(e);

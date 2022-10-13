@@ -21,6 +21,7 @@ export class CreatePasswordComponent implements OnInit {
   public oldPassword = '';
   public newPassword = '';
   public recoveryKey = '';
+  public confirmPassword = '';
   public recoveryKeyInput = '';
   public passwordHandleCases = 0;
   public PassWordHandleCases = PassWordHandleCases;
@@ -46,6 +47,12 @@ export class CreatePasswordComponent implements OnInit {
   ngOnInit() {}
 
   createPassword(){
+    if(this.password.trim().length === 0 ){
+      return this.showErrorInfoSheet(new Error("Password can not be empty"));
+    }
+    if(this.password !== this.confirmPassword){
+      return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
+    }
     const userOpts ={ 
       id_token: this.authenticaionService.currentUserValue,
       password: this.password

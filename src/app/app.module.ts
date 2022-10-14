@@ -59,6 +59,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatSortModule} from '@angular/material/sort';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
   featureFlagsService.loadConfig();
@@ -110,6 +111,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
             backButtonText: '',
             navAnimation: enterAnimation
         }),
+        MatCheckboxModule,
         MatTableModule,
         MatPaginatorModule,
         MatDialogModule,

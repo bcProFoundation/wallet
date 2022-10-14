@@ -1,0 +1,45 @@
+
+<div class="page-coin-config-container">
+  <p>Swap</p>
+
+  <ng-container *ngFor="let coin of listSwap">
+    <mat-checkbox
+    [checked]="checked"
+    [disabled]="!coin.isEnableSwap"
+    (change)="setCoinConfig($event.checked, coin)">
+    {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+    </mat-checkbox>
+    <div class="min-max-container">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Min</mat-label>
+        <input matInput placeholder="Input min here" [(ngModel)]="coin.min">
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Max</mat-label>
+        <input matInput placeholder="Input max here" [(ngModel)]="coin.max">
+      </mat-form-field>
+    </div>
+    
+  </ng-container>
+  
+  <p>Receive</p>
+  <ng-container *ngFor="let coin of listReceive">
+    <mat-checkbox
+    [checked]="checked"
+    [disabled]="!coin.isEnableSwap"
+    (change)="setCoinConfig($event.checked, coin)">
+    {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+    </mat-checkbox>
+    <div class="min-max-container">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Min</mat-label>
+        <input matInput placeholder="Input min here" [(ngModel)]="coin.min">
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Max</mat-label>
+        <input matInput placeholder="Input max here" [(ngModel)]="coin.max">
+      </mat-form-field>
+  </ng-container>
+  
+  <ion-button>Apply</ion-button>
+</div>

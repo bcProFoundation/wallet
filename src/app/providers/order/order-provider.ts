@@ -56,6 +56,10 @@ import { Logger } from "../logger/logger";
         return this.http.post(`${this.bwsURL}/v3/order/update/`, orderOpts).toPromise();
       }
 
+      public getCoinConfigList(): Promise<any>{
+        return this.http.get(`${this.bwsURL}/v3/coinconfig/`).toPromise();
+      }
+
       public login(userOpts): Promise<any> {
         const options = {
           headers: {'authorization': userOpts.id_token}

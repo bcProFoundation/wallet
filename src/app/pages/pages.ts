@@ -119,6 +119,7 @@ import { LoginAdminComponent } from './admin/login-admin/login-admin.component';
 import { CreatePasswordComponent } from './admin/create-password/create-password.component';
 import { ImportSeedComponent } from './admin/import-seed/import-seed.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { CoinConfigComponent } from './admin/coin-config/coin-config.component';
 
 
 export const PAGES = [
@@ -224,6 +225,7 @@ export const PAGES = [
   LoginAdminComponent,
   CreatePasswordComponent,
   ImportSeedComponent,
-  DashboardComponent
+  DashboardComponent,
+  CoinConfigComponent
   // Phases: card pages
 ];

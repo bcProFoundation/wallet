@@ -1,0 +1,15 @@
+
+.page-coin-config-container{
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    p{
+        color: black;
+    }
+    mat-checkbox {
+        color: black;
+    }
+    .min-max-container{
+        display: flex;
+    }
+}

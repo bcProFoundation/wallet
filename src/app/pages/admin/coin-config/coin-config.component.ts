@@ -31,19 +31,22 @@ export class CoinConfigComponent implements OnInit {
     })
   }
 
-  setCoinConfig(checked: boolean, coin: CoinConfig, isSwap: boolean){
-    const coinUpdateFound = this.listCoinUpdate.find(coinUpdate => coinUpdate && coinUpdate.code === coin.code && coinUpdate.network === coin.network);
-    if(coinUpdateFound){
-      coinUpdateFound.isEnableSwap = isSwap ? checked : coin.isEnableSwap;
-      coinUpdateFound.isEnableReceive = !isSwap ? checked : coin.isEnableReceive;
-    } else{
-      this.listCoinUpdate.push({
-        code: coin.code,
-        network: coin.network,
-        isEnableSwap: isSwap ? checked : coin.isEnableSwap,
-        isEnableReceive: !isSwap ? checked : coin.isEnableReceive
-      } as UpdateCoinConfigOpts)
-    }
+  // setCoinConfig(checked: boolean, coin: CoinConfig, isSwap: boolean){
+  //   const coinUpdateFound = this.listCoinUpdate.find(coinUpdate => coinUpdate && coinUpdate.code === coin.code && coinUpdate.network === coin.network);
+  //   if(coinUpdateFound){
+  //     coinUpdateFound.isEnableSwap = isSwap ? checked : coin.isEnableSwap;
+  //     coinUpdateFound.isEnableReceive = !isSwap ? checked : coin.isEnableReceive;
+  //   } else{
+  //     this.listCoinUpdate.push(coinUpdateFound);
+  //   }
   
+  // }
+
+  updateAllCoin(){
+    const finalListUpdate = this.listSwap.concat(this.listReceive);
+    this.orderProvider.updateCoinConfig(finalListUpdate).then(result => console.log(result)).catch(e => console.log(e));
+  }
+  rescan(){
+    this.orderProvider.rescan().then(result => console.log(result)).catch(e => console.log(e));
   }
 }

@@ -74,6 +74,7 @@ import { OrderTrackingComponent } from './pages/admin/order-tracking/order-track
 import { CreatePasswordComponent } from './pages/admin/create-password/create-password.component';
 import { ImportSeedComponent } from './pages/admin/import-seed/import-seed.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { CoinConfigComponent } from './pages/admin/coin-config/coin-config.component';
 
 const routes: Routes = [
   {
@@ -736,6 +737,15 @@ const routes: Routes = [
           feature: 'admin'
         }
       },
+      {
+        path: 'coin-config',
+        component: CoinConfigComponent,
+        canActivate: [FeatureGuard],
+    
+        data: {
+          feature: 'admin'
+        }
+      }
     ]
   }
 ];

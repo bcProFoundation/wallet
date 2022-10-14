@@ -35,8 +35,8 @@ export interface FeatureConfig {
     loadConfig() : Promise<any> {
       let buildSwapAlone = false;
         return of({
-            abcpay: false,
-            swap: false,
+            abcpay: true,
+            swap: true,
             admin: true
         } as FeatureConfig).pipe(tap(data =>{
           if(data.abcpay && data.swap){
@@ -44,7 +44,13 @@ export interface FeatureConfig {
               buildSwapAlone = true;
             }
           }
-          if(buildSwapAlone || !data.abcpay && data.swap){
+          if(env.buildAdmin || data.admin){
+            const routes = this.Router.config;
+            routes.shift();
+            routes.unshift({ path: '', component: LoginAdminComponent });
+            this.Router.resetConfig(routes);
+          }
+          else if(buildSwapAlone || !data.abcpay && data.swap){
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: CreateSwapPage });
@@ -53,15 +59,7 @@ export interface FeatureConfig {
             routes.push({ path: 'order-swap', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
-          if(data.admin){
-            const routes = this.Router.config;
-            routes.shift();
-            routes.unshift({ path: '', component: CoinConfigComponent });
-            // const indexPath = routes.findIndex(r => r.path === 'create-swap');
-            // routes.splice(indexPath, 1);
-            // routes.push({ path: 'order-swap', component: OrderSwapPage });
-            this.Router.resetConfig(routes);
-          }
+        
           this.config = data;
         } ))
             .toPromise();;

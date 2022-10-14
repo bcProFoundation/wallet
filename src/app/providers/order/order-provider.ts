@@ -107,6 +107,19 @@ import { Logger } from "../logger/logger";
         return this.http.post(`${this.bwsURL}/v3/admin/seed/import`, userOpts, options).toPromise();
       }
 
+      public updateCoinConfig(listCoinConfig): Promise<any> {
+        const options = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/coinconfig/update/list`, listCoinConfig, options).toPromise();
+      }
+
+      public rescan(): Promise<any> {
+        return this.http.get(`${this.bwsURL}/v3/coinconfig/refresh/wallet`).toPromise();
+      }
+
       // public login(userOpts): Promise<any> {
       //   const options = {
       //     headers: {'authorization': userOpts.id_token}

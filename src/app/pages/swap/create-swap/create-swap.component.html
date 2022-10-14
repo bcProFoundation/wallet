@@ -139,11 +139,10 @@
           <span class="amount-fee-network" *ngIf="!coinReceiveSelected.isToken">
             {{
               coinReceiveSelected.networkFee
-                | satToUnit: getChain(coinReceiveSelected.code)
             }}
           </span>
           <span class="amount-fee-network" *ngIf="coinReceiveSelected.isToken">
-            {{ getFeeToken(coinReceiveSelected.networkFee) }} XEC
+            {{ coinReceiveSelected.networkFee }} XEC
           </span>
         </div>
 

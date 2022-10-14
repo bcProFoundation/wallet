@@ -31,6 +31,7 @@ let awsUrl =
     : process.env.AWS_URL_CONFIG;
 let lixiLotusUrl = process.env.LIXI_LOTUS_URL;
 let buildSwapAlone = process.env.BUILD_SWAP_STANDALONE;
+let buildAdmin = process.env.BUILD_ADMIN;
 if (environment === 'production') {
   nameEnv = 'production';
 } else if (environment === 'development') {
@@ -51,7 +52,8 @@ export const env = {
     activateScanner: ${activateScanner},
     awsUrl: '${awsUrl}',
     lixiLotusUrl: '${lixiLotusUrl}' ,
-    buildSwapALone: ${buildSwapAlone}
+    buildSwapALone: ${buildSwapAlone},
+    buildAdmin: ${buildAdmin}
 };
     export default env;`;
 

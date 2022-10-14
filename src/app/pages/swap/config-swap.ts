@@ -94,6 +94,7 @@ export class ConfigSwap {
 }
 
 export class CoinConfig {
+  _id: string;
   code: string;
   network: string;
   isToken: boolean;
@@ -118,6 +119,7 @@ export class CoinConfig {
 
   static create(opts) {
     const x = new CoinConfig();
+    x._id = opts._id;
     x.code = opts.code;
     x.isToken = opts.isToken;
     x.network = opts.network;
@@ -144,6 +146,7 @@ export class CoinConfig {
 
   static fromObj(opts) {
     const x = new CoinConfig();
+    x._id = opts._id;
     x.code = opts.code;
     x.network = opts.network;
     x.isToken = opts.isToken;

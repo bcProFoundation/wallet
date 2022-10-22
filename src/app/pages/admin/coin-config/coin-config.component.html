@@ -1,8 +1,17 @@
 
 <div class="page-coin-config-container">
   <ion-button (click)="rescan()">Rescan wallet</ion-button>
-  <p>Swap</p>
-
+  <mat-accordion class="example-headers-align" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Swap
+        </mat-panel-title>
+        <mat-panel-description>
+          Swap coin
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
   <ng-container *ngFor="let coin of listSwap">
     <mat-checkbox
     [checked]="checked"
@@ -22,30 +31,43 @@
     </div>
     
   </ng-container>
-  
-  <p>Receive</p>
-  <ng-container *ngFor="let coin of listReceive">
-    <mat-checkbox
-    [checked]="checked"
-    [disabled]="!coin.isSupport"
-    [(ngModel)]="coin.isEnableReceive">
-    {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
-    </mat-checkbox>
-    <div class="min-max-container">
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Network fee</mat-label>
-        <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.networkFee">
-      </mat-form-field>
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Service fee</mat-label>
-        <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.serviceFee">
-      </mat-form-field>
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Service fee</mat-label>
-        <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.settleFee">
-      </mat-form-field>
-      </div>
-  </ng-container>
-  
+    
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Receive
+        </mat-panel-title>
+        <mat-panel-description>
+          Receive coin
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <ng-container *ngFor="let coin of listReceive">
+        <mat-checkbox
+        [checked]="checked"
+        [disabled]="!coin.isSupport"
+        [(ngModel)]="coin.isEnableReceive">
+        {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+        </mat-checkbox>
+        <div class="min-max-container">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Network fee</mat-label>
+            <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.networkFee">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Service fee</mat-label>
+            <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.serviceFee">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Service fee</mat-label>
+            <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.settleFee">
+          </mat-form-field>
+          </div>
+      </ng-container>
+    
+    </mat-expansion-panel>
+
+  </mat-accordion>
   <ion-button (click)="updateAllCoin()">Apply</ion-button>
 </div>

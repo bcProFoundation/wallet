@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
+import {MatAccordion} from '@angular/material/expansion';
 
 interface UpdateCoinConfigOpts{
   code: string;
@@ -15,6 +16,8 @@ interface UpdateCoinConfigOpts{
   styleUrls: ['./coin-config.component.scss'],
 })
 export class CoinConfigComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+
   listCoinConfig : CoinConfig[] = [];
   listSwap : CoinConfig[] = [];
   listReceive: CoinConfig[] = [];
@@ -47,6 +50,12 @@ export class CoinConfigComponent implements OnInit {
     this.orderProvider.updateCoinConfig(finalListUpdate).then(result => console.log(result)).catch(e => console.log(e));
   }
   rescan(){
-    this.orderProvider.rescan().then(result => console.log(result)).catch(e => console.log(e));
+    this.orderProvider.rescan().then(result => {
+      this.orderProvider.getCoinConfigList().then(result => {
+        this.listCoinConfig = result;
+        this.listSwap = this.listCoinConfig.filter(coin => coin.isSwap);
+        this.listReceive = this.listCoinConfig.filter(coin => coin.isReceive);
+      })
+    }).catch(e => console.log(e));
   }
 }

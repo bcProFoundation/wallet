@@ -92,4 +92,11 @@ export class ImportSeedComponent implements OnInit {
       }
     );
   }
+  redirectForgotPasswordPage(){
+    this.router.navigate(['/dashboard/create-password'], {
+      state: {
+        passwordHandleCases :  PassWordHandleCases.ForgotPassword
+      }
+    })
+  }
 }

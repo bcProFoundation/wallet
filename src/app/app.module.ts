@@ -60,6 +60,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatSortModule} from '@angular/material/sort';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
   featureFlagsService.loadConfig();
@@ -116,6 +117,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         MatPaginatorModule,
         MatDialogModule,
         MatSortModule,
+        MatExpansionModule,
         NgxMaskModule.forRoot(),
         MatGridListModule,
         MatFormFieldModule,

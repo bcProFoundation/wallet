@@ -7,6 +7,7 @@
       <input matInput placeholder="Input password here" [(ngModel)]="password">
     </mat-form-field>
     <ion-button (click)="verifyPassword()"> Input password </ion-button>
+    <p><a (click)="redirectForgotPasswordPage()">Forget / change password</a></p>
   </ng-container>
 
   <ng-container *ngIf="isShowImportSeed">

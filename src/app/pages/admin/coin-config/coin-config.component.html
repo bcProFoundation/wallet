@@ -17,15 +17,15 @@
     [checked]="checked"
     [disabled]="!coin.isSupport"
     [(ngModel)]="coin.isEnableSwap">
-    {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+    {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
     </mat-checkbox>
     <div class="min-max-container">
       <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Min</mat-label>
+        <mat-label>Min (USD)</mat-label>
         <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.min">
       </mat-form-field>
       <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Max</mat-label>
+        <mat-label>Max (USD)</mat-label>
         <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.max">
       </mat-form-field>
     </div>
@@ -48,11 +48,11 @@
         [checked]="checked"
         [disabled]="!coin.isSupport"
         [(ngModel)]="coin.isEnableReceive">
-        {{ coin.code }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+        {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
         </mat-checkbox>
         <div class="min-max-container">
           <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Network fee</mat-label>
+            <mat-label>Network fee ({{ getUnitName(coin) }} )</mat-label>
             <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.networkFee">
           </mat-form-field>
           <mat-form-field class="example-full-width" appearance="fill">

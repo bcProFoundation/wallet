@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +13,8 @@ export class DashboardComponent implements OnInit {
 
   reason = '';
   opened = false;
-  constructor() { }
+  constructor(    private authenticationService: AuthenticationService,
+    ) { }
 
   ngOnInit() {}
 
@@ -21,4 +23,7 @@ export class DashboardComponent implements OnInit {
     this.sidenav.close();
   }
 
+  logOut(){
+    this.authenticationService.logout();
+  }
 }

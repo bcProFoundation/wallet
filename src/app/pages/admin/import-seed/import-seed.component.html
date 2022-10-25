@@ -3,11 +3,13 @@
 <ng-container *ngIf="!isFinish">
   <ng-container *ngIf="!isShowImportSeed">
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Password</mat-label>
+      <mat-label>Enter Password</mat-label>
       <input matInput placeholder="Input password here" [(ngModel)]="password">
     </mat-form-field>
-    <ion-button (click)="verifyPassword()"> Input password </ion-button>
-    <p><a (click)="redirectForgotPasswordPage()">Forget / change password</a></p>
+    <div class="password-container">
+      <ion-button (click)="verifyPassword()"> Continue </ion-button>
+      <p><a (click)="redirectForgotPasswordPage()">Forget / change password</a></p>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="isShowImportSeed">

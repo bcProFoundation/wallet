@@ -195,7 +195,8 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     };
     this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
       this.length = listOrderinfo.count;
-      this.dataSource = listOrderinfo.listOrderInfo;
+      this.dataSource = listOrderinfo.listOrderInfo.map(obj => ({ ...obj, lastModifiedStr: new Date(obj.lastModified || obj.createdOn).toUTCString() }));
+      this.sortedData = this.dataSource.slice();
       this._cdRef.markForCheck();
     });  
 
@@ -332,9 +333,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  logOut(){
-    this.authenticationService.logout();
-  }
+
 }
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

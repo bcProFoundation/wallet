@@ -14,16 +14,18 @@
 
   <ng-container *ngIf="isShowImportSeed">
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>keyFund</mat-label>
-      <input matInput placeholder="Input 9 here" [(ngModel)]="keyFund">
+      <mat-label>Swap fund</mat-label>
+      <input matInput placeholder="Input mnemonic" [(ngModel)]="keyFund">
     </mat-form-field>
   
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>keyReceive</mat-label>
-      <input matInput placeholder="Input password here" [(ngModel)]="keyReceive">
+      <mat-label>Deposit fund</mat-label>
+      <input matInput placeholder="Input mnemonic" [(ngModel)]="keyReceive">
     </mat-form-field>
-  
-    <ion-button (click)="importSeed()">Import seed</ion-button>
+
+    <p class="msg-found-key" *ngIf="isShowMessageFoundKey"> Message: Either “Deposit Account” or “Funding Account” has already existed. In case you want to change the accounts, please do re-import seed!</p>
+
+    <ion-button class="btn-import-seed" (click)="importSeed()">Import seed</ion-button>
   </ng-container>
  
    

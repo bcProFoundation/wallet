@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
+import { BwcErrorProvider, ErrorsProvider, OnGoingProcessProvider, OrderProvider } from 'src/app/providers';
 import { PassWordHandleCases } from '../create-password/create-password.component';
 import { IApproveOpts } from '../login-admin/login-admin.component';
 import { AuthenticationService } from '../service/authentication.service';
@@ -17,14 +17,15 @@ export class ImportSeedComponent implements OnInit {
   public keyFund = '';
   public keyReceive = '';
   public isFinish = false;
+  public isShowMessageFoundKey = false;
   constructor(
     private orderProvider: OrderProvider,
     private errorsProvider: ErrorsProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
     private authenticationService: AuthenticationService,
+    private onGoingProcessProvider: OnGoingProcessProvider,
     private router: Router
-
   ) { }
 
   ngOnInit() {
@@ -50,6 +51,11 @@ export class ImportSeedComponent implements OnInit {
     };
     this.orderProvider.verifyPassword(userOpts).then(result =>{
       this.isShowImportSeed = result;
+      this.orderProvider.checkKeyExist().then(result => {
+        this.isShowMessageFoundKey = result.isKeyExisted;
+      }).catch(e => {
+        this.showErrorInfoSheet(e);
+      });
     }).catch(e => {
       this.isShowImportSeed = false;
       this.showErrorInfoSheet(e);
@@ -61,11 +67,14 @@ export class ImportSeedComponent implements OnInit {
       keyFund: this.keyFund,
       keyReceive: this.keyReceive
     }
+    this.onGoingProcessProvider.set('Processing');
     this.orderProvider.importSeed(keysOpts).then(result =>{
       this.isFinish = result;
     }).catch(e => {
       this.isFinish = false;
       this.showErrorInfoSheet(e);
+    }).finally(()=>{
+      this.onGoingProcessProvider.clear();
     })
   }
   public showErrorInfoSheet(

@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { reject } from "lodash";
 import { throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { AuthenticationService } from "src/app/pages/admin/service/authentication.service";
 import { ConfigSwap } from "src/app/pages/swap/config-swap";
 import { ConfigProvider } from "../config/config";
 import { Logger } from "../logger/logger";
@@ -17,7 +18,8 @@ import { Logger } from "../logger/logger";
     constructor(
         private logger: Logger,
         private configProvider: ConfigProvider,
-        private http: HttpClient
+        private http: HttpClient,
+        private authenticationService: AuthenticationService,
         ) {
         this.logger.debug('LixiLotusProvider initialized');
         const defaults = this.configProvider.getDefaults();
@@ -115,6 +117,18 @@ import { Logger } from "../logger/logger";
         };
         return this.http.post(`${this.bwsURL}/v3/coinconfig/update/list`, listCoinConfig, options).toPromise();
       }
+
+      public checkKeyExist(): Promise<any>{
+        const userOpts ={
+          id_token: this.authenticationService.currentUserValue        
+        }
+        const options = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/admin/seed/check`, userOpts, options).toPromise();
+      } 
 
       public rescan(): Promise<any> {
         return this.http.get(`${this.bwsURL}/v3/coinconfig/refresh/wallet`).toPromise();

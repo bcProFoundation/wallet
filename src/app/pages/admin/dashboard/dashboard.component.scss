@@ -12,4 +12,8 @@ app-dashboard{
            margin: 20px;
         }
     }
+    .custom-toolbar-row{
+        display: flex;
+        justify-content: space-between;
+    }
 }

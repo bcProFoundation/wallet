@@ -31,6 +31,9 @@ import { FingerprintModalPage } from './pages/fingerprint/fingerprint';
 import { ImageLoaderConfigService } from 'ionic-image-loader-v5';
 import { CopayersPage } from './pages/add/copayers/copayers';
 import { FeatureFlagsService } from './providers/feature-flags.service';
+
+import env from 'src/environments';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -104,7 +107,7 @@ export class CopayApp {
     this.imageLoaderConfig.useImageTag(true);
     this.imageLoaderConfig.enableSpinner(false);
     this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    if (!this.platformProvider.isCordova &&  !this.isAdmin && this.isAbcpay) {
+    if (!this.platformProvider.isCordova &&  !env.buildAdmin && this.isAbcpay) {
       this.renderer.addClass(document.body, 'bg-desktop');
     }
 

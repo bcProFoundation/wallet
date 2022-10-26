@@ -9,19 +9,19 @@
     <!-- Name Column -->
     <ng-container matColumnDef="swapPairCode">
       <th mat-header-cell *matHeaderCellDef> Swap Pair </th>
-      <td mat-cell *matCellDef="let element"> {{element.fromCoinCode}} / {{ element.toCoinCode }} </td>
+      <td mat-cell *matCellDef="let element"> {{ element.fromCoinCode.toUpperCase() }} / {{ element.toCoinCode.toUpperCase() }} </td>
     </ng-container>
   
     <!-- Weight Column -->
     <ng-container matColumnDef="rate">
       <th mat-header-cell *matHeaderCellDef> Rate </th>
-      <td mat-cell *matCellDef="let element"> {{ element.updatedRate || element.createdRate }} </td>
+      <td mat-cell *matCellDef="let element"> {{  (element.updatedRate || element.createdRate).toFixed(2) | mask: 'separator':',' }} </td>
     </ng-container>
   
        <!-- Symbol Column -->
        <ng-container matColumnDef="pendingReason">
         <th mat-header-cell *matHeaderCellDef > Pending Reason </th>
-        <td mat-cell *matCellDef="let element"> {{ element.pendingReason }} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.error }} </td>
       </ng-container>
   
        <!-- Symbol Column -->

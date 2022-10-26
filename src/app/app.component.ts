@@ -104,7 +104,7 @@ export class CopayApp {
     this.imageLoaderConfig.useImageTag(true);
     this.imageLoaderConfig.enableSpinner(false);
     this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    if (!this.platformProvider.isCordova && (this.isAbcpay || !this.isAdmin)) {
+    if (!this.platformProvider.isCordova &&  !this.isAdmin && this.isAbcpay) {
       this.renderer.addClass(document.body, 'bg-desktop');
     }
 

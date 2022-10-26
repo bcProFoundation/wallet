@@ -140,7 +140,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
 
   ) { 
     const opts = {
-      query: {_id : 1},
+      query: {_id : -1},
       limit: this.pageSize,
       skip: this.pageSize * 0
     };
@@ -189,7 +189,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
 
   onPaginateChange(){
     const opts = {
-      query: {_id : 1},
+      query: {_id : -1},
       limit: this.pageEvent.pageSize,
       skip: this.pageEvent.pageSize * this.pageEvent.pageIndex
     };

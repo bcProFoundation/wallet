@@ -1,4 +1,4 @@
-<ion-app [ngClass]="{'isDesktop': !this.platformProvider.isCordova && !isAdmin}">
+<ion-app [ngClass]="{'isDesktop': !this.platformProvider.isCordova && !env.buildAdmin}">
   <div #splash [hidden]="!routerHidden" class="custom-splash-screen">
     <svg
    width="722.84167mm"

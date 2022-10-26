@@ -67,6 +67,7 @@ export class CopayApp {
   public isSwap: boolean = false;
   public isAbcpay: boolean = false;
   public isAdmin: boolean = false;
+  public env = env;
   constructor(
     private config: Config,
     private platform: Platform,

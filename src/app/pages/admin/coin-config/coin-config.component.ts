@@ -87,7 +87,7 @@ export class CoinConfigComponent implements OnInit {
 
   getUnitName(coin: CoinConfig): string{
     if(coin.isToken){
-      return coin.tokenInfo.symbol.toUpperCase();
+      return 'XEC';
     } else{
       return coin.code.toUpperCase();
     }

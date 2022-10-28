@@ -57,15 +57,15 @@ export interface TokenInfo {
     status?: string;
     isSentToFund?: boolean;
     isSentToUser?: boolean;
-    endedOn?: number;
-    createdOn?: number;
+    endedOn?: Date;
+    createdOn?: Date;
     error?: string;
     coinConfig?: CoinConfig;
     toTokenInfo?: TokenInfo;
     fromTokenInfo?: TokenInfo;
     note?: string;
     pendingReason?: string;
-    lastModified?: number;
+    lastModified?: Date;
     isResolve?: boolean;
   }
   export interface CoinConfig {

@@ -327,7 +327,7 @@ export class CreateSwapPage implements OnInit {
       if (this.altValue.isGreaterThan(0)) {
         this.minWithCurrentFiat =
           this.coinSwapSelected.min * this.usdRate[this.fiatCode];
-        if (this.altValue.toNumber() < this.minWithCurrentFiat) {
+        if (this.minWithCurrentFiat > 0 && this.altValue.toNumber() < this.minWithCurrentFiat) {
           return { amountMinValidator: true };
         } else {
           return null;
@@ -352,8 +352,8 @@ export class CreateSwapPage implements OnInit {
       }
       if (this.altValue.isGreaterThan(0)) {
         this.maxWithCurrentFiat =
-          this.coinReceiveSelected.max * this.usdRate[this.fiatCode];
-        if (this.altValue.toNumber() > this.maxWithCurrentFiat) {
+          this.coinSwapSelected.max * this.usdRate[this.fiatCode];
+        if (this.maxWithCurrentFiat && this.altValue.toNumber() > this.maxWithCurrentFiat) {
           return { amountMaxValidator: true };
         } else {
           return null;

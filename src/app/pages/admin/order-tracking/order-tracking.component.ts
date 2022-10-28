@@ -1,18 +1,34 @@
-import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  OnInit
+} from '@angular/core';
 import { TokenInfo } from 'src/app/models/tokens/tokens.model';
-import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
+import {
+  BwcErrorProvider,
+  Coin,
+  CurrencyProvider,
+  ErrorsProvider,
+  OnGoingProcessProvider,
+  OrderProvider
+} from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
-import {PageEvent} from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogCustomComponent } from '../modal/modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { Sort } from '@angular/material/sort';
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 import { AuthenticationService } from '../service/authentication.service';
 import { PassWordHandleCases } from '../create-password/create-password.component';
 import { Router } from '@angular/router';
 
+import * as moment from 'moment';
+import _, { StringNullableChain } from 'lodash';
+import { LabelTip } from 'src/app/components/label-tip/label-tip';
 
 export interface PeriodicElement {
   name: string;
@@ -21,23 +37,20 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-export interface OrderReturnOpts{
+export interface OrderReturnOpts {
   listOrderInfo: IOrder[];
   count: number;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+export interface ICoinConfigFilter {
+  fromDate?: Date;
+  toDate?: Date;
+  fromCoinCode?: string;
+  toCoinCode?: string;
+  status?: string;
+  fromNetwork?: string;
+  toNetwork?: string;
+}
 
 interface IOrder {
   id: string | number;
@@ -63,14 +76,15 @@ interface IOrder {
   status?: string;
   isSentToFund?: boolean;
   isSentToUser?: boolean;
-  endedOn?: number;
-  createdOn?: number;
+  endedOn?: Date;
+  createdOn?: Date;
   error?: string;
-  toTokenInfo? : TokenInfo;
+  toTokenInfo?: TokenInfo;
   fromTokenInfo?: TokenInfo;
   coinConfig?: CoinConfig;
-  lastModified?: number;
+  lastModified?: Date;
 }
+
 interface IOrderCustom {
   id: string | number;
   version: number;
@@ -95,38 +109,102 @@ interface IOrderCustom {
   status?: string;
   isSentToFund?: boolean;
   isSentToUser?: boolean;
-  endedOn?: number;
-  createdOn?: number;
+  endedOn?: Date;
+  createdOn?: Date;
   error?: string;
-  toTokenInfo? : TokenInfo;
+  toTokenInfo?: TokenInfo;
   fromTokenInfo?: TokenInfo;
   coinConfig?: CoinConfig;
-  lastModified?: number;
+  lastModified?: Date;
+}
+
+enum CoinFilterDate {
+  DAY,
+  WEEK,
+  MONTH
 }
 
 @Component({
   selector: 'app-order-tracking',
   templateUrl: './order-tracking.component.html',
-  styleUrls: ['./order-tracking.component.scss'],
+  styleUrls: ['./order-tracking.component.scss']
 })
 export class OrderTrackingComponent implements OnInit, AfterViewInit {
-  // displayedColumns: string[] = ['id','fromCoinCode', 'amountFrom', 'isFromToken', 'toCoinCode', 
-  // 'isToToken', 'createdRate', 'updatedRate', 'addressUserReceive', 'adddressUserDeposit', 
-  // 'status', 'createdOn', 'endedOn','listTxIdUserReceive', 'listTxIdUserDeposit', 'error', 'changeStatus' ];
-  displayedColumns: string[] = ['id','swapPairCode', 'rate', 'pendingReason', 'status', 'lastModified', 'action'];
-  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  // displayedColumns: string[] = ['id','fromCoinCode', 'endedOn', 'abc'];
-
-  // dataSource = ELEMENT_DATA;
+  dateSelected = null;
+  optsCoinConfigFilter: ICoinConfigFilter = null;
+  listCoinFilterDate = [
+    {
+      label: 'All',
+      value: null
+    },
+    {
+      label: 'today',
+      value: CoinFilterDate.DAY
+    },
+    {
+      label: 'this week',
+      value: CoinFilterDate.WEEK
+    },
+    {
+      label: 'this month',
+      value: CoinFilterDate.MONTH
+    }
+  ];
+  displayedColumns: string[] = [
+    'id',
+    'swapPairCode',
+    'rate',
+    'pendingReason',
+    'status',
+    'lastModified',
+    'action'
+  ];
+  listStatus =[
+    {
+      label: 'All',
+      value: null
+    },
+    {
+      label: 'Complete',
+      value: 'complete'
+    },
+    {
+      label: 'Pending',
+      value: 'pending'
+    },
+    {
+      label: 'Waiting',
+      value: 'waiting'
+    },
+    {
+      label: 'Expired',
+      value: 'expired'
+    }
+  ];
+  status = null;
+  listCoinSwap = [];
+  listCoinReceive = [];
   dataSource: any;
   length = 100;
   pageSize = 10;
-  isLoggedin: boolean = true; 
+  isLoggedin: boolean = true;
   pageSizeOptions: number[] = [5, 10, 25, 100];
-    // MatPaginator Output
-    pageEvent: PageEvent;
-    sortedData: IOrder[];
-    // Date = new this.Date()
+  // MatPaginator Output
+  pageEvent: PageEvent;
+  sortedData: IOrder[];
+  // Date = new this.Date()
+  fromCoin : {
+    label: string,
+    value: CoinConfig
+  };
+  toCoin : {
+    label: string,
+    value: CoinConfig
+  };
+  listCoinConfig : {
+    label: string,
+    value: CoinConfig
+  }[] = [];
   constructor(
     private orderProvider: OrderProvider,
     private _cdRef: ChangeDetectorRef,
@@ -136,110 +214,137 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     private bwcErrorProvider: BwcErrorProvider,
     private ngZone: NgZone,
     private authenticationService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private onGoingProcessProvider: OnGoingProcessProvider,
+    private currencyProvider: CurrencyProvider
+  ) {
+    this.dateSelected = this.listCoinFilterDate[0];
+    this.status = this.listStatus[0];
+    this.getAllOrderInfo();
 
-  ) { 
-    const opts = {
-      query: {_id : -1},
-      limit: this.pageSize,
-      skip: this.pageSize * 0
-    };
-
-    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
-      this.length = listOrderinfo.count;
-      this.dataSource = listOrderinfo.listOrderInfo.map(obj => ({ ...obj, lastModifiedStr: new Date(obj.lastModified || obj.createdOn).toUTCString() }));
-      this.sortedData = this.dataSource.slice();
-      this._cdRef.markForCheck();
-    });  
-
-    window['handleCredentialResponse'] = user => ngZone.run(
-      ()=>{
+    window['handleCredentialResponse'] = user =>
+      ngZone.run(() => {
         this.afterSignInUser(user);
+      });
+  }
+  ngAfterViewInit(): void {}
+  redirectForgotPasswordPage() {
+    this.router.navigate(['/dashboard/create-password'], {
+      state: {
+        passwordHandleCases: PassWordHandleCases.ForgotPassword
       }
-    )
-    
-  }
-  ngAfterViewInit(): void { 
- }
- redirectForgotPasswordPage(){
-  this.router.navigate(['/dashboard/create-password'], {
-    state: {
-      passwordHandleCases :  PassWordHandleCases.ForgotPassword
-    }
-  })
- }
-
- redirectImportSeedPage(){
-  this.router.navigate(['/import-seed']);
- }
- afterSignInUser(user){
-   const userDecoded = jwt_decode(user.credential);
-   this.orderProvider.login({id_token: user.credential}).then(approve => {
-    if(approve){
-      this.authenticationService.login(user.credential);
-    }
-   }).catch(e => {
-    this.showErrorInfoSheet(e);
-   })
-  //  console.log(userDecoded);
- }
-  ngOnInit() {
- 
-  }
-
-  onPaginateChange(){
-    const opts = {
-      query: {_id : -1},
-      limit: this.pageEvent.pageSize,
-      skip: this.pageEvent.pageSize * this.pageEvent.pageIndex
-    };
-    this.orderProvider.getAllOrderInfo(opts).then((listOrderinfo: OrderReturnOpts) => {
-      this.length = listOrderinfo.count;
-      this.dataSource = listOrderinfo.listOrderInfo.map(obj => ({ ...obj, lastModifiedStr: new Date(obj.lastModified || obj.createdOn).toUTCString() }));
-      this.sortedData = this.dataSource.slice();
-      this._cdRef.markForCheck();
-    });  
-
-  }
-
-  handleChangeStatus(order){
-    order.status = 'complete';
-    this.orderProvider.updateOrder(order).then(
-
-    ).catch(e => {
-      this.showErrorInfoSheet(e);
     });
+  }
+
+  redirectImportSeedPage() {
+    this.router.navigate(['/import-seed']);
+  }
+  afterSignInUser(user) {
+    const userDecoded = jwt_decode(user.credential);
+    this.orderProvider
+      .login({ id_token: user.credential })
+      .then(approve => {
+        if (approve) {
+          this.authenticationService.login(user.credential);
+        }
+      })
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      });
+    //  console.log(userDecoded);
+  }
+  ngOnInit() {
+    this.orderProvider
+      .getCoinConfigList()
+      .then((listCoinConfig: CoinConfig[]) => {
+        if (listCoinConfig && listCoinConfig.length > 0) {
+          this.listCoinConfig = listCoinConfig.map(coinConfig => { 
+            return{
+              label: coinConfig.code.toUpperCase()  + ( coinConfig.network === 'testnet' ? ' ( Testnet )' : ''),
+              value: coinConfig
+            }
+          });
+          this.listCoinConfig = [
+            {
+              label: 'All',
+              value: null
+            },
+            ...this.listCoinConfig
+          ]
+          this.toCoin = this.listCoinConfig[0];
+          this.fromCoin = this.listCoinConfig[0];
+          // this.listCoinSwap = listCoinConfig
+          //   .map(s => {
+          //     if (s.isSwap) {
+          //       return {
+          //         label: this.getCoinName(s),
+          //         value: s.code
+          //       };
+          //     } else {
+          //       return null;
+          //     }
+          //   })
+          //   .filter(coin => coin !== null);
+          // this.listCoinSwap = [{label: 'All', value: null}, ...this.listCoinSwap];
+          // this.fromCoin = this.listCoinSwap[0];
+          // this.listCoinReceive = listCoinConfig
+          //   .map(s => {
+          //     if (s.isReceive) {
+          //       return {
+          //         label: this.getCoinName(s),
+          //         value: s.code
+          //       };
+          //     } else {
+          //       return null;
+          //     }
+          //   })
+          //   .filter(coin => coin !== null);
+          // this.listCoinReceive = [{label: 'All', value: null}, ...this.listCoinReceive];
+          // this.toCoin = this.listCoinReceive[0];
+        }
+      });
+  }
+
+  onPaginateChange() {
+    this.getAllOrderInfo();
+  }
+
+  handleChangeStatus(order) {
+    order.status = 'complete';
+    this.orderProvider
+      .updateOrder(order)
+      .then()
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      });
   }
 
   handleCredentialResponse(response: any) {
     // Decoding  JWT token...
-      let decodedToken: any | null = null;
-      try {
-        decodedToken = JSON.parse(atob(response?.credential.split('.')[1]));
-      } catch (e) {
-        console.error('Error while trying to decode token', e);
-      }
-      console.log('decodedToken', decodedToken);
+    let decodedToken: any | null = null;
+    try {
+      decodedToken = JSON.parse(atob(response?.credential.split('.')[1]));
+    } catch (e) {
+      console.error('Error while trying to decode token', e);
     }
-
-  handleChangeResolve(order){
-    order.isResolve = true;
-    this.orderProvider.updateOrder(order).then(
-
-    ).catch(e => {
-      this.showErrorInfoSheet(e);
-    })
+    console.log('decodedToken', decodedToken);
   }
 
-  viewDetailOrder(order: IOrder){
+  handleChangeResolve(order) {
+    order.isResolve = true;
+    this.orderProvider
+      .updateOrder(order)
+      .then()
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      });
+  }
+
+  viewDetailOrder(order: IOrder) {
     this.handleOpenNoteDialog(order);
   }
 
-  public showErrorInfoSheet(
-    error: any,
-    title?: string,
-    exit?: boolean
-  ): void {
+  public showErrorInfoSheet(error: any, title?: string, exit?: boolean): void {
     let msg: string;
     if (!error) return;
     // Currently the paypro error is the following string: 500 - "{}"
@@ -260,26 +365,29 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     );
   }
 
-  handleOpenNoteDialog(order){
+  handleOpenNoteDialog(order) {
     this.openDialog(order);
   }
   openDialog(order): void {
     const dialogRef = this.dialog.open(DialogCustomComponent, {
       width: '500px',
-      data: order,
+      data: order
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         // order = result;
-        this.orderProvider.updateOrder(order).then(orderUpdated => {
-          if(orderUpdated){
-            order = result;
-          }
-          alert('update order succesfully');
-        }).catch(e => {
-          alert(e);
-        })
+        this.orderProvider
+          .updateOrder(order)
+          .then(orderUpdated => {
+            if (orderUpdated) {
+              order = result;
+            }
+            alert('update order succesfully');
+          })
+          .catch(e => {
+            alert(e);
+          });
       }
     });
   }
@@ -289,8 +397,8 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       if (amount.toString().split('.')[1].length > maxDecimals) {
         return Number(
           amount.toString().split('.')[0] +
-          '.' +
-          amount.toString().split('.')[1].substr(0, maxDecimals)
+            '.' +
+            amount.toString().split('.')[1].substr(0, maxDecimals)
         );
       }
       return amount;
@@ -299,11 +407,9 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ionViewDidLoad() {
-   
-  }
+  ionViewDidLoad() {}
 
-  handleDateTime(timeMil){
+  handleDateTime(timeMil) {
     return timeMil && timeMil > 0 ? new Date(timeMil).toUTCString() : '';
   }
 
@@ -333,9 +439,93 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     });
   }
 
+  applyFilter() {
+    this.optsCoinConfigFilter = {};
+    if (this.dateSelected) {
+      if (this.dateSelected.value === CoinFilterDate.DAY) {
+        this.optsCoinConfigFilter.fromDate = moment().startOf('day').toDate();
+        this.optsCoinConfigFilter.toDate = moment().endOf('day').toDate();
+      } else if (this.dateSelected.value === CoinFilterDate.WEEK) {
+        this.optsCoinConfigFilter.fromDate = moment().startOf('week').toDate();
+        this.optsCoinConfigFilter.toDate = moment().endOf('week').toDate();
+      } else if (this.dateSelected.value === CoinFilterDate.MONTH) {
+        this.optsCoinConfigFilter.fromDate = moment().startOf('month').toDate();
+        this.optsCoinConfigFilter.toDate = moment().endOf('month').toDate();
+      }
+    }
 
+    if (this.fromCoin.value) {
+      this.optsCoinConfigFilter.fromCoinCode = this.fromCoin.value.code;
+      this.optsCoinConfigFilter.fromNetwork = this.fromCoin.value.network;
+    }
+
+    if (this.toCoin.value) {
+      this.optsCoinConfigFilter.toCoinCode = this.toCoin.value.code;
+      this.optsCoinConfigFilter.toNetwork = this.toCoin.value.network;
+    }
+
+    if(this.status){
+      this.optsCoinConfigFilter.status = this.status.value;
+    }
+
+    if (_.isEmpty(this.optsCoinConfigFilter)) {
+      this.optsCoinConfigFilter = null;
+    }
+
+    this.getAllOrderInfo();
+  }
+
+  getCoinName(coin: CoinConfig): string{
+    let name = '';
+    if(coin.isToken){
+      name= coin.tokenInfo.name;
+    } else{
+      const objCoin = this.currencyProvider.getCoin(coin.code.toUpperCase());
+      const nameCoin = this.currencyProvider.getCoinName(objCoin) || '';
+      name= nameCoin;
+    }
+    return name + (coin.network === 'testnet' ? ' (Testnet)' : "");
+  }
+
+  clearFilter() {
+    this.dateSelected = this.listCoinFilterDate[0];
+    this.fromCoin = this.listCoinConfig[0];
+    this.toCoin = this.listCoinConfig[0];
+    this.optsCoinConfigFilter = null;
+    this.getAllOrderInfo();
+  }
+
+  getAllOrderInfo() {
+    const opts = {
+      query: { _id: -1 },
+      limit: this.pageEvent ? this.pageEvent.pageSize : this.pageSize,
+      skip: this.pageEvent
+        ? this.pageEvent.pageSize * this.pageEvent.pageIndex
+        : 0,
+      coinConfigFilter: this.optsCoinConfigFilter
+    };
+    this.onGoingProcessProvider.set('Processing');
+    this.orderProvider
+      .getAllOrderInfo(opts)
+      .then((listOrderinfo: OrderReturnOpts) => {
+        this.length = listOrderinfo.count;
+        this.dataSource = listOrderinfo.listOrderInfo.map(obj => ({
+          ...obj,
+          lastModifiedStr: new Date(
+            obj.lastModified || obj.createdOn
+          ).toUTCString()
+        }));
+        this.sortedData = this.dataSource.slice();
+        this._cdRef.markForCheck();
+      })
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      }).finally(()=>{
+        this.onGoingProcessProvider.clear();
+      });
+  }
 }
+
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
-

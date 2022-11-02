@@ -47,18 +47,12 @@ export interface FeatureConfig {
             } });
             this.Router.resetConfig(routes);
           }
-          else if(data.abcpay && data.swap){
-            if(env.buildSwapALone){
-              buildSwapAlone = true;
-            }
-          }
-          else if(buildSwapAlone || !data.abcpay && data.swap){
+          else if(data.swap && env.buildSwapALone){
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: CreateSwapPage });
             const indexPath = routes.findIndex(r => r.path === 'create-swap');
             routes.splice(indexPath, 1);
-            routes.push({ path: 'order-swap', component: OrderSwapPage });
             this.Router.resetConfig(routes);
           }
           this.config = data;

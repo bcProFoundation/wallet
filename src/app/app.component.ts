@@ -64,7 +64,7 @@ export class CopayApp {
   private onResumeSubscription: Subscription;
   private isCopayerModalOpen: boolean;
   private copayerModal: any;
-  public isSwap: boolean = false;
+  public isSwapAlone: boolean = false;
   public isAbcpay: boolean = false;
   public isAdmin: boolean = false;
   public env = env;
@@ -100,9 +100,9 @@ export class CopayApp {
     private navasd: NavController,
     private featureFlagService: FeatureFlagsService
   ) {
-    this.isSwap = this.featureFlagService.isFeatureEnabled('swap');
+    this.isSwapAlone = this.featureFlagService.isFeatureEnabled('swap') && env.buildSwapALone;
     this.isAbcpay = this.featureFlagService.isFeatureEnabled('abcpay');
-    this.isAdmin = this.featureFlagService.isFeatureEnabled('admin');
+    this.isAdmin = this.featureFlagService.isFeatureEnabled('admin') && env.buildAdmin;
     
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
@@ -265,7 +265,7 @@ export class CopayApp {
     this.themeProvider.apply();
     if (this.platformProvider.isElectron) this.updateDesktopOnFocus();
     this.incomingDataRedirEvent();
-    if(this.isAbcpay){
+    if(this.isAbcpay && !this.isAdmin && !this.isSwapAlone){
       let profile;
     this.keyProvider
       .load()

@@ -40,6 +40,7 @@ export interface FeatureConfig {
             admin: true
         } as FeatureConfig).pipe(tap(data =>{
           if(data.admin && env.buildAdmin){
+            data.abcpay = false;
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: LoginAdminComponent, data: {
@@ -48,6 +49,9 @@ export interface FeatureConfig {
             this.Router.resetConfig(routes);
           }
           else if(data.swap && env.buildSwapALone){
+            if(env.buildSwapALone){
+              data.abcpay = false;
+            }
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: CreateSwapPage });

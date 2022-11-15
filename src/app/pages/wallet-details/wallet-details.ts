@@ -22,7 +22,7 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
-import { ModalController, Platform, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
@@ -111,7 +111,8 @@ export class WalletDetailsPage {
     private analyticsProvider: AnalyticsProvider,
     private appProvider: AppProvider,
     private location: Location,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private loadingCtrl: LoadingController
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -228,7 +229,6 @@ export class WalletDetailsPage {
   }
 
   async ionViewWillEnter() {
-    await this.loadingProvider.simpleLoader();
     this.hiddenBalance = this.wallet.balanceHidden;
     this.backgroundColor = this.themeProvider.getThemeInfo().walletDetailsBackgroundStart;
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
@@ -344,8 +344,14 @@ export class WalletDetailsPage {
   }
 
   private async showHistory(loading?: boolean) {
+    const loader = await this.loadingCtrl.create({
+      message: this.translate.instant('Loading...'),
+      backdropDismiss: true
+    });
+
+    loader.present();
     if (!this.wallet.completeHistory) {
-      await this.loadingProvider.dismissLoader();
+      loader.dismiss();
       return;
     }
     this.history = this.wallet.completeHistory.slice(
@@ -357,7 +363,7 @@ export class WalletDetailsPage {
     });
     if (loading) this.currentPage++;
     setTimeout(async () => {
-      await this.loadingProvider.dismissLoader();
+      loader.dismiss();
     }, 1000);
   }
 
@@ -488,7 +494,6 @@ export class WalletDetailsPage {
 
       if (this.wallet.needsBackup && hasTx && this.showBackupNeededMsg)
         this.openBackupModal();
-
       this.showHistory();
     } else {
       if (opts.error) {

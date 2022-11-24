@@ -1,0 +1,40 @@
+.order-detail-modal-container{
+    display: flex;
+    flex-flow: column;
+    h1{
+        font-weight: 400;
+        font-size: 24px;
+        align-self: center;
+    }
+    .order-detail-container{
+        display: flex;
+        flex-flow: row;
+        .right-part{
+            margin-left: 70px;
+            .mat-dialog-actions{
+                justify-content: flex-end;
+            }
+            .mat-form-field{
+                padding: 0;
+            }
+        }
+        .title{
+            display: inline-block;
+            width: 150px;
+            color: rgba(0, 30, 46, 0.38);
+        }
+        ::ng-deep.mat-form-field-flex{
+            background: #FAFAFB;
+            border: 1px solid rgba(112, 129, 138, 0.38);
+            border-radius: 16px;
+        }
+        ::ng-deep.mat-form-field-underline{
+            display: none;
+        }
+        .button-standard-custom{
+            width: unset !important;
+            margin: unset !important;
+            margin-bottom: 16px !important;
+        }
+    }
+}

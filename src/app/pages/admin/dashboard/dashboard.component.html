@@ -9,17 +9,9 @@
 <mat-sidenav-container
     class="example-container" (backdropClick)="close('backdrop')">
   <mat-sidenav #sidenav (keydown.escape)="close('escape')" disableClose mode="side" [(opened)]="opened">
-    <!-- <mat-list>
-        <mat-list-item>
-          <a>Account Management</a>
-        </mat-list-item>
-        <mat-list-item>
-          <a routerLink="/dashboard/order-tracking">Order Tracking </a>
-        </mat-list-item>
-    </mat-list> -->
     <div class="menu-list">
       <a routerLink="/dashboard/import-seed">Import seed </a>
-      <a routerLink="/dashboard/order-tracking">Order Tracking </a>
+      <a routerLink="/dashboard/order-tracking">Order Summary </a>
       <a routerLink="/dashboard/coin-config">Coin Config </a>
     </div>
   </mat-sidenav>

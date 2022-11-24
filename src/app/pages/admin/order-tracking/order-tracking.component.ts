@@ -226,6 +226,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       ngZone.run(() => {
         this.afterSignInUser(user);
       });
+    this.initializeFilter();
   }
   ngAfterViewInit(): void {}
   redirectForgotPasswordPage() {
@@ -235,7 +236,29 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  initializeFilter(){
+    this.orderProvider
+    .getCoinConfigList()
+    .then((listCoinConfig: CoinConfig[]) => {
+      if (listCoinConfig && listCoinConfig.length > 0) {
+        this.listCoinConfig = listCoinConfig.map(coinConfig => { 
+          return{
+            label: coinConfig.code.toUpperCase()  + ( coinConfig.network === 'testnet' ? ' ( Testnet )' : ''),
+            value: coinConfig
+          }
+        });
+        this.listCoinConfig = [
+          {
+            label: 'All',
+            value: null
+          },
+          ...this.listCoinConfig
+        ]
+        this.toCoin = this.listCoinConfig[0];
+        this.fromCoin = this.listCoinConfig[0];
+      }
+    });
+  }
   redirectImportSeedPage() {
     this.router.navigate(['/import-seed']);
   }
@@ -254,55 +277,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     //  console.log(userDecoded);
   }
   ngOnInit() {
-    this.orderProvider
-      .getCoinConfigList()
-      .then((listCoinConfig: CoinConfig[]) => {
-        if (listCoinConfig && listCoinConfig.length > 0) {
-          this.listCoinConfig = listCoinConfig.map(coinConfig => { 
-            return{
-              label: coinConfig.code.toUpperCase()  + ( coinConfig.network === 'testnet' ? ' ( Testnet )' : ''),
-              value: coinConfig
-            }
-          });
-          this.listCoinConfig = [
-            {
-              label: 'All',
-              value: null
-            },
-            ...this.listCoinConfig
-          ]
-          this.toCoin = this.listCoinConfig[0];
-          this.fromCoin = this.listCoinConfig[0];
-          // this.listCoinSwap = listCoinConfig
-          //   .map(s => {
-          //     if (s.isSwap) {
-          //       return {
-          //         label: this.getCoinName(s),
-          //         value: s.code
-          //       };
-          //     } else {
-          //       return null;
-          //     }
-          //   })
-          //   .filter(coin => coin !== null);
-          // this.listCoinSwap = [{label: 'All', value: null}, ...this.listCoinSwap];
-          // this.fromCoin = this.listCoinSwap[0];
-          // this.listCoinReceive = listCoinConfig
-          //   .map(s => {
-          //     if (s.isReceive) {
-          //       return {
-          //         label: this.getCoinName(s),
-          //         value: s.code
-          //       };
-          //     } else {
-          //       return null;
-          //     }
-          //   })
-          //   .filter(coin => coin !== null);
-          // this.listCoinReceive = [{label: 'All', value: null}, ...this.listCoinReceive];
-          // this.toCoin = this.listCoinReceive[0];
-        }
-      });
+    this.initializeFilter();
   }
 
   onPaginateChange() {
@@ -370,7 +345,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
   }
   openDialog(order): void {
     const dialogRef = this.dialog.open(DialogCustomComponent, {
-      width: '500px',
+      width: '1160px',
       data: order
     });
 

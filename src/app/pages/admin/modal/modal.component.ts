@@ -7,6 +7,7 @@ import { IOrder } from '../../swap/model/order-model';
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: 'modal.component.html',
+  styleUrls: ['./modal.component.scss']
 })
 
 

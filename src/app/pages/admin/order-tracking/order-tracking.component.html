@@ -1,50 +1,56 @@
 <div class="order-tracking-container">
+  <h1>Order summary</h1>
   <div class="coin-filter-container">
-    <mat-form-field appearance="none">
-      <mat-label> Select period: </mat-label>
-      <mat-select [(value)]="dateSelected">
-        <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
-          *ngFor="let coinFilterDate of listCoinFilterDate" [value]="coinFilterDate">
-         <p>{{ coinFilterDate.label }}</p>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="none">
-      <mat-label> Select from coin: </mat-label>
-      <mat-select [(value)]="fromCoin">
-        <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
-          *ngFor="let coinConfig of listCoinConfig" [value]="coinConfig">
-         <p>{{ coinConfig.label }}</p>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="none">
-      <mat-label> Select to coin: </mat-label>
-
-      <mat-select [(value)]="toCoin">
-        <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
-          *ngFor="let coinConfig of listCoinConfig" [value]="coinConfig">
-          <p>{{ coinConfig.label }}</p>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="none">
-      <mat-label> Status: </mat-label>
-
-      <mat-select [(value)]="status">
-        <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
-          *ngFor="let status of listStatus" [value]="status">
-         <p>{{ status.label }}</p>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="filter-group">
+      <mat-form-field appearance="none">
+        <p class="filter-label">Time: </p>
+        <mat-select [(value)]="dateSelected">
+          <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+            *ngFor="let coinFilterDate of listCoinFilterDate" [value]="coinFilterDate">
+           <p class="">{{ coinFilterDate.label }}</p>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="none">
+        <p class="filter-label">From: </p>
+        <mat-select [(value)]="fromCoin">
+          <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+            *ngFor="let coinConfig of listCoinConfig" [value]="coinConfig">
+           <p>{{ coinConfig.label }}</p>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="none">
+        <p class="filter-label">To: </p>
+        <mat-select [(value)]="toCoin">
+          <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+            *ngFor="let coinConfig of listCoinConfig" [value]="coinConfig">
+            <p>{{ coinConfig.label }}</p>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="none">
+        <p class="filter-label">Status: </p>
+        <mat-select [(value)]="status">
+          <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+            *ngFor="let status of listStatus" [value]="status">
+           <p>{{ status.label }}</p>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+    </div>
+    
+    <div class="btn-filter-group">
+      <ion-button class="btn-filter" fill="outline" (click)="applyFilter()">Apply filter</ion-button>
+      <ion-button class="btn-filter" fill="outline" (click)="clearFilter()"> Clear filter</ion-button>
+    </div>
   </div>
-  <ion-button (click)="applyFilter()">Apply filter</ion-button>
-  <ion-button (click)="clearFilter()"> Clear filter</ion-button>
-  <table mat-table  matSort (matSortChange)="sortData($event)" [dataSource]="sortedData" class="mat-elevation-z8">
+
+  <table mat-table  matSort (matSortChange)="sortData($event)" [dataSource]="sortedData" class="mat-elevation-z8 table-order-summary">
   
       <!-- Position Column -->
       <ng-container matColumnDef="id">

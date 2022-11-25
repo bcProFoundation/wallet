@@ -1,18 +1,115 @@
+.page-coin-config-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  background: #E5E5E5;
 
-.page-coin-config-container{
+  p {
+    color: black;
+  }
+
+  label.label-title {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
     display: flex;
-    flex-flow: column;
-    justify-content: flex-start;
-    p{
-        color: black;
+    align-items: center;
+    color: #000000;
+  }
+
+  mat-accordion {
+    width: 90%;
+    align-self: center;
+  }
+
+  mat-grid-list {
+    background: #FFFFFF;
+    margin: 16px;
+    border-radius: 16px;
+  }
+
+  mat-checkbox {
+    align-self: center;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    color: #001E2E;
+  }
+
+
+  input.mat-input-element {
+    width: -webkit-fill-available;
+    padding-left: 9px;
+  }
+
+  .text-inside-grid {
+    position: absolute;
+    left: 5px;
+
+    label {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      color: rgba(0, 30, 46, 0.6);
     }
-    mat-checkbox {
-        color: black;
+
+    span {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      color: rgba(0, 30, 46, 0.6);
     }
-    .min-max-container{
-        display: flex;
+  }
+
+  .input-usd {
+    width: 272px;
+  }
+
+  .input-satoshi {
+    width: 255px;
+  }
+
+  .input-percent {
+    width: 188px;
+  }
+
+  ::ng-deep {
+    .mat-checkbox-checked .mat-checkbox-checkmark {
+      opacity: 1;
+      background: #00658D;
     }
-    mat-form-field{
-        color: black;
+
+    .mat-grid-tile-content {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      left: 32px;
     }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0px;
+      border: 1px solid #70818A;
+      border-radius: 8px;
+
+      .mat-form-field-flex {
+        padding: 0px;
+      }
+    }
+  }
+
+  // .min-max-container {
+  //   display: flex;
+  // }
+
+  // mat-form-field {
+  //   color: black;
+  // }
 }

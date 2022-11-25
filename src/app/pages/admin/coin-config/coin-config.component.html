@@ -10,10 +10,10 @@
   <!-- <ion-button (click)="rescan()">Rescan wallet</ion-button> -->
   <mat-accordion class="example-headers-align" multi>
     <div>
-      <label class="label-title">Swap</label>
+      <h1>Swap</h1>
 
       <ng-container *ngFor="let coin of listSwap">
-        <mat-grid-list cols="8" rowHeight="106px">
+        <mat-grid-list cols="7" rowHeight="106px">
           <mat-grid-tile>
             <div class="text-inside-grid">
               <mat-checkbox [checked]="checked" [disabled]="!coin.isSupport" [(ngModel)]="coin.isEnableSwap">
@@ -22,7 +22,7 @@
             </div>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="7">
+          <mat-grid-tile colspan="6">
             <div class="text-inside-grid">
               <label>Min value</label>
               <mat-form-field class="input-usd" appearance="fill">
@@ -43,10 +43,10 @@
 
 
     <div>
-      <label class="label-title">Receive</label>
+      <h1>Receive</h1>
 
       <ng-container *ngFor="let coin of listReceive">
-        <mat-grid-list cols="8" rowHeight="106px">
+        <mat-grid-list cols="7" rowHeight="106px">
           <mat-grid-tile>
             <div class="text-inside-grid">
               <mat-checkbox [checked]="checked" [disabled]="!coin.isSupport" [(ngModel)]="coin.isEnableReceive">
@@ -55,7 +55,7 @@
             </div>
           </mat-grid-tile>
 
-          <mat-grid-tile colspan="7">
+          <mat-grid-tile colspan="6">
             <div class="text-inside-grid">
               <label>Network fee</label>
               <mat-form-field class="input-satoshi" appearance="fill">

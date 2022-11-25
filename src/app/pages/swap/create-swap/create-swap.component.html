@@ -37,10 +37,10 @@
         <img class="swap-ico" src="assets/img/swap/exchange-sign-{{ currentTheme }}.svg" />
         <span>{{
           formatAmountWithLimitDecimal(
-            coinSwapSelected.rate.USD / coinReceiveSelected.rate.USD,
-            8
+          coinSwapSelected.rate.USD / coinReceiveSelected.rate.USD,
+          8
           )
-        }}</span>&nbsp; <span> {{ coinReceiveSelected.code.toUpperCase() }}</span>
+          }}</span>&nbsp; <span> {{ coinReceiveSelected.code.toUpperCase() }}</span>
         <div class="count-down-container">
           <countdown #cd [config]="{ leftTime: 10, format: 's' }" (event)="handleEvent($event)"></countdown>
           <img src="assets/img/countdown-ico.svg" alt="" />
@@ -63,10 +63,10 @@
                       <p class="mat-symbol-name">{{getCoinName(coinSwapSelected)}}</p>
                     </div>
                   </mat-select-trigger>
-                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                  <mat-option class="custom-option" [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
                     Select coin send
                   </mat-option>
-                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+                  <mat-option class="custom-option" [ngClass]="{'dark': this.currentTheme === 'dark'}"
                     *ngFor="let coin of listConfig.coinSwap" [value]="coin">
                     <img [ngClass]="{'testnet' : coin.network === 'testnet'}" [src]="getImageCoin(coin)">
                     <div>
@@ -100,10 +100,10 @@
                       <p class="mat-symbol-name">{{getCoinName(coinReceiveSelected)}}</p>
                     </div>
                   </mat-select-trigger>
-                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
+                  <mat-option class="custom-option" [ngClass]="{'dark': this.currentTheme === 'dark'}" translate>
                     Select coin receive
                   </mat-option>
-                  <mat-option [ngClass]="{'dark': this.currentTheme === 'dark'}"
+                  <mat-option class="custom-option" [ngClass]="{'dark': this.currentTheme === 'dark'}"
                     *ngFor="let coin of listConfig.coinReceive" [value]="coin">
                     <img [ngClass]="{'testnet' : coin.network === 'testnet'}" [src]="getImageCoin(coin)">
                     <div>
@@ -138,7 +138,7 @@
           <span class="label-network" translate>Network fee: </span>
           <span class="amount-fee-network" *ngIf="!coinReceiveSelected.isToken">
             {{
-              coinReceiveSelected.networkFee
+            coinReceiveSelected.networkFee
             }}
           </span>
           <span class="amount-fee-network" *ngIf="coinReceiveSelected.isToken">

@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CurrencyProvider, OnGoingProcessProvider, OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
-import {MatAccordion} from '@angular/material/expansion';
+import { MatAccordion } from '@angular/material/expansion';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ImportSeedComponent } from '../import-seed/import-seed.component';
 
-interface UpdateCoinConfigOpts{
+interface UpdateCoinConfigOpts {
   code: string;
   network: string;
   isEnableSwap: boolean;
@@ -18,16 +20,17 @@ interface UpdateCoinConfigOpts{
 export class CoinConfigComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
-  listCoinConfig : CoinConfig[] = [];
-  listSwap : CoinConfig[] = [];
+  listCoinConfig: CoinConfig[] = [];
+  listSwap: CoinConfig[] = [];
   listReceive: CoinConfig[] = [];
   listCoinUpdate: UpdateCoinConfigOpts[] = [];
   checked = true;
   lists
-  constructor(private orderProvider: OrderProvider,     
+  constructor(private orderProvider: OrderProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private currencyProvider: CurrencyProvider
-    ) { }
+    private currencyProvider: CurrencyProvider,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.orderProvider.getCoinConfigList().then(result => {
@@ -45,19 +48,19 @@ export class CoinConfigComponent implements OnInit {
   //   } else{
   //     this.listCoinUpdate.push(coinUpdateFound);
   //   }
-  
+
   // }
 
-  updateAllCoin(){
+  updateAllCoin() {
     const finalListUpdate = this.listSwap.concat(this.listReceive);
     this.onGoingProcessProvider.set('Updating');
     this.orderProvider.updateCoinConfig(finalListUpdate)
-    .catch(e => console.log(e)).finally(()=>{
-      this.onGoingProcessProvider.clear();
-    });
+      .catch(e => console.log(e)).finally(() => {
+        this.onGoingProcessProvider.clear();
+      });
   }
 
-  rescan(){
+  rescan() {
     this.onGoingProcessProvider.set('Processing');
     this.orderProvider.rescan().then(result => {
       this.orderProvider.getCoinConfigList().then(result => {
@@ -66,7 +69,7 @@ export class CoinConfigComponent implements OnInit {
         this.listSwap = this.listCoinConfig.filter(coin => coin.isSwap);
         this.listReceive = this.listCoinConfig.filter(coin => coin.isReceive);
       }).catch(e => {
-        console.log(e); 
+        console.log(e);
         this.onGoingProcessProvider.clear();
       });
     }).catch(e => {
@@ -75,21 +78,28 @@ export class CoinConfigComponent implements OnInit {
     });
   }
 
-  getCoinName(coin: CoinConfig): string{
-    if(coin.isToken){
+  getCoinName(coin: CoinConfig): string {
+    if (coin.isToken) {
       return coin.tokenInfo.name;
-    } else{
+    } else {
       const objCoin = this.currencyProvider.getCoin(coin.code.toUpperCase());
       const nameCoin = this.currencyProvider.getCoinName(objCoin) || '';
       return nameCoin;
     }
   }
 
-  getUnitName(coin: CoinConfig): string{
-    if(coin.isToken){
+  getUnitName(coin: CoinConfig): string {
+    if (coin.isToken) {
       return 'XEC';
-    } else{
+    } else {
       return coin.code.toUpperCase();
     }
+  }
+
+  openImportSeedDialog(): void {
+    this.dialog.open(ImportSeedComponent, {
+      width: '604px',
+      panelClass: 'import-seed-dialog'
+    })
   }
 }

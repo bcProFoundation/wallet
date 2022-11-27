@@ -1,11 +1,10 @@
 <div class="page-coin-config-container">
-  <mat-toolbar>
-    <span>Configuration</span>
-    <span class="example-spacer"></span>
-    <button mat-stroked-button>
+  <div class='toolbar'>
+    <h1>Configuration</h1>
+    <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)='openImportSeedDialog()'>
       Import Seed
-    </button>
-  </mat-toolbar>
+    </ion-button>
+  </div>
 
   <!-- <ion-button (click)="rescan()">Rescan wallet</ion-button> -->
   <mat-accordion class="example-headers-align" multi>

@@ -1,34 +1,41 @@
-
+<h1 mat-dialog-title>Import Seed</h1>
 
 <ng-container *ngIf="!isFinish">
   <ng-container *ngIf="!isShowImportSeed">
-    <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Enter Password</mat-label>
+    <label>Password</label>
+    <mat-form-field class="input-password" appearance="fill">
       <input matInput placeholder="Input password here" [(ngModel)]="password">
     </mat-form-field>
-    <div class="password-container">
-      <ion-button (click)="verifyPassword()"> Continue </ion-button>
+    <div class="password-container div-text-align">
+      <ion-button class='remove-shadow-root' (click)="verifyPassword()"> Continue </ion-button>
       <p><a (click)="redirectForgotPasswordPage()">Forget / change password</a></p>
     </div>
   </ng-container>
 
   <ng-container *ngIf="isShowImportSeed">
+    <label>Swap fund</label>
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Swap fund</mat-label>
       <input matInput placeholder="Input mnemonic" [(ngModel)]="keyFund">
     </mat-form-field>
-  
+
+    <label>Deposit fund</label>
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Deposit fund</mat-label>
       <input matInput placeholder="Input mnemonic" [(ngModel)]="keyReceive">
     </mat-form-field>
 
-    <p class="msg-found-key" *ngIf="isShowMessageFoundKey"> Message: Either “Deposit Account” or “Funding Account” has already existed. In case you want to change the accounts, please do re-import seed!</p>
+    <!-- <mat-dialog-actions align="end">
+        <ion-button class="btn-import-seed" (click)="importSeed()">Import seed</ion-button>
+      </mat-dialog-actions> -->
 
-    <ion-button class="btn-import-seed" (click)="importSeed()">Import seed</ion-button>
+    <div class="div-text-align">
+      <p class="msg-found-key" *ngIf="isShowMessageFoundKey"> Message: Either “Deposit Account” or “Funding Account” has
+        already existed. In case you want to change the accounts, please do re-import seed!</p>
+
+      <ion-button class="btn-import-seed remove-shadow-root" (click)="importSeed()">Import seed</ion-button>
+    </div>
   </ng-container>
- 
-   
+
+
 </ng-container>
 
 <ng-container *ngIf="isFinish">

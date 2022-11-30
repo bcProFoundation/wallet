@@ -1,12 +1,22 @@
 <div class="page-coin-config-container">
   <div class='toolbar'>
-    <h1>Configuration</h1>
-    <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)='openImportSeedDialog()'>
-      Import Seed
-    </ion-button>
+    <div class="toolbar-title">
+      <ion-button mat-button (click)="back()">
+        <ion-icon class="remove-shadow-root back-url" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <h1>Configuration</h1>
+    </div>
+
+    <div>
+      <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)="rescan()">
+        Re-scan
+      </ion-button>
+      <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)='openImportSeedDialog()'>
+        Import Seed
+      </ion-button>
+    </div>
   </div>
 
-  <!-- <ion-button (click)="rescan()">Rescan wallet</ion-button> -->
   <mat-accordion class="example-headers-align" multi>
     <div>
       <h1>Swap</h1>
@@ -80,5 +90,7 @@
     </div>
 
   </mat-accordion>
-  <!-- <ion-button (click)="updateAllCoin()">Apply</ion-button> -->
+  <div class='navbar'>
+    <ion-button class='remove-shadow-root' (click)="updateAllCoin()">Apply</ion-button>
+  </div>
 </div>

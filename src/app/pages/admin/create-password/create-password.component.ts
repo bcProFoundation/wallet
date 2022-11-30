@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
@@ -16,6 +17,11 @@ export enum PassWordHandleCases {
   styleUrls: ['./create-password.component.scss'],
 })
 export class CreatePasswordComponent implements OnInit {
+  public PassWordHandleCases = {
+    ForgotPassword : 1,
+    CreateNewPassword : 2,
+    SuccessfulInfo:3
+  }
   navPramss: any;
   public password = '';
   public oldPassword = '';
@@ -24,7 +30,7 @@ export class CreatePasswordComponent implements OnInit {
   public confirmPassword = '';
   public recoveryKeyInput = '';
   public passwordHandleCases = 0;
-  public PassWordHandleCases = PassWordHandleCases;
+  public handleCasePassword = 0;
 
   constructor(
     private orderProvider: OrderProvider,
@@ -32,7 +38,9 @@ export class CreatePasswordComponent implements OnInit {
     private errorsProvider: ErrorsProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
-    private router: Router
+    private router: Router,
+    public dialogRef: MatDialogRef<CreatePasswordComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) { 
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
@@ -42,9 +50,12 @@ export class CreatePasswordComponent implements OnInit {
     if(this.navPramss.passwordHandleCases){
       this.passwordHandleCases = this.navPramss.passwordHandleCases;
     }
+    this.passwordHandleCases = this.data.passWordHandleCases;
+    this.handleCasePassword = this.data?.passWordHandleCases;
   }
 
-  ngOnInit() {}
+    ngOnInit(): void {
+    }
 
   createPassword(){
     if(this.password.trim().length === 0 ){
@@ -58,7 +69,7 @@ export class CreatePasswordComponent implements OnInit {
       password: this.password
     }
     this.orderProvider.createPassword(userOpts).then(recoveryKeyServerReturn => {
-      this.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKeyServerReturn;
     }).catch(e => {
       this.showErrorInfoSheet(e);
@@ -79,10 +90,17 @@ export class CreatePasswordComponent implements OnInit {
      userOpts.recoveryKey = this.recoveryKeyInput
     }
     this.orderProvider.renewPassword(userOpts).then(recoveryKey => {
-      this.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.data.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKey;
     })
-    
+  }
+
+  reNewPassword1(){
+    this.handleCasePassword = 3;
+  }
+
+  reNewPassword2(){
+    this.handleCasePassword = 2;
   }
 
   public showErrorInfoSheet(

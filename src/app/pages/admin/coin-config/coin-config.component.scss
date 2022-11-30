@@ -14,10 +14,31 @@
 
   .toolbar {
     width: 90%;
-    align-self: center;
+    align-self: flex-start;
     display: flex;
     flex-flow: row;
     justify-content: space-between;
+    margin-left: 2.3%;
+
+    .toolbar-title {
+      display: flex;
+      align-items: center;
+
+      ion-button.md.button.button-solid.ion-activatable.ion-focusable.hydrated {
+        --background: #f7f7f7;
+        color: black;
+      
+        :host(.button-solid) {
+          --background-activated: none !important;
+        }
+      }
+
+      .back-url {
+        width: 16px;
+        height: 16px;
+        left: -30px;
+      }  
+    }
 
     .btn-filter {
       --border-color: #70818A;
@@ -27,6 +48,24 @@
       font-weight: 600;
       --border-width: 1px;
       padding-left: 10px;
+    }
+  }
+
+  .navbar {
+    width: 90%;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    align-self: center;
+    display: flex;
+    justify-content: flex-end;
+
+    ion-button.remove-shadow-root {
+      padding: 9px 24px;
+      background: #00658D;
+      border-radius: 100px;
+      --box-shadow: none;
+      margin-bottom: 16px;
     }
   }
 

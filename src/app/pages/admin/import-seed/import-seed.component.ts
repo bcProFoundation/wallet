@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { BwcErrorProvider, ErrorsProvider, OnGoingProcessProvider, OrderProvider } from 'src/app/providers';
-import { PassWordHandleCases } from '../create-password/create-password.component';
+import { CreatePasswordComponent, PassWordHandleCases } from '../create-password/create-password.component';
 import { IApproveOpts } from '../login-admin/login-admin.component';
 import { AuthenticationService } from '../service/authentication.service';
 
@@ -25,18 +26,25 @@ export class ImportSeedComponent implements OnInit {
     private bwcErrorProvider: BwcErrorProvider,
     private authenticationService: AuthenticationService,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
+
   ) { }
 
   ngOnInit() {
     this.orderProvider.login({id_token: this.authenticationService.currentUserValue}).then( (approveReq : IApproveOpts) => {
       if(approveReq.isVerified){
         if(!approveReq.isCreatePassword) {
-          this.router.navigate(['/dashboard/create-password'], {
-            state: {
-              passwordHandleCases: PassWordHandleCases.CreateNewPassword
-            }
-          });
+          // this.router.navigate(['/dashboard/create-password'], {
+          //   state: {
+          //     passwordHandleCases: PassWordHandleCases.CreateNewPassword
+          //   }
+          // });
+          this.dialog.open(CreatePasswordComponent, {
+            width: '604px',
+            panelClass: 'create-password-dialog',
+            data: {passWordHandleCases: PassWordHandleCases.CreateNewPassword}
+          })
         }
       }
      }).catch(e => {
@@ -102,10 +110,15 @@ export class ImportSeedComponent implements OnInit {
     );
   }
   redirectForgotPasswordPage(){
-    this.router.navigate(['/dashboard/create-password'], {
-      state: {
-        passwordHandleCases :  PassWordHandleCases.ForgotPassword
-      }
+    // this.router.navigate(['/dashboard/create-password'], {
+    //   state: {
+    //     passwordHandleCases :  PassWordHandleCases.ForgotPassword
+    //   }
+    // })
+    this.dialog.open(CreatePasswordComponent, {
+      width: '604px',
+      panelClass: 'create-password-dialog',
+      data: {passWordHandleCases: PassWordHandleCases.ForgotPassword}
     })
   }
 }

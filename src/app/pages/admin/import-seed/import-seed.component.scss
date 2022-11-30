@@ -19,8 +19,19 @@ label {
 }
 
 p {
-	color: black;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 20px;
+	display: flex;
+	align-items: center;
 	text-align: center;
+	letter-spacing: 0.1px;
+	justify-content: center;	
+	color: #00658D;
+}
+
+a {
+	text-decoration: none;
 }
 
 .password-container {
@@ -33,6 +44,9 @@ p {
 
 input.mat-input-element {
 	width: -webkit-fill-available;
+	padding-left: 9px;
+}
+textarea.mat-input-element {
 	padding-left: 9px;
 }
 
@@ -49,6 +63,18 @@ ion-button.remove-shadow-root {
 
 .msg-found-key {
 	padding-left: 16px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	display: flex;
+	align-items: center;
+	letter-spacing: 0.25px;
+	color: rgba(0, 30, 46, 0.6);
+
+	ion-icon {
+		width: 50px;
+		height: 20px;
+	}
 }
 
 .btn-renew-password {
@@ -67,7 +93,7 @@ ion-button.remove-shadow-root {
 		margin-bottom: 48px;
 
 		.mat-form-field-flex {
-			padding: 0px;
+			padding: 0px !important;
 		}
 	}
 }

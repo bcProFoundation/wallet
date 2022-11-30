@@ -53,7 +53,7 @@ export class LoginAdminComponent implements OnInit {
       //   });
       // }else{
       // }
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard/order-tracking']);
     }
    }).catch(e => {
     this.showErrorInfoSheet(e);

@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common'
 import { CurrencyProvider, OnGoingProcessProvider, OrderProvider } from 'src/app/providers';
 import { CoinConfig } from '../../swap/config-swap';
 import { MatAccordion } from '@angular/material/expansion';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ImportSeedComponent } from '../import-seed/import-seed.component';
 
 interface UpdateCoinConfigOpts {
@@ -29,6 +30,7 @@ export class CoinConfigComponent implements OnInit {
   constructor(private orderProvider: OrderProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private currencyProvider: CurrencyProvider,
+    private location: Location,
     public dialog: MatDialog
   ) { }
 
@@ -101,5 +103,9 @@ export class CoinConfigComponent implements OnInit {
       width: '604px',
       panelClass: 'import-seed-dialog'
     })
+  }
+
+  back(): void {
+    this.location.back()
   }
 }

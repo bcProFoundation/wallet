@@ -1,19 +1,32 @@
 app-dashboard{
-    .mat-drawer-container{
-        height: 100%;
+  .mat-drawer-container{
+    height: 100%;
+  }
+  .menu-button{
+    font-size: 35px;
+  }
+  .menu-list{
+    display: flex;
+    flex-flow: column;
+    a{
+        margin: 20px;
     }
-    .menu-button{
-        font-size: 35px;
-    }
-    .menu-list{
-        display: flex;
-        flex-flow: column;
-        a{
-           margin: 20px;
-        }
-    }
-    .custom-toolbar-row{
-        display: flex;
-        justify-content: space-between;
-    }
+  }
+  .custom-toolbar-row{
+    display: flex;
+    justify-content: flex-end;
+    height: 88px;
+  }
+  .custom-btn {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+    color: #00658D;
+    margin: 0px 10px;
+    background: #fff;
+  }
+  a {
+    text-decoration: none;
+  }
 }

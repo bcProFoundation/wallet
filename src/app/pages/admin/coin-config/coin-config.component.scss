@@ -27,6 +27,7 @@
       ion-button.md.button.button-solid.ion-activatable.ion-focusable.hydrated {
         --background: #f7f7f7;
         color: black;
+        --box-shadow:none;
       
         :host(.button-solid) {
           --background-activated: none !important;

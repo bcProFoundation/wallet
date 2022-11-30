@@ -19,6 +19,7 @@ export class ImportSeedComponent implements OnInit {
   public keyReceive = '';
   public isFinish = false;
   public isShowMessageFoundKey = false;
+  public isTextFieldType: boolean;
   constructor(
     private orderProvider: OrderProvider,
     private errorsProvider: ErrorsProvider,
@@ -120,5 +121,9 @@ export class ImportSeedComponent implements OnInit {
       panelClass: 'create-password-dialog',
       data: {passWordHandleCases: PassWordHandleCases.ForgotPassword}
     })
+  }
+
+  togglemyPasswordFieldType(){
+    this.isTextFieldType = !this.isTextFieldType;
   }
 }

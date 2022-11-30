@@ -96,4 +96,15 @@ ion-button.remove-shadow-root {
 			padding: 0px !important;
 		}
 	}
+	
+	.input-password {
+		button {
+			margin-right: 10px;
+			color: rgba(0, 30, 46, 0.6);
+		}
+		ion-icon {
+			width: 25px;
+			height: 20px;
+		}
+	}
 }

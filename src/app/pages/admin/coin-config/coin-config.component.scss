@@ -3,6 +3,7 @@
   flex-flow: column;
   justify-content: flex-start;
   background: #f7f7f7;
+  margin-bottom: 60px;
 
   p {
     color: black;
@@ -60,13 +61,17 @@
     align-self: center;
     display: flex;
     justify-content: flex-end;
+    background: linear-gradient(0deg, rgba(0, 93, 141, 0.05), rgba(0, 93, 141, 0.05)), #FAFAFB;
+    border-radius: 16px 16px 0px 0px;
+    height: 70px;
 
     ion-button.remove-shadow-root {
       padding: 9px 24px;
       background: #00658D;
       border-radius: 100px;
       --box-shadow: none;
-      margin-bottom: 16px;
+      margin-top: 16px;
+      margin-right: 16px;
     }
   }
 

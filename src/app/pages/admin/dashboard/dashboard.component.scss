@@ -16,6 +16,21 @@ app-dashboard{
     display: flex;
     justify-content: flex-end;
     height: 88px;
+
+    button {
+      display: flex;
+      align-items: center;
+    }
+
+    a {
+      display: flex;
+    }
+
+    ion-icon{
+      align-self: center;
+      margin-right: 5px;
+    }
+    
   }
   .custom-btn {
     font-weight: 600;

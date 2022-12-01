@@ -138,15 +138,15 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       value: null
     },
     {
-      label: 'today',
+      label: 'Today',
       value: CoinFilterDate.DAY
     },
     {
-      label: 'this week',
+      label: 'This week',
       value: CoinFilterDate.WEEK
     },
     {
-      label: 'this month',
+      label: 'This month',
       value: CoinFilterDate.MONTH
     }
   ];
@@ -165,7 +165,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       value: null
     },
     {
-      label: 'Complete',
+      label: 'Completed',
       value: 'complete'
     },
     {

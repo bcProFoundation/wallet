@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,12 +24,15 @@ export class CreatePasswordComponent implements OnInit {
     SuccessfulInfo:3
   }
   navPramss: any;
-  public password = '';
-  public oldPassword = '';
-  public newPassword = '';
-  public recoveryKey = '';
-  public confirmPassword = '';
-  public recoveryKeyInput = '';
+  public password!: string;
+  public oldPassword!: string;
+  public newPassword!: string;
+  public recoveryKey!: string;
+  public confirmPassword!: string;
+  public recoveryKeyInput!: string;
+  public formData!: FormGroup;
+  public showError: boolean = false;
+  public message:string;
   public passwordHandleCases = 0;
   public handleCasePassword = 0;
 
@@ -54,44 +58,62 @@ export class CreatePasswordComponent implements OnInit {
     this.handleCasePassword = this.data?.passWordHandleCases;
   }
 
-    ngOnInit(): void {
-    }
+  ngOnInit() {
+    this.formData = new FormGroup({
+      password: new FormControl("", [Validators.required]),
+      oldPassword: new FormControl("", [Validators.required]),
+      newPassword: new FormControl("", [Validators.required]),
+      recoveryKey: new FormControl("", [Validators.required]),
+      recoveryKeyInput: new FormControl("", [Validators.required]),
+      confirmPassword: new FormControl("", [Validators.required]),
+    });
+  }
 
-  createPassword(){
-    if(this.password.trim().length === 0 ){
-      return this.showErrorInfoSheet(new Error("Password can not be empty"));
+  createPassword(data: any){
+    if(data.password.trim().length === 0 ){
+      // return this.showErrorInfoSheet(new Error("Password can not be empty"));
+      this.showError = true,
+      this.message = "Password can not be empty"
     }
-    if(this.password !== this.confirmPassword){
-      return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
+    if(data.password !== this.confirmPassword) {
+      // return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
+      this.showError = true,
+      this.message = "Invalid password confirmation . Please try again"
     }
     const userOpts ={ 
       id_token: this.authenticaionService.currentUserValue,
-      password: this.password
+      password: data.password
     }
     this.orderProvider.createPassword(userOpts).then(recoveryKeyServerReturn => {
       this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKeyServerReturn;
     }).catch(e => {
-      this.showErrorInfoSheet(e);
+      // this.showErrorInfoSheet(e);
+      this.showError = true;
+      this.message = e.error.error; 
     })
   }
 
-  reNewPassword(){
+  reNewPassword(data: any){
     const userOpts = {
       id_token: this.authenticaionService.currentUserValue,
-      newPassword: this.newPassword,
+      newPassword: data.newPassword,
       oldPassword: '',
       recoveryKey: ''
     } ;
     
     if(this.oldPassword){
-     userOpts.oldPassword = this.oldPassword
+     userOpts.oldPassword = data.oldPassword
     } else {
-     userOpts.recoveryKey = this.recoveryKeyInput
+     userOpts.recoveryKey = data.recoveryKeyInput
     }
     this.orderProvider.renewPassword(userOpts).then(recoveryKey => {
       this.data.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKey;
+    }).catch(e => {
+      // this.showErrorInfoSheet(e);
+      this.showError = true;
+      this.message = e.error.error; 
     })
   }
 

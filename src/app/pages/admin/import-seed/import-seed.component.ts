@@ -6,6 +6,7 @@ import { BwcErrorProvider, ErrorsProvider, OnGoingProcessProvider, OrderProvider
 import { CreatePasswordComponent, PassWordHandleCases } from '../create-password/create-password.component';
 import { IApproveOpts } from '../login-admin/login-admin.component';
 import { AuthenticationService } from '../service/authentication.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-import-seed',
@@ -13,10 +14,14 @@ import { AuthenticationService } from '../service/authentication.service';
   styleUrls: ['./import-seed.component.scss'],
 })
 export class ImportSeedComponent implements OnInit {
-  public password = '';
+  public password!: string;
+  public formData!: FormGroup;
+  public showErrorVerifyPassword = false;
+  public showErrorImportSeed = false;
+  public message: string;
   public isShowImportSeed = false;
-  public keyFund = '';
-  public keyReceive = '';
+  public keyFund!: string;
+  public keyReceive!: string;
   public isFinish = false;
   public isShowMessageFoundKey = false;
   public isTextFieldType: boolean;
@@ -33,6 +38,11 @@ export class ImportSeedComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.formData = new FormGroup({
+      password: new FormControl("", [Validators.required]),
+      keyFund: new FormControl("", [Validators.required]),
+      keyReceive: new FormControl("", [Validators.required])
+    });
     this.orderProvider.login({id_token: this.authenticationService.currentUserValue}).then( (approveReq : IApproveOpts) => {
       if(approveReq.isVerified){
         if(!approveReq.isCreatePassword) {
@@ -48,40 +58,45 @@ export class ImportSeedComponent implements OnInit {
           })
         }
       }
-     }).catch(e => {
+    }).catch(e => {
       this.showErrorInfoSheet(e);
-     })
+    })
   }
 
-  verifyPassword(){
+  verifyPassword(data: any){
     const userOpts = {
       id_token: this.authenticationService.currentUserValue,
-      password: this.password
+      password: data.password
     };
     this.orderProvider.verifyPassword(userOpts).then(result =>{
       this.isShowImportSeed = result;
       this.orderProvider.checkKeyExist().then(result => {
         this.isShowMessageFoundKey = result.isKeyExisted;
       }).catch(e => {
-        this.showErrorInfoSheet(e);
+        this.showErrorVerifyPassword = true;
+        this.message = e.error.error;
+        // this.showErrorInfoSheet(e);
       });
     }).catch(e => {
-      this.isShowImportSeed = false;
-      this.showErrorInfoSheet(e);
+      this.showErrorVerifyPassword = true;
+      this.message = e.error.error;
+      // this.showErrorInfoSheet(e);
     })
   }
-  importSeed(){
+  importSeed(data: any){
     const keysOpts = {
       id_token: this.authenticationService.currentUserValue,
-      keyFund: this.keyFund,
-      keyReceive: this.keyReceive
+      keyFund: data.keyFund,
+      keyReceive: data.keyReceive
     }
     this.onGoingProcessProvider.set('Processing');
     this.orderProvider.importSeed(keysOpts).then(result =>{
       this.isFinish = result;
     }).catch(e => {
       this.isFinish = false;
-      this.showErrorInfoSheet(e);
+      // this.showErrorInfoSheet(e);
+      this.showErrorImportSeed =  true;
+      this.message = e.error.error
     }).finally(()=>{
       this.onGoingProcessProvider.clear();
     })

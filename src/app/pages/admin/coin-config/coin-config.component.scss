@@ -11,10 +11,14 @@
 
   h1 {
     color: #001E2E;
+
+    &.h1-content {
+      margin-bottom: 32px;
+    }
   }
 
   .toolbar {
-    width: 90%;
+    width: 93%;
     align-self: flex-start;
     display: flex;
     flex-flow: row;
@@ -29,6 +33,7 @@
         --background: #f7f7f7;
         color: black;
         --box-shadow:none;
+        margin-top: 13px;
       
         :host(.button-solid) {
           --background-activated: none !important;
@@ -171,7 +176,7 @@
   //   display: flex;
   // }
 
-  // mat-form-field {
-  //   color: black;
-  // }
+  mat-form-field {
+    padding: 0 32px 0 8px;
+  }
 }

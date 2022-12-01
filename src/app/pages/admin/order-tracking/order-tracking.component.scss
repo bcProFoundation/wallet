@@ -1,7 +1,9 @@
 .order-tracking-container{
-  padding: 100px;
+  width: 90%;
+  margin-left: 5%;
   h1{
     color: #001E2E;
+    margin-bottom: 32px;
   }
   .coin-filter-container{
     display: flex;
@@ -74,4 +76,10 @@
   .highlight{
     background-color: yellow;
   }
+  }
+
+  mat-paginator {
+    ::ng-deep mat-form-field.mat-paginator-page-size-select {
+      width: 75px;
+    }
   }

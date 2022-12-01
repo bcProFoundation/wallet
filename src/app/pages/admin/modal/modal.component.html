@@ -1,31 +1,33 @@
 <div mat-dialog-content>
   <div  class="order-detail-modal-container">
-    <h1>Order details</h1>
+    <h1>Order detail</h1>
     <div class="order-detail-container">
       <div class="left-part">
         <p>
-          <span class="title">Order Id: </span>
-          <span> {{ data.id }}</span>
+          <span class="title">Order ID: </span>
+          <span style="letter-spacing: 0.5px"> {{ data.id }}</span>
          </p>
         
          <p>
           <span class="title">From coin: </span>
-          <span> {{ data.fromCoinCode }}</span>
+          <span style="text-transform:uppercase"> {{ data.fromCoinCode }}</span>
          </p>
         
          <p>
           <span class="title">Is from token: </span>
-          <span> {{ data.isFromToken }}</span>
+          <!-- <span> {{ data.isFromToken }}</span> -->
+          <mat-checkbox disabled [(ngModel)]="data.isFromToken"></mat-checkbox>
          </p>
         
          <p>
           <span class="title">To coin: </span>
-          <span> {{ data.toCoinCode }}</span>
+          <span style="text-transform:uppercase"> {{ data.toCoinCode }}</span>
          </p>
         
          <p>
           <span class="title"> Is to Token: </span>
-          <span> {{ data.isToToken }}</span>
+          <!-- <span> {{ data.isToToken }}</span> -->
+          <mat-checkbox disabled [(ngModel)]="data.isToToken"></mat-checkbox>
          </p>
         
          <p>
@@ -39,7 +41,7 @@
          </p>
          
          <p>
-          <span class="title">listTxIdUserDeposit</span>
+          <span class="title">Deposit Txid</span>
           <ng-container *ngFor="let tx of data.listTxIdUserDeposit">
             <a (click)="viewOnBlockchain(data.fromCoinCode, data.isFromToken, tx)">
               {{ tx }}
@@ -49,7 +51,7 @@
          </p>
         
          <p>
-          <span class="title">listTxIdUserReceive</span>
+          <span class="title">Received Txid</span>
           <ng-container *ngFor="let tx of data.listTxIdUserReceive">
             <a (click)="viewOnBlockchain(data.toCoinCode, data.isToToken, tx)">
               {{ tx }}
@@ -85,13 +87,14 @@
         
          <p>
           <span class="title">Status: </span>
-          <span> {{ data.status }}</span>
+          <span style="text-transform:capitalize"> {{ data.status == 'complete' ? 'Completed' : data.status }}</span>
          </p>
         
         
          <p>
           <span class="title">Is resolve: </span>
-          <span>{{ data.isResolve }}</span>
+          <!-- <span>{{ data.isResolve }}</span> -->
+          <mat-checkbox disabled [(ngModel)]="data.isResolve"></mat-checkbox>
          </p>
           <mat-form-field appearance="fill">
             <mat-label>Note</mat-label>

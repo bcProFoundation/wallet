@@ -117,7 +117,7 @@ export class CustomAmountPage {
         });
       }
     }
-    this.unitIndex = 0;
+    this.unitIndex = 1;
     //  currency have preference
     this.fiatCode =
       this.config.wallet.settings.alternativeIsoCode ||

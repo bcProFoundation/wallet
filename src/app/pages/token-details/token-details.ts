@@ -1,13 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { ChangeDetectorRef, Component, NgZone, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
-import { ModalController, ToastController } from "@ionic/angular";
+import { LoadingController, ModalController, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import _ from "lodash";
 import moment from "moment";
 import { Subscription } from "rxjs";
 import { Token } from "src/app/models/tokens/tokens.model";
-import { AddressBookProvider, LoadingProvider, PlatformProvider } from "src/app/providers";
+import { AddressBookProvider, PlatformProvider } from "src/app/providers";
 import { ActionSheetProvider } from "src/app/providers/action-sheet/action-sheet";
 import { AppProvider } from "src/app/providers/app/app";
 import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
@@ -82,7 +82,7 @@ export class TokenDetailsPage {
     private appProvider: AppProvider,
     private addressbookProvider: AddressBookProvider,
     public toastController: ToastController,
-    private loadingProvider: LoadingProvider
+    private loadingCtrl: LoadingController
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -195,7 +195,6 @@ export class TokenDetailsPage {
   }
 
   ionViewWillEnter() {
-    this.loadingProvider.autoLoader();
     this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`;
     this.loadToken();
     // Getting info from cache
@@ -436,8 +435,16 @@ export class TokenDetailsPage {
   }
 
 
-  private showHistory(loading?: boolean) {
-    if (!this.wallet.completeHistory) return;
+  private async showHistory(loading?: boolean) {
+    const loader = await this.loadingCtrl.create({
+      message: this.translate.instant('Loading...'),
+      backdropDismiss: true
+    });
+    loader.present();
+    if (!this.wallet.completeHistory) {
+      loader.dismiss();
+      return;
+    }
     this.history = _.filter(this.wallet.completeHistory, item => item.tokenId == this.token.tokenId)
     this.history = this.history.slice(
       0,
@@ -448,6 +455,9 @@ export class TokenDetailsPage {
     });
     this.isShowZeroState = true;
     if (loading) this.currentPage++;
+    setTimeout(async () => {
+      loader.dismiss();
+    }, 1000);
   }
 
   private updateHistory = opts => {

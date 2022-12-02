@@ -1,73 +1,96 @@
-
 <div class="page-coin-config-container">
-  <ion-button (click)="rescan()">Rescan wallet</ion-button>
-  <mat-accordion class="example-headers-align" multi>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Swap
-        </mat-panel-title>
-        <mat-panel-description>
-          Swap coin
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-  <ng-container *ngFor="let coin of listSwap">
-    <mat-checkbox
-    [checked]="checked"
-    [disabled]="!coin.isSupport"
-    [(ngModel)]="coin.isEnableSwap">
-    {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
-    </mat-checkbox>
-    <div class="min-max-container">
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Min (USD)</mat-label>
-        <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.min">
-      </mat-form-field>
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Max (USD)</mat-label>
-        <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.max">
-      </mat-form-field>
+  <div class='toolbar'>
+    <div class="toolbar-title">
+      <ion-button mat-button (click)="back()">
+        <ion-icon class="remove-shadow-root back-url" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <h1>Configuration</h1>
     </div>
-    
-  </ng-container>
-    
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Receive
-        </mat-panel-title>
-        <mat-panel-description>
-          Receive coin
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-      <ng-container *ngFor="let coin of listReceive">
-        <mat-checkbox
-        [checked]="checked"
-        [disabled]="!coin.isSupport"
-        [(ngModel)]="coin.isEnableReceive">
-        {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
-        </mat-checkbox>
-        <div class="min-max-container">
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Network fee ({{ getUnitName(coin) }} )</mat-label>
-            <input type="number" matInput placeholder="Input min here" [(ngModel)]="coin.networkFee">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Service fee (%)</mat-label>
-            <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.serviceFee">
-          </mat-form-field>
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Settle fee (USD)</mat-label>
-            <input type="number" matInput placeholder="Input max here" [(ngModel)]="coin.settleFee">
-          </mat-form-field>
-          </div>
+
+    <div>
+      <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)="rescan()">
+        Re-scan
+      </ion-button>
+      <ion-button mat-stroked-button class="btn-filter" fill="outline" (click)='openImportSeedDialog()'>
+        Import Seed
+      </ion-button>
+    </div>
+  </div>
+
+  <mat-accordion class="example-headers-align" multi>
+    <div>
+      <h1 class="h1-content">Swap</h1>
+
+      <ng-container *ngFor="let coin of listSwap">
+        <mat-grid-list cols="7" rowHeight="106px">
+          <mat-grid-tile>
+            <div class="text-inside-grid">
+              <mat-checkbox [checked]="checked" [disabled]="!coin.isSupport" [(ngModel)]="coin.isEnableSwap">
+                {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+              </mat-checkbox>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="6">
+            <div class="text-inside-grid">
+              <label>Min value</label>
+              <mat-form-field class="input-usd" appearance="fill">
+                <input type="number" matInput placeholder="Input min here" min='0' [(ngModel)]="coin.min">
+                <span matSuffix>USD &nbsp;</span>
+              </mat-form-field>
+
+              <label>Max value</label>
+              <mat-form-field class="input-usd" appearance="fill">
+                <input type="number" matInput placeholder="Input max here" min='0' [(ngModel)]="coin.max">
+                <span matSuffix>USD &nbsp;</span>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
       </ng-container>
-    
-    </mat-expansion-panel>
+    </div>
+
+
+    <div>
+      <h1 class="h1-content">Receive</h1>
+
+      <ng-container *ngFor="let coin of listReceive">
+        <mat-grid-list cols="7" rowHeight="106px">
+          <mat-grid-tile>
+            <div class="text-inside-grid">
+              <mat-checkbox [checked]="checked" [disabled]="!coin.isSupport" [(ngModel)]="coin.isEnableReceive">
+                {{ getCoinName(coin) }} {{ coin.network === 'testnet' ? ' (testnet)' : '' }}
+              </mat-checkbox>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile colspan="6">
+            <div class="text-inside-grid">
+              <label>Network fee</label>
+              <mat-form-field class="input-satoshi" appearance="fill">
+                <input type="number" matInput placeholder="Input min here" min='0' [(ngModel)]="coin.networkFee">
+                <span matSuffix>{{ getUnitName(coin) }} &nbsp;</span>
+              </mat-form-field>
+
+              <label>Service fee</label>
+              <mat-form-field class="input-percent" appearance="fill">
+                <input type="number" matInput placeholder="Input max here" min='0' [(ngModel)]="coin.serviceFee">
+                <span matSuffix>% &nbsp;</span>
+              </mat-form-field>
+
+              <label>Settle fee</label>
+              <mat-form-field class="input-usd" appearance="fill">
+                <input type="number" matInput placeholder="Input max here" min='0' [(ngModel)]="coin.settleFee">
+                <span matSuffix>USD &nbsp;</span>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </ng-container>
+    </div>
 
   </mat-accordion>
-  <ion-button (click)="updateAllCoin()">Apply</ion-button>
+  <div class='navbar'>
+    <ion-button class='remove-shadow-root' (click)="updateAllCoin()">Apply</ion-button>
+  </div>
 </div>

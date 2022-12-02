@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BwcErrorProvider, ErrorsProvider, OrderProvider } from 'src/app/providers';
@@ -16,15 +18,23 @@ export enum PassWordHandleCases {
   styleUrls: ['./create-password.component.scss'],
 })
 export class CreatePasswordComponent implements OnInit {
+  public PassWordHandleCases = {
+    ForgotPassword : 1,
+    CreateNewPassword : 2,
+    SuccessfulInfo:3
+  }
   navPramss: any;
-  public password = '';
-  public oldPassword = '';
-  public newPassword = '';
-  public recoveryKey = '';
-  public confirmPassword = '';
-  public recoveryKeyInput = '';
+  public password!: string;
+  public oldPassword!: string;
+  public newPassword!: string;
+  public recoveryKey!: string;
+  public confirmPassword!: string;
+  public recoveryKeyInput!: string;
+  public formData!: FormGroup;
+  public showError: boolean = false;
+  public message:string;
   public passwordHandleCases = 0;
-  public PassWordHandleCases = PassWordHandleCases;
+  public handleCasePassword = 0;
 
   constructor(
     private orderProvider: OrderProvider,
@@ -32,7 +42,9 @@ export class CreatePasswordComponent implements OnInit {
     private errorsProvider: ErrorsProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
-    private router: Router
+    private router: Router,
+    public dialogRef: MatDialogRef<CreatePasswordComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) { 
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
@@ -42,47 +54,75 @@ export class CreatePasswordComponent implements OnInit {
     if(this.navPramss.passwordHandleCases){
       this.passwordHandleCases = this.navPramss.passwordHandleCases;
     }
+    this.passwordHandleCases = this.data.passWordHandleCases;
+    this.handleCasePassword = this.data?.passWordHandleCases;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formData = new FormGroup({
+      password: new FormControl("", [Validators.required]),
+      oldPassword: new FormControl("", [Validators.required]),
+      newPassword: new FormControl("", [Validators.required]),
+      recoveryKey: new FormControl("", [Validators.required]),
+      recoveryKeyInput: new FormControl("", [Validators.required]),
+      confirmPassword: new FormControl("", [Validators.required]),
+    });
+  }
 
-  createPassword(){
-    if(this.password.trim().length === 0 ){
-      return this.showErrorInfoSheet(new Error("Password can not be empty"));
+  createPassword(data: any){
+    if(data.password.trim().length === 0 ){
+      // return this.showErrorInfoSheet(new Error("Password can not be empty"));
+      this.showError = true,
+      this.message = "Password can not be empty"
     }
-    if(this.password !== this.confirmPassword){
-      return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
+    if(data.password !== this.confirmPassword) {
+      // return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
+      this.showError = true,
+      this.message = "Invalid password confirmation . Please try again"
     }
     const userOpts ={ 
       id_token: this.authenticaionService.currentUserValue,
-      password: this.password
+      password: data.password
     }
     this.orderProvider.createPassword(userOpts).then(recoveryKeyServerReturn => {
-      this.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKeyServerReturn;
     }).catch(e => {
-      this.showErrorInfoSheet(e);
+      // this.showErrorInfoSheet(e);
+      this.showError = true;
+      this.message = e.error.error; 
     })
   }
 
-  reNewPassword(){
+  reNewPassword(data: any){
     const userOpts = {
       id_token: this.authenticaionService.currentUserValue,
-      newPassword: this.newPassword,
+      newPassword: data.newPassword,
       oldPassword: '',
       recoveryKey: ''
     } ;
     
     if(this.oldPassword){
-     userOpts.oldPassword = this.oldPassword
+     userOpts.oldPassword = data.oldPassword
     } else {
-     userOpts.recoveryKey = this.recoveryKeyInput
+     userOpts.recoveryKey = data.recoveryKeyInput
     }
     this.orderProvider.renewPassword(userOpts).then(recoveryKey => {
-      this.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.data.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKey;
+    }).catch(e => {
+      // this.showErrorInfoSheet(e);
+      this.showError = true;
+      this.message = e.error.error; 
     })
-    
+  }
+
+  reNewPassword1(){
+    this.handleCasePassword = 3;
+  }
+
+  reNewPassword2(){
+    this.handleCasePassword = 2;
   }
 
   public showErrorInfoSheet(

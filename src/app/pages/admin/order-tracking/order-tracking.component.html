@@ -42,10 +42,10 @@
         </mat-select>
       </mat-form-field>
     
+      <ion-button class="btn-filter" fill="outline" (click)="applyFilter()">Apply filter</ion-button>
     </div>
     
-    <div class="btn-filter-group">
-      <ion-button class="btn-filter" fill="outline" (click)="applyFilter()">Apply filter</ion-button>
+    <div>
       <ion-button class="btn-filter" fill="outline" (click)="clearFilter()"> Clear filter</ion-button>
     </div>
   </div>
@@ -54,8 +54,8 @@
   
       <!-- Position Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> id </th>
-        <td mat-cell *matCellDef="let element" class="truncate-cell id-cell"> {{element.id}} </td>
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element" class="truncate-cell id-cell" style="letter-spacing: 0.5px"> {{element.id}} </td>
       </ng-container>
     
       <!-- Name Column -->
@@ -79,7 +79,7 @@
          <!-- Symbol Column -->
          <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> Status </th>
-          <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+          <td mat-cell *matCellDef="let element" style="text-transform:capitalize"> {{ element.status == 'complete' ? 'Completed' : element.status}} </td>
         </ng-container>
   
          <!-- Symbol Column -->
@@ -112,11 +112,11 @@
     <tr mat-row [ngClass]="{'highlight': row.status === 'pending'}" *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
     
-    <mat-paginator [length]="length"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="pageSizeOptions"
-                   (page)="pageEvent = $event; onPaginateChange()"
-                   aria-label="Select page">
-    </mat-paginator>
+  <mat-paginator [length]="length"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="pageSizeOptions"
+                  (page)="pageEvent = $event; onPaginateChange()"
+                  aria-label="Select page">
+  </mat-paginator>
   
 </div>

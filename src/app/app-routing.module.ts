@@ -75,6 +75,9 @@ import { CreatePasswordComponent } from './pages/admin/create-password/create-pa
 import { ImportSeedComponent } from './pages/admin/import-seed/import-seed.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { CoinConfigComponent } from './pages/admin/coin-config/coin-config.component';
+import { CreatePasswordConversionComponent } from './pages/admin-conversion/create-password/create-password.component';
+import { ImportSeedConversionComponent } from './pages/admin-conversion/import-seed/import-seed.component';
+import { ConversionComponent } from './pages/admin-conversion/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -747,12 +750,40 @@ const routes: Routes = [
         }
       }
     ]
-  }
+  },
+  {
+    path: 'conversion',
+    component: ConversionComponent,
+    canActivate: [FeatureGuard],
+    data: {
+      feature: 'conversion'
+    },
+    children: [
+      {
+        path: 'create-password',
+        component: CreatePasswordConversionComponent,
+        canActivate: [FeatureGuard],
+        data: {
+          feature: 'conversion'
+        }
+      }
+      ,
+      {
+        path: 'import-seed',
+        component: ImportSeedConversionComponent,
+        canActivate: [FeatureGuard],
+    
+        data: {
+          feature: 'conversion'
+        }
+      }
+    ]
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, onSameUrlNavigation: 'reload' }, )
   ],
   exports: [RouterModule]
 })

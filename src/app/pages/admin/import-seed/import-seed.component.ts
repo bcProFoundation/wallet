@@ -51,11 +51,11 @@ export class ImportSeedComponent implements OnInit {
           //     passwordHandleCases: PassWordHandleCases.CreateNewPassword
           //   }
           // });
-          this.dialog.open(CreatePasswordComponent, {
-            width: '604px',
-            panelClass: 'create-password-dialog',
-            data: {passWordHandleCases: PassWordHandleCases.CreateNewPassword}
-          })
+          // this.dialog.open(CreatePasswordComponent, {
+          //   width: '604px',
+          //   panelClass: 'create-password-dialog',
+          //   data: {passWordHandleCases: PassWordHandleCases.CreateNewPassword}
+          // })
         }
       }
     }).catch(e => {

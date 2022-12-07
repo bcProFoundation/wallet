@@ -583,7 +583,7 @@ export class HomePage {
     if (!_.isEmpty(wallet)) {
       let message = 'Loading...';
       let claimWalletAddress = '';
-      let codeClaimSplit = claimCode?.value ? claimCode.value.replace('lixi_','') : '';
+      let codeClaimSplit = claimCode ? claimCode.replace('lixi_','') : '';
       this.loadingProvider.simpleLoader(message);
       await this.walletProvider
       .getAddress(wallet, false)

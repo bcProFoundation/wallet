@@ -59,6 +59,7 @@ export { PushNotificationsProvider } from './push-notifications/push-notificatio
 export { RateProvider } from './rate/rate';
 export { LixiLotusProvider } from './lixi-lotus/lixi-lotus';
 export { OrderProvider } from './order/order-provider';
+export { ConversionProvider } from './conversion/conversion';
 export { ReplaceParametersProvider } from './replace-parameters/replace-parameters';
 export { ScanProvider } from './scan/scan';
 export { ThemeProvider } from './theme/theme';

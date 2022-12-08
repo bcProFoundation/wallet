@@ -12,11 +12,13 @@ import env from 'src/environments';
 import { OrderTrackingComponent } from "../pages/admin/order-tracking/order-tracking.component";
 import { LoginAdminComponent } from "../pages/admin/login-admin/login-admin.component";
 import { CoinConfigComponent } from "../pages/admin/coin-config/coin-config.component";
+import { LoginConversionAdminComponent } from "../pages/admin-conversion/login-admin/login-admin.component";
 
 export interface FeatureConfig {
     abcpay: boolean,
     swap: boolean,
-    admin: boolean
+    admin: boolean,
+    conversion: boolean
 }
 
 @Injectable({
@@ -33,14 +35,26 @@ export interface FeatureConfig {
      * be called by the APP_INITIALIZER
      */
     loadConfig() : Promise<any> {
-      let buildSwapAlone = false;
         return of({
             abcpay: true,
             swap: true,
-            admin: true
+            admin: true,
+            conversion: true
         } as FeatureConfig).pipe(tap(data =>{
-          if(data.admin && env.buildAdmin){
+          if(data.conversion && env.buildAdminConversion){
             data.abcpay = false;
+            data.admin = false;
+            data.swap = false;
+            const routes = this.Router.config;
+            routes.shift();
+            routes.unshift({ path: '', component: LoginConversionAdminComponent, data: {
+              feature: 'admin'
+            } });
+            this.Router.resetConfig(routes);
+          }
+          else if(data.admin && env.buildAdmin){
+            data.abcpay = false;
+            data.conversion = false;
             const routes = this.Router.config;
             routes.shift();
             routes.unshift({ path: '', component: LoginAdminComponent, data: {
@@ -51,6 +65,7 @@ export interface FeatureConfig {
           else if(data.swap && env.buildSwapALone){
             if(env.buildSwapALone){
               data.abcpay = false;
+              data.conversion = false;
             }
             const routes = this.Router.config;
             routes.shift();

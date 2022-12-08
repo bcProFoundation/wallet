@@ -67,6 +67,7 @@ export class CopayApp {
   public isSwapAlone: boolean = false;
   public isAbcpay: boolean = false;
   public isAdmin: boolean = false;
+  public isConversion: boolean = false;
   public env = env;
   constructor(
     private config: Config,
@@ -103,12 +104,12 @@ export class CopayApp {
     this.isSwapAlone = this.featureFlagService.isFeatureEnabled('swap') && env.buildSwapALone;
     this.isAbcpay = this.featureFlagService.isFeatureEnabled('abcpay');
     this.isAdmin = this.featureFlagService.isFeatureEnabled('admin') && env.buildAdmin;
-    
+    this.isConversion = this.featureFlagService.isFeatureEnabled('admin') && env.buildAdminConversion;
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
     this.imageLoaderConfig.enableSpinner(false);
     this.platformProvider.isCordova ? this.routerHidden = true : this.routerHidden = false;
-    if (!this.platformProvider.isCordova &&  !env.buildAdmin && (this.isAbcpay || this.isSwapAlone)) {
+    if (!this.platformProvider.isCordova &&  !env.buildAdmin && !env.buildAdminConversion && (this.isAbcpay || this.isSwapAlone)) {
       this.renderer.addClass(document.body, 'bg-desktop');
     }
 
@@ -265,7 +266,7 @@ export class CopayApp {
     this.themeProvider.apply();
     if (this.platformProvider.isElectron) this.updateDesktopOnFocus();
     this.incomingDataRedirEvent();
-    if(this.isAbcpay && !this.isAdmin && !this.isSwapAlone){
+    if(this.isAbcpay && !this.isAdmin && !this.isSwapAlone && !this.isConversion){
       let profile;
     this.keyProvider
       .load()

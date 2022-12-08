@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ConversionAuthenticationService } from '../pages/admin-conversion/service/authentication.service';
 import { AuthenticationService } from '../pages/admin/service/authentication.service';
 import { FeatureFlagsService } from './feature-flags.service';
 
@@ -11,7 +12,8 @@ export class FeatureGuard implements CanActivate, CanLoad {
   constructor(
     private featureFlagsService: FeatureFlagsService,
     private router: Router,
-    private authenticationService : AuthenticationService
+    private authenticationService: AuthenticationService,
+    private conversionAuthenticationService: ConversionAuthenticationService
   ) {}
     canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         const {
@@ -36,6 +38,17 @@ export class FeatureGuard implements CanActivate, CanLoad {
               if(feature === 'admin'){
                 // authenticate before routing
                 if(this.authenticationService.currentUserValue){
+                  return true;
+                } else{
+                  this.router.navigate(['']).then(()=>{
+                    window.location.reload();
+                  });
+                  return false;
+                }
+              }
+              else if(feature === 'conversion'){
+                // authenticate before routing
+                if(this.conversionAuthenticationService.currentUserValue){
                   return true;
                 } else{
                   this.router.navigate(['']).then(()=>{

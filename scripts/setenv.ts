@@ -32,6 +32,7 @@ let awsUrl =
 let lixiLotusUrl = process.env.LIXI_LOTUS_URL;
 let buildSwapAlone = process.env.BUILD_SWAP_STANDALONE;
 let buildAdmin = process.env.BUILD_ADMIN;
+let buildAdminConversion = process.env.BUILD_ADMIN_CONVERSION;
 if (environment === 'production') {
   nameEnv = 'production';
 } else if (environment === 'development') {
@@ -53,7 +54,8 @@ export const env = {
     awsUrl: '${awsUrl}',
     lixiLotusUrl: '${lixiLotusUrl}' ,
     buildSwapALone: ${buildSwapAlone},
-    buildAdmin: ${buildAdmin}
+    buildAdmin: ${buildAdmin},
+    buildAdminConversion: ${buildAdminConversion}
 };
     export default env;`;
 

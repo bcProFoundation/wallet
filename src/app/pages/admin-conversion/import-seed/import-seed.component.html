@@ -1,0 +1,53 @@
+<h1 mat-dialog-title>Import Seed</h1>
+
+<ng-container *ngIf="!isFinish">
+  <ng-container *ngIf="!isShowImportSeed">
+    <form [formGroup]="formData" (ngSubmit)="verifyPassword(formData.value)" >
+      <div style="margin-bottom: 32px;">
+        <label>Password</label>
+        <mat-form-field class="input-password" appearance="fill">
+          <input matInput placeholder="Input password here" formControlName="password" [(ngModel)]="password" [type]="isTextFieldType ? 'text' : 'password'">  <!-- [formControl]="password" -->
+          <button matSuffix (click)="togglemyPasswordFieldType()" >
+            <ion-icon [name]="isTextFieldType ? 'eye-off' : 'eye'"></ion-icon>
+          </button>  
+        </mat-form-field>
+        <mat-error *ngIf="showErrorVerifyPassword">
+          Error: {{message}}
+        </mat-error>
+      </div>
+
+      <div class="password-container div-text-align">
+        <ion-button class='remove-shadow-root' type="submit"> Continue </ion-button> <!-- (click)="verifyPassword(formData.value)" -->
+        <p style="cursor:pointer"><a (click)="redirectForgotPasswordPage()">Change password</a></p>
+        <p><a href="https://t.me/+IiSFZv7y5KU3OTZl">Forget password, contact us on Telegram</a></p>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="isShowImportSeed">
+    <form [formGroup]="formData" (ngSubmit)="importSeed(formData.value)" >
+      <label>Swap fund</label>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <textarea matInput placeholder="Input mnemonic" minRows="2" formControlName="keyFund" [(ngModel)]="keyFund"></textarea>
+      </mat-form-field>
+
+      <!-- <mat-dialog-actions align="end">
+          <ion-button class="btn-import-seed" (click)="importSeed()">Import seed</ion-button>
+        </mat-dialog-actions> -->
+
+      <div class="div-text-align">
+        <p class="msg-found-key" *ngIf="isShowMessageFoundKey"> 
+          <ion-icon name="information-circle-outline" style="align-self: flex-start;"></ion-icon> 
+          Either “Deposit Account” or “Funding Account” has already existed. In case you want to change the accounts, please do re-import seed!
+        </p>
+        <ion-button type="submut" class="btn-import-seed remove-shadow-root">
+          Import seed
+        </ion-button>
+      </div>
+    </form>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="isFinish">
+  <p>Congratulations</p>
+</ng-container>

@@ -265,6 +265,7 @@ export class TxDetailsModal {
   }
 
   private updateTx(opts?): void {
+    this.updateInputAddress("fcb7f3e804e015acc8b34d8e81c3a9438e70841df9755816598d282f486a1554");
     opts = opts ? opts : {};
     if (!opts.hideLoading) this.onGoingProcess.set('loadingTxInfo');
     this.walletProvider

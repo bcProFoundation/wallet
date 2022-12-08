@@ -121,6 +121,12 @@ import { ImportSeedComponent } from './admin/import-seed/import-seed.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { CoinConfigComponent } from './admin/coin-config/coin-config.component';
 
+/* Conversion */
+import { CreatePasswordConversionComponent } from './admin-conversion/create-password/create-password.component';
+import { ImportSeedConversionComponent } from './admin-conversion/import-seed/import-seed.component';
+import { LoginConversionAdminComponent } from './admin-conversion/login-admin/login-admin.component';
+import { ConversionComponent } from './admin-conversion/dashboard/dashboard.component';
+
 
 export const PAGES = [
   AddPage,
@@ -224,8 +230,12 @@ export const PAGES = [
   OrderTrackingComponent,
   LoginAdminComponent,
   CreatePasswordComponent,
+  CreatePasswordConversionComponent,
   ImportSeedComponent,
   DashboardComponent,
-  CoinConfigComponent
+  CoinConfigComponent,
+  ImportSeedConversionComponent,
+  LoginConversionAdminComponent,
+  ConversionComponent
   // Phases: card pages
 ];

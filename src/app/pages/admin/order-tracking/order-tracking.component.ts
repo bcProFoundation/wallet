@@ -17,7 +17,7 @@ import {
 import { CoinConfig } from '../../swap/config-swap';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogCustomComponent } from '../modal/modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { Sort } from '@angular/material/sort';
@@ -29,6 +29,7 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import _, { StringNullableChain } from 'lodash';
 import { LabelTip } from 'src/app/components/label-tip/label-tip';
+import { PopupCustomComponent } from '../popup/popup.component';
 
 export interface PeriodicElement {
   name: string;
@@ -130,6 +131,7 @@ enum CoinFilterDate {
   styleUrls: ['./order-tracking.component.scss']
 })
 export class OrderTrackingComponent implements OnInit, AfterViewInit {
+  popupDialogRef: MatDialogRef<PopupCustomComponent>;
   dateSelected = null;
   optsCoinConfigFilter: ICoinConfigFilter = null;
   listCoinFilterDate = [
@@ -157,7 +159,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     'pendingReason',
     'status',
     'lastModified',
-    'action'
+    'isResolve'
   ];
   listStatus =[
     {
@@ -364,6 +366,49 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
             alert(e);
           });
       }
+    });
+  }
+
+  public viewChangeStatusPopup(order: IOrder, $event) {
+    $event.stopPropagation()
+    this.handleOpenPopupStatus(order)
+  }
+  handleOpenPopupStatus(order) {
+    this.popupChangeStatusDialog(order);
+  }
+  popupChangeStatusDialog(order): void {
+    const popupDialogRef = this.dialog.open(PopupCustomComponent, {
+      data: order
+    });
+
+    popupDialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.handleChangeStatus(order);
+      }
+      order.status == 'pending';
+      order.status = order.status === 'pending';
+      result = order.status === true ? null : false;
+    });
+  }
+
+  public viewChangeResolvePopup(order: IOrder, $event) {
+    $event.stopPropagation()
+    this.handleOpenPopupResolve(order)
+  }
+  handleOpenPopupResolve(order) {
+    this.popupChangeResolveDialog(order);
+  }
+  popupChangeResolveDialog(order): void {
+    const popupDialogRef = this.dialog.open(PopupCustomComponent, {
+      data: order
+    });
+
+    popupDialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.handleChangeResolve(order);
+      }
+      order.isResolve = order.isResolve === true ? null : true;
+      result = order.isResolve === true ? null : false;
     });
   }
 

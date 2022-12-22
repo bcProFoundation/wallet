@@ -138,11 +138,7 @@ export class ImportSeedConversionComponent implements OnInit {
     );
   }
   redirectForgotPasswordPage() {
-    // this.router.navigate(['/dashboard/create-password'], {
-    //   state: {
-    //     passwordHandleCases :  PassWordHandleCases.ForgotPassword
-    //   }
-    // })
+    this.dialog.closeAll();
     this.dialog.open(CreatePasswordConversionComponent, {
       width: '604px',
       panelClass: 'create-password-dialog',

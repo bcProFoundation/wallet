@@ -46,6 +46,7 @@ export class ImportSeedComponent implements OnInit {
     this.orderProvider.login({id_token: this.authenticationService.currentUserValue}).then( (approveReq : IApproveOpts) => {
       if(approveReq.isVerified){
         if(!approveReq.isCreatePassword) {
+          this.dialog.closeAll();
           this.dialog.open(CreatePasswordComponent, {
             width: '604px',
             panelClass: 'create-password-dialog',
@@ -121,6 +122,7 @@ export class ImportSeedComponent implements OnInit {
     );
   }
   redirectForgotPasswordPage(){
+    this.dialog.closeAll();
     this.dialog.open(CreatePasswordComponent, {
       width: '604px',
       panelClass: 'create-password-dialog',

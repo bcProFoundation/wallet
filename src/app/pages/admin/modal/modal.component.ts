@@ -1,8 +1,9 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { BwcErrorProvider, ConfigProvider, ExternalLinkProvider } from 'src/app/providers';
+import { BwcErrorProvider, ConfigProvider, ErrorsProvider, ExternalLinkProvider, OrderProvider } from 'src/app/providers';
 import { IOrder } from '../../swap/model/order-model';
+import { PopupCustomComponent } from '../popup/popup.component';
 
 @Component({
   selector: 'dialog-overview-example-dialog',
@@ -18,6 +19,9 @@ export class DialogCustomComponent {
   public endedOnStr = '';
   public createdOnStr = '';
   constructor(
+    private orderProvider: OrderProvider,
+    public dialog: MatDialog,
+    private errorsProvider: ErrorsProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private externalLinkProvider: ExternalLinkProvider,
     public dialogRef: MatDialogRef<DialogCustomComponent>,
@@ -70,4 +74,86 @@ export class DialogCustomComponent {
     // );
   }
   
+  handleChangeStatus(order) {
+    order.status = 'complete';
+    this.orderProvider
+      .updateOrder(order)
+      .then()
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      });
+  }
+  public viewChangeStatusPopup(order: IOrder, $event) {
+    $event.stopPropagation()
+    this.handleOpenPopupStatus(order)
+  }
+  handleOpenPopupStatus(order) {
+    this.popupChangeStatusDialog(order);
+  }
+  popupChangeStatusDialog(order): void {
+    const popupDialogRef = this.dialog.open(PopupCustomComponent, {
+      data: order
+    });
+
+    popupDialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.handleChangeStatus(order);
+      }
+      order.status == 'pending';
+      order.status = order.status === 'pending';
+      result = order.status === true ? null : false;
+    });
+  }
+
+
+  handleChangeResolve(order) {
+    order.isResolve = true;
+    this.orderProvider
+      .updateOrder(order)
+      .then()
+      .catch(e => {
+        this.showErrorInfoSheet(e);
+      });
+  }
+  public viewChangeResolvePopup(order: IOrder, $event) {
+    $event.stopPropagation()
+    this.handleOpenPopupResolve(order)
+  }
+  handleOpenPopupResolve(order) {
+    this.popupChangeResolveDialog(order);
+  }
+  popupChangeResolveDialog(order): void {
+    const popupDialogRef = this.dialog.open(PopupCustomComponent, {
+      data: order
+    });
+
+    popupDialogRef.afterClosed().subscribe(result => {
+      if (result == true) {
+        this.handleChangeResolve(order);
+      }
+      order.isResolve = order.isResolve === true ? null : true;
+      result = order.isResolve === true ? null : false;
+    });
+  }
+
+  public showErrorInfoSheet(error: any, title?: string, exit?: boolean): void {
+    let msg: string;
+    if (!error) return;
+    // Currently the paypro error is the following string: 500 - "{}"
+    if (error.status === 500) {
+      msg = error.error.error;
+    }
+
+    const infoSheetTitle = title ? title : this.translate.instant('Error');
+
+    this.errorsProvider.showDefaultError(
+      msg || this.bwcErrorProvider.msg(error),
+      infoSheetTitle,
+      () => {
+        // if (exit) {
+        //   this.location.back()
+        // }
+      }
+    );
+  }
 }

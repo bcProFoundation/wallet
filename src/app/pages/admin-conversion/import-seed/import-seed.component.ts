@@ -57,11 +57,6 @@ export class ImportSeedConversionComponent implements OnInit {
       .then((approveReq: IApproveOpts) => {
         if (approveReq.isVerified) {
           if (!approveReq.isCreatePassword) {
-            // this.router.navigate(['/dashboard/create-password'], {
-            //   state: {
-            //     passwordHandleCases: PassWordHandleCases.CreateNewPassword
-            //   }
-            // });
             this.dialog.open(CreatePasswordConversionComponent, {
               width: '604px',
               panelClass: 'create-password-dialog',
@@ -181,6 +176,7 @@ export class ImportSeedConversionComponent implements OnInit {
     );
   }
   redirectForgotPasswordPage() {
+    this.dialog.closeAll();
     this.dialog.open(CreatePasswordConversionComponent, {
       width: '604px',
       panelClass: 'create-password-dialog',

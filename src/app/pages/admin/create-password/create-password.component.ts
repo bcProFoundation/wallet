@@ -108,7 +108,7 @@ export class CreatePasswordComponent implements OnInit {
      userOpts.recoveryKey = data.recoveryKeyInput
     }
     this.orderProvider.renewPassword(userOpts).then(recoveryKey => {
-      this.data.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKey;
     }).catch(e => {
       // this.showErrorInfoSheet(e);

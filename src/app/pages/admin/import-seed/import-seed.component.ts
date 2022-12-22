@@ -46,16 +46,12 @@ export class ImportSeedComponent implements OnInit {
     this.orderProvider.login({id_token: this.authenticationService.currentUserValue}).then( (approveReq : IApproveOpts) => {
       if(approveReq.isVerified){
         if(!approveReq.isCreatePassword) {
-          // this.router.navigate(['/dashboard/create-password'], {
-          //   state: {
-          //     passwordHandleCases: PassWordHandleCases.CreateNewPassword
-          //   }
-          // });
-          // this.dialog.open(CreatePasswordComponent, {
-          //   width: '604px',
-          //   panelClass: 'create-password-dialog',
-          //   data: {passWordHandleCases: PassWordHandleCases.CreateNewPassword}
-          // })
+          this.dialog.closeAll();
+          this.dialog.open(CreatePasswordComponent, {
+            width: '604px',
+            panelClass: 'create-password-dialog',
+            data: {passWordHandleCases: PassWordHandleCases.CreateNewPassword}
+          })
         }
       }
     }).catch(e => {
@@ -126,11 +122,7 @@ export class ImportSeedComponent implements OnInit {
     );
   }
   redirectForgotPasswordPage(){
-    // this.router.navigate(['/dashboard/create-password'], {
-    //   state: {
-    //     passwordHandleCases :  PassWordHandleCases.ForgotPassword
-    //   }
-    // })
+    this.dialog.closeAll();
     this.dialog.open(CreatePasswordComponent, {
       width: '604px',
       panelClass: 'create-password-dialog',

@@ -85,16 +85,25 @@
           <span> {{ data.error }}</span>
          </p>
         
-         <p>
+         <p style="display: flex">
           <span class="title">Status: </span>
-          <span style="text-transform:capitalize"> {{ data.status == 'complete' ? 'Completed' : data.status }}</span>
+          <span style="text-transform:capitalize"> 
+            <div *ngIf="data.status != 'pending'">{{ data.status == 'complete' ? 'Completed' : data.status}}</div>
+            <div *ngIf="data.status == 'pending'">
+              <mat-select [(value)]="data.status" (click)="$event.stopPropagation()">
+                <mat-option value="">{{data.status}}</mat-option>
+                <mat-option value="complete" (click)="viewChangeStatusPopup(data, $event)">Completed</mat-option>
+              </mat-select>
+            </div>
+          </span>
          </p>
         
         
          <p>
           <span class="title">Is resolve: </span>
           <!-- <span>{{ data.isResolve }}</span> -->
-          <mat-checkbox disabled [(ngModel)]="data.isResolve"></mat-checkbox>
+          <mat-checkbox [(ngModel)]="data.isResolve"   
+          (click)="viewChangeResolvePopup(data, $event)"></mat-checkbox>
          </p>
           <mat-form-field appearance="fill">
             <mat-label>Note</mat-label>

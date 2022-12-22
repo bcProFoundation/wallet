@@ -80,4 +80,28 @@ import { Logger } from "../logger/logger";
         };
         return this.http.post(`${this.bwsURL}/v3/conversion/admin/seed/check`, userOpts, options).toPromise();
       } 
+
+      public startQueue(): Promise<any>{
+        const userOpts ={
+          id_token: this.authenticationService.currentUserValue        
+        }
+        const options = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/conversion/restart`, userOpts, options).toPromise();
+      } 
+      
+      public stopQueue(): Promise<any>{
+        const userOpts ={
+          id_token: this.authenticationService.currentUserValue        
+        }
+        const options = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        return this.http.post(`${this.bwsURL}/v3/conversion/stop`, userOpts, options).toPromise();
+      } 
   }

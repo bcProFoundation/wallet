@@ -15,6 +15,7 @@ import {
 import { IApproveOpts } from '../login-admin/login-admin.component';
 import { ConversionAuthenticationService } from '../service/authentication.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-import-seed',
@@ -41,7 +42,8 @@ export class ImportSeedConversionComponent implements OnInit {
     private authenticationService: ConversionAuthenticationService,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -70,6 +72,46 @@ export class ImportSeedConversionComponent implements OnInit {
       });
   }
 
+  async presentToast(finishText, cssClass?) {
+    const toast = await this.toastController.create({
+      message: finishText,
+      duration: 3000,
+      position: 'top',
+      animated: true,
+      cssClass: `custom-finish-toast ${cssClass}`,
+    });
+    toast.present();
+  }
+
+  startQueue(){
+    this.onGoingProcessProvider.set('Processing');
+    this.conversionProvider.startQueue().then(result => {
+      if(result){
+        this.presentToast("Queue start successfully")
+      } else{
+        this.showErrorInfoSheet("Can not show info sheet");
+      }
+    }).catch(e => {
+      this.showErrorInfoSheet(e);
+    }).finally(()=>{
+      this.onGoingProcessProvider.clear();
+    })
+  }
+
+  stopQueue(){
+    this.onGoingProcessProvider.set('Processing');
+    this.conversionProvider.stopQueue().then(result => {
+      if(result){
+        this.presentToast("Queue stop successfully")
+      } else{
+        this.showErrorInfoSheet("Can not show info sheet");
+      }
+    }).catch(e => {
+      this.showErrorInfoSheet(e);
+    }).finally(()=>{
+      this.onGoingProcessProvider.clear();
+    })
+  }
   verifyPassword(data: any) {
     const userOpts = {
       id_token: this.authenticationService.currentUserValue,
@@ -109,7 +151,6 @@ export class ImportSeedConversionComponent implements OnInit {
       })
       .catch(e => {
         this.isFinish = false;
-        // this.showErrorInfoSheet(e);
         this.showErrorImportSeed = true;
         this.message = e.error.error;
       })
@@ -131,9 +172,6 @@ export class ImportSeedConversionComponent implements OnInit {
       msg || this.bwcErrorProvider.msg(error),
       infoSheetTitle,
       () => {
-        // if (exit) {
-        //   this.location.back()
-        // }
       }
     );
   }

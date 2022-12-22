@@ -1,5 +1,13 @@
-<h1 mat-dialog-title>Import Seed</h1>
+<div class="btn-action-group">
+  <ion-button type="submit" (click)="startQueue()">
+    Start queue
+  </ion-button>
 
+  <ion-button type="submit" (click)="stopQueue()">
+    Stop queue
+  </ion-button>
+</div>
+<h1 mat-dialog-title>Import Seed</h1>
 <ng-container *ngIf="!isFinish">
   <ng-container *ngIf="!isShowImportSeed">
     <form [formGroup]="formData" (ngSubmit)="verifyPassword(formData.value)" >
@@ -40,7 +48,7 @@
           <ion-icon name="information-circle-outline" style="align-self: flex-start;"></ion-icon> 
           Either “Deposit Account” or “Funding Account” has already existed. In case you want to change the accounts, please do re-import seed!
         </p>
-        <ion-button type="submut" class="btn-import-seed remove-shadow-root">
+        <ion-button type="submit" class="btn-import-seed remove-shadow-root">
           Import seed
         </ion-button>
       </div>

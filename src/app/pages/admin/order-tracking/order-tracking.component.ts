@@ -307,8 +307,8 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
     console.log('decodedToken', decodedToken);
   }
 
-  handleChangeResolve(order) {
-    order.isResolve = true;
+  handleChangeResolve(order, checked) {
+    order.isResolve = checked;
     this.orderProvider
       .updateOrder(order)
       .then()
@@ -387,7 +387,7 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
       }
       order.status == 'pending';
       order.status = order.status === 'pending';
-      result = order.status === true ? null : false;
+      result = order.status === true ? null : 'pending';
     });
   }
 
@@ -405,7 +405,9 @@ export class OrderTrackingComponent implements OnInit, AfterViewInit {
 
     popupDialogRef.afterClosed().subscribe(result => {
       if (result == true) {
-        this.handleChangeResolve(order);
+        this.handleChangeResolve(order, !order.isResolve);
+        order.isResolve = order.isResolve === true;
+        result = order.isResolve === true;
       }
       order.isResolve = order.isResolve === true ? null : true;
       result = order.isResolve === true ? null : false;

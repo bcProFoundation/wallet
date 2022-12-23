@@ -587,7 +587,7 @@ export class HomePage {
     if (!_.isEmpty(wallet)) {
       let message = 'Loading...';
       let claimWalletAddress = '';
-      let codeClaimSplit = claimCode?.value ? claimCode.value.replace('lixi_','') : '';
+      let codeClaimSplit = claimCode?.value ? claimCode?.value.replace('lixi_','') : '';
       this.loadingProvider.simpleLoader(message);
       await this.walletProvider
       .getAddress(wallet, false)
@@ -600,9 +600,11 @@ export class HomePage {
         claimAddress: claimWalletAddress,
         claimCode: codeClaimSplit
       }
+      this.logger.info('Body claim', bodyClaim);
       // Call provider to claim xpi from lixilotus/api
       await this.lixiLotusProvider.claimVoucher(bodyClaim)
       .then(async (data) => {
+        this.logger.info('Response claim', data);
         const copayerModal = await this.modalCtrl.create({
           component: ClaimVoucherModalComponent,
           componentProps: {
@@ -620,6 +622,7 @@ export class HomePage {
         });
       })
       .catch(err => {
+        this.logger.error('Response claim err', err);
         const infoSheet = this.actionSheetProvider.createInfoSheet(
           'process-fail-voucher'
         );

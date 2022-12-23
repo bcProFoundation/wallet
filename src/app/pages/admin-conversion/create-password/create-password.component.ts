@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -13,9 +13,10 @@ export enum PassWordHandleCases {
 }
 
 @Component({
-  selector: 'app-create-password',
+  selector: 'conversion-create-password',
   templateUrl: './create-password.component.html',
   styleUrls: ['./create-password.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CreatePasswordConversionComponent implements OnInit {
   public PassWordHandleCases = {
@@ -35,6 +36,11 @@ export class CreatePasswordConversionComponent implements OnInit {
   public message:string;
   public passwordHandleCases = 0;
   public handleCasePassword = 0;
+  public isPasswordHide = true;
+  public isConfirmPasswordHide = true;
+  public isOldPasswordHide = true;
+  public isRecoveryKeyHide = true;
+  public isNewPassword = true;
 
   constructor(
     private conversionProvider: ConversionProvider,
@@ -44,6 +50,7 @@ export class CreatePasswordConversionComponent implements OnInit {
     private bwcErrorProvider: BwcErrorProvider,
     private router: Router,
     public dialogRef: MatDialogRef<CreatePasswordConversionComponent>,
+    private changeRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { 
     if (this.router.getCurrentNavigation()) {
@@ -75,23 +82,25 @@ export class CreatePasswordConversionComponent implements OnInit {
       this.showError = true,
       this.message = "Password can not be empty"
     }
-    if(data.password !== this.confirmPassword) {
+    else if(data.password !== this.confirmPassword) {
       // return this.showErrorInfoSheet(new Error("Invalid password confirmation . Please try again"))
       this.showError = true,
       this.message = "Invalid password confirmation . Please try again"
+    } else{
+      const userOpts ={ 
+        id_token: this.authenticaionService.currentUserValue,
+        password: data.password
+      }
+      this.conversionProvider.createPassword(userOpts).then(recoveryKeyServerReturn => {
+        this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
+        this.recoveryKey = recoveryKeyServerReturn;
+        this.changeRef.markForCheck();
+      }).catch(e => {
+        // this.showErrorInfoSheet(e);
+        this.showError = true;
+        this.message = e.error.error; 
+      })
     }
-    const userOpts ={ 
-      id_token: this.authenticaionService.currentUserValue,
-      password: data.password
-    }
-    this.conversionProvider.createPassword(userOpts).then(recoveryKeyServerReturn => {
-      this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
-      this.recoveryKey = recoveryKeyServerReturn;
-    }).catch(e => {
-      // this.showErrorInfoSheet(e);
-      this.showError = true;
-      this.message = e.error.error; 
-    })
   }
 
   reNewPassword(data: any){
@@ -108,21 +117,14 @@ export class CreatePasswordConversionComponent implements OnInit {
      userOpts.recoveryKey = data.recoveryKeyInput
     }
     this.conversionProvider.renewPassword(userOpts).then(recoveryKey => {
-      this.data.passwordHandleCases = PassWordHandleCases.SuccessfulInfo;
+      this.handleCasePassword = PassWordHandleCases.SuccessfulInfo;
       this.recoveryKey = recoveryKey;
+      this.changeRef.markForCheck();
     }).catch(e => {
       // this.showErrorInfoSheet(e);
       this.showError = true;
       this.message = e.error.error; 
     })
-  }
-
-  reNewPassword1(){
-    this.handleCasePassword = 3;
-  }
-
-  reNewPassword2(){
-    this.handleCasePassword = 2;
   }
 
   public showErrorInfoSheet(

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export enum PassWordHandleCases {
   selector: 'app-create-password',
   templateUrl: './create-password.component.html',
   styleUrls: ['./create-password.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CreatePasswordComponent implements OnInit {
   public PassWordHandleCases = {
@@ -35,6 +36,8 @@ export class CreatePasswordComponent implements OnInit {
   public message:string;
   public passwordHandleCases = 0;
   public handleCasePassword = 0;
+  public isPasswordHide = true;
+
 
   constructor(
     private orderProvider: OrderProvider,

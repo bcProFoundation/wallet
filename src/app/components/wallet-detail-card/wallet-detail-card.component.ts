@@ -42,7 +42,7 @@ export class WalletDetailCardComponent {
 
   public currentTheme: string;
   public hiddenBalance: boolean;
-  private listEToken = ['EAT', 'DoC', 'bcPro'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS'];
   public typeErrorQr =  NgxQrcodeErrorCorrectionLevels;
   public loading: boolean;
   public newAddressError: boolean;

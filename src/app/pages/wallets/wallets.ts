@@ -59,7 +59,7 @@ export class WalletsPage {
   public symbolCurrency;
   public keyHiddenBalanceTemp = [];
   public flagOptionRemove: boolean;
-  listEToken = ['EAT', 'DoC', 'bcPro'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS'];
   donationSupportCoins = [];
   navParamsData;
   isShowCreateNewWallet = false;
@@ -164,7 +164,7 @@ export class WalletsPage {
     const walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
-    !this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
+    this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
   }
 
   private updateTotalBalanceKey(keySelected) {

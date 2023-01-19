@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -14,13 +20,26 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
-import { IonItemSliding, MenuController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
+import {
+  IonItemSliding,
+  MenuController,
+  ModalController,
+  NavParams,
+  Platform,
+  ToastController
+} from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
 import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
-import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, ThemeProvider } from 'src/app/providers';
+import {
+  AppProvider,
+  ConfigProvider,
+  CurrencyProvider,
+  LoadingProvider,
+  ThemeProvider
+} from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -111,7 +130,9 @@ export class WalletsPage {
         this.symbolCurrency = '$';
     }
     if (this.router.getCurrentNavigation()) {
-      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state
+        ? this.router.getCurrentNavigation().extras.state
+        : {};
     } else {
       this.navParamsData = history ? history.state : undefined;
     }
@@ -125,14 +146,13 @@ export class WalletsPage {
   async handleScrolling(event) {
     if (event.detail.currentY > 0) {
       this.isScroll = true;
-    }
-    else {
+    } else {
       this.isScroll = false;
     }
   }
 
   getWalletGroup(name: string) {
-    return this.profileProvider.getWalletGroup(name)
+    return this.profileProvider.getWalletGroup(name);
   }
 
   ionViewDidEnter() {
@@ -150,43 +170,62 @@ export class WalletsPage {
 
   setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
-    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/xec.svg';
+    return isValid
+      ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg`
+      : 'assets/img/currencies/xec.svg';
   }
 
   async ionViewWillEnter() {
     this.walletsGroups = [];
     if (this.router.getCurrentNavigation()) {
-      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state
+        ? this.router.getCurrentNavigation().extras.state
+        : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
-    if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
+    if (
+      _.isEmpty(this.navParamsData) &&
+      this.navParams &&
+      !_.isEmpty(this.navParamsData)
+    )
+      this.navParamsData = this.navParamsData;
     const walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
-    !this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
+    this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
   }
 
   private updateTotalBalanceKey(keySelected) {
     let totalAlternativeBalanceToken = 0;
     _.forEach(keySelected, wallet => {
       if (wallet.tokens) {
-        totalAlternativeBalanceToken += _.sumBy(wallet.tokens, 'alternativeBalance')
+        totalAlternativeBalanceToken += _.sumBy(
+          wallet.tokens,
+          'alternativeBalance'
+        );
       }
-    })
-    return totalAlternativeBalanceToken + _.toNumber(this.getTotalBalanceKey(keySelected));
+    });
+    return (
+      totalAlternativeBalanceToken +
+      _.toNumber(this.getTotalBalanceKey(keySelected))
+    );
   }
 
   private async loadTokenWallet() {
     this.isLoading = false;
     await this.loadingProvider.simpleLoader();
-    await this.loadTokenData(this.keySelected).then(data => {
-      this.keySelected = data;
-      this.totalBalanceKey = DecimalFormatBalance(this.updateTotalBalanceKey(data));
-      this.changeDetectorRef.detectChanges();
-    }).catch(err => {
-      this.logger.error(err);
-    })
+    await this.loadTokenData(this.keySelected)
+      .then(data => {
+        this.keySelected = data;
+        this.totalBalanceKey = DecimalFormatBalance(
+          this.updateTotalBalanceKey(data)
+        );
+        this.changeDetectorRef.detectChanges();
+      })
+      .catch(err => {
+        this.logger.error(err);
+      });
     setTimeout(async () => {
       await this.loadingProvider.dismissLoader();
       this.isLoading = true;
@@ -217,29 +256,41 @@ export class WalletsPage {
     let walletChange = this.profileProvider.walletChange;
     if (this.walletsGroups.length !== 0) {
       if (this.keySelected.length === 0 || keyChange.isDelete) {
-        this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.walletsGroups[0]));
+        this.totalBalanceKey = DecimalFormatBalance(
+          this.getTotalBalanceKey(this.walletsGroups[0])
+        );
         this.keySelected = this.walletsGroups[0];
-        this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
+        this.keyNameSelected = this.getWalletGroup(
+          this.keySelected[0].keyId
+        ).name;
         this.profileProvider.keyChange.isDelete = false;
       }
       if (keyChange.isStatus && keyChange.keyId) {
         const walletsGroups = this.profileProvider.orderedWalletsByGroup;
-        const newAddWallet = walletsGroups.find((item) => {
+        const newAddWallet = walletsGroups.find(item => {
           return item[0].keyId == keyChange.keyId;
-        })
-        this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(newAddWallet));
+        });
+        this.totalBalanceKey = DecimalFormatBalance(
+          this.getTotalBalanceKey(newAddWallet)
+        );
         this.keySelected = newAddWallet;
-        this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
+        this.keyNameSelected = this.getWalletGroup(
+          this.keySelected[0].keyId
+        ).name;
         this.profileProvider.keyChange.isStatus = false;
       }
       if (walletChange.isStatus && walletChange.keyId) {
         const walletsGroups = this.profileProvider.orderedWalletsByGroup;
-        const newAddWallet = walletsGroups.find((item) => {
+        const newAddWallet = walletsGroups.find(item => {
           return item[0].keyId == walletChange.keyId;
-        })
-        this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(newAddWallet));
+        });
+        this.totalBalanceKey = DecimalFormatBalance(
+          this.getTotalBalanceKey(newAddWallet)
+        );
         this.keySelected = newAddWallet;
-        this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
+        this.keyNameSelected = this.getWalletGroup(
+          this.keySelected[0].keyId
+        ).name;
         this.profileProvider.walletChange.isStatus = false;
       }
     } else {
@@ -262,16 +313,14 @@ export class WalletsPage {
     obj = {
       keyId: this.keySelected[0].keyId,
       isShowBalanceKey: this.isShowBalance
-    }
+    };
     this.keySelected.forEach(ele => {
-      this.profileProvider.toggleHideBalanceFlag(
-        ele.credentials.walletId
-      )
+      this.profileProvider.toggleHideBalanceFlag(ele.credentials.walletId);
     });
     this.events.publish('Local/GetListPrimary', true);
-    const keyItemTemp = this.keyHiddenBalanceTemp.find((item) => {
+    const keyItemTemp = this.keyHiddenBalanceTemp.find(item => {
       return item.keyId === this.keySelected[0].keyId;
-    })
+    });
     if (keyItemTemp) {
       keyItemTemp.isShowBalanceKey = this.isShowBalance;
     } else {
@@ -280,32 +329,44 @@ export class WalletsPage {
   }
 
   public getKeySelected(keyId) {
-    const keyItem = this.keyHiddenBalanceTemp.find((item) => {
+    const keyItem = this.keyHiddenBalanceTemp.find(item => {
       return item.keyId === keyId;
-    })
+    });
     if (keyItem) {
       this.isShowBalance = keyItem.isShowBalanceKey;
     } else {
       this.isShowBalance = true;
     }
-    this.keySelected = this.profileProvider.getWalletsFromGroup({ keyId: keyId });
+    this.keySelected = this.profileProvider.getWalletsFromGroup({
+      keyId: keyId
+    });
     this.keyNameSelected = this.getWalletGroup(this.keySelected[0].keyId).name;
-    this.totalBalanceKey = DecimalFormatBalance(this.getTotalBalanceKey(this.keySelected));
+    this.totalBalanceKey = DecimalFormatBalance(
+      this.getTotalBalanceKey(this.keySelected)
+    );
     this.loadTokenWallet();
     this.closeMenu();
   }
 
   public handleBtnSubMenu(isDisable) {
-    return isDisable ? this.isDisableBtnMenu = true : this.isDisableBtnMenu = false;
+    return isDisable
+      ? (this.isDisableBtnMenu = true)
+      : (this.isDisableBtnMenu = false);
   }
 
   private getTotalBalanceKey(key) {
     const totalBalanceAlternative = key.reduce((result, wallet) => {
-      if (wallet.cachedStatus && wallet.cachedStatus.totalBalanceAlternative && wallet.network !== 'testnet') {
-        result += parseFloat(wallet.cachedStatus.totalBalanceAlternative.replaceAll(',', ''));
+      if (
+        wallet.cachedStatus &&
+        wallet.cachedStatus.totalBalanceAlternative &&
+        wallet.network !== 'testnet'
+      ) {
+        result += parseFloat(
+          wallet.cachedStatus.totalBalanceAlternative.replaceAll(',', '')
+        );
       }
       return result;
-    }, 0)
+    }, 0);
     return totalBalanceAlternative;
   }
 
@@ -317,8 +378,8 @@ export class WalletsPage {
     this.router.navigate(['/add'], {
       state: {
         isZeroState: true
-      },
-    })
+      }
+    });
   }
 
   public openProposalsNotificationsPage(): void {
@@ -329,21 +390,25 @@ export class WalletsPage {
     return this.profileProvider.setAddress(wallet).then(addr => {
       if (!addr) return '';
       const { prefix, type, hash } = this.addressProvider.decodeAddress(addr);
-      const etoken = this.addressProvider.encodeAddress('etoken', type, hash, addr);
+      const etoken = this.addressProvider.encodeAddress(
+        'etoken',
+        type,
+        hash,
+        addr
+      );
       return Promise.resolve(etoken);
-    })
+    });
   }
-
 
   isSupportToken(wallet): boolean {
     if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
-    return false
+    return false;
   }
 
   setTokensWallet(walletId, groupToken) {
     return new Promise(resolve => {
       this.profileProvider.setTokensWallet(walletId, groupToken);
-      resolve(true)
+      resolve(true);
     });
   }
 
@@ -352,28 +417,37 @@ export class WalletsPage {
       let wallet = keySelected[i];
       wallet = await this.tokenProvider.loadTokenWallet(wallet);
     }
-    return keySelected;;
+    return keySelected;
   }
 
   private filterLotusDonationWallet(walletGroups: any) {
     const walletsGroup = [];
     walletGroups.forEach((el: any) => {
       const wallet = el.filter(wallet => {
-        return _.some(this.donationSupportCoins, (item: any) => item.network == wallet.network && item.coin == wallet.coin);
-      })
+        return _.some(
+          this.donationSupportCoins,
+          (item: any) =>
+            item.network == wallet.network && item.coin == wallet.coin
+        );
+      });
       walletsGroup.push(wallet);
-    })
-    this.isShowCreateNewWallet = _.isEmpty(walletsGroup) || _.isEmpty(walletsGroup[0]);
+    });
+    this.isShowCreateNewWallet =
+      _.isEmpty(walletsGroup) || _.isEmpty(walletsGroup[0]);
     return walletsGroup;
   }
 
   private async walletAudienceEvents() {
     try {
       const deviceUUID = this.platformProvider.getDeviceUUID();
-      const hasCreatedWallet = await this.persistenceProvider.getHasReportedFirebaseWalletCreateFlag();
-      const hasSecuredWalletFlag = await this.persistenceProvider.getHasReportedFirebaseSecuredWallet();
-      const hasFundedWallet = await this.persistenceProvider.getHasReportedFirebaseHasFundedWallet();
-      const hasNotFundedWallet = await this.persistenceProvider.getHasReportedFirebasedNonFundedWallet();
+      const hasCreatedWallet =
+        await this.persistenceProvider.getHasReportedFirebaseWalletCreateFlag();
+      const hasSecuredWalletFlag =
+        await this.persistenceProvider.getHasReportedFirebaseSecuredWallet();
+      const hasFundedWallet =
+        await this.persistenceProvider.getHasReportedFirebaseHasFundedWallet();
+      const hasNotFundedWallet =
+        await this.persistenceProvider.getHasReportedFirebasedNonFundedWallet();
       const keys = await this.persistenceProvider.getKeys();
 
       if (!hasCreatedWallet) {
@@ -469,7 +543,7 @@ export class WalletsPage {
 
       this.eventsService.getRefreshKey().subscribe(data => {
         this.setWallets(data.keyId);
-      })
+      });
     };
 
     //Detect Change theme
@@ -539,7 +613,6 @@ export class WalletsPage {
               force: true
             });
           });
-
         });
         this.loadTokenWallet();
       },
@@ -614,9 +687,9 @@ export class WalletsPage {
 
     this.logger.debug(
       'fetching status for: ' +
-      opts.walletId +
-      ' alsohistory:' +
-      opts.alsoUpdateHistory
+        opts.walletId +
+        ' alsohistory:' +
+        opts.alsoUpdateHistory
     );
     const wallet = this.profileProvider.getWallet(opts.walletId);
     if (!wallet) return;
@@ -707,7 +780,9 @@ export class WalletsPage {
   }
 
   public collapsToken(walletId: string) {
-    this.collapsedToken[walletId] = this.collapsedToken[walletId] ? false : true;
+    this.collapsedToken[walletId] = this.collapsedToken[walletId]
+      ? false
+      : true;
   }
 
   public isCollapsedToken(walletId: string): boolean {
@@ -718,16 +793,16 @@ export class WalletsPage {
     this.router.navigate(['/add'], {
       state: {
         keyId
-      },
-    })
+      }
+    });
   }
 
   public openBackupPage(keyId) {
     this.router.navigate(['/backup-key'], {
       state: {
         keyId
-      },
-    })
+      }
+    });
   }
 
   public openSettingPage() {
@@ -744,7 +819,7 @@ export class WalletsPage {
       duration: 3000,
       position: 'bottom',
       animated: true,
-      cssClass: `custom-finish-toast ${cssClass}`,
+      cssClass: `custom-finish-toast ${cssClass}`
     });
     toast.present();
   }
@@ -753,7 +828,7 @@ export class WalletsPage {
     let walletObj = {
       walletId: wallet?.id,
       tokenId: token?.tokenId
-    }
+    };
     let result = this.profileProvider.setWalletGroupsHome(walletObj);
     if (result && result.added.status) {
       this.router.navigate(['/tabs/home']).then(() => {
@@ -770,12 +845,15 @@ export class WalletsPage {
 
   public removeOutGroupsHome(wallet, token?) {
     if (this.profileProvider.isLastItemPrimaryList()) {
-      this.presentToast('Can not remove the last account in Home!', 'toast-warning');
+      this.presentToast(
+        'Can not remove the last account in Home!',
+        'toast-warning'
+      );
     } else {
       let walletObj = {
         walletId: wallet.id,
         tokenId: token?.tokenId
-      }
+      };
       let result = this.profileProvider.removeWalletGroupsHome(walletObj);
       if (result) {
         this.presentToast('Removed account successfully!');
@@ -787,13 +865,14 @@ export class WalletsPage {
   }
 
   public checkCardExistListPrimary(wallet, token?) {
-    let data = JSON.parse(localStorage.getItem("listHome"));
-    let isExist = _.find(data, item => item.walletId === wallet.id && item.tokenId === token?.tokenId);
+    let data = JSON.parse(localStorage.getItem('listHome'));
+    let isExist = _.find(
+      data,
+      item => item.walletId === wallet.id && item.tokenId === token?.tokenId
+    );
     return !!isExist;
   }
 }
-
-
 
 // WEBPACK FOOTER //
 // ./src/pages/wallets/wallets

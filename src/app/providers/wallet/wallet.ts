@@ -54,6 +54,7 @@ export interface WalletOptions {
   useLegacyPurpose?: boolean;
   useNativeSegwit?: boolean;
   isSlpToken?: boolean;
+  isFromRaipay?: boolean;
 }
 
 export interface TransactionProposal {

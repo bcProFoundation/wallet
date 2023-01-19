@@ -70,9 +70,10 @@ export class ProfileProvider {
     },
     full: {
       status: false,
-      message: 'Maximum 5 accounts has reached. Please remove account from Home first.'
+      message:
+        'Maximum 5 accounts has reached. Please remove account from Home first.'
     }
-  }
+  };
   public walletsGroupsHome: any = [];
   public walletsGroups: WalletGroups = {}; // TODO walletGroups Class
   public wallet: any = {};
@@ -172,7 +173,7 @@ export class ProfileProvider {
   }
 
   public isLastItemPrimaryList() {
-    let listPrimary = JSON.parse(localStorage.getItem("listHome"));
+    let listPrimary = JSON.parse(localStorage.getItem('listHome'));
     if (listPrimary && listPrimary.length === 1) {
       return true;
     }
@@ -181,12 +182,14 @@ export class ProfileProvider {
 
   public setWalletGroupsHome(walletObj) {
     let result = _.cloneDeep(this.resultPrimaryAccount);
-    let walletsGroupsHome = JSON.parse(localStorage.getItem("listHome")) || [];
+    let walletsGroupsHome = JSON.parse(localStorage.getItem('listHome')) || [];
     if (walletObj && walletObj.walletId) {
       if (walletsGroupsHome.length < 5) {
-        if (!JSON.stringify(walletsGroupsHome).includes(JSON.stringify(walletObj))) {
+        if (
+          !JSON.stringify(walletsGroupsHome).includes(JSON.stringify(walletObj))
+        ) {
           walletsGroupsHome.push(walletObj);
-          localStorage.setItem("listHome", JSON.stringify(walletsGroupsHome));
+          localStorage.setItem('listHome', JSON.stringify(walletsGroupsHome));
           result.added.status = true;
           return result;
         }
@@ -195,50 +198,55 @@ export class ProfileProvider {
       }
       result.full.status = true;
       return result;
-    } 
+    }
     return result;
   }
 
   public getFirstLotusWalletHome() {
-    let data = JSON.parse(localStorage.getItem("listHome"));
+    let data = JSON.parse(localStorage.getItem('listHome'));
     if (data) {
       let walletsGroupsHome = [];
-      walletsGroupsHome = data.map((item) => {
+      walletsGroupsHome = data.map(item => {
         return this.getWalletPrimary(item.walletId, item.tokenId);
-      })
-      return walletsGroupsHome.find(item => item.coin === 'xpi')
+      });
+      return walletsGroupsHome.find(item => item.coin === 'xpi');
     }
   }
 
   public async getWalletGroupsHome() {
     let walletsGroupsHome = [];
-    let data = JSON.parse(localStorage.getItem("listHome"));
+    let data = JSON.parse(localStorage.getItem('listHome'));
     if (data) {
-      walletsGroupsHome = data.map((item) => {
+      walletsGroupsHome = data.map(item => {
         return this.getWalletPrimary(item.walletId, item.tokenId);
-      })
+      });
     }
     // Handle case delete Key
     if (walletsGroupsHome.includes(undefined)) {
       let tempWalletsGroupsHome = [];
       walletsGroupsHome = _.compact(walletsGroupsHome);
-      tempWalletsGroupsHome = walletsGroupsHome.map((item) => {
+      tempWalletsGroupsHome = walletsGroupsHome.map(item => {
         return {
           walletId: item?.id,
           tokenId: item?.tokens?.tokenId
         };
       });
-      localStorage.setItem("listHome", JSON.stringify(tempWalletsGroupsHome));
+      localStorage.setItem('listHome', JSON.stringify(tempWalletsGroupsHome));
     }
     return walletsGroupsHome;
   }
 
   public removeWalletGroupsHome(walletObj) {
-    let data = JSON.parse(localStorage.getItem("listHome"));
-    let isExist = _.find(data, item => item.walletId === walletObj.walletId && item.tokenId === walletObj?.tokenId);
+    let data = JSON.parse(localStorage.getItem('listHome'));
+    let isExist = _.find(
+      data,
+      item =>
+        item.walletId === walletObj.walletId &&
+        item.tokenId === walletObj?.tokenId
+    );
     if (isExist) {
       data.splice(data.indexOf(isExist), 1);
-      localStorage.setItem("listHome", JSON.stringify(data));
+      localStorage.setItem('listHome', JSON.stringify(data));
     }
     return !!isExist;
   }
@@ -275,7 +283,7 @@ export class ProfileProvider {
       isStatus: true,
       isDelete: false,
       keyId: newWalletKeyId
-    }
+    };
   }
 
   public setWalletGroupName(keyId: string, name: string): void {
@@ -286,7 +294,7 @@ export class ProfileProvider {
       isStatus: true,
       isDelete: false,
       keyId: keyId
-    }
+    };
   }
 
   public async getWalletGroupName(keyId: string) {
@@ -528,7 +536,8 @@ export class ProfileProvider {
       date = new Date(Number(groupBackupInfo.timestamp));
 
     this.logger.info(
-      `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${date ? date : ''
+      `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${
+        date ? date : ''
       } - Encrypted: ${wallet.isPrivKeyEncrypted} - Token: ${!!wallet
         .credentials.token}`
     );
@@ -590,7 +599,7 @@ export class ProfileProvider {
             return;
           }
           wallet.setNotificationsInterval(this.EXTENDED_UPDATE_PERIOD);
-          wallet.openWallet(() => { });
+          wallet.openWallet(() => {});
         }
       );
     }
@@ -631,9 +640,10 @@ export class ProfileProvider {
     ) {
       return false;
     } else {
-      const derivationStrategy = this.derivationPathHelperProvider.getDerivationStrategy(
-        wallet.credentials.rootPath
-      );
+      const derivationStrategy =
+        this.derivationPathHelperProvider.getDerivationStrategy(
+          wallet.credentials.rootPath
+        );
 
       const coinCode = this.derivationPathHelperProvider.parsePath(
         wallet.credentials.rootPath
@@ -898,7 +908,10 @@ export class ProfileProvider {
 
     // do not request encryption if wallets were already created without it
     const wallets = this.getWalletsFromGroup({ keyId: key.id });
-    if (!!skipEncrypt || (!key.isPrivKeyEncrypted() && wallets && wallets.length))
+    if (
+      !!skipEncrypt ||
+      (!key.isPrivKeyEncrypted() && wallets && wallets.length)
+    )
       return Promise.resolve();
     return this.showEncryptPasswordInfoModal().then((password: string) => {
       if (!password) {
@@ -915,7 +928,8 @@ export class ProfileProvider {
   }
 
   private showEncryptPasswordInfoModal(): Promise<any> {
-    const encryptPasswordModal = this.actionSheetProvider.createEncryptPasswordComponent();
+    const encryptPasswordModal =
+      this.actionSheetProvider.createEncryptPasswordComponent();
     encryptPasswordModal.present({ maxHeight: '100%', minHeight: '100%' });
     return new Promise(resolve => {
       encryptPasswordModal.onDidDismiss(password => resolve(password));
@@ -923,7 +937,8 @@ export class ProfileProvider {
   }
 
   public showEncryptPasswordInfoModalSmall(params?): Promise<any> {
-    const encryptPasswordModal = this.actionSheetProvider.createEncryptPasswordComponent(params);
+    const encryptPasswordModal =
+      this.actionSheetProvider.createEncryptPasswordComponent(params);
     encryptPasswordModal.present({ maxHeight: '48%%', minHeight: '48%%' });
     return new Promise(resolve => {
       encryptPasswordModal.onDidDismiss(password => resolve(password));
@@ -938,37 +953,39 @@ export class ProfileProvider {
         this.logger.warn('Clear Encrypt Password? ', res);
         this.onGoingProcessProvider.pause();
         // Encrypt wallet
-        return this.askToEncryptKey(data.key, !!data.isSkipAskEncrypt).then(() => {
-          this.onGoingProcessProvider.set('Creating account');
-          return this.keyProvider.addKey(data.key).then(async () => {
-            const boundWalletClients = [];
-            for (const walletClient of data.walletClients) {
-              const boundClient = await this.addAndBindWalletClient(
-                walletClient,
-                {
-                  bwsurl: opts.bwsurl,
-                  store: false
-                }
-              );
-              // Skip if wallet multisig already exists with another key
-              if (boundClient === undefined && walletClient.credentials.m > 1)
-                continue;
+        return this.askToEncryptKey(data.key, !!data.isSkipAskEncrypt).then(
+          () => {
+            this.onGoingProcessProvider.set('Creating account');
+            return this.keyProvider.addKey(data.key).then(async () => {
+              const boundWalletClients = [];
+              for (const walletClient of data.walletClients) {
+                const boundClient = await this.addAndBindWalletClient(
+                  walletClient,
+                  {
+                    bwsurl: opts.bwsurl,
+                    store: false
+                  }
+                );
+                // Skip if wallet multisig already exists with another key
+                if (boundClient === undefined && walletClient.credentials.m > 1)
+                  continue;
 
-              boundWalletClients.push(boundClient);
-            }
-            this.setOrderedWalletsByGroup(); // Update Ordered Wallet List
-            return this.storeProfileIfDirty()
-              .then(() => {
-                this.checkIfAlreadyExist(boundWalletClients);
-                this.onGoingProcessProvider.resume();
-                return Promise.resolve(_.compact(boundWalletClients));
-              })
-              .catch(err => {
-                this.onGoingProcessProvider.resume();
-                return Promise.reject('failed to bind wallets:' + err);
-              });
-          });
-        });
+                boundWalletClients.push(boundClient);
+              }
+              this.setOrderedWalletsByGroup(); // Update Ordered Wallet List
+              return this.storeProfileIfDirty()
+                .then(() => {
+                  this.checkIfAlreadyExist(boundWalletClients);
+                  this.onGoingProcessProvider.resume();
+                  return Promise.resolve(_.compact(boundWalletClients));
+                })
+                .catch(err => {
+                  this.onGoingProcessProvider.resume();
+                  return Promise.reject('failed to bind wallets:' + err);
+                });
+            });
+          }
+        );
       })
       .catch(e => {
         this.onGoingProcessProvider.resume();
@@ -1006,8 +1023,10 @@ export class ProfileProvider {
 
   private checkIfAlreadyExist(walletClients: any[]): Promise<any> {
     return new Promise(resolve => {
-      const countInArray = _.filter(walletClients, item => item == undefined)
-        .length;
+      const countInArray = _.filter(
+        walletClients,
+        item => item == undefined
+      ).length;
       if (countInArray > 0) {
         const msg1 = this.replaceParametersProvider.replace(
           this.translate.instant('The account is already in the app'),
@@ -1482,15 +1501,14 @@ export class ProfileProvider {
     try {
       disclaimerFlag = await this.persistenceProvider.getAbcPayDisclaimerFlag();
       keyOnboardingFlag = await this.persistenceProvider.getKeyOnboardingFlag();
-    } catch (error) { }
+    } catch (error) {}
     if (disclaimerFlag) {
       this.profile.disclaimerAccepted = true;
       return Promise.resolve();
     } else if (keyOnboardingFlag) {
       const onboardingState = 'SIMPLEFLOW';
       return Promise.resolve(onboardingState);
-    }
-    else {
+    } else {
       const onboardingState = 'UNFINISHEDONBOARDING';
       return Promise.resolve(onboardingState);
     }
@@ -1649,6 +1667,7 @@ export class ProfileProvider {
               account: opts.account || 0,
               addressType: opts.addressType,
               isSlpToken: opts.isSlpToken,
+              isFromRaipay: opts.isFromRaipay,
               n: opts.n || 1
             })
           );
@@ -1674,7 +1693,7 @@ export class ProfileProvider {
               network,
               account: opts.account || 0,
               n: opts.n || 1,
-              isSlpToken: opts.isSlpToken,
+              isSlpToken: opts.isSlpToken
             })
           );
           if (opts.duplicateKeyId) {
@@ -1715,6 +1734,7 @@ export class ProfileProvider {
               account: opts.account || 0,
               n: opts.n || 1,
               isSlpToken: opts.isSlpToken,
+              isFromRaipay: opts.isFromRaipay
             })
           );
         } catch (e) {
@@ -1728,7 +1748,7 @@ export class ProfileProvider {
                 network,
                 account: opts.account || 0,
                 n: opts.n || 1,
-                isSlpToken: opts.isSlpToken,
+                isSlpToken: opts.isSlpToken
               })
             );
           } else {
@@ -1775,7 +1795,8 @@ export class ProfileProvider {
                 walletPrivKey: opts.walletPrivKey,
                 coin: opts.coin,
                 useNativeSegwit: opts.useNativeSegwit,
-                isSlpToken: opts.isSlpToken
+                isSlpToken: opts.isSlpToken,
+                isFromRaipay: opts.isFromRaipay
               },
               err => {
                 const copayerRegistered =
@@ -1789,11 +1810,19 @@ export class ProfileProvider {
                   );
                   return reject(msg);
                 } else if (copayerRegistered && opts.isSlpToken) {
-                  return reject(
-                    this.translate.instant(
-                      'Only one slp Token wallet can be created'
-                    )
-                  );
+                  if (!opts.isFromRaipay) {
+                    return reject(
+                      this.translate.instant(
+                        'Only one slp Token wallet can be created'
+                      )
+                    );
+                  } else {
+                    return reject(
+                      this.translate.instant(
+                        'Only one wallet path 145 can be created'
+                      )
+                    );
+                  }
                 } else if (copayerRegistered) {
                   // try with account + 1
                   opts.account = opts.account ? opts.account + 1 : 1;
@@ -1846,7 +1875,9 @@ export class ProfileProvider {
           })
         ) {
           return reject(
-            this.translate.instant('Cannot join the same account more that once')
+            this.translate.instant(
+              'Cannot join the same account more that once'
+            )
           );
         }
       } catch (ex) {
@@ -1906,7 +1937,7 @@ export class ProfileProvider {
   public getWalletPrimary(walletId, tokenId) {
     let wallet = _.cloneDeep(this.wallet[walletId]);
     if (wallet && tokenId) {
-      wallet.tokens = wallet.tokens.find(ele =>  ele.tokenId === tokenId);
+      wallet.tokens = wallet.tokens.find(ele => ele.tokenId === tokenId);
     }
     return wallet;
   }
@@ -1979,9 +2010,8 @@ export class ProfileProvider {
       `Creating token wallet ${tokenObj.name} for ${ethWallet.id}:`
     );
 
-    const tokenCredentials = ethWallet.credentials.getTokenCredentials(
-      tokenObj
-    );
+    const tokenCredentials =
+      ethWallet.credentials.getTokenCredentials(tokenObj);
     const walletClient = this.bwcProvider.getClient(null, {
       baseUrl: this.getBWSURL(ethWallet.credentials.walletId),
       bp_partner: ethWallet.bp_partner,
@@ -2002,9 +2032,8 @@ export class ProfileProvider {
     this.logger.debug(
       `Creating ETH multisig wallet ${multisigEthInfo.walletName} for ${ethWallet.id}:`
     );
-    const multisigEthCredentials = ethWallet.credentials.getMultisigEthCredentials(
-      multisigEthInfo
-    );
+    const multisigEthCredentials =
+      ethWallet.credentials.getMultisigEthCredentials(multisigEthInfo);
     const walletClient = this.bwcProvider.getClient(null, {
       bwsurl: this.getBWSURL(ethWallet.credentials.walletId),
       bp_partner: ethWallet.bp_partner,
@@ -2037,7 +2066,11 @@ export class ProfileProvider {
     return this.addAndBindWalletClient(multisigEthWalletClient);
   }
 
-  public createMultipleWallets(coins: string[], tokens = [], isSimpleFlow?: boolean): Promise<any> {
+  public createMultipleWallets(
+    coins: string[],
+    tokens = [],
+    isSimpleFlow?: boolean
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       if (tokens && tokens.length && coins.indexOf('eth') < 0) {
         reject('No ethereum wallets for tokens');
@@ -2081,7 +2114,6 @@ export class ProfileProvider {
               walletClients = walletClients.concat(tokenClients);
             }
 
-
             this.addAndBindWalletClients({
               key: firstWalletData.key,
               walletClients
@@ -2104,72 +2136,82 @@ export class ProfileProvider {
     return new Promise((resolve, reject) => {
       const coins = ['xpi', 'xec'];
       const defaultOptsXpi = this.getDefaultWalletOpts(coins[0]);
-      defaultOptsXpi.name = `${defaultOptsXpi.name} - 1899`
+      defaultOptsXpi.name = `${defaultOptsXpi.name} - 1899`;
       defaultOptsXpi.isSlpToken = true;
-      this._createWallet(defaultOptsXpi).then(data => {
-        const key = data.key;
-        const firstWalletData = data;
-        const newOpts: any = {};
-        Object.assign(newOpts, this.getDefaultWalletOpts(coins[1]));
-        newOpts['key'] = key; // Add Key
-        newOpts['keyId'] = key.id;
-        newOpts['name'] += ' - 1899';
-        delete newOpts['mnemonic'];
-        newOpts['isSlpToken'] = true;
-        newOpts['singleAddress'] = true;
-        const create2ndWallets = [this._createWallet(newOpts)];
-        Promise.all(create2ndWallets)
-          .then(walletsData => {
-            walletsData.unshift(firstWalletData);
-            let walletClients = _.map(walletsData, 'walletClient');
-            const data = {
-              key: firstWalletData.key,
-              walletClients,
-              isSkipAskEncrypt: !!isSkipAskEncrypt
-            }
-            return data;
-          }).then(data => {
-            return this.addAndBindWalletClients(data)
-          })
-          .then(async (boundWalletClients) => {
-            try {
-              for (let i = 0; i < _.size(boundWalletClients); i++) {
-                const walletClient = boundWalletClients[i];
-                this.setWalletBackup(walletClient.id);
-                const address = await this.setAddress(walletClient);
-                if (this.isSupportToken(walletClient)) {
-                  const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
-                  const etoken = this.addressProvider.encodeAddress('etoken', type, hash, address);
-                  walletClient.etokenAddress = etoken;
+      this._createWallet(defaultOptsXpi)
+        .then(data => {
+          const key = data.key;
+          const firstWalletData = data;
+          const newOpts: any = {};
+          Object.assign(newOpts, this.getDefaultWalletOpts(coins[1]));
+          newOpts['key'] = key; // Add Key
+          newOpts['keyId'] = key.id;
+          newOpts['name'] += ' - 1899';
+          delete newOpts['mnemonic'];
+          newOpts['isSlpToken'] = true;
+          newOpts['singleAddress'] = true;
+          const create2ndWallets = [this._createWallet(newOpts)];
+          Promise.all(create2ndWallets)
+            .then(walletsData => {
+              walletsData.unshift(firstWalletData);
+              let walletClients = _.map(walletsData, 'walletClient');
+              const data = {
+                key: firstWalletData.key,
+                walletClients,
+                isSkipAskEncrypt: !!isSkipAskEncrypt
+              };
+              return data;
+            })
+            .then(data => {
+              return this.addAndBindWalletClients(data);
+            })
+            .then(async boundWalletClients => {
+              try {
+                for (let i = 0; i < _.size(boundWalletClients); i++) {
+                  const walletClient = boundWalletClients[i];
+                  this.setWalletBackup(walletClient.id);
+                  const address = await this.setAddress(walletClient);
+                  if (this.isSupportToken(walletClient)) {
+                    const { prefix, type, hash } =
+                      this.addressProvider.decodeAddress(address);
+                    const etoken = this.addressProvider.encodeAddress(
+                      'etoken',
+                      type,
+                      hash,
+                      address
+                    );
+                    walletClient.etokenAddress = etoken;
+                  }
                 }
+                this.setDefaultPrimaryAccount();
+                return resolve(boundWalletClients);
+              } catch (error) {
+                reject(error);
               }
-              this.setDefaultPrimaryAccount();
-              return resolve(boundWalletClients);
-            } catch (error) {
-              reject(error);
-            }
-          }).catch(e => {
-            reject(e);
-          });
-      }).catch(e => {
-        reject(e);
-      });
-    })
-  };
+            })
+            .catch(e => {
+              reject(e);
+            });
+        })
+        .catch(e => {
+          reject(e);
+        });
+    });
+  }
 
   setDefaultPrimaryAccount() {
-    let data = JSON.parse(localStorage.getItem("listHome"));
+    let data = JSON.parse(localStorage.getItem('listHome'));
     if (!data) {
       let wallets = _.cloneDeep(this.wallet);
       for (let item in wallets) {
         let walletObj = {
           walletId: item
-        }
+        };
         this.setWalletGroupsHome(walletObj);
       }
     }
   }
-  
+
   public createWallet(opts) {
     this.walletChange = {
       isStatus: true,
@@ -2186,15 +2228,22 @@ export class ProfileProvider {
             return this.addAndBindWalletClient(data.walletClient, {
               bwsurl: opts.bwsurl
             }).then(walletClient => {
-              if (opts.isImport && walletClient) this.setWalletBackup(walletClient.id);
+              if (opts.isImport && walletClient)
+                this.setWalletBackup(walletClient.id);
               return this.setAddress(walletClient).then(data => {
                 if (this.isSupportToken(data)) {
-                  const { prefix, type, hash } = this.addressProvider.decodeAddress(data);
-                  const etoken = this.addressProvider.encodeAddress('etoken', type, hash, data);
-                  walletClient.etokenAddress = etoken
+                  const { prefix, type, hash } =
+                    this.addressProvider.decodeAddress(data);
+                  const etoken = this.addressProvider.encodeAddress(
+                    'etoken',
+                    type,
+                    hash,
+                    data
+                  );
+                  walletClient.etokenAddress = etoken;
                 }
                 return Promise.resolve(walletClient);
-              })
+              });
             });
           });
         });
@@ -2202,75 +2251,88 @@ export class ProfileProvider {
     });
   }
 
-
   public createTokenWallets(opts, isSimpleFlow?: boolean): Promise<any> {
-
     return new Promise((resolve, reject) => {
-      this._createWallet(opts).then(data => {
-        const key = data.key;
-        const firstWalletData = data;
-        const slpOpts = _.cloneDeep(opts);
-        slpOpts.key = key; // Add Key
-        slpOpts.keyId = key.id;
-        slpOpts.singleAddress = true;
-        slpOpts.isSlpToken = true;
-        delete slpOpts.mnemonic;
-        if (!!isSimpleFlow) {
-          slpOpts.name = `${this.currencyProvider.getCoinName(Coin.XEC)} - 1899`;
-          slpOpts.coin = Coin.XEC;
-        }
-        else {
-          slpOpts.name = `${opts.name} - 1899`
-        }
-
-        const create2ndWallets = [this._createWallet(slpOpts)];
-        Promise.all(create2ndWallets)
-          .then(walletsData => {
-            walletsData.unshift(firstWalletData);
-            let walletClients = _.map(walletsData, 'walletClient');
-            const data = {
-              key: firstWalletData.key,
-              walletClients,
-              isSkipAskEncrypt: false
+      this._createWallet(opts)
+        .then(data => {
+          const key = data.key;
+          const firstWalletData = data;
+          const slpOpts = _.cloneDeep(opts);
+          slpOpts.key = key; // Add Key
+          slpOpts.keyId = key.id;
+          slpOpts.singleAddress = true;
+          slpOpts.isSlpToken = true;
+          delete slpOpts.mnemonic;
+          if (!!isSimpleFlow) {
+            slpOpts.name = `${this.currencyProvider.getCoinName(
+              Coin.XEC
+            )} - 1899`;
+            if (opts.isFromRaipay) {
+              slpOpts.name = `${opts.name} - 145`;
             }
-            this.addAndBindWalletClients(data)
-              .then(async (boundWalletClients) => {
-                try {
-                  for (let i = 0; i < _.size(boundWalletClients); i++) {
-                    const walletClient = boundWalletClients[i];
-                    this.setWalletBackup(walletClient.id);
-                    const address = await this.setAddress(walletClient);
-                    if (this.isSupportToken(walletClient)) {
-                      const { prefix, type, hash } = this.addressProvider.decodeAddress(address);
-                      const etoken = this.addressProvider.encodeAddress('etoken', type, hash, address);
-                      walletClient.etokenAddress = etoken;
+            slpOpts.coin = Coin.XEC;
+          } else {
+            slpOpts.name = `${opts.name} - 1899`;
+            if (opts.isFromRaipay) {
+              slpOpts.name = `${opts.name} - 145`;
+            }
+          }
+
+          const create2ndWallets = [this._createWallet(slpOpts)];
+          Promise.all(create2ndWallets)
+            .then(walletsData => {
+              walletsData.unshift(firstWalletData);
+              let walletClients = _.map(walletsData, 'walletClient');
+              const data = {
+                key: firstWalletData.key,
+                walletClients,
+                isSkipAskEncrypt: false
+              };
+              this.addAndBindWalletClients(data)
+                .then(async boundWalletClients => {
+                  try {
+                    for (let i = 0; i < _.size(boundWalletClients); i++) {
+                      const walletClient = boundWalletClients[i];
+                      this.setWalletBackup(walletClient.id);
+                      const address = await this.setAddress(walletClient);
+                      if (this.isSupportToken(walletClient)) {
+                        const { prefix, type, hash } =
+                          this.addressProvider.decodeAddress(address);
+                        const etoken = this.addressProvider.encodeAddress(
+                          'etoken',
+                          type,
+                          hash,
+                          address
+                        );
+                        walletClient.etokenAddress = etoken;
+                      }
                     }
+                    return resolve(boundWalletClients);
+                  } catch (error) {
+                    reject(error);
                   }
-                  return resolve(boundWalletClients);
-                } catch (error) {
-                  reject(error);
-                }
-              }).catch(e => {
-                reject(e);
-              });
-          }).catch(e => {
-            reject(e);
-          });
-      }).catch(e => {
-        reject(e);
-      });
+                })
+                .catch(e => {
+                  reject(e);
+                });
+            })
+            .catch(e => {
+              reject(e);
+            });
+        })
+        .catch(e => {
+          reject(e);
+        });
     });
   }
 
-
   isSupportToken(wallet): boolean {
     if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
-    return false
+    return false;
   }
 
   public setAddress(wallet): Promise<string> {
-    if (!wallet || !wallet.isComplete())
-      return Promise.resolve('');
+    if (!wallet || !wallet.isComplete()) return Promise.resolve('');
     return this.walletProvider
       .getAddress(wallet, false)
       .then(addr => {
@@ -2304,7 +2366,7 @@ export class ProfileProvider {
                 isStatus: true,
                 isDelete: false,
                 keyId: opts.keyId
-              }
+              };
               return Promise.resolve(walletClient);
             });
           });
@@ -2357,7 +2419,7 @@ export class ProfileProvider {
         isStatus: true,
         isDelete: false,
         keyId: keyId
-      }
+      };
     }
   }
 
@@ -2529,7 +2591,7 @@ export class ProfileProvider {
       isStatus: true,
       isDelete: false,
       keyId: this.wallet[walletId].keyId
-    }
+    };
   }
 
   public getTxps(opts): Promise<any> {

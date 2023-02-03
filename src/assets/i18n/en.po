@@ -497,6 +497,9 @@ msgstr "Backup"
 msgid "Backup recovery phrase"
 msgstr "Backup recovery phrase"
 
+msgid "Back up my phrase"
+msgstr "Back up my phrase"
+
 msgid "Backup Phrase"
 msgstr "Backup Phrase"
 

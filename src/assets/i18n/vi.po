@@ -506,6 +506,9 @@ msgstr "Sao lưu"
 msgid "Backup recovery phrase"
 msgstr "Sao lưu cụm từ khôi phục"
 
+msgid "Back up my phrase"
+msgstr "Sao lưu cụm từ của tôi"
+
 msgid "Backup Phrase"
 msgstr "Sao lưu cụm từ (12 từ)"
 

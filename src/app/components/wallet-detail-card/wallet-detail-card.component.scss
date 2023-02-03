@@ -237,6 +237,22 @@ wallet-detail-card {
           background: url(../../../assets/img/wallet-details/xec-home-bg.svg) no-repeat;
         }
       }
+      &-USDR {
+        background: url(../../../assets/img/wallet-details/bg-xec.svg) no-repeat;
+        background-size: cover !important;
+        background-position: center !important;
+        &.card-home {
+          background: url(../../../assets/img/wallet-details/xec-home-bg.svg) no-repeat;
+        }
+      }
+      &-eLPS {
+        background: url(../../../assets/img/wallet-details/bg-xec.svg) no-repeat;
+        background-size: cover !important;
+        background-position: center !important;
+        &.card-home {
+          background: url(../../../assets/img/wallet-details/xec-home-bg.svg) no-repeat;
+        }
+      }
       &-default {
         background: url(../../../assets/img/wallet-details/bg-xec.svg) no-repeat;
         background-size: cover !important;

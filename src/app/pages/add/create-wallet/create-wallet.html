@@ -176,7 +176,8 @@
         </div>
       </ion-item>
 
-      <ion-item class="option-container" [ngClass]="{'set-padding-top': !isEnvDev}"
+      <!-- TODO: Hide support path 145 -->
+      <!-- <ion-item class="option-container" [ngClass]="{'set-padding-top': !isEnvDev}"
         *ngIf="!isShared && (this.coin === 'xpi' || this.coin === 'xec')">
         <div class="option-line">
           <ion-label translate>
@@ -189,7 +190,7 @@
             Only select path m'/44'/145'/0 to import seed of wallet supports path 145
           </span>
         </div>
-      </ion-item>
+      </ion-item> -->
 
       <ion-item lines="none" class="option-container" *ngIf="!isSingleAddress()"
         [ngClass]="{'with-label': createForm.value.singleAddress}">

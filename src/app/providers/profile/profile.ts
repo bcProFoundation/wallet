@@ -955,7 +955,7 @@ export class ProfileProvider {
         // Encrypt wallet
         return this.askToEncryptKey(data.key, !!data.isSkipAskEncrypt).then(
           () => {
-            this.onGoingProcessProvider.set('Creating account');
+            this.onGoingProcessProvider.set('creatingWallet');
             return this.keyProvider.addKey(data.key).then(async () => {
               const boundWalletClients = [];
               for (const walletClient of data.walletClients) {

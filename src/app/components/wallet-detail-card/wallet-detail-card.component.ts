@@ -1,10 +1,38 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetProvider, AddressProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, ErrorsProvider, EventManagerService, Logger, PlatformProvider, ProfileProvider, RateProvider, TokenProvider, WalletProvider } from 'src/app/providers';
+import {
+  ActionSheetProvider,
+  AddressProvider,
+  AppProvider,
+  BwcErrorProvider,
+  ConfigProvider,
+  CurrencyProvider,
+  ErrorsProvider,
+  EventManagerService,
+  Logger,
+  PlatformProvider,
+  ProfileProvider,
+  RateProvider,
+  TokenProvider,
+  WalletProvider
+} from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import * as _ from 'lodash';
 import { TokenInforPage } from 'src/app/pages/token-info/token-info';
-import { IonItemSliding, ModalController, ToastController } from '@ionic/angular';
+import {
+  IonItemSliding,
+  ModalController,
+  ToastController
+} from '@ionic/angular';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { timer } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,19 +51,21 @@ export class WalletDetailCardComponent {
   wallet: any;
 
   @Input()
-  isHomeCard: boolean = false;  
+  isHomeCard: boolean = false;
 
   @Input()
   walletNotRegistered: any;
-  
+
   @Input()
   token: any;
 
   @Input()
   isToken: boolean = false;
-  
+
   @Input()
   flagAllItemRemove: boolean = false;
+
+  @Output() genNewAddressEvent = new EventEmitter<boolean>();
 
   @ViewChild('slidingItem') slidingItem: IonItemSliding;
   @ViewChild('itemWallet') itemWallet: ElementRef;
@@ -77,22 +107,20 @@ export class WalletDetailCardComponent {
   }
 
   ngOnInit() {
-    this.walletProvider
-      .getAddress(this.wallet, undefined)
-      .then(addr => {
-        if (!addr) return;
-        const address = this.walletProvider.getAddressView(
-          this.wallet.coin,
-          this.wallet.network,
-          addr
-        );
-        this.address = address;
-      })
+    this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
+      if (!addr) return;
+      const address = this.walletProvider.getAddressView(
+        this.wallet.coin,
+        this.wallet.network,
+        addr
+      );
+      this.address = address;
+    });
     this.hiddenBalance = this.wallet.balanceHidden;
     this.bchAddrFormat = 'cashAddress';
     this.checkCardExistListPrimary();
     if (this.isToken) {
-      this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`
+      this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`;
     }
   }
 
@@ -105,9 +133,9 @@ export class WalletDetailCardComponent {
         this.slidingItem.close();
       }
     }
-    this.events.subscribe('Local/Update Amount Token', (data) => {
+    this.events.subscribe('Local/Update Amount Token', data => {
       if (data) this.amountToken = data;
-    })
+    });
   }
 
   ngAfterViewInit() {
@@ -120,7 +148,9 @@ export class WalletDetailCardComponent {
 
   handleOnDrag() {
     let element = this.itemWallet.nativeElement;
-    this.flagOptionRemove ? element.style.background = '#677A87' : element.style.background = '#30885a';
+    this.flagOptionRemove
+      ? (element.style.background = '#677A87')
+      : (element.style.background = '#30885a');
   }
 
   public updateAll = _.debounce(
@@ -138,8 +168,13 @@ export class WalletDetailCardComponent {
   );
 
   private checkCardExistListPrimary() {
-    let data = JSON.parse(localStorage.getItem("listHome"));
-    let isExist = _.find(data, item => item.walletId === this.wallet.id && item?.tokenId === this.token?.tokenId);
+    let data = JSON.parse(localStorage.getItem('listHome'));
+    let isExist = _.find(
+      data,
+      item =>
+        item.walletId === this.wallet.id &&
+        item?.tokenId === this.token?.tokenId
+    );
     this.flagOptionRemove = !!isExist;
   }
 
@@ -189,29 +224,32 @@ export class WalletDetailCardComponent {
   }
 
   public goToTokenInfo() {
-    this.modalCtrl.create(
-      {
+    this.modalCtrl
+      .create({
         component: TokenInforPage,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
           tokenInfo: this.token.tokenInfo
         }
-      }).then(res => {
-        res.present();
       })
+      .then(res => {
+        res.present();
+      });
   }
 
   public setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
-    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/xec.svg';
+    return isValid
+      ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg`
+      : 'assets/img/currencies/xec.svg';
   }
 
   public goToMultisignInfo() {
     const receive = this.actionSheetProvider.createMultisignInfo(this.wallet);
-      receive.present();
-      receive.onDidDismiss(data => {
-        if (data) console.log('close action multisig');
-      });
+    receive.present();
+    receive.onDidDismiss(data => {
+      if (data) console.log('close action multisig');
+    });
   }
 
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
@@ -238,7 +276,8 @@ export class WalletDetailCardComponent {
         if (this.address && this.address != address) {
           this.playAnimation = true;
         }
-        if (this.wallet.coin === 'bch' || this.wallet.coin === 'xec') this.bchCashAddress = address;
+        if (this.wallet.coin === 'bch' || this.wallet.coin === 'xec')
+          this.bchCashAddress = address;
 
         this.updateQrAddress(address, newAddr);
       })
@@ -274,7 +313,17 @@ export class WalletDetailCardComponent {
       await timer(400).toPromise();
     }
     this.address = address;
-
+    if (this.wallet && this.wallet.etokenAddress) {
+      const { prefix, type, hash } =
+        this.addressProvider.decodeAddress(address);
+      this.wallet.etokenAddress = this.addressProvider.encodeAddress(
+        'etoken',
+        type,
+        hash,
+        address
+      );
+    }
+    this.genNewAddressEvent.emit(true);
     await timer(200).toPromise();
     this.playAnimation = false;
   }
@@ -323,9 +372,7 @@ export class WalletDetailCardComponent {
       let opts = {
         aliasFor: {}
       };
-      opts.aliasFor[
-        this.wallet.credentials.walletId
-      ] = this.wallet.name;
+      opts.aliasFor[this.wallet.credentials.walletId] = this.wallet.name;
       this.configProvider.set(opts);
       this.events.publish('Local/ConfigUpdate', {
         walletId: this.wallet.credentials.walletId
@@ -346,19 +393,19 @@ export class WalletDetailCardComponent {
   }
 
   public goToSendPageToken() {
-    if (this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
+    if (
+      this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee
+    ) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'no-amount-xec',
-        { secondBtnGroup: true,
-          isShowTitle: false
-        }
+        { secondBtnGroup: true, isShowTitle: false }
       );
       infoSheet.present();
     } else {
       this.router.navigate(['/send-page'], {
         state: {
           walletId: this.wallet.id,
-          token : this.token,
+          token: this.token,
           isSendFromHome: true
         }
       });
@@ -367,12 +414,15 @@ export class WalletDetailCardComponent {
 
   public removeOutGroupsHome() {
     if (this.profileProvider.isLastItemPrimaryList()) {
-      this.presentToast('Can not remove the last account in Home!', 'toast-warning');
+      this.presentToast(
+        'Can not remove the last account in Home!',
+        'toast-warning'
+      );
     } else {
       let walletObj = {
         walletId: this.wallet.id,
         tokenId: this.token?.tokenId
-      }
+      };
       let result = this.profileProvider.removeWalletGroupsHome(walletObj);
       if (result) {
         this.presentToast('Removed account successfully!');
@@ -389,7 +439,7 @@ export class WalletDetailCardComponent {
     let walletObj = {
       walletId: this.wallet?.id,
       tokenId: this.token?.tokenId
-    }
+    };
     let result = this.profileProvider.setWalletGroupsHome(walletObj);
     if (result && result.added.status) {
       this.router.navigate(['/tabs/home']).then(() => {
@@ -409,7 +459,7 @@ export class WalletDetailCardComponent {
       duration: 3000,
       position: 'bottom',
       animated: true,
-      cssClass: `custom-finish-toast ${cssClass}`,
+      cssClass: `custom-finish-toast ${cssClass}`
     });
     toast.present();
   }
@@ -429,6 +479,5 @@ export class WalletDetailCardComponent {
         }
       });
     }
-    
   }
 }

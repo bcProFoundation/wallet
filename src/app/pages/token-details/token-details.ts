@@ -1,30 +1,39 @@
-import { HttpClient } from "@angular/common/http";
-import { ChangeDetectorRef, Component, NgZone, ViewEncapsulation } from "@angular/core";
-import { Router } from "@angular/router";
-import { LoadingController, ModalController, ToastController } from "@ionic/angular";
-import { TranslateService } from "@ngx-translate/core";
-import _ from "lodash";
-import moment from "moment";
-import { Subscription } from "rxjs";
-import { Token } from "src/app/models/tokens/tokens.model";
-import { AddressBookProvider, PlatformProvider } from "src/app/providers";
-import { ActionSheetProvider } from "src/app/providers/action-sheet/action-sheet";
-import { AppProvider } from "src/app/providers/app/app";
-import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
-import { DecimalFormatBalance } from "src/app/providers/decimal-format.ts/decimal-format";
-import { ErrorsProvider } from "src/app/providers/errors/errors";
-import { EventManagerService } from "src/app/providers/event-manager.service";
-import { Logger } from "src/app/providers/logger/logger";
-import { ProfileProvider } from "src/app/providers/profile/profile";
-import { ThemeProvider } from "src/app/providers/theme/theme";
-import { TimeProvider } from "src/app/providers/time/time";
-import { TokenProvider } from "src/app/providers/token-sevice/token-sevice";
-import { WalletProvider } from "src/app/providers/wallet/wallet";
-import { TokenInforPage } from "../token-info/token-info";
-import { TxDetailsModal } from "../tx-details/tx-details";
-import { SearchTxModalPage } from "../wallet-details/search-tx-modal/search-tx-modal";
+import { HttpClient } from '@angular/common/http';
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  ViewEncapsulation
+} from '@angular/core';
+import { Router } from '@angular/router';
+import {
+  LoadingController,
+  ModalController,
+  ToastController
+} from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import _ from 'lodash';
+import moment from 'moment';
+import { Subscription } from 'rxjs';
+import { Token } from 'src/app/models/tokens/tokens.model';
+import { AddressBookProvider, PlatformProvider } from 'src/app/providers';
+import { ActionSheetProvider } from 'src/app/providers/action-sheet/action-sheet';
+import { AppProvider } from 'src/app/providers/app/app';
+import { BwcErrorProvider } from 'src/app/providers/bwc-error/bwc-error';
+import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { ErrorsProvider } from 'src/app/providers/errors/errors';
+import { EventManagerService } from 'src/app/providers/event-manager.service';
+import { Logger } from 'src/app/providers/logger/logger';
+import { ProfileProvider } from 'src/app/providers/profile/profile';
+import { ThemeProvider } from 'src/app/providers/theme/theme';
+import { TimeProvider } from 'src/app/providers/time/time';
+import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
+import { WalletProvider } from 'src/app/providers/wallet/wallet';
+import { TokenInforPage } from '../token-info/token-info';
+import { TxDetailsModal } from '../tx-details/tx-details';
+import { SearchTxModalPage } from '../wallet-details/search-tx-modal/search-tx-modal';
 const HISTORY_SHOW_LIMIT = 10;
-const configProvider = require('src/assets/appConfig.json')
+const configProvider = require('src/assets/appConfig.json');
 const MIN_UPDATE_TIME = 1000;
 
 interface UpdateWalletOptsI {
@@ -42,7 +51,7 @@ export class TokenDetailsPage {
   private onResumeSubscription: Subscription;
   public navPramss;
   public wallet;
-  public token : Token;
+  public token: Token;
   public tokenData;
   public amountToken;
   public selectedTheme;
@@ -62,6 +71,8 @@ export class TokenDetailsPage {
   public isShowZeroState = false;
   private tokenId;
   public isSendFromHome: boolean = false;
+  public isGenNewAddress: boolean = false;
+
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -76,7 +87,7 @@ export class TokenDetailsPage {
     private logger: Logger,
     private changeDetectorRef: ChangeDetectorRef,
     private events: EventManagerService,
-    private timeProvider : TimeProvider,
+    private timeProvider: TimeProvider,
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
     private appProvider: AppProvider,
@@ -99,7 +110,7 @@ export class TokenDetailsPage {
 
     if (this.tokenId) {
       const tokens = this.wallet?.tokens;
-      this.token = tokens.find(item => item.tokenId === this.tokenId)
+      this.token = tokens.find(item => item.tokenId === this.tokenId);
     }
 
     this.addressbookProvider
@@ -115,10 +126,13 @@ export class TokenDetailsPage {
   async handleScrolling(event) {
     if (event.detail.currentY > 0) {
       this.isScroll = true;
-    }
-    else {
+    } else {
       this.isScroll = false;
     }
+  }
+
+  handleGenNewAddress(event: boolean) {
+    this.isGenNewAddress = event;
   }
 
   ionViewDidEnter() {
@@ -128,7 +142,7 @@ export class TokenDetailsPage {
       } else {
         this.navPramss = history ? history.state : {};
       }
-      if(this.navPramss && this.navPramss.finishParam){
+      if (this.navPramss && this.navPramss.finishParam) {
         this.finishParam = this.navPramss.finishParam;
         this.presentToast();
       }
@@ -142,7 +156,7 @@ export class TokenDetailsPage {
       position: 'top',
       animated: true,
       cssClass: 'custom-finish-toast',
-      buttons:[
+      buttons: [
         {
           side: 'start',
           icon: 'checkmark-circle',
@@ -165,8 +179,8 @@ export class TokenDetailsPage {
   }
 
   caculateAmountToken(utxoToken, decimals) {
-    const totalAmount = _.sumBy(utxoToken, 'amountToken')
-    return totalAmount / Math.pow(10, decimals)
+    const totalAmount = _.sumBy(utxoToken, 'amountToken');
+    return totalAmount / Math.pow(10, decimals);
   }
 
   shouldShowZeroState() {
@@ -182,16 +196,29 @@ export class TokenDetailsPage {
   }
 
   loadToken() {
-    this.tokenProvider.getUtxosToken(this.wallet).then(utxos => {
-      const utxoToken = _.filter(utxos, item => item.tokenId == this.token.tokenId && !item.isNonSLP);
-      this.token.utxoToken = utxoToken;
-      this.token.amountToken = this.caculateAmountToken(utxoToken, this.token.tokenInfo.decimals);
-      this.token.alternativeBalance = this.tokenProvider.getAlternativeBalanceToken(this.token, this.wallet);
-      this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`
-      this.events.publish('Local/Update Amount Token', this.amountToken)
-    }).catch(err => {
-      this.logger.error(err);
-    })
+    this.tokenProvider
+      .getUtxosToken(this.wallet)
+      .then(utxos => {
+        const utxoToken = _.filter(
+          utxos,
+          item => item.tokenId == this.token.tokenId && !item.isNonSLP
+        );
+        this.token.utxoToken = utxoToken;
+        this.token.amountToken = this.caculateAmountToken(
+          utxoToken,
+          this.token.tokenInfo.decimals
+        );
+        this.token.alternativeBalance =
+          this.tokenProvider.getAlternativeBalanceToken(
+            this.token,
+            this.wallet
+          );
+        this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`;
+        this.events.publish('Local/Update Amount Token', this.amountToken);
+      })
+      .catch(err => {
+        this.logger.error(err);
+      });
   }
 
   ionViewWillEnter() {
@@ -201,7 +228,10 @@ export class TokenDetailsPage {
     if (this.navPramss.clearCache) {
       this.clearHistoryCache();
     } else {
-      this.wallet.completeHistory = _.filter(this.wallet.completeHistory, item => item.tokenId == this.token.tokenId)
+      this.wallet.completeHistory = _.filter(
+        this.wallet.completeHistory,
+        item => item.tokenId == this.token.tokenId
+      );
       this.fetchTxHistory({
         walletId: this.wallet.credentials.walletId,
         force: true
@@ -214,19 +244,20 @@ export class TokenDetailsPage {
   }
 
   public goToSendPage() {
-    if (this.wallet.cachedStatus.availableBalanceSat === 0 || this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee) {
+    if (
+      this.wallet.cachedStatus.availableBalanceSat === 0 ||
+      this.wallet.cachedStatus.availableBalanceSat < configProvider.eTokenFee
+    ) {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'no-amount-xec',
-        { secondBtnGroup: true,
-          isShowTitle: false
-        }
+        { secondBtnGroup: true, isShowTitle: false }
       );
       infoSheet.present();
     } else {
       this.router.navigate(['/send-page'], {
         state: {
           walletId: this.wallet.id,
-          token : this.token
+          token: this.token
         }
       });
     }
@@ -242,7 +273,7 @@ export class TokenDetailsPage {
       },
       showBackdrop: false,
       backdropDismiss: true
-    })
+    });
     await modal.present();
     modal.onDidDismiss().then(({ data }) => {
       if (!data || !data.txid) return;
@@ -251,16 +282,17 @@ export class TokenDetailsPage {
   }
 
   public goToTokenInfo() {
-    this.modalCtrl.create(
-      {
+    this.modalCtrl
+      .create({
         component: TokenInforPage,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
           tokenInfo: this.token.tokenInfo
         }
-      }).then(res => {
-        res.present();
       })
+      .then(res => {
+        res.present();
+      });
   }
 
   public showErrorInfoSheet(error: Error | string): void {
@@ -280,7 +312,7 @@ export class TokenDetailsPage {
 
   private debounceSetWallets = _.debounce(
     async () => {
-      this.loadToken()
+      this.loadToken();
       this.events.publish('Local/WalletFocus', {
         walletId: this.wallet.credentials.walletId,
         force: true
@@ -345,14 +377,14 @@ export class TokenDetailsPage {
   }
 
   private updateHistoryToken(tx) {
-    const tokenInfo = this.token.tokenInfo
+    const tokenInfo = this.token.tokenInfo;
     if (tx.action == 'sent') {
-      tx.addressTo = this.updateAddressToShowToken(tx)
+      tx.addressTo = this.updateAddressToShowToken(tx);
     }
     tx.amountToken = tx.amountTokenUnit / Math.pow(10, tokenInfo.decimals);
     tx.symbolToken = tokenInfo.symbol;
     tx.name = tokenInfo.name;
-    tx.isGenesis = tx.txType == 'GENESIS'
+    tx.isGenesis = tx.txType == 'GENESIS';
     if (tx.txType == 'GENESIS') tx.action = 'received';
   }
 
@@ -410,7 +442,10 @@ export class TokenDetailsPage {
     this.walletProvider
       .fetchTxHistory(this.wallet, progressFn, opts)
       .then(txHistory => {
-        this.wallet.completeHistory =  _.filter(txHistory, item => item.tokenId == this.token.tokenId) ;
+        this.wallet.completeHistory = _.filter(
+          txHistory,
+          item => item.tokenId == this.token.tokenId
+        );
         this.events.publish('Local/WalletHistoryUpdate', {
           walletId: opts.walletId,
           finished: true
@@ -434,7 +469,6 @@ export class TokenDetailsPage {
     return null;
   }
 
-
   private async showHistory(loading?: boolean) {
     const loader = await this.loadingCtrl.create({
       message: this.translate.instant('Loading...'),
@@ -445,7 +479,10 @@ export class TokenDetailsPage {
       loader.dismiss();
       return;
     }
-    this.history = _.filter(this.wallet.completeHistory, item => item.tokenId == this.token.tokenId)
+    this.history = _.filter(
+      this.wallet.completeHistory,
+      item => item.tokenId == this.token.tokenId
+    );
     this.history = this.history.slice(
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
@@ -490,7 +527,7 @@ export class TokenDetailsPage {
         this.showHistory();
       }
     }
-  }
+  };
 
   public canSpeedUpTx(tx): boolean {
     if (this.wallet.coin !== 'btc' && this.wallet.coin !== 'eth') return false;
@@ -531,9 +568,8 @@ export class TokenDetailsPage {
 
   public itemTapped(tx) {
     if (tx.hasUnconfirmedInputs) {
-      const infoSheet = this.actionSheetProvider.createInfoSheet(
-        'unconfirmed-inputs'
-      );
+      const infoSheet =
+        this.actionSheetProvider.createInfoSheet('unconfirmed-inputs');
       infoSheet.present();
       infoSheet.onDidDismiss(() => {
         this.goToTxDetails(tx);
@@ -542,34 +578,39 @@ export class TokenDetailsPage {
       this.goToTxDetails(tx);
     }
   }
-  
+
   public goToTxDetails(tx) {
-    this.modalCtrl.create(
-      {
+    this.modalCtrl
+      .create({
         component: TxDetailsModal,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
           txid: tx.txid,
           tokenData: {
-            amountToken : tx.amountToken,
+            amountToken: tx.amountToken,
             tokenId: tx.tokenId,
             symbolToken: tx.symbolToken,
             name: tx.name,
             addressToShow: tx.addressTo
           },
-          token: this.token,
+          token: this.token
         }
-      }).then(res => {
-        res.present();
       })
+      .then(res => {
+        res.present();
+      });
   }
 
   public handleNavigateBack() {
     if (this.isSendFromHome) {
       this.router.navigate(['/tabs/home']);
+    } else if (this.isGenNewAddress) {
+      this.isGenNewAddress = false;
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.router.navigate(['/tabs/wallets']);
+      });
     } else {
       this.router.navigate(['/tabs/wallets']);
     }
   }
-
 }

@@ -18,6 +18,7 @@ export interface TokenInfo {
 }
 
 export interface UtxoToken {
+  addressInfo: IAddress;
   txid: string;
   outIdx: number;
   value: number;
@@ -25,8 +26,23 @@ export interface UtxoToken {
   slpMeta?: any;
   tokenId?: string;
   amountToken?: number;
-  tokenQty?: number,
-  decimals?: number,
+  tokenQty?: number;
+  decimals?: number;
+}
+
+export interface IAddress {
+  version: string;
+  createdOn: number;
+  address: string;
+  walletId: string;
+  isChange: boolean;
+  path: string;
+  publicKeys: string[];
+  coin: string;
+  network: string;
+  type: string;
+  hasActivity: any;
+  beRegistered: boolean;
 }
 
 export interface Token {
@@ -34,8 +50,5 @@ export interface Token {
   tokenId: string;
   tokenInfo?: TokenInfo;
   utxoToken?: UtxoToken[];
-  alternativeBalance? : number;
+  alternativeBalance?: number;
 }
-
-
-

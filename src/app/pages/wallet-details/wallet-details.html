@@ -40,7 +40,7 @@
         </div>
 
         <!-- wallet card -->
-        <wallet-detail-card [wallet]="wallet" [walletNotRegistered]="walletNotRegistered">
+        <wallet-detail-card [wallet]="wallet" [walletNotRegistered]="walletNotRegistered" (genNewAddressEvent)="handleGenNewAddress($event)">
         </wallet-detail-card>
 
         <div class="balance-scanning" *ngIf="!updateStatusError && wallet?.scanning">

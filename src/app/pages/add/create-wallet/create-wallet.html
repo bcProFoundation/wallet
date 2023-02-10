@@ -196,7 +196,7 @@
         [ngClass]="{'with-label': createForm.value.singleAddress}">
         <div class="option-line">
           <p>{{ 'Single Address' | translate }}</p>
-          <ion-toggle [disabled]="isSlpToken || isFromRaipay" [checked]="isSlpToken || isFromRaipay"
+          <ion-toggle [checked]="isSlpToken || isFromRaipay"
             formControlName="singleAddress"></ion-toggle>
         </div>
         <div class="option-line-info" *ngIf="createForm.value.singleAddress">

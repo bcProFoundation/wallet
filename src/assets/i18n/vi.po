@@ -605,9 +605,8 @@ msgid ""
 "can be recovered in the case your device was lost or stolen."
 msgstr ""
 "Trước khi lấy lại địa chỉ của tài khoản, bạn nên lưu lại "
-"mã khôi phục và giữ mã này một cách an toàn nhất để tài khoản của bạn có thể"
+"mã khôi phục và giữ mã này một cách an toàn nhất để tài khoản của bạn có thể "
 "phục hồi lại khi thiết bị của bạn bị mất hoặc lấy cắp."
-
 
 msgid ""
 "Before sending more funds to complete this transaction we recommend you read "
@@ -1194,9 +1193,6 @@ msgstr "Đang tạo tài khoản..."
 
 msgid "Creating account..."
 msgstr "Đang tạo tài khoản..."
-
-msgid "Creating account"
-msgstr "Đang tạo tài khoản"
 
 msgid "Creating transaction..."
 msgstr "Đang tạo giao dịch..."
@@ -3830,7 +3826,7 @@ msgid "Status"
 msgstr "Status"
 
 msgid "Store this key separately"
-msgstr "Lưu lại khóa mới"
+msgstr "Lưu lại khoá mới"
 
 msgid "Submit a ticket"
 msgstr "Submit a ticket"
@@ -4314,7 +4310,7 @@ msgid ""
 "unrelated to any 12 word key you may have previously created. Store and "
 "manage it accordingly."
 msgstr ""
-"Đây là 12 từ khóa mới quản lý bộ tài khoản riêng của nó. Và ”
+"Đây là 12 từ khóa mới quản lý bộ tài khoản riêng của nó. Và "
 "không liên quan đến bất kỳ 12 từ khóa nào mà bạn đã sở hữu trước đó. Lưu trữ và "
 "quản lý nó cho phù hợp."
 

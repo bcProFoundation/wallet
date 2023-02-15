@@ -36,6 +36,7 @@ import { LoadingController, ModalController, Platform, ToastController } from '@
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+import { EventsService } from 'src/app/providers/events.service';
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -123,7 +124,8 @@ export class WalletDetailsPage {
     private appProvider: AppProvider,
     private location: Location,
     public toastController: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private eventsService: EventsService
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -279,7 +281,10 @@ export class WalletDetailsPage {
   }
 
   ionViewDidLeave() {
-    this.events.publish('Local/GetData', true);
+    // this.events.publish('Local/GetData', true);
+    this.eventsService.publishRefresh({
+      keyId: this.wallet.keyId
+    });
   }
 
   shouldShowZeroState() {

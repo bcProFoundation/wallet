@@ -407,9 +407,11 @@ export class CreateWalletPage implements OnInit {
                 this.router.navigate(['/wallet-details'], {
                   state: { walletId: wallet.credentials.walletId }
                 }).then(() => {
-                  this.eventsService.publishRefresh({
-                    keyId: this.keyId
-                  })
+                  // TODO: Test handle key not update
+                  // this.eventsService.publishRefresh({
+                  //   keyId: this.keyId
+                  // })
+                  this.events.publish('Local/GetData', true);
                 });
               } else {
                 const copayerModal = this.modalCtrl.create({

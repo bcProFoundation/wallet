@@ -333,9 +333,11 @@ export class ImportWalletPage {
         replaceUrl: true
       })
       .then(() => {
-        this.eventsService.publishRefresh({
-          keyId
-        });
+        // TODO: Test handle key not update
+        // this.eventsService.publishRefresh({
+        //   keyId
+        // });
+        this.events.publish('Local/GetData', true);
       });
   }
 

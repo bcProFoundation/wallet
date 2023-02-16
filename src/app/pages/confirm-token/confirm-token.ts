@@ -201,13 +201,16 @@ export class ConfirmTokenPage {
             isSendFromHome: this.isSendFromHome
           }
         });
-      }).then(
-        () => {
-          this.eventsService.publishRefresh({
-            keyId: this.wallet.keyId
-          });
-        }
-      );
+      })
+      // TODO: Test handle key not update
+      // .then(
+      //   () => {
+      //     this.eventsService.publishRefresh({
+      //       keyId: this.wallet.keyId
+      //     });
+      //     this.events.publish('Local/GetData', true);
+      //   }
+      // );
     }, 50);
   }
 

@@ -55,6 +55,7 @@ export class BackupGamePage {
     private eventsService: EventsService,
     private router: Router,
     private modalCtrl: ModalController,
+    private events: EventManagerService,
     private location: Location) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -198,9 +199,11 @@ export class BackupGamePage {
               replaceUrl: true
             })
             .then(() => {
-              this.eventsService.publishRefresh({
-                keyId: this.keyId
-              })
+              // TODO: Test handle key not update
+              // this.eventsService.publishRefresh({
+              //   keyId: this.keyId
+              // })
+              this.events.publish('Local/GetData', true);
             });
         }
         )
@@ -211,9 +214,11 @@ export class BackupGamePage {
             replaceUrl: true
           })
           .then(() => {
-            this.eventsService.publishRefresh({
-              keyId: this.keyId
-            })
+            // TODO: Test handle key not update
+            // this.eventsService.publishRefresh({
+            //   keyId: this.keyId
+            // })
+            this.events.publish('Local/GetData', true);
           });
       }
     });

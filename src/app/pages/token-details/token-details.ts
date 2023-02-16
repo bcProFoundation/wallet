@@ -23,6 +23,7 @@ import { BwcErrorProvider } from 'src/app/providers/bwc-error/bwc-error';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { ErrorsProvider } from 'src/app/providers/errors/errors';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
+import { EventsService } from 'src/app/providers/events.service';
 import { Logger } from 'src/app/providers/logger/logger';
 import { ProfileProvider } from 'src/app/providers/profile/profile';
 import { ThemeProvider } from 'src/app/providers/theme/theme';
@@ -93,7 +94,8 @@ export class TokenDetailsPage {
     private appProvider: AppProvider,
     private addressbookProvider: AddressBookProvider,
     public toastController: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private eventsService: EventsService
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -176,6 +178,13 @@ export class TokenDetailsPage {
   ionViewWillLeave() {
     this.events.unsubscribe('Local/WalletHistoryUpdate', this.updateHistory);
     this.onResumeSubscription.unsubscribe();
+  }
+
+  ionViewDidLeave() {
+    // this.events.publish('Local/GetData', true);
+    this.eventsService.publishRefresh({
+      keyId: this.wallet.keyId
+    });
   }
 
   caculateAmountToken(utxoToken, decimals) {

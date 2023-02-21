@@ -59,7 +59,7 @@ export class WalletsPage {
   public symbolCurrency;
   public keyHiddenBalanceTemp = [];
   public flagOptionRemove: boolean;
-  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', "🎖MVP"];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
   donationSupportCoins = [];
   navParamsData;
   isShowCreateNewWallet = false;

@@ -1330,6 +1330,9 @@ msgstr "Disconnect AbcPay ID"
 msgid "Discount"
 msgstr "Discount"
 
+msgid "Due to high demand, miner fees are high. Fees are paid to miners who process transactions and are not paid to {{appName}}."
+msgstr "Due to high demand, miner fees are high. Fees are paid to miners who process transactions and are not paid to {{appName}}."
+
 msgid ""
 "Discover a curated list of places you can spend your crypto. Purchase, "
 "manage & spend store credits instantly."

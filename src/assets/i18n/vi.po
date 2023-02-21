@@ -1302,6 +1302,9 @@ msgstr ""
 msgid "Derivation Path"
 msgstr "Đường dẫn xuất"
 
+msgid "Due to high demand, miner fees are high. Fees are paid to miners who process transactions and are not paid to {{appName}}."
+msgstr "Do nhu cầu cao, phí thợ đào tăng. Phí này được trả cho thợ đào để xử lý giao dịch và không được trả cho {{appName}}."
+
 msgid "Derivation path"
 msgstr "Đường dẫn xuất"
 
@@ -2364,7 +2367,7 @@ msgid "Learn More"
 msgstr "Tìm hiểu thêm"
 
 msgid "Learn about miner fees"
-msgstr "Learn about miner fees"
+msgstr "Tìm hiểu về phí thợ đào"
 
 msgid "Learn more"
 msgstr "Learn more"

@@ -72,7 +72,7 @@ export class WalletDetailCardComponent {
 
   public currentTheme: string;
   public hiddenBalance: boolean;
-  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'Bux'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
   public typeErrorQr = NgxQrcodeErrorCorrectionLevels;
   public loading: boolean;
   public newAddressError: boolean;

@@ -164,7 +164,7 @@ export class WalletsPage {
     const walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
-    this.isSupportToken(this.keySelected[0]) ? this.loadTokenWallet() : null;
+    this.loadTokenWallet()
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -334,11 +334,6 @@ export class WalletsPage {
     })
   }
 
-
-  isSupportToken(wallet): boolean {
-    if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
-    return false
-  }
 
   setTokensWallet(walletId, groupToken) {
     return new Promise(resolve => {

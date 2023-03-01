@@ -156,6 +156,10 @@ export class IncomingDataProvider {
     );
   }
 
+  private isValidETokenAddress(data: string): boolean {
+    return data.includes('etoken:');
+  }
+
   private isValidLotusAddress(data: string): boolean {
     return !!(
       this.bwcProvider.getBitcoreXpi().Address.isValid(data, 'livenet') ||
@@ -467,6 +471,23 @@ export class IncomingDataProvider {
     }
   }
 
+  private handlePlainEtokenAddress(
+    data: string,
+    redirParams?: RedirParams
+  ): void {
+    this.logger.debug('Incoming-data: ECash plain address');
+    const coin = Coin.XEC;
+    if (redirParams && redirParams.activePage === 'ScanPage') {
+      this.showMenu({
+        data,
+        type: 'eTokenAddress',
+        coin
+      });
+    } else {
+      this.goSend(data, redirParams.amount, '', coin, redirParams.recipientId);
+    }
+  }
+
   private goToImportByPrivateKey(data: string): void {
     this.logger.debug('Incoming-data (redirect): QR code export feature');
 
@@ -602,6 +623,11 @@ export class IncomingDataProvider {
       // Plain Address (Ecashcoin)
     } else if (this.isValidECashAddress(data)) {
       this.handlePlainEcashAddress(data, redirParams);
+      return true;
+
+      // Plain Address (Etoken)
+    } else if (this.isValidETokenAddress(data)) {
+      this.handlePlainEtokenAddress(data, redirParams);
       return true;
 
       // Join

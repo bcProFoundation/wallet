@@ -106,7 +106,7 @@ export class ScanPage {
     this.logger.info('Loaded: ScanPage');
     this.routerOutlet.swipeGesture = false;
     this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
-
+    
   }
 
   ionViewWillLeave() {
@@ -311,7 +311,7 @@ export class ScanPage {
         }
       });
     }).catch(err => {
-      if (data.data.includes('amount')) {
+      if (data?.data?.includes('amount')) {
         this.router.navigateByUrl('/accounts-page', {
           state: {
             coin: addrData.coin,
@@ -345,6 +345,14 @@ export class ScanPage {
     } else {
       const parsedData = this.incomingDataProvider.parseData(address);
       if (parsedData) {
+        // Handle case scan eToken
+        if (parsedData && parsedData?.data.includes('etoken:')) {
+          return this.handleSendAddress({
+            data: parsedData?.data,
+            type: 'EtokenUrl',
+            coin: 'xec'
+          }, {coin: 'xec', network: 'livenet'})
+        }
         const addrData = this.addressProvider.getCoinAndNetwork(address);
         if (addrData && addrData.coin && addrData.network) {
           return this.handleSendAddress({

@@ -1426,11 +1426,11 @@ msgid "ETH wallet is required"
 msgstr "Ethereum wallet required"
 
 msgid ""
-"Each bitcoin wallet can generate billions of addresses from your 12-word "
+"Each {coinName} account can generate billions of addresses from your 12-word "
 "recovery phrase. A new address is automatically generated and shown each "
 "time you receive a payment."
 msgstr ""
-"Mỗi ví bitcoin có thể tạo ra hàng tỉ địa chỉ từ cụm mật khẩu phục hồi 12 từ "
+"Mỗi tài khoản {coinName} có thể tạo ra hàng tỉ địa chỉ từ cụm từ khôi phục (12 từ)"
 ". Một địa chỉ mới được tự động tạo và chia sẻ cùng bạn "
 "trên mỗi lần bạn nhận một thanh toán."
 

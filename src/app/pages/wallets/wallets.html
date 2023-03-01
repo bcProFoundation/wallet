@@ -119,7 +119,7 @@
               </ion-item-options>
             </ion-item-sliding>
 
-            <ng-container *ngIf="isSupportToken(wallet) && isLoading">
+            <ng-container *ngIf="(wallet?.coin === 'xec' && wallet?.isSlpToken) && isLoading">
               <div class="token-container">
                 <div class="section-header ion-padding-top ion-padding-bottom"
                   [ngClass]="{'no-border': isCollapsedToken(wallet.id)}">

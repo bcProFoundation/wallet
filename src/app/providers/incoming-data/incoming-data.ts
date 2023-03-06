@@ -156,10 +156,6 @@ export class IncomingDataProvider {
     );
   }
 
-  private isValidETokenAddress(data: string): boolean {
-    return data.includes('etoken:');
-  }
-
   private isValidLotusAddress(data: string): boolean {
     return !!(
       this.bwcProvider.getBitcoreXpi().Address.isValid(data, 'livenet') ||
@@ -537,14 +533,36 @@ export class IncomingDataProvider {
     }
   }
 
+  private handleToAddressEtoken(data) {
+    // data: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20
+    let tempToAddressObject = {
+      address: data,
+      amount: null
+    }
+    // Handle parse toAddress to address & amount by "amount1"(eToken).
+    if (data && data?.includes('amount1')) {
+      let parseArrayData, address, amount;
+      parseArrayData = data?.replace('amount1=', '')?.split('?');
+      address = parseArrayData[0] ? parseArrayData[0] : '';
+      amount = parseArrayData[1] ? parseInt(parseArrayData[1]) : 0;
+      tempToAddressObject = {
+        address: address,
+        amount: amount
+      }
+    }
+    return tempToAddressObject;
+  }
+
   public redir(data: string, redirParams?: RedirParams): boolean {
     if (redirParams && redirParams.activePage)
       this.activePage = redirParams.activePage;
     if (redirParams && redirParams.activePage)
       this.fromFooterMenu = redirParams.fromFooterMenu;
     if (redirParams.token) {
-      if (this.isValidEToken(data)) {
-        this.handleEtoken(data, redirParams);
+      let toAddressObject = this.handleToAddressEtoken(data);
+      if (this.isValidEToken(toAddressObject?.address)) {
+        toAddressObject?.amount ? redirParams.amount = toAddressObject?.amount : null;
+        this.handleEtoken(toAddressObject?.address ? toAddressObject?.address : data, redirParams);
         return true;
       }
       this.logger.warn('Incoming-data: Unknown information');
@@ -626,11 +644,6 @@ export class IncomingDataProvider {
       return true;
 
       // Plain Address (Etoken)
-    } else if (this.isValidETokenAddress(data)) {
-      this.handlePlainEtokenAddress(data, redirParams);
-      return true;
-
-      // Join
     } else if (this.isValidJoinCode(data) || this.isValidJoinLegacyCode(data)) {
       this.goToJoinWallet(data);
       return true;
@@ -743,6 +756,13 @@ export class IncomingDataProvider {
       };
       // Ecash URI
     } else if (this.isValidECashUri(data)) {
+      return {
+        data,
+        type: 'ECashUri',
+        title: 'Ecash URI'
+      };
+      // Lotus URI
+    } else if (this.isValidEToken(data)) {
       return {
         data,
         type: 'ECashUri',

@@ -20,6 +20,7 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { LoadingController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
+import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -48,6 +49,9 @@ export class AccountsPage {
   isDonation;
   donationSupportCoins = [];
   navParamsData;
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
+  public isToken: boolean;
+  public tokenID: string;
   public isShowCreateNewWallet = false;
   public network: string ;
   public coin: string ;
@@ -96,11 +100,29 @@ export class AccountsPage {
       });
     }
     else {
-      this.walletsGroups = this.filterValidWallet(walletsGroups);
+      if (this.navParamsData?.isToken) {
+        this.walletsGroups = this.getTokensGroups(walletsGroups);
+      } else {
+        this.walletsGroups = this.filterValidWallet(walletsGroups);
+      }
       if( !this.addToGroupsHome && this.walletsGroups.length === 1 && this.walletsGroups[0].length ===1){
         this.goToSendPage(this.walletsGroups[0][0]);
       }
     }
+  }
+
+  private getTokensGroups(walletsGroups) {
+    const filterWalletsGroups = this.filterValidWallet(walletsGroups);
+    let tokensGroup = [];
+    tokensGroup = filterWalletsGroups.map((wallet) => {
+      return wallet.filter(subWallet => subWallet?.tokens);
+    });
+    return tokensGroup;
+  }
+
+  setIconToken(token) {
+    const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
   private filterValidWallet(walletGroups: any) {
@@ -121,6 +143,10 @@ export class AccountsPage {
     })
     this.isShowCreateNewWallet = _.isEmpty(walletsGroup);
     return walletsGroup;
+  }
+
+  public DecimalFormatBalance(amount) {
+    return DecimalFormatBalance(amount);
   }
 
   private async walletAudienceEvents() {
@@ -224,6 +250,8 @@ export class AccountsPage {
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
     this.isDonation = this.navParamsData.isDonation;
     this.isAddToHome = this.navParamsData.isAddToHome;
+    this.isToken = this.navParamsData?.isToken;
+    this.tokenID = this.navParamsData?.tokenID;
     if (this.isDonation) this.titlePage = "Accounts";
     if (this.isAddToHome) this.titlePage = "Add to home";
     this.coin = this.navParamsData.coin;
@@ -409,7 +437,28 @@ export class AccountsPage {
       this.router.navigate(['/send-page'], {
         state: {
           walletId: wallet.credentials.walletId,
+          toAddress: this.navParamsData.toAddress
+        }
+      });
+    } else {
+      const copayerModal = await this.modalCtrl.create({
+        component: CopayersPage,
+        componentProps: {
+          walletId: wallet.credentials.walletId
+        },
+        cssClass: 'wallet-details-modal'
+      });
+      await copayerModal.present();
+    }
+  }
+
+  public async goToSendPageForToken(wallet, token) {
+    if (wallet.isComplete()) {
+      this.router.navigate(['/send-page'], {
+        state: {
+          walletId: wallet.credentials.walletId,
           toAddress: this.navParamsData.toAddress,
+          token: token
         }
       });
     } else {

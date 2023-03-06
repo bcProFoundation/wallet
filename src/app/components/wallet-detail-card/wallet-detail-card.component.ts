@@ -241,7 +241,7 @@ export class WalletDetailCardComponent {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
     return isValid
       ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg`
-      : 'assets/img/currencies/xec.svg';
+      : 'assets/img/currencies/eToken.svg';
   }
 
   public goToMultisignInfo() {

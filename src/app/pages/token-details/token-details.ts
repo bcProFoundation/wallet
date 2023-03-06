@@ -272,6 +272,13 @@ export class TokenDetailsPage {
     }
   }
 
+  public requestSpecificAmount(): void {
+    this.router.navigate(['/custom-amount-token'], {state: {
+      token: this.token,
+      tokenAddress: this.wallet.etokenAddress
+    }});
+  }
+
   public async openSearchModal(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: SearchTxModalPage,

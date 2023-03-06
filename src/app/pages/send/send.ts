@@ -200,10 +200,15 @@ export class SendPage {
         }))
       }
       else {
-        let totalAmountStr = this.txFormatProvider.satToUnit(
-          nextView.params.amount,
-          this.wallet.coin
-        );
+        let totalAmountStr;
+        if (this.checkPrefixEtokenAddress(nextView.params.toAddress)) {
+          totalAmountStr = nextView.params?.amount || 0
+        } else {
+          totalAmountStr = this.txFormatProvider.satToUnit(
+            nextView.params.amount,
+            this.wallet.coin
+          );
+        }
         if (this.queryListRecipientComponent) {
           this.queryListRecipientComponent.toArray()[0].updateRecipient(new RecipientModel({
             toAddress: nextView.params.toAddress,
@@ -220,6 +225,10 @@ export class SendPage {
         }
       }
     }
+    // Handle specific amount for eToken
+    if (this.checkPrefixEtokenAddress(nextView.params.toAddress) && nextView.name == 'ConfirmPage') {
+      return this.goToConfirmToken();
+    } 
     this.router.navigate([this.pageMap[nextView.name]], {
       state: nextView.params
     });
@@ -233,7 +242,9 @@ export class SendPage {
     );
   }
 
-
+  private checkPrefixEtokenAddress(address) {
+    return address.includes('etoken') || false;
+  }
 
   public showOptions(coin: Coin) {
     return (

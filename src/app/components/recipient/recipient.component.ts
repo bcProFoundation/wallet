@@ -515,6 +515,13 @@ export class RecipientComponent implements OnInit {
     if (this.recipient.name) this.validAddress = true;
     else {
       let address = this.searchValue;
+      let scanEtokenSpecificValue, addressTokenScan, amountTokenScan;
+          // Scan data: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20
+          if (address.includes('amount1')) {
+            scanEtokenSpecificValue = address.split('?');
+            addressTokenScan = !_.isNil(scanEtokenSpecificValue) ? scanEtokenSpecificValue[0] : null;
+            amountTokenScan = !_.isNil(scanEtokenSpecificValue) ? scanEtokenSpecificValue[1] : null;
+          }
       let tokenAddress: string = '';
       if (address == '') this.validAddress = false;
       // handle case send to etoken address in xec
@@ -543,16 +550,16 @@ export class RecipientComponent implements OnInit {
       } else if (this.token && this.wallet.coin == 'xec') {
         try {
           const { prefix, type, hash } =
-            this.addressProvider.decodeAddress(address);
+            this.addressProvider.decodeAddress(addressTokenScan ? addressTokenScan : address);
           if (prefix === 'ecash') {
-            tokenAddress = address;
+            tokenAddress = addressTokenScan ? addressTokenScan : address;
           } else if (prefix === 'etoken') {
-            tokenAddress = address;
+            tokenAddress = addressTokenScan ? addressTokenScan : address;
             address = this.addressProvider.encodeAddress(
               'ecash',
               type,
               hash,
-              address
+              addressTokenScan ? addressTokenScan : address
             );
           } else {
             this.validAddress = false;
@@ -565,7 +572,7 @@ export class RecipientComponent implements OnInit {
           return;
         }
       }
-      const parsedData = this.incomingDataProvider.parseData(address);
+      const parsedData = this.incomingDataProvider.parseData(addressTokenScan ? addressTokenScan : address);
       if (
         parsedData &&
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1
@@ -731,7 +738,8 @@ export class RecipientComponent implements OnInit {
       amount: this.navParams.data.amount,
       coin: this.navParams.data.coin, // TODO ???? what is this for ?
       recipientId: !this.isShowSendMax ? this.recipient.id : null,
-      isSentXecToEtoken: isSentXecToEtoken
+      isSentXecToEtoken: isSentXecToEtoken,
+      token: this.token
     });
     this.search = '';
   }

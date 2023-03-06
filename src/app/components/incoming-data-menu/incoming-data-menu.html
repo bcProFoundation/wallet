@@ -12,7 +12,7 @@
           <ion-button copy-to-clipboard="{{ data }}" slot="start" fill="clear">
             {{"Copy" | translate}}
           </ion-button>
-          <ion-button *ngIf="!isToken" slot="end" fill="clear" (click)="close('SendPage', data)">
+          <ion-button slot="end" fill="clear" (click)="close('SendPage', data)">
             {{"Send" | translate}}
           </ion-button>
         </ion-buttons>

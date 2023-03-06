@@ -519,10 +519,11 @@ export class RecipientComponent implements OnInit {
           // Scan data: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20
           if (address.includes('amount1')) {
             scanEtokenSpecificValue = address.split('?');
-            addressTokenScan = !_.isNil(scanEtokenSpecificValue) ? scanEtokenSpecificValue[0] : null;
-            amountTokenScan = !_.isNil(scanEtokenSpecificValue) ? scanEtokenSpecificValue[1] : null;
+            addressTokenScan = scanEtokenSpecificValue[0] || null;
+            amountTokenScan = scanEtokenSpecificValue[1] || null;
           }
       let tokenAddress: string = '';
+      let addressSelected = addressTokenScan || address
       if (address == '') this.validAddress = false;
       // handle case send to etoken address in xec
       if (
@@ -550,16 +551,16 @@ export class RecipientComponent implements OnInit {
       } else if (this.token && this.wallet.coin == 'xec') {
         try {
           const { prefix, type, hash } =
-            this.addressProvider.decodeAddress(addressTokenScan ? addressTokenScan : address);
+            this.addressProvider.decodeAddress(addressSelected);
           if (prefix === 'ecash') {
-            tokenAddress = addressTokenScan ? addressTokenScan : address;
+            tokenAddress = address;
           } else if (prefix === 'etoken') {
-            tokenAddress = addressTokenScan ? addressTokenScan : address;
+            tokenAddress = addressSelected;
             address = this.addressProvider.encodeAddress(
               'ecash',
               type,
               hash,
-              addressTokenScan ? addressTokenScan : address
+              addressSelected
             );
           } else {
             this.validAddress = false;
@@ -572,7 +573,7 @@ export class RecipientComponent implements OnInit {
           return;
         }
       }
-      const parsedData = this.incomingDataProvider.parseData(addressTokenScan ? addressTokenScan : address);
+      const parsedData = this.incomingDataProvider.parseData(addressSelected);
       if (
         parsedData &&
         _.indexOf(this.validDataTypeMap, parsedData.type) != -1

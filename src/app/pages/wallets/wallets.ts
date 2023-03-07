@@ -150,7 +150,7 @@ export class WalletsPage {
 
   setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
-    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/xec.svg';
+    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
   async ionViewWillEnter() {
@@ -188,8 +188,8 @@ export class WalletsPage {
       this.logger.error(err);
     })
     setTimeout(async () => {
-      await this.loadingProvider.dismissLoader();
       this.isLoading = true;
+      await this.loadingProvider.dismissLoader();
     }, 500);
   }
 

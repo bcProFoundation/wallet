@@ -317,10 +317,12 @@ export class ScanPage {
             coin: addrData.coin,
             network: addrData.network,
             toAddress: data.data,
-            isSpecificAmount: true
+            isSpecificAmount: true,
+            isToken: data?.isToken || false,
+            tokenID: data?.tokenID
           }
         });
-      }
+      } 
       else {
         const dataMenu = this.actionSheetProvider.createIncomingDataMenu({ data });
         dataMenu.present();
@@ -330,7 +332,8 @@ export class ScanPage {
               state: {
                 coin: addrData.coin,
                 network: addrData.network,
-                toAddress: data.data
+                toAddress: data.data,
+                isToken: data?.isToken || false
               }
             });
           }
@@ -339,31 +342,53 @@ export class ScanPage {
     })
   }
 
-  private redirScanAddress(address) {
-    if (address.includes('lixi_')) {
-      this.events.publish('Local/ClaimVoucher', { value: address });
-    } else {
-      const parsedData = this.incomingDataProvider.parseData(address);
-      if (parsedData) {
-        // Handle case scan eToken
-        if (parsedData && parsedData?.data.includes('etoken:')) {
-          return this.handleSendAddress({
-            data: parsedData?.data,
-            type: 'EtokenUrl',
-            coin: 'xec'
-          }, {coin: 'xec', network: 'livenet'})
-        }
-        const addrData = this.addressProvider.getCoinAndNetwork(address);
+  private handleScanSpecificToken(value: string) {
+    // Value: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20-1a399e9f63d7452365662bfe3ce288da569 || etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3
+    let addressToken, tokenId;
+    addressToken = value.includes('amount1') ? value.slice(0, value.indexOf('?')) : value;
+    tokenId = value.includes('-') ? value.slice(value.indexOf('-') + 1) : null;
+    const parsedData = this.incomingDataProvider.parseData(addressToken);
+    if (parsedData) {
+      const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
+      const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);
+      if (eCashAddess) {
+        const addrData = this.addressProvider.getCoinAndNetwork(eCashAddess);
         if (addrData && addrData.coin && addrData.network) {
           return this.handleSendAddress({
-            data: address,
-            type: parsedData.type,
-            coin: addrData.coin
+            data: value,
+            coin: addrData.coin,
+            isToken: true,
+            tokenID: tokenId
           }, addrData)
         }
       }
-      return this.showErrorInvalidQr(' ', 'Invalid QR code');
     }
+    return this.showErrorInvalidQr(' ', 'Invalid QR code');
+  }
+
+  private handleScanLixiCode(address: string) {
+    this.events.publish('Local/ClaimVoucher', { value: address });
+  }
+
+  private redirScanAddress(address) {
+    if (address.includes('lixi_')) {
+      return this.handleScanLixiCode(address);
+    }
+    if (address.includes('etoken')) {
+      return this.handleScanSpecificToken(address);
+    }
+    const parsedData = this.incomingDataProvider.parseData(address);
+    if (parsedData) {
+      const addrData = this.addressProvider.getCoinAndNetwork(address);
+      if (addrData && addrData.coin && addrData.network) {
+        return this.handleSendAddress({
+          data: address,
+          type: parsedData.type,
+          coin: addrData.coin
+        }, addrData)
+      }
+    }
+    return this.showErrorInvalidQr(' ', 'Invalid QR code');
   }
 
   public authorize(): void {

@@ -101,6 +101,7 @@ import { TransferToPage } from '../pages/send/transfer-to/transfer-to';
 
 /* Receive */
 import { CustomAmountPage } from '../pages/receive/custom-amount/custom-amount';
+import { CustomAmountTokenPage } from '../pages/receive/custom-amount-token/custom-amount-token';
 import { WideHeaderPage } from './templates/wide-header-page/wide-header-page';
 import { BackupWordComponent } from './backup/backup-component/backup-word/backup-word.component';
 import { DisclaimerModal } from './includes/disclaimer-modal/disclaimer-modal';
@@ -141,6 +142,7 @@ export const PAGES = [
   TransferToModalPage,
   TransferToPage,
   CustomAmountPage,
+  CustomAmountTokenPage,
   AddFundsPage,
   SelectFlowPage,
   FeatureEducationPage,

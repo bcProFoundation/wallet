@@ -246,7 +246,7 @@
 
                     <span *ngIf="!tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
-                      {{tx.amount | satToUnit: wallet?.coin}}</span>
+                      {{tx.amount | satToUnit: wallet?.coin: (wallet?.coin == 'btc' || wallet?.coin == 'bch') ? true : false }}</span>
 
                     <span *ngIf="tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">

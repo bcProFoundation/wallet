@@ -5357,6 +5357,9 @@ msgstr ""
 "{{walletName}} will be disconected from your actual connection to "
 "{{peerMetaName}} ({{peerMetaUrl}})"
 
+msgid "{symbolToken} Confirm Payment"
+msgstr "{symbolToken} Confirm Payment"
+
 #~ msgid ""
 #~ "Amazon.com Gift Cards never expire and can be redeemed towards millions "
 #~ "of items at www.amazon.com."

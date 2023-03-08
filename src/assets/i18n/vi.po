@@ -5416,6 +5416,9 @@ msgid ""
 msgstr ""
 "Hãy đảm bảo tài khoản {chain} đã được tạo và thêm vào Tài khoản chính ở Trang chủ. Sau đó, thử quét lại mã lì xì!"
 
+msgid "{symbolToken} Confirm Payment"
+msgstr "Xác nhận thanh toán {symbolToken}"
+
 msgid ""
 "English"
 msgstr ""

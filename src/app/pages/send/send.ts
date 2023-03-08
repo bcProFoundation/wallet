@@ -128,7 +128,7 @@ export class SendPage {
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.titlePage = this.translate.instant("Send ") + (this.wallet.coin as String).toUpperCase();
-    if (this.token) this.titlePage = `Send ${this.token.tokenInfo.name}`
+    if (this.token) this.titlePage = this.translate.instant("Send ") + (this.token.tokenInfo.name as String);
     this.isDonation = this.navPramss.isDonation;
     if (this.isDonation) {
       this.titlePage = this.translate.instant("Send Donation");

@@ -16,10 +16,20 @@
           <ng-container *ngIf="!btx.tokenId">
             <div class="amount-label" *ngIf="!(btx.amount === 0 && wallet.coin === 'eth')">
               <div *ngIf="isNegative" class="amount negative-amount">
-                -{{btx.amountValueStr}} {{btx.amountUnitStr | uppercase}}
+                <ng-container *ngIf="['btc', 'bch'].includes(btx.coin);else anotherCoin">
+                  -{{btx.amount | satToUnit: btx?.coin: ['btc', 'bch'].includes(btx.coin) }}
+                </ng-container>
+                <ng-template #anotherCoin>
+                  -{{btx.amountValueStr}} {{btx.amountUnitStr | uppercase}}
+                </ng-template>
               </div>
               <div *ngIf="!isNegative" class="amount">
-                +{{btx.amountValueStr}} {{btx.amountUnitStr | uppercase}}
+                <ng-container *ngIf="['btc', 'bch'].includes(btx.coin);else anotherCoin">
+                  +{{btx.amount | satToUnit: btx?.coin: ['btc', 'bch'].includes(btx.coin) }}
+                </ng-container>
+                <ng-template #anotherCoin>
+                  +{{btx.amountValueStr}} {{btx.amountUnitStr | uppercase}}
+                </ng-template>
               </div>
               <div class="alternative">
                 <span *ngIf="!btx.fiatRateStr">...</span>

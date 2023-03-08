@@ -76,8 +76,8 @@
     </div>
 
     <ng-container *ngIf="history && history[0]">
-      <div  class="header-transaction">
-        Transaction History
+      <div class="header-transaction">
+        {{'Transaction History' | translate}}
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>
       </div>
 

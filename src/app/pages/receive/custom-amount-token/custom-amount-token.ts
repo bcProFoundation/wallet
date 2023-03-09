@@ -80,7 +80,6 @@ export class CustomAmountTokenPage {
         Validators.compose([Validators.minLength(1), Validators.required])
       ]
     });
-    // this.amountCustomForm.value.amountCustom = 0;
     this.expression = 0;
     this.isCordova = this.platformProvider.isCordova;
     if (this.router.getCurrentNavigation()) {
@@ -90,7 +89,6 @@ export class CustomAmountTokenPage {
     }
     this.token = this.navParamsData?.token;
     this.addressToken = this.navParamsData?.tokenAddress || null;
-    // if (_.isEmpty(this.navParamsData && this.navParams && !_.isEmpty(this.navParams.data))) this.navParamsData = this.navParams.data;
     const walletId = this.navParamsData.id;
     this.showShareButton = this.platformProvider.isCordova;
     this.config = this.configProvider.get();
@@ -151,32 +149,6 @@ export class CustomAmountTokenPage {
     else {
       this.qrAddress = this.addressToken;
     }
-    // if (this.amountCustomForm.value.amountCustom === '') return;
-    // this.walletProvider.getAddress(this.wallet, false).then(addr => {
-    //   this.address = this.walletProvider.getAddressView(
-    //     this.wallet.coin,
-    //     this.wallet.network,
-    //     addr
-    //   );
-
-    //   let protoAddr;
-    //   if (this.wallet.coin != 'bch' && this.wallet.coin != 'xpi' && this.wallet.coin != 'xec') {
-    //     protoAddr = this.walletProvider.getProtoAddress(
-    //       this.wallet.coin,
-    //       this.wallet.network,
-    //       this.address
-    //     );
-    //   }
-    //   if (this.amountToShow > 0) {
-    //     this.qrAddress =
-    //       (protoAddr ? protoAddr : this.address) +
-    //       '?amount=' +
-    //       this.amountToShow;
-    //   }
-    //   else {
-    //     this.qrAddress = this.address;
-    //   }
-    // });
   }
 
   private format(val: string): string {

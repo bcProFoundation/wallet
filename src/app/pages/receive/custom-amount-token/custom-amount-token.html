@@ -9,11 +9,12 @@
       <form [formGroup]="amountCustomForm">
         <mat-form-field appearance="outline">
           <mat-label translate>Request amount</mat-label>
-          <input type="number" (blur)="getAmountCustom()" matInput
+          <input (ngModelChange)="processAmount()" type="number" (blur)="getAmountCustom()" matInput
             formControlName="amountCustom" [value]="this.amountCustomForm.value.amountCustom"
             [placeholder]="'Request amount'" translate>
-           <span matSuffix>{{token?.tokenInfo?.symbol}}</span>
+          <span (click)="changeUnit()" matSuffix>{{unit}}</span>
         </mat-form-field>
+        <mat-hint *ngIf="altAmountStr">{{altAmountStr}} {{alternativeUnit}}</mat-hint>
       </form>
     </div>
 

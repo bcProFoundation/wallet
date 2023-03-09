@@ -853,7 +853,7 @@ export class RecipientComponent implements OnInit {
 
   public openScanner(): void {
     this.router.navigate(['/scan'], {
-      state: { fromRecipientComponent: true, recipientId: this.recipient.id }
+      state: { fromRecipientComponent: true, recipientId: this.recipient.id, isTokenScan: !!this.token}
     });
   }
 

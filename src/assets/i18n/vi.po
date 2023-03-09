@@ -3646,7 +3646,7 @@ msgid "Share the love by inviting your friends."
 msgstr "Chia sẻ tình yêu bằng cách mời bạn bè của bạn."
 
 msgid "Share this QR code to receive {amount} in your account {name}."
-msgstr "Chia sẻ mã QR này để nhận {money} trong tài khoản {name} của bạn."
+msgstr "Chia sẻ mã QR này để nhận {amount} trong tài khoản {name} của bạn."
 
 msgid "Share this address with the devices joining this account."
 msgstr "Chia sẻ địa chỉ này với các thiết bị tham gia tài khoản đa chữ ký."
@@ -5418,6 +5418,15 @@ msgstr ""
 
 msgid "{symbolToken} Confirm Payment"
 msgstr "Xác nhận thanh toán {symbolToken}"
+
+msgid ""
+"Hint: Please create an easy to remember password to encrypt your wallet on this device. This password will "
+"be needed to send transactions from this wallet. If you forget this password, you can reimport your 12-word "
+"seed phrase and create a new password. You can turn this option on/off in the Key settings."
+msgstr ""
+"Gợi ý: Vui lòng tạo một mật khẩu dễ nhớ để mã hóa ví của bạn trên thiết bị này. Mật khẩu này sẽ cần thiết để "
+"gửi các giao dịch từ ví này. Nếu bạn quên mật khẩu này, bạn có thể nhập lại cụm từ khôi phục (12 từ) và tạo "
+"một mật khẩu mới. Bạn có thể bật/tắt tùy chọn này trong phần cài đặt Khóa."
 
 msgid ""
 "English"

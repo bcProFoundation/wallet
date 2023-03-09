@@ -119,7 +119,7 @@ export class ScanPage {
     this.logger.info('Loaded: ScanPage');
     this.routerOutlet.swipeGesture = false;
     this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
-    
+
   }
 
   ionViewWillLeave() {
@@ -306,8 +306,8 @@ export class ScanPage {
 
   private handleScanSpecificEtokenFromSend(content) {
     let value = '';
-    content.includes('amount1'); {
-      value = content.slice(0, content.indexOf('-'))
+    if (content.includes('amount1')) {
+      value = content.slice(0, content.indexOf('-'));
     }
     return value;
   }

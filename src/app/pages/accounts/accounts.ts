@@ -151,9 +151,11 @@ export class AccountsPage {
     let tokensGroups = [];
     walletsGroups.map((item) => {
       return item.map((wallet) => {
-          let validToken = wallet.tokens.filter(token => token.tokenId === this.tokenID);
-          validToken.walletId = wallet.credentials.walletId;
-          tokensGroups.push(validToken);
+          let validToken = wallet.tokens.find(token => token.tokenId === this.tokenID);
+          if (validToken) {
+            validToken.walletId = wallet.credentials.walletId;
+            tokensGroups.push(validToken);
+          }
       })
     })
     if (this.isSpecificAmount && tokensGroups.length === 1 && tokensGroups[0].length === 1) {

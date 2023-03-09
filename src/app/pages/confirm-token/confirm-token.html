@@ -1,4 +1,4 @@
-<wide-header-page title="Confirm Token Payment" [hasSlideButton]="!hideSlideButton && isCordova">
+<wide-header-page title="{{'Confirm Payment' | translate }}" [hasSlideButton]="!hideSlideButton && isCordova">
   <div page-content>
     <ion-list lines="none" class="bp-list">
       <ion-item lines="none" class="custom-list">
@@ -6,7 +6,7 @@
           <div class="first-row row-container summary-amount-info">
             <div class="ellipsis">
               <div class="total-amount ellipsis">
-                {{amountTokenToSend}} {{token?.tokenInfo?.symbol | uppercase}}
+                {{amountTokenToSend}} {{token?.tokenInfo?.symbol}}
               </div>
               <!--Todo: later for convert etoken to fiat-->
               <!-- <div class="total-amount-alt ellipsis">
@@ -16,9 +16,9 @@
           </div>
 
           <div class="row-container">
-            <div class="item-name">Subtotal</div>
+            <div class="item-name" translate>Subtotal</div>
             <div class="item-detail ellipsis">
-              <span>{{amountTokenToSend}} {{token?.tokenInfo?.symbol | uppercase}}</span>
+              <span>{{amountTokenToSend}} {{token?.tokenInfo?.symbol}}</span>
             </div>
           </div>
 
@@ -82,6 +82,12 @@
         </ion-note>
       </ion-item>
 
+      <ion-item *ngIf="!toAddressName" class="add-address-book">
+        <mat-form-field appearance="outline">
+            <mat-label translate>Address book name</mat-label>
+            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book' | translate">
+          </mat-form-field>
+      </ion-item>
 
     </ion-list>
   </div>

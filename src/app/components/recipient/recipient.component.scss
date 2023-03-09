@@ -7,6 +7,14 @@ recipient-component {
         appearance: none;
         margin: 0;
     }
+    
+    .check {
+        margin: 0 !important;
+        font-size: 22px;
+        &.success {
+          color: var(--ion-color-success);
+        }
+      }
 
     .recipient-header {
         font-weight: 600;

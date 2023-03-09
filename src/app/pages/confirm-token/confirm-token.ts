@@ -16,7 +16,8 @@ import { ErrorsProvider } from "src/app/providers/errors/errors";
 import { BwcErrorProvider } from "src/app/providers/bwc-error/bwc-error";
 import { Location } from '@angular/common';
 import { OnGoingProcessProvider } from "src/app/providers/on-going-process/on-going-process";
-import { EventManagerService } from "src/app/providers";
+import { AddressBookProvider, EventManagerService } from "src/app/providers";
+import { EventsService } from "src/app/providers/events.service";
 
 @Component({
   selector: 'confirm-token',
@@ -40,6 +41,9 @@ export class ConfirmTokenPage {
   sendToAddress: string;
   fee: number
   precision;
+  toAddressName;
+  nameContact;
+  isSendFromHome: boolean = false;
   constructor(
     public http: HttpClient,
     private router: Router,
@@ -56,13 +60,16 @@ export class ConfirmTokenPage {
     private errorsProvider: ErrorsProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private location: Location
+    private location: Location,
+    private eventsService: EventsService,
+    private addressBookProvider: AddressBookProvider,
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navPramss = this.router.getCurrentNavigation().extras.state;
     } else {
       this.navPramss = history ? history.state : {};
     }
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.sendToAddress = this.navPramss.toAddress;
@@ -117,6 +124,7 @@ export class ConfirmTokenPage {
   }
 
   ngOnInit() {
+    this.checkExistContact();
     this.tokenProvider.getUtxosToken(this.wallet).then(utxos => {
       let amountXec = 0;
       let amountToken = 0
@@ -136,11 +144,23 @@ export class ConfirmTokenPage {
   }
 
   async approve(wallet) {
+    if (this.nameContact && this.nameContact.trim().length > 0) {
+      this.addressBookProvider
+        .add({
+          name: this.nameContact,
+          email: '',
+          address: this.sendToAddress,
+          network: 'livenet',
+          coin: 'xec'
+        });
+    }    
     this.walletProvider.prepare(wallet).then(pass => {
       const mnemonic = this.keyProvider.getMnemonic(wallet, pass);
       this.onGoingProcessProvider.set('Sending Token ...');
       this.tokenProvider.sendToken(wallet, mnemonic, this.token.tokenInfo, this.amountTokenToSend, this.sendToAddress).then(() => {
         this.onGoingProcessProvider.clear();
+        // Update balance in card home
+        this.events.publish('Local/GetListPrimary', true);
         this.annouceFinish();
       }).catch(err => {
         this.onGoingProcessProvider.clear();
@@ -153,6 +173,15 @@ export class ConfirmTokenPage {
 
   }
 
+  checkExistContact() {
+    this.addressBookProvider.getContactName(this.sendToAddress, 'livenet')
+    .then(rs => {
+      {
+        this.toAddressName = rs;
+      }
+    })
+    .catch(err => console.log(err))
+  }
   protected async annouceFinish() {
     let params: {
       finishText: string;
@@ -162,19 +191,27 @@ export class ConfirmTokenPage {
       finishText: this.successText,
       autoDismiss: true
     };
-    // Update balance in card home
-    this.events.publish('Local/GetListPrimary', true);
     setTimeout(() => {
       this.router.navigate(['/tabs/wallets'], { replaceUrl: true },).then(() => {
         this.router.navigate(['/token-details'], {
           state: {
             walletId: this.wallet.credentials.walletId,
             token: this.token,
-            finishParam: params
+            finishParam: params,
+            isSendFromHome: this.isSendFromHome
           }
         });
       })
-    }, 100);
+      // TODO: Test handle key not update
+      // .then(
+      //   () => {
+      //     this.eventsService.publishRefresh({
+      //       keyId: this.wallet.keyId
+      //     });
+      //     this.events.publish('Local/GetData', true);
+      //   }
+      // );
+    }, 50);
   }
 
   public showErrorInfoSheet(

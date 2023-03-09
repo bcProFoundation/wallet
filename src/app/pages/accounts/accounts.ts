@@ -9,6 +9,8 @@ import { CopayersPage } from '../add/copayers/copayers';
 
 // Providers
 import { AnalyticsProvider } from '../../providers/analytics/analytics';
+import { TranslateService } from '@ngx-translate/core';
+
 // import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
@@ -18,6 +20,7 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { LoadingController, ModalController, NavParams, Platform, ToastController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
+import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -46,11 +49,15 @@ export class AccountsPage {
   isDonation;
   donationSupportCoins = [];
   navParamsData;
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
+  public isToken: boolean;
+  public tokenID: string;
   public isShowCreateNewWallet = false;
   public network: string ;
   public coin: string ;
   public titlePage : string = 'Send from';
   public isAddToHome : boolean = false;
+  public isSpecificAmount: boolean = false;
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -65,7 +72,8 @@ export class AccountsPage {
     private modalCtrl: ModalController,
     private loadingCtr: LoadingController,
     private navParams: NavParams,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private translate: TranslateService
   ) {
     this.collapsedGroups = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -93,11 +101,30 @@ export class AccountsPage {
       });
     }
     else {
-      this.walletsGroups = this.filterValidWallet(walletsGroups);
-      if(this.walletsGroups.length === 1 && this.walletsGroups[0].length ===1){
+      if (this.navParamsData?.isToken) {
+        this.walletsGroups = this.getTokensGroups(walletsGroups);
+        this.checkCaseExistOneToken(this.walletsGroups);
+      } else {
+        this.walletsGroups = this.filterValidWallet(walletsGroups);
+      }
+      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1){
         this.goToSendPage(this.walletsGroups[0][0]);
       }
     }
+  }
+
+  private getTokensGroups(walletsGroups) {
+    const filterWalletsGroups = this.filterValidWallet(walletsGroups);
+    let tokensGroup = [];
+    tokensGroup = filterWalletsGroups.map((wallet) => {
+      return wallet.filter(subWallet => subWallet?.tokens);
+    });
+    return tokensGroup;
+  }
+
+  setIconToken(token) {
+    const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
   private filterValidWallet(walletGroups: any) {
@@ -118,6 +145,26 @@ export class AccountsPage {
     })
     this.isShowCreateNewWallet = _.isEmpty(walletsGroup);
     return walletsGroup;
+  }
+
+  private checkCaseExistOneToken(walletsGroups) {
+    let tokensGroups = [];
+    walletsGroups.map((item) => {
+      return item.map((wallet) => {
+          let validToken = wallet.tokens.find(token => token.tokenId === this.tokenID);
+          if (validToken) {
+            validToken.walletId = wallet.credentials.walletId;
+            tokensGroups.push(validToken);
+          }
+      })
+    })
+    if (this.isSpecificAmount && tokensGroups.length === 1 && tokensGroups[0].length === 1) {
+      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0][0])
+    }
+  }
+
+  public DecimalFormatBalance(amount) {
+    return DecimalFormatBalance(amount);
   }
 
   private async walletAudienceEvents() {
@@ -221,6 +268,9 @@ export class AccountsPage {
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
     this.isDonation = this.navParamsData.isDonation;
     this.isAddToHome = this.navParamsData.isAddToHome;
+    this.isToken = this.navParamsData?.isToken;
+    this.isSpecificAmount = this.navParamsData?.isSpecificAmount;
+    this.tokenID = this.navParamsData?.tokenID;
     if (this.isDonation) this.titlePage = "Accounts";
     if (this.isAddToHome) this.titlePage = "Add to home";
     this.coin = this.navParamsData.coin;
@@ -406,7 +456,7 @@ export class AccountsPage {
       this.router.navigate(['/send-page'], {
         state: {
           walletId: wallet.credentials.walletId,
-          toAddress: this.navParamsData.toAddress,
+          toAddress: this.navParamsData.toAddress
         }
       });
     } else {
@@ -420,6 +470,16 @@ export class AccountsPage {
       await copayerModal.present();
     }
   }
+
+  public async goToSendPageForToken(walletId, token) {
+    this.router.navigate(['/send-page'], {
+      state: {
+        walletId: walletId,
+        toAddress: this.navParamsData.toAddress,
+        token: token
+      }
+    });
+  }
   
   public openBackupPage(keyId) {
     this.router.navigate(['/backup-key'], {
@@ -431,7 +491,7 @@ export class AccountsPage {
 
   async presentToast(finishText, cssClass?) {
     const toast = await this.toastController.create({
-      message: finishText,
+      message: this.translate.instant(finishText),
       duration: 3000,
       position: 'bottom',
       animated: true,

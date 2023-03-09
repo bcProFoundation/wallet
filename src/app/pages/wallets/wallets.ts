@@ -20,9 +20,10 @@ import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
 import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
-import { AppProvider, ConfigProvider, CurrencyProvider, ThemeProvider } from 'src/app/providers';
+import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -58,7 +59,7 @@ export class WalletsPage {
   public symbolCurrency;
   public keyHiddenBalanceTemp = [];
   public flagOptionRemove: boolean;
-  listEToken = ['EAT', 'DoC', 'bcPro'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
   donationSupportCoins = [];
   navParamsData;
   isShowCreateNewWallet = false;
@@ -68,6 +69,7 @@ export class WalletsPage {
   isShowBalance = true;
   keySelected = [];
   keyNameSelected;
+  isLoading: boolean = false;
 
   constructor(
     public http: HttpClient,
@@ -91,7 +93,9 @@ export class WalletsPage {
     private currencyProvider: CurrencyProvider,
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private loadingProvider: LoadingProvider,
+    private translate: TranslateService
   ) {
     let config = this.configProvider.get();
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -146,7 +150,7 @@ export class WalletsPage {
 
   setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
-    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/xec.svg';
+    return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
   async ionViewWillEnter() {
@@ -160,7 +164,7 @@ export class WalletsPage {
     const walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.walletsGroups = walletsGroups;
     this.initKeySelected();
-    this.loadTokenWallet();
+    this.loadTokenWallet()
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -173,14 +177,20 @@ export class WalletsPage {
     return totalAlternativeBalanceToken + _.toNumber(this.getTotalBalanceKey(keySelected));
   }
 
-  private loadTokenWallet() {
-    this.loadTokenData(this.keySelected).then(data => {
+  private async loadTokenWallet() {
+    this.isLoading = false;
+    await this.loadingProvider.simpleLoader();
+    await this.loadTokenData(this.keySelected).then(data => {
       this.keySelected = data;
       this.totalBalanceKey = DecimalFormatBalance(this.updateTotalBalanceKey(data));
       this.changeDetectorRef.detectChanges();
     }).catch(err => {
       this.logger.error(err);
     })
+    setTimeout(async () => {
+      this.isLoading = true;
+      await this.loadingProvider.dismissLoader();
+    }, 500);
   }
 
   openMenu() {
@@ -325,11 +335,6 @@ export class WalletsPage {
   }
 
 
-  isSupportToken(wallet): boolean {
-    if (wallet && wallet.coin == 'xec' && wallet.isSlpToken) return true;
-    return false
-  }
-
   setTokensWallet(walletId, groupToken) {
     return new Promise(resolve => {
       this.profileProvider.setTokensWallet(walletId, groupToken);
@@ -437,7 +442,6 @@ export class WalletsPage {
       const walletsGroups = this.profileProvider.orderedWalletsByGroup;
       this.walletsGroups = walletsGroups;
       this.initKeySelected();
-      this.loadTokenWallet();
     }
   };
 
@@ -731,7 +735,7 @@ export class WalletsPage {
 
   async presentToast(finishText, cssClass?) {
     const toast = await this.toastController.create({
-      message: finishText,
+      message: this.translate.instant(finishText),
       duration: 3000,
       position: 'bottom',
       animated: true,
@@ -761,7 +765,7 @@ export class WalletsPage {
 
   public removeOutGroupsHome(wallet, token?) {
     if (this.profileProvider.isLastItemPrimaryList()) {
-      this.presentToast('Can not remove last item in list', 'toast-warning');
+      this.presentToast('Can not remove the last account in Home!', 'toast-warning');
     } else {
       let walletObj = {
         walletId: wallet.id,
@@ -769,10 +773,10 @@ export class WalletsPage {
       }
       let result = this.profileProvider.removeWalletGroupsHome(walletObj);
       if (result) {
-        this.presentToast('Remove account successful');
+        this.presentToast('Removed account successfully!');
         this.events.publish('Local/GetListPrimary', true);
       } else {
-        this.presentToast('Remove account unsuccessful');
+        this.presentToast('Removed account unsuccessfully!');
       }
     }
   }

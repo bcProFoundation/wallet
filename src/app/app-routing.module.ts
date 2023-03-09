@@ -67,6 +67,7 @@ import { SettingsPage } from './pages/settings/settings';
 import { SearchContactPage } from './pages/search/search-contact/search-contact.component';
 import { SelectFlowPage } from './pages/onboarding/select-flow/select-flow';
 import { ChartViewPage } from './pages/chart-view/chart-view';
+import { CustomAmountTokenPage } from './pages/receive/custom-amount-token/custom-amount-token';
 
 const routes: Routes = [
   {
@@ -318,6 +319,10 @@ const routes: Routes = [
   {
     path: 'custom-amount',
     component: CustomAmountPage,
+  },
+  {
+    path: 'custom-amount-token',
+    component: CustomAmountTokenPage
   },
   {
     path: 'add-funds',

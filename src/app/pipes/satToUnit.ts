@@ -8,7 +8,7 @@ import { Coin, TxFormatProvider } from '../providers';
 })
 export class SatToUnitPipe implements PipeTransform {
   constructor(private txFormatProvider: TxFormatProvider) { }
-  transform(amount: number, coin: Coin | any) {
-    return this.txFormatProvider.formatAmountStr(coin, amount);
+  transform(amount: number, coin: Coin | any, fullPrecision?: boolean) {
+    return this.txFormatProvider.formatAmountStr(coin, amount, fullPrecision);
   }
 }

@@ -8,7 +8,7 @@ import { PopupProvider } from '../../../../../providers/popup/popup';
 import { ProfileProvider } from '../../../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../../../../providers/wallet/wallet';
-import { AppProvider } from 'src/app/providers';
+import { AppProvider, CurrencyProvider, Coin } from 'src/app/providers';
 
 // pages
 import { WalletDetailsPage } from '../../../../wallet-details/wallet-details';
@@ -40,6 +40,7 @@ export class WalletAddressesPage {
   public isShowAddressBalance: boolean;
   public isShowUnsedAddress: boolean;
   public currentTheme: string;
+  public coinName: string;
 
   private UNUSED_ADDRESS_LIMIT: number;
   private BALANCE_ADDRESS_LIMIT: number;
@@ -57,7 +58,8 @@ export class WalletAddressesPage {
     private modalCtrl: ModalController,
     private txFormatProvider: TxFormatProvider,
     private appProvider: AppProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private currencyProvider: CurrencyProvider
   ) {
     if (this.router.getCurrentNavigation()) {
        this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -76,6 +78,7 @@ export class WalletAddressesPage {
   }
 
   ionViewWillEnter() {
+    this.getCoinName();
     this.loading = true;
     this.walletProvider
       .getMainAddresses(this.wallet, {
@@ -201,6 +204,11 @@ export class WalletAddressesPage {
         });
       }, 1000);
     });
+  }
+
+  private getCoinName() {
+    let coin = Coin[this.wallet.coin.toUpperCase()];
+    this.coinName = this.currencyProvider.getCoinName(coin);
   }
 
   public handleClickShowWallInputs() {

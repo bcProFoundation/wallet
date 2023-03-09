@@ -29,7 +29,7 @@
           </div>
 
           <div class="row-container">
-            <div class="item-name">Subtotal</div>
+            <div class="item-name" translate>Subtotal</div>
             <div class="item-detail ellipsis">
               <span *ngIf="!fromSelectInputs">{{amount}} {{tx.coin | uppercase}}</span>
               <span
@@ -168,15 +168,19 @@
         </ion-note>
       </ion-item>
 
+      <ion-item *ngIf="!tx.name && !toAddressName" class="add-address-book">
+        <mat-form-field appearance="outline">
+            <mat-label translate>Address book name</mat-label>
+            <input matInput type="text" [(ngModel)]="nameContact" [placeholder]="'Enter name to save to address book' | translate">
+          </mat-form-field>
+      </ion-item>
+
       <ion-item *ngIf="tx && fromMultiSend" lines="none" class="custom-list">
         <div class="list-container">
           <div class="first-row first-row-send-to row-container summary-amount-info">
-            <div>
-              Send to
-            </div>
-            <div>
-              Amount
-            </div>
+            <!-- TODO language translate: check as translate seems not affect -->
+            <div>{{ 'Send to' | translate }}</div>
+            <div translate>Amount</div>
           </div>
           <div class="row-container send-to-content" *ngFor="let recipient of recipients; let i = index"
             copy-to-clipboard="{{recipient.toAddress}}">

@@ -82,6 +82,7 @@ export class CreateWalletPage implements OnInit {
   public pairedWallet: any;
   public isOpenSelector: boolean;
   public isSlpToken: boolean;
+  public isFromRaipay: boolean;
   navParamsData;
   public isScroll = false;
   constructor(
@@ -376,7 +377,8 @@ export class CreateWalletPage implements OnInit {
   private create(opts): void {
     this.onGoingProcessProvider.set('creatingWallet');
     opts['keyId'] = this.keyId;
-    opts['isSlpToken'] = this.isSlpToken;
+    opts['isSlpToken'] = this.isSlpToken || this.isFromRaipay;
+    opts['isFromRaipay'] = this.isFromRaipay;
     this.profileProvider
       .createWallet(opts)
       .then(wallet => {
@@ -405,9 +407,11 @@ export class CreateWalletPage implements OnInit {
                 this.router.navigate(['/wallet-details'], {
                   state: { walletId: wallet.credentials.walletId }
                 }).then(() => {
-                  this.eventsService.publishRefresh({
-                    keyId: this.keyId
-                  })
+                  // TODO: Test handle key not update
+                  // this.eventsService.publishRefresh({
+                  //   keyId: this.keyId
+                  // })
+                  this.events.publish('Local/GetData', true);
                 });
               } else {
                 const copayerModal = this.modalCtrl.create({
@@ -560,11 +564,27 @@ export class CreateWalletPage implements OnInit {
   changeSlpPath(event) {
     this.isSlpToken = event.detail.checked;
     if (event.detail.checked) {
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 145", ""));
       this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value + " - 1899");
       this.createForm.controls['singleAddress'].setValue(true);
+      this.isFromRaipay = false;
     }
     else {
-      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace("- 1899", ""));
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 1899", ""));
+    }
+  }
+
+  changeRaipayPath(event) {
+    this.isFromRaipay = event.detail.checked;
+    if (event.detail.checked) {
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 1899", ""));
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value + " - 145");
+      this.createForm.controls['singleAddress'].setValue(true);
+      this.isSlpToken = false;
+    }
+    else {
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 145", ""));
     }
   }
 }
+

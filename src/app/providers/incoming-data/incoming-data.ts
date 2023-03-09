@@ -231,6 +231,20 @@ export class IncomingDataProvider {
     } else this.goSend(address, amount, message, coin, redirParams.recipientId);
   }
 
+  private handleBitcoinUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: Bitcoin URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.BTC;
+    let parsed = this.bwcProvider.getBitcore().URI(data);
+    let address = parsed.address ? parsed.address.toString() : '';
+    let message = parsed.message;
+    let amount = parsed.amount || amountFromRedirParams;
+    if (!parsed.r) {
+      this.goSend(address, amount, message, coin, redirParams.recipientId);
+    } 
+  }
+
   private handleEtoken(data: string, redirParams?: RedirParams) {
     this.logger.debug('Incoming-data: Etoken');
     let amountFromRedirParams =
@@ -453,6 +467,23 @@ export class IncomingDataProvider {
     }
   }
 
+  private handlePlainEtokenAddress(
+    data: string,
+    redirParams?: RedirParams
+  ): void {
+    this.logger.debug('Incoming-data: ECash plain address');
+    const coin = Coin.XEC;
+    if (redirParams && redirParams.activePage === 'ScanPage') {
+      this.showMenu({
+        data,
+        type: 'eTokenAddress',
+        coin
+      });
+    } else {
+      this.goSend(data, redirParams.amount, '', coin, redirParams.recipientId);
+    }
+  }
+
   private goToImportByPrivateKey(data: string): void {
     this.logger.debug('Incoming-data (redirect): QR code export feature');
 
@@ -502,14 +533,36 @@ export class IncomingDataProvider {
     }
   }
 
+  private handleToAddressEtoken(data) {
+    // data: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20
+    let tempToAddressObject = {
+      address: data,
+      amount: null
+    }
+    // Handle parse toAddress to address & amount by "amount1"(eToken).
+    if (data && data?.includes('amount1')) {
+      let parseArrayData, address, amount;
+      parseArrayData = data?.replace('amount1=', '')?.split('?');
+      address = parseArrayData[0] ? parseArrayData[0] : '';
+      amount = parseArrayData[1] ? parseInt(parseArrayData[1]) : 0;
+      tempToAddressObject = {
+        address: address,
+        amount: amount
+      }
+    }
+    return tempToAddressObject;
+  }
+
   public redir(data: string, redirParams?: RedirParams): boolean {
     if (redirParams && redirParams.activePage)
       this.activePage = redirParams.activePage;
     if (redirParams && redirParams.activePage)
       this.fromFooterMenu = redirParams.fromFooterMenu;
     if (redirParams.token) {
-      if (this.isValidEToken(data)) {
-        this.handleEtoken(data, redirParams);
+      let toAddressObject = this.handleToAddressEtoken(data);
+      if (this.isValidEToken(toAddressObject?.address)) {
+        toAddressObject?.amount ? redirParams.amount = toAddressObject?.amount : null;
+        this.handleEtoken(toAddressObject?.address ? toAddressObject?.address : data, redirParams);
         return true;
       }
       this.logger.warn('Incoming-data: Unknown information');
@@ -517,7 +570,7 @@ export class IncomingDataProvider {
     }
     // Bitcoin  URI
     else if (this.isValidBitcoinUri(data)) {
-      // this.handleBitcoinUri(data, redirParams);
+      this.handleBitcoinUri(data, redirParams);
       return true;
 
       // Bitcoin Cash URI
@@ -590,7 +643,7 @@ export class IncomingDataProvider {
       this.handlePlainEcashAddress(data, redirParams);
       return true;
 
-      // Join
+      // Plain Address (Etoken)
     } else if (this.isValidJoinCode(data) || this.isValidJoinLegacyCode(data)) {
       this.goToJoinWallet(data);
       return true;
@@ -703,6 +756,13 @@ export class IncomingDataProvider {
       };
       // Ecash URI
     } else if (this.isValidECashUri(data)) {
+      return {
+        data,
+        type: 'ECashUri',
+        title: 'Ecash URI'
+      };
+      // Lotus URI
+    } else if (this.isValidEToken(data)) {
       return {
         data,
         type: 'ECashUri',

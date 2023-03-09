@@ -18,10 +18,11 @@ import { AppProvider } from '../../../../providers/app/app';
 import { CurrencyProvider } from '../../../../providers/currency/currency';
 import { Logger } from '../../../../providers/logger/logger';
 import { PlatformProvider } from '../../../../providers/platform/platform';
-import { PopupProvider } from '../../../../providers/popup/popup';
 
 // validators
 import { AddressValidator } from '../../../../validators/address';
+import { Keyboard } from '@capacitor/keyboard';
+import { LixiLotusProvider } from 'src/app/providers/lixi-lotus/lixi-lotus';
 
 @Component({
   selector: 'page-addressbook-add',
@@ -29,7 +30,7 @@ import { AddressValidator } from '../../../../validators/address';
   styleUrls: ['add.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AddressbookAddPage extends ActionSheetParent{
+export class AddressbookAddPage extends ActionSheetParent {
   public addressBookAdd: FormGroup;
   public isCordova: boolean;
   public appName: string;
@@ -38,7 +39,8 @@ export class AddressbookAddPage extends ActionSheetParent{
   public networks;
   public coins: string[];
   public allowNetworkSelection: boolean;
-
+  public hiddenFormAddContact: boolean = false;
+  public nameEditable: boolean = true;
   private destinationTagregex: RegExp;
   navParamsData;
 
@@ -53,13 +55,15 @@ export class AddressbookAddPage extends ActionSheetParent{
     private formBuilder: FormBuilder,
     private logger: Logger,
     private platformProvider: PlatformProvider,
-    private popupProvider: PopupProvider
+    private lixiLotusProvider: LixiLotusProvider
   ) {
     super();
     if (this.router.getCurrentNavigation()) {
-       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state
+        ? this.router.getCurrentNavigation().extras.state
+        : {};
     } else {
-      this.navParamsData =  history ? history.state : undefined;
+      this.navParamsData = history ? history.state : undefined;
     }
     this.networks = ['livenet', 'testnet'];
     this.isCordova = this.platformProvider.isCordova;
@@ -143,10 +147,21 @@ export class AddressbookAddPage extends ActionSheetParent{
           this.addressBookAdd.controls['coin'].setValue(this.addressInfo.coin);
         }
       }
+      this.lixiLotusProvider
+        .getOfficialInfo(address)
+        .then(data => {
+          this.addressBookAdd.controls['name'].setValue(data.name);
+          this.nameEditable = false;
+        })
+        .catch(e => {
+          if (!this.nameEditable) {
+            this.nameEditable = true;
+          }
+        });
     }
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.logger.info('Loaded: AddressbookAddPage');
   }
 
@@ -167,6 +182,7 @@ export class AddressbookAddPage extends ActionSheetParent{
         this.parseAddress(data.value)
       );
     }
+    this.hiddenFormAddContact = false;
   };
 
   private emailOrEmpty(control: AbstractControl): ValidationErrors | null {
@@ -174,21 +190,26 @@ export class AddressbookAddPage extends ActionSheetParent{
   }
 
   public save(): void {
-    const name = this.addressBookAdd.value.name.charAt(0).toUpperCase() + this.addressBookAdd.value.name.slice(1);
+    const name =
+      this.addressBookAdd.value.name.charAt(0).toUpperCase() +
+      this.addressBookAdd.value.name.slice(1);
     this.ab
       .add({
         name: name,
         email: this.addressBookAdd.value.email,
-        address: this.addressBookAdd.value.address.includes('etoken') ? this.addressBookAdd.value.address : this.parseAddress(this.addressBookAdd.value.address),
+        address: this.addressBookAdd.value.address.includes('etoken')
+          ? this.addressBookAdd.value.address
+          : this.parseAddress(this.addressBookAdd.value.address),
         tag: this.addressBookAdd.value.tag,
         network: this.addressBookAdd.value.network,
-        coin: this.addressBookAdd.value.coin
+        coin: this.addressBookAdd.value.coin,
+        isOfficialInfo: !this.nameEditable
       })
-      .then((rs) => {
+      .then(rs => {
         this.confirm(rs);
       })
       .catch(err => {
-        this.confirm(err)
+        this.confirm(err);
       });
   }
 
@@ -201,7 +222,9 @@ export class AddressbookAddPage extends ActionSheetParent{
   }
 
   public openScanner(): void {
-    this.router.navigate(['scan'], {state: {fromAddressbook: true}})
+    this.hiddenFormAddContact = true;
+    Keyboard.hide();
+    this.router.navigate(['scan'], { state: { fromAddressbook: true } });
   }
 
   public getCoinAndNetwork(): { coin: string; network: string } {

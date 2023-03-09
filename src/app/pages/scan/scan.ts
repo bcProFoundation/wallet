@@ -17,6 +17,7 @@ import _ from 'lodash';
 import { PreviousRouteService } from 'src/app/providers/previous-route/previous-route';
 import { ActionSheetProvider } from 'src/app/providers/action-sheet/action-sheet';
 import { AddressProvider } from 'src/app/providers/address/address';
+import { LixiLotusProvider } from 'src/app/providers';
 
 @Component({
   selector: 'page-scan',
@@ -52,6 +53,7 @@ export class ScanPage {
   public fromConfirm: boolean;
   public fromWalletConnect: boolean;
   public fromFooterMenu: boolean;
+  public isTokenScan: boolean;
   public canGoBack: boolean;
   public tabBarElement;
   navParamsData
@@ -72,7 +74,8 @@ export class ScanPage {
     private routerOutlet: IonRouterOutlet,
     private previousRouteService: PreviousRouteService,
     private actionSheetProvider: ActionSheetProvider,
-    private addressProvider: AddressProvider
+    private addressProvider: AddressProvider,
+    private lixiLotusProvider: LixiLotusProvider
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
@@ -98,6 +101,18 @@ export class ScanPage {
     this.canOpenSettings = false;
     this.isCordova = this.platformProvider.isCordova;
     this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
+    this.fromAddressbook = this.navParamsData.fromAddressbook;
+    this.fromImport = this.navParamsData.fromImport;
+    this.fromJoin = this.navParamsData.fromJoin;
+    this.fromRecipientComponent = this.navParamsData.fromRecipientComponent;
+    this.recipientId = this.navParamsData.recipientId;
+    this.fromMultiSend = this.navParamsData.fromMultiSend;
+    this.fromSelectInputs = this.navParamsData.fromSelectInputs;
+    this.fromEthMultisig = this.navParamsData.fromEthMultisig;
+    this.fromConfirm = this.navParamsData.fromConfirm;
+    this.fromWalletConnect = this.navParamsData.fromWalletConnect;
+    this.fromFooterMenu = this.navParamsData.fromFooterMenu;
+    this.isTokenScan = this.navParamsData.isTokenScan;
   }
 
   ngOnInit() {
@@ -125,18 +140,6 @@ export class ScanPage {
   }
 
   ionViewWillEnter() {
-    this.fromAddressbook = this.navParamsData.fromAddressbook;
-    this.fromImport = this.navParamsData.fromImport;
-    this.fromJoin = this.navParamsData.fromJoin;
-    this.fromRecipientComponent = this.navParamsData.fromRecipientComponent;
-    this.recipientId = this.navParamsData.recipientId;
-    this.fromMultiSend = this.navParamsData.fromMultiSend;
-    this.fromSelectInputs = this.navParamsData.fromSelectInputs;
-    this.fromEthMultisig = this.navParamsData.fromEthMultisig;
-    this.fromConfirm = this.navParamsData.fromConfirm;
-    this.fromWalletConnect = this.navParamsData.fromWalletConnect;
-    this.fromFooterMenu = this.navParamsData.fromFooterMenu;
-
     if (this.canGoBack && this.tabBarElement)
       this.tabBarElement.style.display = 'none';
 
@@ -273,6 +276,9 @@ export class ScanPage {
     } else if (this.fromJoin) {
       this.events.publish('Local/JoinScan', { value: contents });
     } else if (this.fromRecipientComponent) {
+      if (this.isTokenScan) {
+        contents = this.handleScanSpecificEtokenFromSend(contents);
+      }
       this.events.publish('Local/AddressScan', { value: contents, recipientId: this.recipientId });
     } else if (this.fromMultiSend) {
       this.events.publish('Local/AddressScanMultiSend', { value: contents });
@@ -298,37 +304,90 @@ export class ScanPage {
     }
   }
 
+  private handleScanSpecificEtokenFromSend(content) {
+    let value = '';
+    if (content.includes('amount1')) {
+      value = content.slice(0, content.indexOf('-'));
+    }
+    return value;
+  }
 
   private handleSendAddress(data, addrData): void {
-    if (data.data.includes('amount')) {
+    this.lixiLotusProvider.getOfficialInfo(data.data).then(() => {
       this.router.navigateByUrl('/accounts-page', {
         state: {
           coin: addrData.coin,
           network: addrData.network,
-          toAddress: data.data,
-          isSpecificAmount: true
+          toAddress: data.data
         }
       });
-    }
-    else {
-      const dataMenu = this.actionSheetProvider.createIncomingDataMenu({ data });
-      dataMenu.present();
-      dataMenu.onDidDismiss(dataDismiss => {
-        if (dataDismiss && dataDismiss.redirTo == 'SendPage') {
-          this.router.navigateByUrl('/accounts-page', {
-            state: {
-              coin: addrData.coin,
-              network: addrData.network,
-              toAddress: data.data
-            }
-          });
-        }
-      });
-    }
+    }).catch(err => {
+      if (data?.data?.includes('amount')) {
+        this.router.navigateByUrl('/accounts-page', {
+          state: {
+            coin: addrData.coin,
+            network: addrData.network,
+            toAddress: data.data,
+            isSpecificAmount: true,
+            isToken: data?.isToken || false,
+            tokenID: data?.tokenID
+          }
+        });
+      } 
+      else {
+        const dataMenu = this.actionSheetProvider.createIncomingDataMenu({ data });
+        dataMenu.present();
+        dataMenu.onDidDismiss(dataDismiss => {
+          if (dataDismiss && dataDismiss.redirTo == 'SendPage') {
+            this.router.navigateByUrl('/accounts-page', {
+              state: {
+                coin: addrData.coin,
+                network: addrData.network,
+                toAddress: data.data,
+                isToken: data?.isToken || false
+              }
+            });
+          }
+        });
+      }
+    })
+  }
 
+  private handleScanSpecificToken(value: string) {
+    // Value: etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3?amount1=20-1a399e9f63d7452365662bfe3ce288da569 || etoken:qp8ks7622cklc7c9pm2d3ktwzctack6njq57wn02p3
+    let addressToken, tokenId;
+    addressToken = value.includes('amount1') ? value.slice(0, value.indexOf('?')) : value;
+    tokenId = value.includes('-') ? value.slice(value.indexOf('-') + 1) : null;
+    const parsedData = this.incomingDataProvider.parseData(addressToken);
+    if (parsedData) {
+      const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
+      const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);
+      if (eCashAddess) {
+        const addrData = this.addressProvider.getCoinAndNetwork(eCashAddess);
+        if (addrData && addrData.coin && addrData.network) {
+          return this.handleSendAddress({
+            data: value,
+            coin: addrData.coin,
+            isToken: true,
+            tokenID: tokenId
+          }, addrData)
+        }
+      }
+    }
+    return this.showErrorInvalidQr(' ', 'Invalid QR code');
+  }
+
+  private handleScanLixiCode(address: string) {
+    this.events.publish('Local/ClaimVoucher', { value: address });
   }
 
   private redirScanAddress(address) {
+    if (address.includes('lixi_')) {
+      return this.handleScanLixiCode(address);
+    }
+    if (address.includes('etoken')) {
+      return this.handleScanSpecificToken(address);
+    }
     const parsedData = this.incomingDataProvider.parseData(address);
     if (parsedData) {
       const addrData = this.addressProvider.getCoinAndNetwork(address);

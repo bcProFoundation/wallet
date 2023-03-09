@@ -11,6 +11,8 @@ import { DecimalFormatBalance } from 'src/providers/decimal-format.ts/decimal-fo
 import { ClipboardProvider } from '../../../providers/clipboard/clipboard';
 import { Logger } from '../../../providers/logger/logger';
 import { PlatformProvider } from '../../../providers/platform/platform';
+import { TranslateService } from '@ngx-translate/core';
+
 
 // Pages
 import { RecipientModel } from '../../../components/recipient/recipient.model';
@@ -18,6 +20,7 @@ import { WalletProvider } from 'src/app/providers/wallet/wallet';
 import { ConfigProvider } from 'src/app/providers/config/config';
 import { CurrencyProvider } from 'src/app/providers/currency/currency';
 import { ThemeProvider } from 'src/app/providers/theme/theme';
+import { DUST_AMOUNT } from 'src/app/constants';
 
 @Component({
   selector: 'page-send-select-inputs',
@@ -73,6 +76,7 @@ export class SelectInputsSendPage {
     private walletProvider: WalletProvider,
     private configProvider: ConfigProvider,
     private currencyProvider: CurrencyProvider,
+    private translate: TranslateService,
     private themeProvider: ThemeProvider
   ) {
     if (this.router.getCurrentNavigation()) {
@@ -89,7 +93,7 @@ export class SelectInputsSendPage {
     }))
 
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
-    this.titlePage = `Send  ${(this.wallet.coin as String).toUpperCase()}`;
+    this.titlePage = this.translate.instant("Send ") + (this.wallet.coin as String).toUpperCase();
     this.subTitle = `(from select inputs)`;
 
     this.isCordova = this.platformProvider.isCordova;
@@ -170,15 +174,14 @@ export class SelectInputsSendPage {
 
   public goToConfirm(): void {
     const recipient = this.listRecipient[0];
+    const totalAmountSataoshi = this.totalAmount * this.currencyProvider.getPrecision(this.wallet.coin).unitToSatoshi
     this.router.navigate(['/confirm'], {
       state: {
         walletId: this.wallet.credentials.walletId,
         fromSelectInputs: true,
-        totalInputsAmount:
-          this.totalAmount *
-          this.currencyProvider.getPrecision(this.wallet.coin).unitToSatoshi,
+        totalInputsAmount: totalAmountSataoshi,
         toAddress: recipient.toAddress,
-        amount: recipient.amount,
+        amount:  ( totalAmountSataoshi - recipient.amount ) < DUST_AMOUNT ? totalAmountSataoshi :  recipient.amount,
         coin: this.wallet.coin,
         network: this.wallet.network,
         useSendMax: false,

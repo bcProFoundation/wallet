@@ -11,7 +11,17 @@ import env from '../../../environments';
 import { DecimalFormatBalance } from '../../providers/decimal-format.ts/decimal-format';
 import { ErrorsProvider } from '../../providers/errors/errors';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
-import { ActionSheetProvider, AddressBookProvider, AnalyticsProvider, AppProvider, BwcErrorProvider, ConfigProvider, CurrencyProvider, EventManagerService, LoadingProvider } from '../../providers/index';
+import {
+  ActionSheetProvider,
+  AddressBookProvider,
+  AnalyticsProvider,
+  AppProvider,
+  BwcErrorProvider,
+  ConfigProvider,
+  CurrencyProvider,
+  EventManagerService,
+  LoadingProvider
+} from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -22,10 +32,11 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
-import { ModalController, Platform, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+import { EventsService } from 'src/app/providers/events.service';
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -39,7 +50,7 @@ interface UpdateWalletOptsI {
   selector: 'page-wallet-details',
   templateUrl: 'wallet-details.html',
   styleUrls: ['wallet-details.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class WalletDetailsPage {
   private currentPage: number = 0;
@@ -81,6 +92,8 @@ export class WalletDetailsPage {
   public navPramss: any;
   public finishParam: any;
   public isScroll = false;
+  public isSendFromHome: boolean = false;
+  public isGenNewAddress: boolean = false;
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -110,7 +123,9 @@ export class WalletDetailsPage {
     private analyticsProvider: AnalyticsProvider,
     private appProvider: AppProvider,
     private location: Location,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private loadingCtrl: LoadingController,
+    private eventsService: EventsService
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -118,33 +133,35 @@ export class WalletDetailsPage {
     } else {
       this.navPramss = history ? history.state : {};
     }
-
+    this.isSendFromHome = this.navPramss.isSendFromHome;
     this.selectedTheme = this.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
 
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
-    this.walletProvider
-      .getAddress(this.wallet, undefined)
-      .then(addr => {
-        if (!addr) return;
-        const address = this.walletProvider.getAddressView(
-          this.wallet.coin,
-          this.wallet.network,
-          addr
-        );
-        this.address = address;
-      })
+    this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
+      if (!addr) return;
+      const address = this.walletProvider.getAddressView(
+        this.wallet.coin,
+        this.wallet.network,
+        addr
+      );
+      this.address = address;
+    });
     this.isDarkModeEnabled = this.themeProvider.isDarkModeEnabled();
     this.showBuyCrypto =
-      (this.wallet.network == 'livenet' ||
-        (this.wallet.network == 'testnet' && env.name == 'development'));
+      this.wallet.network == 'livenet' ||
+      (this.wallet.network == 'testnet' && env.name == 'development');
     this.showExchangeCrypto = this.wallet.network == 'livenet';
 
     // Check is show btn Donate
     this.walletProvider.getDonationInfo().then((data: any) => {
-      this.isShowDonationBtn = _.some(data.donationSupportCoins, (item: any) => item.network == this.wallet.network && item.coin == this.wallet.coin);
-    })
+      this.isShowDonationBtn = _.some(
+        data.donationSupportCoins,
+        (item: any) =>
+          item.network == this.wallet.network && item.coin == this.wallet.coin
+      );
+    });
 
     // Getting info from cache
     if (this.navPramss.clearCache) {
@@ -169,14 +186,18 @@ export class WalletDetailsPage {
 
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl = defaults.blockExplorerUrl[this.wallet.coin];
-    this.blockexplorerUrlTestnet = defaults.blockExplorerUrlTestnet[this.wallet.coin];
+    this.blockexplorerUrlTestnet =
+      defaults.blockExplorerUrlTestnet[this.wallet.coin];
+  }
+
+  handleGenNewAddress(event: boolean) {
+    this.isGenNewAddress = event;
   }
 
   async handleScrolling(event) {
     if (event.detail.currentY > 0) {
       this.isScroll = true;
-    }
-    else {
+    } else {
       this.isScroll = false;
     }
   }
@@ -226,10 +247,10 @@ export class WalletDetailsPage {
     );
   }
 
-  ionViewWillEnter() {
-    this.loadingProvider.simpleLoader();
+  async ionViewWillEnter() {
     this.hiddenBalance = this.wallet.balanceHidden;
-    this.backgroundColor = this.themeProvider.getThemeInfo().walletDetailsBackgroundStart;
+    this.backgroundColor =
+      this.themeProvider.getThemeInfo().walletDetailsBackgroundStart;
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.profileProvider.setFastRefresh(this.wallet);
       this.subscribeEvents();
@@ -260,7 +281,10 @@ export class WalletDetailsPage {
   }
 
   ionViewDidLeave() {
-    this.events.publish('Local/GetData', true);
+    // this.events.publish('Local/GetData', true);
+    this.eventsService.publishRefresh({
+      keyId: this.wallet.keyId
+    });
   }
 
   shouldShowZeroState() {
@@ -329,7 +353,7 @@ export class WalletDetailsPage {
   private groupHistory(history) {
     return history.reduce((groups, tx, txInd) => {
       if (tx.isSlpToken) {
-        this.updateHistoryToken(tx)
+        this.updateHistoryToken(tx);
       }
       this.isFirstInGroup(txInd)
         ? groups.push([tx])
@@ -342,9 +366,17 @@ export class WalletDetailsPage {
     return new Date(number);
   }
 
-  private showHistory(loading?: boolean) {
-    if (!this.wallet.completeHistory) return;
+  private async showHistory(loading?: boolean) {
+    const loader = await this.loadingCtrl.create({
+      message: this.translate.instant('Loading...'),
+      backdropDismiss: true
+    });
 
+    loader.present();
+    if (!this.wallet.completeHistory) {
+      loader.dismiss();
+      return;
+    }
     this.history = this.wallet.completeHistory.slice(
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
@@ -353,8 +385,8 @@ export class WalletDetailsPage {
       this.groupedHistory = this.groupHistory(this.history);
     });
     if (loading) this.currentPage++;
-    setTimeout(() => {
-      this.loadingProvider.dismissLoader();
+    setTimeout(async () => {
+      loader.dismiss();
     }, 1000);
   }
 
@@ -451,12 +483,16 @@ export class WalletDetailsPage {
   }
 
   private updateHistoryToken(tx) {
-    const token = _.find(this.wallet.tokens, item => item.tokenId == tx.tokenId);
+    const token = _.find(
+      this.wallet.tokens,
+      item => item.tokenId == tx.tokenId
+    );
     if (token && token.tokenInfo) {
       if (tx.action == 'sent') {
-        tx.addressTo = this.updateAddressToShowToken(tx)
+        tx.addressTo = this.updateAddressToShowToken(tx);
       }
-      tx.amountToken = tx.amountTokenUnit / Math.pow(10, token.tokenInfo.decimals);
+      tx.amountToken =
+        tx.amountTokenUnit / Math.pow(10, token.tokenInfo.decimals);
       tx.symbolToken = token.tokenInfo.symbol;
       tx.name = token.tokenInfo.name;
       tx.isGenesis = tx.txType == 'GENESIS';
@@ -487,8 +523,8 @@ export class WalletDetailsPage {
     if (this.wallet.credentials.multisigEthInfo) {
       this.router.navigate(['/proposals-notifications'], {
         state: {
-          multisigContractAddress: this.wallet.credentials.multisigEthInfo
-            .multisigContractAddress
+          multisigContractAddress:
+            this.wallet.credentials.multisigEthInfo.multisigContractAddress
         }
       });
     } else {
@@ -566,7 +602,6 @@ export class WalletDetailsPage {
 
       if (this.wallet.needsBackup && hasTx && this.showBackupNeededMsg)
         this.openBackupModal();
-
       this.showHistory();
     } else {
       if (opts.error) {
@@ -647,9 +682,8 @@ export class WalletDetailsPage {
       return;
     }
     if (tx.hasUnconfirmedInputs) {
-      const infoSheet = this.actionSheetProvider.createInfoSheet(
-        'unconfirmed-inputs'
-      );
+      const infoSheet =
+        this.actionSheetProvider.createInfoSheet('unconfirmed-inputs');
       infoSheet.present();
       infoSheet.onDidDismiss(() => {
         this.goToTxDetails(tx);
@@ -698,16 +732,17 @@ export class WalletDetailsPage {
   }
 
   public goToTxDetails(tx) {
-    const txDetailModal = this.modalCtrl.create(
-      {
+    const txDetailModal = this.modalCtrl
+      .create({
         component: TxDetailsModal,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
           txid: tx.txid
         }
-      }).then(res => {
-        res.present();
       })
+      .then(res => {
+        res.present();
+      });
   }
 
   public openBackupModal(): void {
@@ -722,7 +757,6 @@ export class WalletDetailsPage {
   }
 
   public openBackup() {
-
     this.router.navigate(['/backup-key'], {
       state: {
         keyId: this.wallet.credentials.keyId
@@ -731,7 +765,8 @@ export class WalletDetailsPage {
   }
 
   public openAddresses() {
-    this.router.navigate(['/wallet-addresses'], { // WalletAddressesPage
+    this.router.navigate(['/wallet-addresses'], {
+      // WalletAddressesPage
       state: {
         walletId: this.wallet.credentials.walletId
       }
@@ -792,14 +827,16 @@ export class WalletDetailsPage {
   }
 
   public openBalanceDetails(): void {
-    this.modalCtrl.create({
-      component: WalletBalanceModal,
-      componentProps: {
-        status: this.wallet.cachedStatus
-      }
-    }).then(res => {
-      res.present()
-    });
+    this.modalCtrl
+      .create({
+        component: WalletBalanceModal,
+        componentProps: {
+          status: this.wallet.cachedStatus
+        }
+      })
+      .then(res => {
+        res.present();
+      });
   }
 
   public back(): void {
@@ -816,7 +853,7 @@ export class WalletDetailsPage {
       },
       showBackdrop: false,
       backdropDismiss: true
-    })
+    });
     await modal.present();
     modal.onDidDismiss().then(({ data }) => {
       if (!data || !data.txid) return;
@@ -847,7 +884,6 @@ export class WalletDetailsPage {
 
     setTimeout(() => {
       refresher.target.complete();
-
     }, TIMEOUT_FOR_REFRESHER);
   }
 
@@ -899,7 +935,8 @@ export class WalletDetailsPage {
           coin: this.wallet.coin,
           fromBuyCrypto: true,
           nextPage: 'CryptoOrderSummaryPage',
-          currency: this.configProvider.get().wallet.settings.alternativeIsoCode,
+          currency:
+            this.configProvider.get().wallet.settings.alternativeIsoCode,
           walletId: this.wallet.id
         }
       });
@@ -923,29 +960,39 @@ export class WalletDetailsPage {
   }
 
   public handleDonation() {
-    this.walletProvider.getDonationInfo().then((data: any) => {
-      if (_.isEmpty(data)) throw new Error("No data Remaning");
-      this.router.navigate(['/send-page'], {
-        state: {
-          toAddress: _.get(_.find(data.donationToAddresses, item => item.coin == this.wallet.coin), 'address', ''),
-          donationSupportCoins: data.donationSupportCoins,
-          id: this.wallet.credentials.walletId,
-          walletId: this.wallet.credentials.walletId,
-          recipientType: 'wallet',
-          name: this.wallet.name,
-          coin: this.wallet.coin,
-          network: this.wallet.network,
-          isDonation: true,
-          fromWalletDetails: true,
-          minMoneydonation: data.minMoneydonation,
-          remaining: data.remaining,
-          receiveLotus: data.receiveAmountLotus,
-          donationCoin: data.donationCoin
-        }
+    this.walletProvider
+      .getDonationInfo()
+      .then((data: any) => {
+        if (_.isEmpty(data)) throw new Error('No data Remaning');
+        this.router.navigate(['/send-page'], {
+          state: {
+            toAddress: _.get(
+              _.find(
+                data.donationToAddresses,
+                item => item.coin == this.wallet.coin
+              ),
+              'address',
+              ''
+            ),
+            donationSupportCoins: data.donationSupportCoins,
+            id: this.wallet.credentials.walletId,
+            walletId: this.wallet.credentials.walletId,
+            recipientType: 'wallet',
+            name: this.wallet.name,
+            coin: this.wallet.coin,
+            network: this.wallet.network,
+            isDonation: true,
+            fromWalletDetails: true,
+            minMoneydonation: data.minMoneydonation,
+            remaining: data.remaining,
+            receiveLotus: data.receiveAmountLotus,
+            donationCoin: data.donationCoin
+          }
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    }).catch((err) => {
-      console.log(err)
-    });
   }
 
   public requestSpecificAmount(): void {
@@ -1001,12 +1048,12 @@ export class WalletDetailsPage {
       return totalBalanceStr || lastKnownBalance;
     }
   }
-  
+
   public getAlternativeBalance() {
-      const totalBalanceAlternative =
-        this.wallet.cachedStatus &&
-        this.wallet.cachedStatus.totalBalanceAlternative;
-      return DecimalFormatBalance(totalBalanceAlternative);
+    const totalBalanceAlternative =
+      this.wallet.cachedStatus &&
+      this.wallet.cachedStatus.totalBalanceAlternative;
+    return DecimalFormatBalance(totalBalanceAlternative);
   }
 
   public formatTxAmount(amount: any) {
@@ -1101,5 +1148,18 @@ export class WalletDetailsPage {
       okText,
       cancelText
     );
+  }
+
+  public handleNavigateBack() {
+    if (this.isSendFromHome) {
+      this.router.navigate(['/tabs/home']);
+    } else if (this.isGenNewAddress) {
+      this.isGenNewAddress = false;
+      this.router.navigate(['/tabs/home']).then(() => {
+        this.router.navigate(['/tabs/wallets']);
+      });
+    } else {
+      this.router.navigate(['/tabs/wallets']);
+    }
   }
 }

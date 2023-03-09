@@ -3,10 +3,10 @@
     <div class="title">
       <div *ngIf="!disableButtons">
         <span class="message" *ngIf="action === 'checkPin' && !incorrect" translate>Please enter your PIN</span>
-        <span class="message" *ngIf="!confirmingPin && !incorrect && action === 'pinSetUp'" translate>Create your passcode</span>
-        <span class="message" *ngIf="!confirmingPin && !incorrect && action === 'lockSetUp'" translate>Please enter your passcode</span>
-        <span class="message" *ngIf="confirmingPin && !incorrect" translate>Re-type passcode</span>
-        <span class="message" *ngIf="incorrect" translate>Incorrect passcode, try again.</span>
+        <span class="message" *ngIf="!confirmingPin && !incorrect && action === 'pinSetUp'" translate>Create your PIN</span>
+        <span class="message" *ngIf="!confirmingPin && !incorrect && action === 'lockSetUp'" translate>Please enter your PIN</span>
+        <span class="message" *ngIf="confirmingPin && !incorrect" translate>Re-type PIN</span>
+        <span class="message" *ngIf="incorrect" translate>Incorrect PIN, try again.</span>
       </div>
       <div *ngIf="disableButtons">
         <span class="message" *ngIf="expires" translate>Try again in <countdown [config]="{leftTime: countDownTime, format: 'm:s'}"></countdown></span>

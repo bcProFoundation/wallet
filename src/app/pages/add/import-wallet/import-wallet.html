@@ -15,9 +15,10 @@
     <form [formGroup]="importForm">
       <ion-list lines="none" *ngIf="selectedTab == 'words'">
         <mat-form-field appearance="outline">
-          <mat-label>The recovery phrase</mat-label>
-          <textarea matInput formControlName="words" [value]="importForm.value.words" autocapitalize="none" rows="6" 
-          placeholder="Enter your recovery phrase (12 words) in the correct order. Separate each word with a single space only ( no commas or any other punctuation)." #textarea>
+          <mat-label>{{ 'Recovery Phrase' | translate }}</mat-label>
+          <textarea matInput formControlName="words" [value]="importForm.value.words" autocapitalize="none" rows="6"
+            [placeholder]="'Enter your recovery phrase (12 words) in the correct order. Separate each word with a single space only (no commas or any other punctuation).' | translate"
+            #textarea>
           </textarea>
           <mat-icon (click)="openScanner()" matSuffix>
             <img src="assets/img/recipient-component/qr-{{currentTheme}}.svg">
@@ -37,12 +38,13 @@
 
         <mat-form-field *ngIf="isSafari || isCordova" appearance="outline">
           <mat-label translate>Backup plain text code</mat-label>
-          <input matInput type="text" formControlName="backupText" [value]="importForm.value.backupText" [placeholder]="'Paste here'" translate>
+          <input matInput type="text" formControlName="backupText" [value]="importForm.value.backupText"
+            [placeholder]="'Paste here'" translate>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label translate>Password</mat-label>
-          <input matInput type="password" formControlName="filePassword" [placeholder]="'Password'" translate>
+          <input matInput type="password" formControlName="filePassword" [placeholder]="'Password' | translate">
         </mat-form-field>
       </ion-list>
 
@@ -63,8 +65,8 @@
       <div class="show-advance-option stroke-card" *ngIf="showAdvOpts">
         <ion-list class="account-service-list" lines="none">
           <mat-form-field appearance="outline">
-            <mat-label translate>Account Service URL</mat-label>
-            <input matInput type="text" formControlName="bwsURL" [placeholder]="'Account Service URL'" translate>
+            <mat-label translate>Wallet Service URL</mat-label>
+            <input matInput type="text" formControlName="bwsURL" [placeholder]="'Wallet Service URL'" translate>
           </mat-form-field>
         </ion-list>
 
@@ -88,7 +90,7 @@
             </ion-select>
           </ion-item>
           <ion-item class="token-path-item" *ngIf="isShoweTokenPath">
-            <ion-label>
+            <ion-label translate>
               eToken Path
             </ion-label>
             <ion-toggle (ionChange)="setDerivationPathForXpiSlpToken($event)"></ion-toggle>
@@ -96,7 +98,8 @@
 
           <mat-form-field class="derivation-item" appearance="outline">
             <mat-label translate>Derivation path</mat-label>
-            <input matInput type="text" formControlName="derivationPath" [placeholder]="'Derivation path'" translate>
+            <input [readonly]="!importForm.value.derivationPathEnabled" matInput type="text"
+              formControlName="derivationPath" [placeholder]="'Derivation path' | translate">
           </mat-form-field>
 
           <ion-item class="shared-account-item"
@@ -105,13 +108,18 @@
             <ion-toggle formControlName="isMultisig"></ion-toggle>
           </ion-item>
 
-          <div *ngIf="importForm.value.derivationPathEnabled && importForm.value.derivationPath === this.derivationPathHelperProvider.defaultBTC" class="line-divider line-divider-inside-bottom"></div>
+          <div
+            *ngIf="importForm.value.derivationPathEnabled && importForm.value.derivationPath === this.derivationPathHelperProvider.defaultBTC"
+            class="line-divider line-divider-inside-bottom"></div>
 
-          <mat-form-field [ngClass]="{'item-margin-top': !(importForm.value.derivationPathEnabled && importForm.value.derivationPath === this.derivationPathHelperProvider.defaultBTC)}" appearance="outline">
+          <mat-form-field
+            [ngClass]="{'item-margin-top': !(importForm.value.derivationPathEnabled && importForm.value.derivationPath === this.derivationPathHelperProvider.defaultBTC)}"
+            appearance="outline">
             <mat-label translate>Password</mat-label>
-            <input matInput type="password" formControlName="passphrase" [placeholder]="'Password'" translate>
+            <input matInput type="password" formControlName="passphrase" [placeholder]="'Password' | translate">
           </mat-form-field>
-          <mat-hint>This to protect the recovery phrase. This field is not for your encrypt password</mat-hint>
+          <mat-hint>{{'This to protect the recovery phrase. This field is not used for your encrypt password' |
+            translate}}</mat-hint>
 
         </ion-list>
       </div>
@@ -120,7 +128,7 @@
 
   <div footer-content>
     <ion-toolbar>
-      <ion-button class="button-standard" (click)="import()" [disabled]="!importForm.valid">Import
+      <ion-button class="button-standard" (click)="import()" [disabled]="!importForm.valid">{{'Import' | translate}}
       </ion-button>
     </ion-toolbar>
   </div>

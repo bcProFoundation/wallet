@@ -1,27 +1,38 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingProvider {
   defaultDuration: any = 1000;
-  defaultMessage: any = 'Loading...';
+  defaultMessage: any = this.translate.instant('Loading...');
+  
+  isLoading: boolean = false;
   constructor(
-    private loadingCtr: LoadingController
+    private loadingCtr: LoadingController,
+    private translate: TranslateService
   ) { }
 
-  public simpleLoader(message?) {
-    this.loadingCtr
-    .create({
-        message: message ? message : this.defaultMessage,
-    }).then((response) => {
-        response.present();
+  public async simpleLoader(message?) {
+    this.isLoading = true;
+    return await this.loadingCtr.create({
+      message: message ? message : this.defaultMessage,
+      backdropDismiss: true
+    }).then(a => {
+      a.present().then(() => {
+        console.log('presented');
+        if (!this.isLoading) {
+          a.dismiss();
+        }
+      });
     });
   }
 
-  public dismissLoader() {
-    this.loadingCtr.dismiss();
+  public async dismissLoader() {
+    this.isLoading = false;
+    return await this.loadingCtr.dismiss();
   }
 
   // Auto hide show loader
@@ -36,6 +47,6 @@ export class LoadingProvider {
         console.log('Loader dismissed', response);
       });
     });
-  } 
+  }
 
 }

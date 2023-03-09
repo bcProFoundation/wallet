@@ -16,6 +16,7 @@ import { AnalyticsProvider } from 'src/app/providers/analytics/analytics';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { PlatformProvider } from 'src/app/providers';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'price-page',
@@ -50,6 +51,7 @@ export class PricePage {
     private walletProvider: WalletProvider,
     private analyticsProvider: AnalyticsProvider,
     private loadingCtr: LoadingController,
+    private translate: TranslateService,
     public platformProvider: PlatformProvider
   ) {
     this.getCoinDonate();
@@ -70,7 +72,7 @@ export class PricePage {
 
   ngOnInit() {
     const loading = this.loadingCtr.create({
-      message: 'Please wait...'
+      message: this.translate.instant('Please wait...')
     })
     loading.then(loadingEl => loadingEl.present());
     this.drawCanvas();

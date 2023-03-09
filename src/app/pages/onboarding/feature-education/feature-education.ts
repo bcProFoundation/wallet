@@ -1,4 +1,10 @@
-import { Component, NgZone, ViewChild, ViewEncapsulation, AfterContentChecked } from '@angular/core';
+import {
+  Component,
+  NgZone,
+  ViewChild,
+  ViewEncapsulation,
+  AfterContentChecked
+} from '@angular/core';
 
 // Providers
 import { ConfigProvider } from '../../../providers/config/config';
@@ -12,7 +18,17 @@ import { Router } from '@angular/router';
 import { SwiperComponent } from 'swiper/angular';
 import { Pagination, SwiperOptions } from 'swiper';
 import SwiperCore from 'swiper';
-import { BwcErrorProvider, ErrorsProvider, EventManagerService, LoadingProvider, OnGoingProcessProvider, ProfileProvider, PushNotificationsProvider, ThemeProvider, WalletProvider } from 'src/app/providers';
+import {
+  BwcErrorProvider,
+  ErrorsProvider,
+  EventManagerService,
+  LoadingProvider,
+  OnGoingProcessProvider,
+  ProfileProvider,
+  PushNotificationsProvider,
+  ThemeProvider,
+  WalletProvider
+} from 'src/app/providers';
 import { TranslateService } from '@ngx-translate/core';
 
 SwiperCore.use([Pagination]);
@@ -23,8 +39,6 @@ SwiperCore.use([Pagination]);
   encapsulation: ViewEncapsulation.None
 })
 export class FeatureEducationPage {
-
-
   @ViewChild('swiper', { static: true }) swiper: SwiperComponent;
 
   public isCordova: boolean;
@@ -42,7 +56,7 @@ export class FeatureEducationPage {
     pagination: true,
     speed: 400,
     resistanceRatio: 0
-  }
+  };
   zone;
 
   constructor(
@@ -82,14 +96,13 @@ export class FeatureEducationPage {
       if (this.swiper.swiperRef.isBeginning) {
         this.swiper.swiperRef.allowSlidePrev = false;
       }
-    })
+    });
   }
 
   public goToNextPage(nextViewName: string): void {
     if (nextViewName === 'SelectCurrencyPage') {
       this.createSimpleFlow();
-    }
-    else {
+    } else {
       const config = this.configProvider.get();
       if ((config.lock && config.lock.method) || !this.isCordova) {
         this.params.isSimpleFlow = true;
@@ -104,20 +117,22 @@ export class FeatureEducationPage {
   }
 
   private createSimpleFlow() {
-    this.onGoingProcessProvider.set('Creating account');
+    this.onGoingProcessProvider.set('creatingWallet');
     // if case full flow do not skip ask encrypt password
-    this.profileProvider.createDefaultWalletsForSimpleFlow(false).then(async wallets => {
-      this.walletProvider.updateRemotePreferences(wallets);
-      this.pushNotificationsProvider.updateSubscription(wallets);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    this.profileProvider
+      .createDefaultWalletsForSimpleFlow(false)
+      .then(async wallets => {
+        this.walletProvider.updateRemotePreferences(wallets);
+        this.pushNotificationsProvider.updateSubscription(wallets);
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-      this.profileProvider.setNewWalletGroupOrder(
-        wallets[0].credentials.keyId
-      );
-      // if case full flow do not skip recover phrase
-      this.endProcess(wallets[0].credentials.keyId, false);
-      this.loadingProvider.dismissLoader();
-    })
+        this.profileProvider.setNewWalletGroupOrder(
+          wallets[0].credentials.keyId
+        );
+        // if case full flow do not skip recover phrase
+        this.endProcess(wallets[0].credentials.keyId, false);
+        this.loadingProvider.dismissLoader();
+      })
       .catch(e => {
         this.showError(e);
         this.loadingProvider.dismissLoader();
@@ -157,7 +172,6 @@ export class FeatureEducationPage {
     }
   }
 
-
   private goToLockMethodPage(name: string): void {
     let nextView = {
       name,
@@ -166,8 +180,8 @@ export class FeatureEducationPage {
     this.router.navigate(['/lock-method'], {
       state: {
         nextView
-      },
-    })
+      }
+    });
   }
 
   public openLink(url) {

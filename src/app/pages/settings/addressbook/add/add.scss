@@ -75,7 +75,7 @@ page-addressbook-add {
       .button-standard {
         --padding-start: 0;
         --padding-end: 0;
-        width: 28%;
+        width: fit-content;
         margin: 1rem 0;
         color: var(--color-primary);
         --background: transparent;

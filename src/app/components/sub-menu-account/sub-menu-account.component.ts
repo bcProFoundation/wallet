@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { EventManagerService, ProfileProvider, ThemeProvider } from 'src/app/providers';
 
 @Component({
@@ -37,11 +38,20 @@ export class SubMenuAccountComponent implements OnInit {
     private themeProvider: ThemeProvider,
     private profileProvider: ProfileProvider,
     private events: EventManagerService,
+    private toastController: ToastController
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.events.subscribe('Local/ChangeTheme', (theme) => {
+      if (theme) this.currentTheme = theme;
+    })
+  }
+
+  ionViewWillLeave() {
+    this.events.unsubscribe('Local/WalletHistoryUpdate');
+  }
 
   public onClickOutSide(ev) {
     if (ev.target.className.includes('edit-flag-btn')) {
@@ -58,8 +68,8 @@ export class SubMenuAccountComponent implements OnInit {
     if (this.isEditKeyName) this.disableBtn.emit(true);
   }
 
-  public editKeyName(value) {
-    if (this.isEditKeyName) {
+  public async editKeyName(value) {
+    if (this.isEditKeyName && value) {
       this.profileProvider.setWalletGroupName(
         this.walletGroup[0].keyId,
         value
@@ -67,6 +77,17 @@ export class SubMenuAccountComponent implements OnInit {
       this.events.publish('Local/GetData', true);
       this.getKeySelect.emit(this.walletGroup[0].keyId);
       this.disableBtn.emit(false);
+    } else {
+      const toast = await this.toastController.create({
+        message: 'Key name not blank',
+        duration: 3000,
+        position: 'bottom',
+        animated: true,
+        cssClass: `custom-finish-toast toast-warning`,
+      });
+      toast.present();
+      this.disableBtn.emit(false);
+      this.value = this.tempName;
     }
     this.isEditKeyName = !this.isEditKeyName;
   }

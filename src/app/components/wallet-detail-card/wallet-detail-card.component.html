@@ -105,7 +105,7 @@
             <div *ngIf="isHomeCard">
               <ion-button class="btn-send" fill="clear" (click)="goToSendPage()">
                 <ion-icon class="icon-refresh" slot="start" src="assets/img/wallet-details/ic-send-light.svg"></ion-icon>
-                Send
+                {{ 'Send' | translate }}
               </ion-button>
             </div>
           </div>
@@ -126,7 +126,7 @@
   </ng-container>
   
   <ng-template #tokenCard>
-    <ion-item-sliding [disabled]="flagAllItemRemove" #slidingItem>
+    <ion-item-sliding (ionDrag)="handleOnDrag()" [disabled]="flagAllItemRemove" #slidingItem>
       <ion-item lines="none">
         <div class="wallet-card bg-default" [ngClass]="{ 
           'bg-EAT': token?.tokenInfo?.symbol == 'EAT',
@@ -211,7 +211,7 @@
             <div *ngIf="isHomeCard">
               <ion-button class="btn-send" fill="clear" (click)="goToSendPageToken()">
                 <ion-icon class="icon-refresh" slot="start" src="assets/img/wallet-details/ic-send-light.svg"></ion-icon>
-                Send
+                {{ 'Send' | translate }}
               </ion-button>
             </div>
           </div>

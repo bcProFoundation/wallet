@@ -16,6 +16,7 @@ export class IncomingDataMenuComponent extends ActionSheetParent {
   public coinName: string;
   public fromHomeCard: boolean;
   public isCordova: boolean;
+  public isToken: boolean = false;
 
   constructor(
     private currencyProvider: CurrencyProvider,

@@ -7,7 +7,7 @@
   </ion-toolbar>
   <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
-      <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button>
+      <ion-back-button icon="chevron-back-outline" (click)="handleNavigateBack()" defaultHref='/'></ion-back-button>
     </ion-buttons>
     <ion-title>
       <div [reveal-at-scroll-pos]="(expandableHeader.headerHeight + 200)" [scrollArea]="scrollArea">
@@ -25,14 +25,14 @@
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="1" [disableFade]="true" #expandableHeader>
       <expandable-header-primary class="balance-header">
         <!-- wallet card -->
-        <wallet-detail-card [isToken]="true" [wallet]="wallet" [token]="token"></wallet-detail-card>
+        <wallet-detail-card [isToken]="true" [wallet]="wallet" [token]="token" (genNewAddressEvent)="handleGenNewAddress($event)"></wallet-detail-card>
       </expandable-header-primary>
       <expandable-header-footer>
         <div class="action-buttons two-actions" >
-          <div class="action-btn receive-btn" (click)="goToReceivePage()">
+          <div class="action-btn receive-btn" (click)="requestSpecificAmount()">
             <ion-button expand="block">
               <ion-icon slot="start" src="assets/img/wallet-details/ic-request-{{currentTheme}}.svg"></ion-icon>
-              {{ 'Receive' | translate }}
+              {{ 'Request' | translate }}
             </ion-button>
           </div>
 
@@ -76,8 +76,8 @@
     </div>
 
     <ng-container *ngIf="history && history[0]">
-      <div  class="header-transaction">
-        Transaction History
+      <div class="header-transaction">
+        {{'Transaction History' | translate}}
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>
       </div>
 

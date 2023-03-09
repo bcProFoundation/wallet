@@ -25,8 +25,9 @@
             </ion-label>
           </ion-item-divider>
           <ion-item *ngFor="let item of entry.contact" detail="false" button class="ion-padding-bottom" (click)="viewEntry(item)">
-            <ion-label>
+            <ion-label class="contact-wrapper">
               <div class="item-title">{{ item.name }}</div>
+              <ion-icon *ngIf="item.isOfficialInfo" name="checkmark-circle" class="check success"></ion-icon>
             </ion-label>
             <div>
               <coin-icon [coin]="item.coin" [network]="item.network" [noBackground]="true"></coin-icon>

@@ -94,11 +94,15 @@
         </ion-item>
         <label-tip>
           <div label-tip-body>
-            <span translate>This password cannot be recovered. If this password is lost, funds can onlybe recovered by your 12-word recovery phrase. </span>
+            <span translate>This password cannot be recovered. If this password is lost, funds can only be recovered by reimporting your 12-word recovery phrase. </span>
             <span class="label-tip-link" (click)="openSupportEncryptPassword()" translate>Learn More</span>
           </div>
         </label-tip>
       </ng-container>
+
+      <ion-item button class="no-border item-end" *ngIf="encryptEnabled && derivationStrategy !== 'BIP45'" (click)="openClearEncryptPasswordPage()">
+        <ion-label translate>Clear Encrypt Password</ion-label>
+      </ion-item>
 
       <div *ngIf="touchIdAvailable">
         <ion-item>

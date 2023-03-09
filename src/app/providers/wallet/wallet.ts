@@ -54,6 +54,7 @@ export interface WalletOptions {
   useLegacyPurpose?: boolean;
   useNativeSegwit?: boolean;
   isSlpToken?: boolean;
+  isFromRaipay?: boolean;
 }
 
 export interface TransactionProposal {
@@ -1129,7 +1130,8 @@ export class WalletProvider {
   public getEstimatedTxSize(
     wallet,
     nbOutputs?: number,
-    nbInputs?: number
+    nbInputs?: number,
+    isAllFund?: boolean
   ): number {
     // Note: found empirically based on all multisig P2SH inputs and within m & n allowed limits.
     nbOutputs = nbOutputs ? nbOutputs : 2; // Assume 2 outputs
@@ -1138,8 +1140,8 @@ export class WalletProvider {
     const inputSize = this.getEstimatedSizeForSingleInput(wallet);
     const outputSize = 34;
     nbInputs = nbInputs ? nbInputs : 1; // Assume 1 input
-
-    const size = overhead + inputSize * nbInputs + outputSize * nbOutputs;
+    const outputReturn = !isAllFund ? 16 : 0;
+    const size = overhead + inputSize * nbInputs + outputSize * nbOutputs + outputReturn;
     return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
   }
 
@@ -1321,8 +1323,7 @@ export class WalletProvider {
           password
         );
       } catch (err) {
-        const title =
-          'Your wallet is in a corrupt state. Please contact support and share the logs provided';
+        const title = this.translate.instant('Your account is in a corrupt state. Please contact support and share the logs provided.');
         let message;
         try {
           message = err instanceof Error ? err.toString() : JSON.stringify(err);

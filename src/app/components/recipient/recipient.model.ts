@@ -4,6 +4,7 @@ export class RecipientModel {
     public amountToShow: string;
     public altAmountStr: string;
     public message?: string;
+    public isOfficialInfo: boolean;
     public isValid?: boolean;
     public id?: number = Date.now();
     public name?:string;
@@ -22,5 +23,6 @@ export class RecipientModel {
         this.recipientType = data.recipientType || "";
         this.currency = data.currency || "";
         this.isSpecificAmount = data.isSpecificAmount || false;
+        this.isOfficialInfo = data.isOfficialInfo || false;
     }
 } 

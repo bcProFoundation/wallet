@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@an
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 // Providers
 import {
@@ -11,6 +12,8 @@ import {
   EventManagerService,
   ExternalLinkProvider,
   FeedbackProvider,
+  LixiLotusProvider,
+  LoadingProvider,
   Logger,
   NewFeatureData,
   PersistenceProvider,
@@ -20,7 +23,8 @@ import {
   RateProvider,
   ReleaseProvider,
   ThemeProvider,
-  TokenProvider
+  TokenProvider,
+  WalletProvider
 } from '../../providers';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { ConfigProvider } from '../../providers/config/config';
@@ -32,6 +36,7 @@ import { Network } from 'src/app/providers/persistence/persistence';
 import { Router } from '@angular/router';
 import { AddFundsPage } from '../onboarding/add-funds/add-funds';
 import { NewFeaturePage } from '../new-feature/new-feature';
+import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
 
 export interface Advertisement {
   name: string;
@@ -122,7 +127,11 @@ export class HomePage {
     private splashScreen: SplashScreen,
     private rateProvider: RateProvider,
     private themeProvider: ThemeProvider,
-    private tokenProvider: TokenProvider
+    private tokenProvider: TokenProvider,
+    private loadingProvider: LoadingProvider,
+    private lixiLotusProvider: LixiLotusProvider,
+    private recaptchaV3Service: ReCaptchaV3Service,
+    private walletProvider: WalletProvider
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -354,6 +363,9 @@ export class HomePage {
     this.events.subscribe('Local/showNewFeaturesSlides', () => {
       this.showNewFeatureSlides();
     });
+    this.events.subscribe('Local/ClaimVoucher', (claimCode) => {
+      this.handleQrScanVoucher(claimCode);
+    } )
   }
 
   private preFetchWallets() {
@@ -585,11 +597,86 @@ export class HomePage {
     this.router.navigate(['/chart-view']);
   }
 
-  public addToHome() {
+  public addToHome(coin?: string, network?: string) {
     this.router.navigateByUrl('/accounts-page', {
       state: {
-        isAddToHome: true
+        isAddToHome: true,
+        coin: coin,
+        network: network
       }
     });
+  }
+
+  public async handleQrScanVoucher(claimCode) {
+    // Get first wallet lotus in home list
+    let wallet = this.profileProvider.getFirstLotusWalletHome();
+    this.executeImportantAction();
+    if (!_.isEmpty(wallet)) {
+      let message = 'Loading...';
+      let claimWalletAddress = '';
+      let codeClaimSplit = claimCode?.value ? claimCode?.value.replace('lixi_','') : '';
+      this.loadingProvider.simpleLoader(message);
+      await this.walletProvider
+      .getAddress(wallet, false)
+      .then(addr => {
+        return addr ? claimWalletAddress = addr : claimWalletAddress = '';
+      })
+      if (claimCode?.value) claimCode.value.replace('lixi_','')
+      const bodyClaim = {
+        captchaToken: 'isAbcpay',
+        claimAddress: claimWalletAddress,
+        claimCode: codeClaimSplit
+      }
+      this.logger.info('Body claim', bodyClaim);
+      // Call provider to claim xpi from lixilotus/api
+      await this.lixiLotusProvider.claimVoucher(bodyClaim)
+      .then(async (data) => {
+        this.logger.info('Response claim', data);
+        const copayerModal = await this.modalCtrl.create({
+          component: ClaimVoucherModalComponent,
+          componentProps: {
+            result: {...data, ...wallet}
+          },
+          cssClass: 'recevied-voucher-success',
+          initialBreakpoint: 0.4,
+        });
+        // Update balance card home
+        this.events.publish('Local/FetchWallets');
+        await copayerModal.present();
+        this.events.publish('Local/GetListPrimary', true);
+        this.loadingProvider.dismissLoader();
+        copayerModal.onDidDismiss().then(({ data }) => {
+        });
+      })
+      .catch(err => {
+        this.logger.error('Response claim err', err);
+        const infoSheet = this.actionSheetProvider.createInfoSheet(
+          'process-fail-voucher'
+        );
+        infoSheet.present();
+        this.loadingProvider.dismissLoader();
+        infoSheet.onDidDismiss(async option => {
+          if (option) {
+            this.router.navigate(['/tabs/scan']);
+          }
+        });
+      });
+    } else {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'process-select-wallet'
+      );
+      infoSheet.present();
+      this.loadingProvider.dismissLoader();
+      infoSheet.onDidDismiss(async option => {
+        if (option) {
+          this.addToHome('xpi', 'livenet');
+        }
+      });
+    }
+  }
+
+  public executeImportantAction(): void {
+    this.recaptchaV3Service.execute('getTokenForVoucher')
+      .subscribe((token) => console.log('****** TOKEN' + token));
   }
 }

@@ -7,7 +7,7 @@
   </ion-toolbar>
   <ion-toolbar [ngClass]="{'add-box-shadow-scroll': isScroll}">
     <ion-buttons slot="start">
-      <ion-back-button icon="chevron-back-outline" defaultHref="/"></ion-back-button>
+      <ion-back-button icon="chevron-back-outline" (click)="handleNavigateBack()" defaultHref='/'></ion-back-button>
     </ion-buttons>
     <ion-title>
       <div [reveal-at-scroll-pos]="(expandableHeader.headerHeight + 200)" [scrollArea]="scrollArea">
@@ -40,7 +40,7 @@
         </div>
 
         <!-- wallet card -->
-        <wallet-detail-card [wallet]="wallet" [walletNotRegistered]="walletNotRegistered">
+        <wallet-detail-card [wallet]="wallet" [walletNotRegistered]="walletNotRegistered" (genNewAddressEvent)="handleGenNewAddress($event)">
         </wallet-detail-card>
 
         <div class="balance-scanning" *ngIf="!updateStatusError && wallet?.scanning">
@@ -71,8 +71,8 @@
 
         <div class="balance-error" *ngIf="walletNotRegistered">
           <div translate>
-            This wallet is not registered at the given AbcPros Wallet Service (AWS). As an advice, you could delete the
-            key, under settings and selecting the specific key, and then use the Backup to import the wallet again
+            This account is not registered at the given AbcPros Wallet Service (AWS). As an advice, you could delete the
+            key, under settings and selecting the specific key, and then use the Backup to import the account again
             (under Home > Wallet Tab).
           </div>
         </div>
@@ -215,7 +215,7 @@
     </div>
 
     <ng-container *ngIf="history && history[0]">
-      <div class="header-transaction">
+      <div class="header-transaction" translate>
         Transaction History
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>
       </div>
@@ -224,6 +224,7 @@
 
           <ion-item-divider (click)="viewOnBlockchain()" sticky class="tx-history-header">
             <ion-label>
+              <!-- TODO language translate: add month calendar to Vietnamese -->
               <span *ngIf="isDateInCurrentMonth(getDate(group[0].time))">{{ 'Recent' | translate }} </span>
               <span *ngIf="!isDateInCurrentMonth(getDate(group[0].time))">{{getDate(group[0].time) |
                 amDateFormat:'MMMM'}}</span>
@@ -245,7 +246,7 @@
 
                     <span *ngIf="!tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
-                      {{tx.amount | satToUnit: wallet?.coin}}</span>
+                      {{tx.amount | satToUnit: wallet?.coin: ['btc', 'bch'].includes(wallet.coin) }}</span>
 
                     <span *ngIf="tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
@@ -264,8 +265,7 @@
                   <ng-container *ngIf="tx.inputAddresses && tx.inputAddresses[0]">
                     <span class="tx-action"
                       *ngIf="(!addressbook || !tx.inputAddresses[0] || !getContactName(tx.inputAddresses[0]))">{{'From:
-                      {address}'
-                      | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
+                      {address}' | translate: {address: tx.inputAddresses[0].slice(-8)} }}</span>
                     <span class="tx-action"
                       *ngIf="addressbook && tx.inputAddresses[0] && getContactName(tx.inputAddresses[0])">
                       {{'From: ' + getContactName(tx.inputAddresses[0])| translate}}
@@ -311,6 +311,7 @@
                   <p class="status" *ngIf="tx.isGenesis">Genesis</p>
                   <p class="status" *ngIf="tx.action == 'mined'">Mined</p>
                   <p class="status" *ngIf="tx.action == 'immature'">Immature</p>
+                  <!-- TODO language translate: need to convert datetime to Vietnamese -->
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |

@@ -275,7 +275,8 @@ export class TokenDetailsPage {
   public requestSpecificAmount(): void {
     this.router.navigate(['/custom-amount-token'], {state: {
       token: this.token,
-      tokenAddress: this.wallet.etokenAddress
+      tokenAddress: this.wallet.etokenAddress,
+      id: this.wallet.credentials.walletId
     }});
   }
 

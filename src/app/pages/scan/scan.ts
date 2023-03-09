@@ -53,6 +53,7 @@ export class ScanPage {
   public fromConfirm: boolean;
   public fromWalletConnect: boolean;
   public fromFooterMenu: boolean;
+  public isTokenScan: boolean;
   public canGoBack: boolean;
   public tabBarElement;
   navParamsData
@@ -100,6 +101,18 @@ export class ScanPage {
     this.canOpenSettings = false;
     this.isCordova = this.platformProvider.isCordova;
     this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
+    this.fromAddressbook = this.navParamsData.fromAddressbook;
+    this.fromImport = this.navParamsData.fromImport;
+    this.fromJoin = this.navParamsData.fromJoin;
+    this.fromRecipientComponent = this.navParamsData.fromRecipientComponent;
+    this.recipientId = this.navParamsData.recipientId;
+    this.fromMultiSend = this.navParamsData.fromMultiSend;
+    this.fromSelectInputs = this.navParamsData.fromSelectInputs;
+    this.fromEthMultisig = this.navParamsData.fromEthMultisig;
+    this.fromConfirm = this.navParamsData.fromConfirm;
+    this.fromWalletConnect = this.navParamsData.fromWalletConnect;
+    this.fromFooterMenu = this.navParamsData.fromFooterMenu;
+    this.isTokenScan = this.navParamsData.isTokenScan;
   }
 
   ngOnInit() {
@@ -127,18 +140,6 @@ export class ScanPage {
   }
 
   ionViewWillEnter() {
-    this.fromAddressbook = this.navParamsData.fromAddressbook;
-    this.fromImport = this.navParamsData.fromImport;
-    this.fromJoin = this.navParamsData.fromJoin;
-    this.fromRecipientComponent = this.navParamsData.fromRecipientComponent;
-    this.recipientId = this.navParamsData.recipientId;
-    this.fromMultiSend = this.navParamsData.fromMultiSend;
-    this.fromSelectInputs = this.navParamsData.fromSelectInputs;
-    this.fromEthMultisig = this.navParamsData.fromEthMultisig;
-    this.fromConfirm = this.navParamsData.fromConfirm;
-    this.fromWalletConnect = this.navParamsData.fromWalletConnect;
-    this.fromFooterMenu = this.navParamsData.fromFooterMenu;
-
     if (this.canGoBack && this.tabBarElement)
       this.tabBarElement.style.display = 'none';
 
@@ -275,6 +276,9 @@ export class ScanPage {
     } else if (this.fromJoin) {
       this.events.publish('Local/JoinScan', { value: contents });
     } else if (this.fromRecipientComponent) {
+      if (this.isTokenScan) {
+        contents = this.handleScanSpecificEtokenFromSend(contents);
+      }
       this.events.publish('Local/AddressScan', { value: contents, recipientId: this.recipientId });
     } else if (this.fromMultiSend) {
       this.events.publish('Local/AddressScanMultiSend', { value: contents });
@@ -300,6 +304,13 @@ export class ScanPage {
     }
   }
 
+  private handleScanSpecificEtokenFromSend(content) {
+    let value = '';
+    content.includes('amount1'); {
+      value = content.slice(0, content.indexOf('-'))
+    }
+    return value;
+  }
 
   private handleSendAddress(data, addrData): void {
     this.lixiLotusProvider.getOfficialInfo(data.data).then(() => {

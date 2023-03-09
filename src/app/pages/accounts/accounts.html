@@ -70,7 +70,7 @@
           <ng-container *ngFor="let wallet of walletGroup">
             <ng-container *ngFor="let token of wallet.tokens">
               <ng-container *ngIf="tokenID;else noTokenId">
-                <ion-item *ngIf="token.tokenId == tokenID" (click)="goToSendPageForToken(wallet, token)">
+                <ion-item *ngIf="token.tokenId == tokenID" (click)="goToSendPageForToken(wallet.credentials.walletId, token)">
                   <img class="item-img rectangle token-icon" [src]="setIconToken(token)" slot="start">
                   <ion-label>
                     <div class="main-label">{{token?.tokenInfo?.name}}</div>
@@ -92,7 +92,7 @@
                 </ion-item>
               </ng-container>
               <ng-template #noTokenId>
-                <ion-item (click)="goToSendPageForToken(wallet, token)">
+                <ion-item (click)="goToSendPageForToken(wallet.credentials.walletId, token)">
                   <img class="item-img rectangle token-icon" [src]="setIconToken(token)" slot="start">
                   <ion-label>
                     <div class="main-label">{{token?.tokenInfo?.name}}</div>

@@ -57,6 +57,7 @@ export class AccountsPage {
   public coin: string ;
   public titlePage : string = 'Send from';
   public isAddToHome : boolean = false;
+  public isSpecificAmount: boolean = false;
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -102,10 +103,11 @@ export class AccountsPage {
     else {
       if (this.navParamsData?.isToken) {
         this.walletsGroups = this.getTokensGroups(walletsGroups);
+        this.checkCaseExistOneToken(this.walletsGroups);
       } else {
         this.walletsGroups = this.filterValidWallet(walletsGroups);
       }
-      if( !this.addToGroupsHome && this.walletsGroups.length === 1 && this.walletsGroups[0].length ===1){
+      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1){
         this.goToSendPage(this.walletsGroups[0][0]);
       }
     }
@@ -143,6 +145,20 @@ export class AccountsPage {
     })
     this.isShowCreateNewWallet = _.isEmpty(walletsGroup);
     return walletsGroup;
+  }
+
+  private checkCaseExistOneToken(walletsGroups) {
+    let tokensGroups = [];
+    walletsGroups.map((item) => {
+      return item.map((wallet) => {
+          let validToken = wallet.tokens.filter(token => token.tokenId === this.tokenID);
+          validToken.walletId = wallet.credentials.walletId;
+          tokensGroups.push(validToken);
+      })
+    })
+    if (this.isSpecificAmount && tokensGroups.length === 1 && tokensGroups[0].length === 1) {
+      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0][0])
+    }
   }
 
   public DecimalFormatBalance(amount) {
@@ -251,6 +267,7 @@ export class AccountsPage {
     this.isDonation = this.navParamsData.isDonation;
     this.isAddToHome = this.navParamsData.isAddToHome;
     this.isToken = this.navParamsData?.isToken;
+    this.isSpecificAmount = this.navParamsData?.isSpecificAmount;
     this.tokenID = this.navParamsData?.tokenID;
     if (this.isDonation) this.titlePage = "Accounts";
     if (this.isAddToHome) this.titlePage = "Add to home";
@@ -452,25 +469,14 @@ export class AccountsPage {
     }
   }
 
-  public async goToSendPageForToken(wallet, token) {
-    if (wallet.isComplete()) {
-      this.router.navigate(['/send-page'], {
-        state: {
-          walletId: wallet.credentials.walletId,
-          toAddress: this.navParamsData.toAddress,
-          token: token
-        }
-      });
-    } else {
-      const copayerModal = await this.modalCtrl.create({
-        component: CopayersPage,
-        componentProps: {
-          walletId: wallet.credentials.walletId
-        },
-        cssClass: 'wallet-details-modal'
-      });
-      await copayerModal.present();
-    }
+  public async goToSendPageForToken(walletId, token) {
+    this.router.navigate(['/send-page'], {
+      state: {
+        walletId: walletId,
+        toAddress: this.navParamsData.toAddress,
+        token: token
+      }
+    });
   }
   
   public openBackupPage(keyId) {

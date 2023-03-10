@@ -5360,6 +5360,9 @@ msgstr ""
 msgid "{symbolToken} Confirm Payment"
 msgstr "{symbolToken} Confirm Payment"
 
+msgid "Please use specific amount code for {tokenName} account."
+msgstr "Please use specific amount code for {tokenName} account."
+
 msgid ""
 "Hint: Please create an easy to remember password to encrypt your wallet on this device. This password will "
 "be needed to send transactions from this wallet. If you forget this password, you can reimport your 12-word "

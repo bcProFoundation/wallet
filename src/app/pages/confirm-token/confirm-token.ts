@@ -136,8 +136,8 @@ export class ConfirmTokenPage {
             amountToken += item.amountToken;
         }
       })
-      if (amountXec < this.fee * this.precision) this.showErrorInfoSheet(`Not enough ${this.wallet.coin} to send token.`, null, true);
-      if (amountToken < this.amount) this.showErrorInfoSheet(`Not enough ${this.token.tokenInfo.symbol} to send.`, null, true);
+      if (amountXec < this.fee * this.precision) this.showErrorInfoSheet(this.translate.instant('Not enough funds for fee'), null, true);
+      if (amountToken < this.amount) this.showErrorInfoSheet(this.translate.instant('Not enough funds for fee'), null, true);
     }).catch(err => {
       this.showErrorInfoSheet(err, null, true);
     })

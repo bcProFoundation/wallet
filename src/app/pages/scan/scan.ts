@@ -56,6 +56,7 @@ export class ScanPage {
   public isTokenScan: boolean;
   public canGoBack: boolean;
   public tabBarElement;
+  private tokenFromRecipient: any;
   navParamsData
   constructor(
     private navCtrl: NavController,
@@ -113,6 +114,7 @@ export class ScanPage {
     this.fromWalletConnect = this.navParamsData.fromWalletConnect;
     this.fromFooterMenu = this.navParamsData.fromFooterMenu;
     this.isTokenScan = this.navParamsData.isTokenScan;
+    this.tokenFromRecipient = this.navParamsData.token;
   }
 
   ngOnInit() {
@@ -210,6 +212,20 @@ export class ScanPage {
     });
   }
 
+  private showErrorInvalidTokenIdQr(error: Error | string, title?: string): void {
+    let infoSheetTitle = title
+    const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
+      'invalid-token-id',
+      { msg: error, title: infoSheetTitle }
+    );
+    errorInfoSheet.present();
+    errorInfoSheet.onDidDismiss(option => {
+      if (option) {
+        this.router.navigate(['/tabs/scan'])
+      }
+    });
+  }
+
   private updateCapabilities(): void {
     let capabilities = this.scanProvider.getCapabilities();
     this.scannerIsAvailable = capabilities.isAvailable;
@@ -277,9 +293,10 @@ export class ScanPage {
       this.events.publish('Local/JoinScan', { value: contents });
     } else if (this.fromRecipientComponent) {
       if (this.isTokenScan) {
-        contents = this.handleScanSpecificEtokenFromSend(contents);
+        this.handleScanSpecificEtokenFromSend(contents);
+      } else {
+        this.events.publish('Local/AddressScan', { value: contents, recipientId: this.recipientId });
       }
-      this.events.publish('Local/AddressScan', { value: contents, recipientId: this.recipientId });
     } else if (this.fromMultiSend) {
       this.events.publish('Local/AddressScanMultiSend', { value: contents });
     } else if (this.fromSelectInputs) {
@@ -306,10 +323,16 @@ export class ScanPage {
 
   private handleScanSpecificEtokenFromSend(content) {
     let value = '';
+    let tokenId = '';
     if (content.includes('amount1')) {
       value = content.slice(0, content.indexOf('-'));
+      tokenId = content.slice(content.indexOf('-') + 1);
+      if (tokenId !== this.tokenFromRecipient?.tokenId) {
+        let messageError = this.tokenFromRecipient?.tokenInfo?.name;
+        return this.showErrorInvalidTokenIdQr(' ', messageError);
+      }
     }
-    return value;
+    this.events.publish('Local/AddressScan', { value: value, recipientId: this.recipientId });
   }
 
   private handleSendAddress(data, addrData): void {

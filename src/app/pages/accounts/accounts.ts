@@ -158,8 +158,11 @@ export class AccountsPage {
           }
       })
     })
-    if (this.isSpecificAmount && tokensGroups.length === 1 && tokensGroups[0].length === 1) {
-      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0][0])
+    // Only 1 token account in list => go to send page
+    if (this.isSpecificAmount && tokensGroups.length === 0) {
+      this.isShowCreateNewWallet = true;
+    } else if (this.isSpecificAmount && tokensGroups.length === 1) {
+      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0])
     }
   }
 

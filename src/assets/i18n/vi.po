@@ -5364,7 +5364,10 @@ msgstr ""
 msgid ""
 "{{appName}} only supports Bitcoin Cash using new version numbers addresses."
 msgstr ""
-"{{appName}} only supports Bitcoin Cash using new version numbers addresses."
+"{{appName}} chỉ hỗ trợ địa chỉ Bitcoin Cash theo định dạng mới."
+
+msgid "Please use specific amount code for {tokenName} account."
+msgstr "Vui lòng sử dụng yêu cầu chuyển tiền cho tài khoản {tokenName}."
 
 msgid "{{countInArray}} of your accounts already exist in {{nameCase}}"
 msgstr "{{countInArray}} trong số các tài khoản của bạn đã tồn tại trong {{nameCase}}"

@@ -92,6 +92,7 @@ export type InfoSheetType =
   | 'no-amount-xec'
   | 'process-fail-voucher'
   | 'process-select-wallet'
+  | 'invalid-token-id'
 
 export type OptionsSheetType =
   | 'wallet-options'

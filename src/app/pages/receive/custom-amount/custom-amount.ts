@@ -311,7 +311,7 @@ export class CustomAmountPage {
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'payment-request',
       {
-        amount: this.amountUnitStr,
+        amount: this.amountCustomForm.value.amountCustom,
         name: this.wallet.name
       }
     );

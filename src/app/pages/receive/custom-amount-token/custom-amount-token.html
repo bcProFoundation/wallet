@@ -14,7 +14,8 @@
             [placeholder]="'Request amount'" translate>
           <span (click)="changeUnit()" matSuffix>{{unit}}</span>
         </mat-form-field>
-        <mat-hint *ngIf="altAmountStr">{{altAmountStr}} {{alternativeUnit}}</mat-hint>
+        <mat-hint *ngIf="altAmountStr && isTokenFiatRate">{{altAmountStr}} {{alternativeUnit}}</mat-hint>
+        <mat-hint *ngIf="!isTokenFiatRate">{{'-- ' + alternativeUnit}}</mat-hint>
       </form>
     </div>
 

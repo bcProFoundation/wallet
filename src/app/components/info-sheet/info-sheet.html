@@ -94,6 +94,13 @@
       <span sheet-button-text translate>Try again</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'invalid-token-id'" type="danger" class="custom-sheet">
+      <span sheet-title-text>{{'Please use specific amount code for {tokenName} account.' | translate: {tokenName: params.title} }}</span>
+      <span sheet-text translate>{{params.msg}}</span>
+      <span sheet-second-button-text translate>Cancel</span>
+      <span sheet-button-text translate>Try again</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'backup-later-warning'" type="warning">
       <span sheet-title-text translate>Are you sure?</span>
       <span sheet-text translate>

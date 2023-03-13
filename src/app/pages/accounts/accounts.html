@@ -54,7 +54,7 @@
       </div>
     </ng-container>
     <ng-template #token>
-      <ng-container *ngIf="!isShowCreateNewWallet">
+      <ng-container *ngIf="!isShowNoToken;else showNoToken">
         <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
           <div class="section-header ion-padding-top ion-padding-bottom"
             *ngIf="walletGroup[0]?.canSign && walletsGroups.length > 1">
@@ -129,6 +129,11 @@
           </label-tip>
         </div>
       </ng-container>
+      <ng-template #showNoToken>
+        <p style="text-align: center;">
+          {{'Please make sure the eToken type is used correctly or funds available.' | translate}}
+        </p>
+      </ng-template>
     </ng-template>
   </div>
 </ion-content>

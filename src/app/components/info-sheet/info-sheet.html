@@ -95,8 +95,8 @@
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'invalid-token-id'" type="danger" class="custom-sheet">
-      <span sheet-title-text>{{'Please use specific amount code for {tokenName} account.' | translate: {tokenName: params.title} }}</span>
-      <span sheet-text translate>{{params.msg}}</span>
+      <span sheet-title-text translate>Error</span>
+      <span sheet-text translate>Invalid eToken. Please check and select an appropriate eToken account to send a transaction.</span>
       <span sheet-second-button-text translate>Cancel</span>
       <span sheet-button-text translate>Try again</span>
     </info-sheet-template>

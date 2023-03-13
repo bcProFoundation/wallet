@@ -58,6 +58,7 @@ export class AccountsPage {
   public titlePage : string = 'Send from';
   public isAddToHome : boolean = false;
   public isSpecificAmount: boolean = false;
+  public isShowNoToken = false;
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -103,7 +104,7 @@ export class AccountsPage {
     else {
       if (this.navParamsData?.isToken) {
         this.walletsGroups = this.getTokensGroups(walletsGroups);
-        this.checkCaseExistOneToken(this.walletsGroups);
+        if (this.tokenID) this.checkCaseExistOneToken(this.walletsGroups);
       } else {
         this.walletsGroups = this.filterValidWallet(walletsGroups);
       }
@@ -160,7 +161,7 @@ export class AccountsPage {
     })
     // Only 1 token account in list => go to send page
     if (this.isSpecificAmount && tokensGroups.length === 0) {
-      this.isShowCreateNewWallet = true;
+      this.isShowNoToken = true;
     } else if (this.isSpecificAmount && tokensGroups.length === 1) {
       this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0])
     }

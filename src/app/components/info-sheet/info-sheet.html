@@ -291,6 +291,15 @@
       <span sheet-second-button-text translate>GOT IT</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'scan-eToken-error-message'" type="danger">
+      <span sheet-title-text translate>Error</span>
+      <span sheet-text translate>
+        Please make sure the eToken type is used correctly or funds available.
+      </span>
+      <span sheet-button-text translate></span>
+      <span sheet-second-button-text translate>Ok</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'appreciate-review'" type="love">
       <span sheet-title-text translate>We appreciate your review</span>
       <span sheet-text translate>

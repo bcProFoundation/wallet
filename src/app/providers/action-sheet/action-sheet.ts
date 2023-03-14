@@ -42,6 +42,7 @@ export type InfoSheetType =
   | 'above-maximum-gift-card-amount'
   | 'below-minimum-gift-card-amount'
   | 'legacy-address-info'
+  | 'scan-eToken-error-message'
   | 'linkEthWallet'
   | 'max-amount-allowed'
   | 'min-amount-allowed'

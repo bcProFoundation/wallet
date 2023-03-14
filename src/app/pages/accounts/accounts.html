@@ -1,60 +1,60 @@
-<ion-header [translucent]="true" class="bp-header">
-  <ion-toolbar>
-    <ion-title>
-      <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
-        {{ titlePage| translate }}
+<ng-container *ngIf="!isShowNoToken;else showNoToken">
+  <ion-header [translucent]="true" class="bp-header">
+    <ion-toolbar>
+      <ion-title>
+        <div [reveal-at-scroll-pos]="expandableHeader.headerHeight" [scrollArea]="scrollArea">
+          {{ titlePage| translate }}
+        </div>
+      </ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button icon="chevron-back-outline" defaultHref="/">
+        </ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+    <div class="wrapper">
+      <expandable-header [ngClass]="{'not-show-expandable-header' : isShowCreateNewWallet}" [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
+        <ion-toolbar class="wide-header__title">
+          <expandable-header-primary>
+            <span class="expandable-header-primary"> {{ titlePage | translate }} </span>
+          </expandable-header-primary>
+        </ion-toolbar>
+      </expandable-header>
+      <div *ngIf="isShowCreateNewWallet">
+        <create-new-wallet></create-new-wallet>
       </div>
-    </ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button icon="chevron-back-outline" defaultHref="/">
-      </ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
-  <div class="wrapper">
-    <expandable-header [ngClass]="{'not-show-expandable-header' : isShowCreateNewWallet}" [scrollArea]="scrollArea" [fadeFactor]="5" [disableFade]="true" #expandableHeader>
-      <ion-toolbar class="wide-header__title">
-        <expandable-header-primary>
-          <span class="expandable-header-primary"> {{ titlePage | translate }} </span>
-        </expandable-header-primary>
-      </ion-toolbar>
-    </expandable-header>
-    <div *ngIf="isShowCreateNewWallet">
-      <create-new-wallet></create-new-wallet>
-    </div>
-    <ng-container *ngIf="!isToken;else token">
-      <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
-        <div class="section-header ion-padding-top ion-padding-bottom"
-          *ngIf="walletGroup[0]?.canSign && walletsGroups.length > 1">
-          <ion-label class="key-name">
-            <span>{{ getWalletGroup(walletGroup[0]?.keyId).name }}</span>
-          </ion-label>
-        </div>
-        <div class="section-header ion-padding-top ion-padding-bottom" *ngIf="walletGroup[0]?.keyId == 'read-only'">
-          <ion-label class="key-name">
-            <span translate>Read Only Accounts</span>
-          </ion-label>
-        </div>
-        <ion-list lines="nones" class="bp-list">
-          <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="!isAddToHome ? goToSendPage(wallet) : addToGroupsHome(wallet)">
-          </wallet-item-content>
-        </ion-list>
-        <label-tip type="warn" class="ion-margin-top" *ngIf="walletGroup && walletGroup[0] && walletGroup[0]?.needsBackup"
-          header="no-header">
-          <div label-tip-body>
-            <span translate>Before retrieving your accounts addresses, it's recommended that you first write down your
-              recovery phrase and store it securely so that your accounts can be recovered in the case your device was lost
-              or stolen.</span>
-            <br>
-            <a class="label-tip-link" (click)="openBackupPage(walletGroup[0]?.keyId)" translate>Backup now</a>
+      <ng-container *ngIf="!isToken;else token">
+        <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
+          <div class="section-header ion-padding-top ion-padding-bottom"
+            *ngIf="walletGroup[0]?.canSign && walletsGroups.length > 1">
+            <ion-label class="key-name">
+              <span>{{ getWalletGroup(walletGroup[0]?.keyId).name }}</span>
+            </ion-label>
           </div>
-        </label-tip>
-      </div>
-    </ng-container>
-    <ng-template #token>
-      <ng-container *ngIf="!isShowNoToken;else showNoToken">
+          <div class="section-header ion-padding-top ion-padding-bottom" *ngIf="walletGroup[0]?.keyId == 'read-only'">
+            <ion-label class="key-name">
+              <span translate>Read Only Accounts</span>
+            </ion-label>
+          </div>
+          <ion-list lines="nones" class="bp-list">
+            <wallet-item-content *ngFor="let wallet of walletGroup" [wallet]="wallet" (click)="!isAddToHome ? goToSendPage(wallet) : addToGroupsHome(wallet)">
+            </wallet-item-content>
+          </ion-list>
+          <label-tip type="warn" class="ion-margin-top" *ngIf="walletGroup && walletGroup[0] && walletGroup[0]?.needsBackup"
+            header="no-header">
+            <div label-tip-body>
+              <span translate>Before retrieving your accounts addresses, it's recommended that you first write down your
+                recovery phrase and store it securely so that your accounts can be recovered in the case your device was lost
+                or stolen.</span>
+              <br>
+              <a class="label-tip-link" (click)="openBackupPage(walletGroup[0]?.keyId)" translate>Backup now</a>
+            </div>
+          </label-tip>
+        </div>
+      </ng-container>
+      <ng-template #token>
         <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
           <div class="section-header ion-padding-top ion-padding-bottom"
             *ngIf="walletGroup[0]?.canSign && walletsGroups.length > 1">
@@ -128,12 +128,11 @@
             </div>
           </label-tip>
         </div>
-      </ng-container>
-      <ng-template #showNoToken>
-        <p style="text-align: center;">
-          {{'Please make sure the eToken type is used correctly or funds available.' | translate}}
-        </p>
       </ng-template>
-    </ng-template>
-  </div>
-</ion-content>
+    </div>
+  </ion-content>
+</ng-container>
+<ng-template #showNoToken>
+  <ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
+  </ion-content>>
+</ng-template>

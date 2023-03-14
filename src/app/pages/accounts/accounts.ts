@@ -21,6 +21,7 @@ import { LoadingController, ModalController, NavParams, Platform, ToastControlle
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { ActionSheetProvider } from 'src/app/providers';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -74,7 +75,8 @@ export class AccountsPage {
     private loadingCtr: LoadingController,
     private navParams: NavParams,
     private toastController: ToastController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private actionSheetProvider: ActionSheetProvider
   ) {
     this.collapsedGroups = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -104,11 +106,11 @@ export class AccountsPage {
     else {
       if (this.navParamsData?.isToken) {
         this.walletsGroups = this.getTokensGroups(walletsGroups);
-        if (this.tokenID) this.checkCaseExistOneToken(this.walletsGroups);
+        this.tokenID ? this.checkCaseExistOneToken(this.walletsGroups) : this.checkCaseExistToken(this.walletsGroups);
       } else {
         this.walletsGroups = this.filterValidWallet(walletsGroups);
       }
-      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1){
+      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1 && !this.isToken){
         this.goToSendPage(this.walletsGroups[0][0]);
       }
     }
@@ -144,7 +146,7 @@ export class AccountsPage {
       })
       walletsGroup.push(wallet);
     })
-    this.isShowCreateNewWallet = _.isEmpty(walletsGroup);
+    this.isShowCreateNewWallet = _.isEmpty(walletsGroup[0]);
     return walletsGroup;
   }
 
@@ -162,8 +164,26 @@ export class AccountsPage {
     // Only 1 token account in list => go to send page
     if (this.isSpecificAmount && tokensGroups.length === 0) {
       this.isShowNoToken = true;
+      this.showETokenErrorMessage();
     } else if (this.isSpecificAmount && tokensGroups.length === 1) {
       this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0])
+    }
+  }
+
+  private checkCaseExistToken(walletsGroups) {
+    let tokensGroups = [];
+    walletsGroups.map((key) => {
+      return key.map((wallet) => {
+          let hasToken = wallet.tokens.find(token => token.tokenId);
+          if (hasToken) {
+            tokensGroups.push(hasToken);
+          }
+      })
+    })
+    // Check ExistToken
+    if (tokensGroups.length === 0) {
+      this.isShowNoToken = true;
+      this.showETokenErrorMessage();
     }
   }
 
@@ -293,6 +313,18 @@ export class AccountsPage {
     },
     3000
   );
+
+  private showETokenErrorMessage() {
+    const errorSheet = this.actionSheetProvider.createInfoSheet(
+      'scan-eToken-error-message',
+    );
+    errorSheet.present();
+    errorSheet.onDidDismiss(option => {
+      if (!option) {
+        this.router.navigate([''], { replaceUrl: true });
+      }
+    });
+  }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {

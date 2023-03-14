@@ -2742,6 +2742,12 @@ msgstr "Không đủ số dư"
 msgid "Not enough funds for fee"
 msgstr "Không đủ số dư để trả phí"
 
+msgid "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
+msgstr "eToken không hợp lệ. Vui lòng kiểm tra và chọn tài khoản eToken phù hợp để gửi giao dịch."
+
+msgid "Please make sure the eToken type is used correctly or funds available."
+msgstr "Vui lòng đảm bảo rằng loại eToken được sử dụng đúng cách hoặc có sẵn tiền."
+
 msgid ""
 "Not including the private key allows to check the account balance, "
 "transaction history, and create spend proposals from the export. However, "

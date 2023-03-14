@@ -212,11 +212,9 @@ export class ScanPage {
     });
   }
 
-  private showErrorInvalidTokenIdQr(error: Error | string, title?: string): void {
-    let infoSheetTitle = title
+  private showErrorInvalidTokenIdQr(): void {
     const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'invalid-token-id',
-      { msg: error, title: infoSheetTitle }
+      'invalid-token-id'
     );
     errorInfoSheet.present();
     errorInfoSheet.onDidDismiss(option => {
@@ -322,14 +320,13 @@ export class ScanPage {
   }
 
   private handleScanSpecificEtokenFromSend(content) {
-    let value = '';
+    let value = content;
     let tokenId = '';
     if (content.includes('amount1')) {
-      value = content.slice(0, content.indexOf('-'));
-      tokenId = content.slice(content.indexOf('-') + 1);
+      value = content.includes('-') ? content.slice(0, content.indexOf('-')) : content;
+      tokenId = content.includes('-') ? content.slice(content.indexOf('-') + 1) : this.tokenFromRecipient?.tokenId;
       if (tokenId !== this.tokenFromRecipient?.tokenId) {
-        let messageError = this.tokenFromRecipient?.tokenInfo?.name;
-        return this.showErrorInvalidTokenIdQr(' ', messageError);
+        return this.showErrorInvalidTokenIdQr();
       }
     }
     this.events.publish('Local/AddressScan', { value: value, recipientId: this.recipientId });

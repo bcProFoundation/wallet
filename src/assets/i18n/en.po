@@ -5319,6 +5319,12 @@ msgstr ""
 
 msgid "{{countInArray}} of your accounts already exist in {{nameCase}}"
 msgstr "{{countInArray}} of your accounts already exist in {{nameCase}}"
+ 
+msgid "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
+msgstr "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
+
+msgid "Please make sure the eToken type is used correctly or funds available."
+msgstr "Please make sure the eToken type is used correctly or funds available."
 
 #| msgid "{walletsGroupLength} Wallets"
 msgid "{{newWalletsCount}} wallets found"

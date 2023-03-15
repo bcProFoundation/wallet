@@ -2736,6 +2736,9 @@ msgstr "Không được phép"
 msgid "Not enough confirmed funds"
 msgstr "Không đủ số dư đã xác nhận"
 
+msgid "Select account"
+msgstr "Chọn tài khoản"
+
 msgid "Not enough funds"
 msgstr "Không đủ số dư"
 
@@ -2745,8 +2748,8 @@ msgstr "Không đủ số dư để trả phí"
 msgid "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
 msgstr "eToken không hợp lệ. Vui lòng kiểm tra và chọn tài khoản eToken phù hợp để gửi giao dịch."
 
-msgid "Please make sure the eToken type is used correctly or funds available."
-msgstr "Vui lòng đảm bảo rằng loại eToken được sử dụng đúng cách hoặc có sẵn tiền."
+msgid "The account you are using does not match the network and/or the currency of the address provided"
+msgstr "Tài khoản bạn đang sử dụng không khớp với mạng và/hoặc đơn vị tiền tệ của địa chỉ được cung cấp"
 
 msgid ""
 "Not including the private key allows to check the account balance, "

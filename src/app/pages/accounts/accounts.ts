@@ -56,7 +56,7 @@ export class AccountsPage {
   public isShowCreateNewWallet = false;
   public network: string ;
   public coin: string ;
-  public titlePage : string = 'Send from';
+  public titlePage : string = 'Select account';
   public isAddToHome : boolean = false;
   public isSpecificAmount: boolean = false;
   public isShowNoToken = false;
@@ -110,9 +110,6 @@ export class AccountsPage {
       } else {
         this.walletsGroups = this.filterValidWallet(walletsGroups);
       }
-      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1 && !this.isToken){
-        this.goToSendPage(this.walletsGroups[0][0]);
-      }
     }
   }
 
@@ -146,7 +143,12 @@ export class AccountsPage {
       })
       walletsGroup.push(wallet);
     })
-    this.isShowCreateNewWallet = _.isEmpty(walletsGroup[0]);
+    const checkIsOneAccount = walletsGroup.filter(key => key.length > 0);
+    if (checkIsOneAccount.length == 0) {
+      this.isShowCreateNewWallet = true;
+    } else if (checkIsOneAccount.length == 1 && checkIsOneAccount[0].length == 1 && !this.isToken) {
+      this.goToSendPage(checkIsOneAccount[0][0], true);
+    }
     return walletsGroup;
   }
 
@@ -166,7 +168,7 @@ export class AccountsPage {
       this.isShowNoToken = true;
       this.showETokenErrorMessage();
     } else if (this.isSpecificAmount && tokensGroups.length === 1) {
-      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0])
+      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0], true);
     }
   }
 
@@ -484,7 +486,7 @@ export class AccountsPage {
     });
   }
 
-  public async goToSendPage(wallet) {
+  public async goToSendPage(wallet, isOneAccount?) {
     if (this.isDonation) {
       return this.handleDonation(wallet);
     }
@@ -493,7 +495,8 @@ export class AccountsPage {
         state: {
           walletId: wallet.credentials.walletId,
           toAddress: this.navParamsData.toAddress
-        }
+        },
+        replaceUrl: !!isOneAccount
       });
     } else {
       const copayerModal = await this.modalCtrl.create({
@@ -507,13 +510,14 @@ export class AccountsPage {
     }
   }
 
-  public async goToSendPageForToken(walletId, token) {
+  public async goToSendPageForToken(walletId, token, isOneToken?) {
     this.router.navigate(['/send-page'], {
       state: {
         walletId: walletId,
         toAddress: this.navParamsData.toAddress,
         token: token
-      }
+      },
+      replaceUrl: !!isOneToken
     });
   }
   

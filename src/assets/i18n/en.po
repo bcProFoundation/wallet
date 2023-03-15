@@ -5301,6 +5301,9 @@ msgstr "{{ status.statusTitle }}"
 msgid "{{ swapTx.status | titlecase }}"
 msgstr "{{ swapTx.status | titlecase }}"
 
+msgid "Select account"
+msgstr "Select account"
+
 msgid ""
 "{{appName}} depends on AbcPros Wallet Service (AWS) for blockchain "
 "information, networking and Copayer synchronization. The default "
@@ -5323,8 +5326,8 @@ msgstr "{{countInArray}} of your accounts already exist in {{nameCase}}"
 msgid "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
 msgstr "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
 
-msgid "Please make sure the eToken type is used correctly or funds available."
-msgstr "Please make sure the eToken type is used correctly or funds available."
+msgid "The account you are using does not match the network and/or the currency of the address provided"
+msgstr "The account you are using does not match the network and/or the currency of the address provided"
 
 #| msgid "{walletsGroupLength} Wallets"
 msgid "{{newWalletsCount}} wallets found"

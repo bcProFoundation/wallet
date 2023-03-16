@@ -153,16 +153,14 @@ export class WalletsPage {
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  async ionViewWillEnter() {
-    this.walletsGroups = [];
+  ionViewWillEnter() {
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
-    const walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.walletsGroups = walletsGroups;
     this.initKeySelected();
     this.loadTokenWallet()
   }

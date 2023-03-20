@@ -62,7 +62,7 @@ export class TxDetailsModal {
   public isNegative: boolean;
   public currentTheme;
   public fiatRateStrToken;
-
+  public messageOnchain: string;
   public addressbook = [];
 
   constructor(
@@ -99,6 +99,7 @@ export class TxDetailsModal {
     this.title = this.translate.instant('Transaction');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.tokenData = this.navParams.data.tokenData;
+    this.messageOnchain = this.navParams.data.messageOnchain;
     this.token = this.navParams.data.token;
     this.color = this.wallet.color;
     this.copayerId = this.wallet.credentials.copayerId;
@@ -184,6 +185,10 @@ export class TxDetailsModal {
         this.logger.warn('Could not fetch transaction note: ' + err);
         return;
       });
+  }
+
+  public showReplyMessageModal() {
+    this.viewCtrl.dismiss(true);
   }
 
   private initActionList(): void {

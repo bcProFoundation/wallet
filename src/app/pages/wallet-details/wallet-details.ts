@@ -113,7 +113,6 @@ export class WalletDetailsPage {
     private actionSheetProvider: ActionSheetProvider,
     private platform: Platform,
     private profileProvider: ProfileProvider,
-    private viewCtrl: ModalController,
     public platformProvider: PlatformProvider,
     private socialSharing: SocialSharing,
     private bwcErrorProvider: BwcErrorProvider,
@@ -731,18 +730,20 @@ export class WalletDetailsPage {
     });
   }
 
-  public goToTxDetails(tx) {
-    const txDetailModal = this.modalCtrl
-      .create({
-        component: TxDetailsModal,
+  public async goToTxDetails(tx) {
+    const txDetailModal = await this.modalCtrl.create({
+      component: TxDetailsModal,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
-          txid: tx.txid
+          txid: tx.txid,
+          messageOnchain: tx.messageOnchain ? tx.messageOnchain : null
         }
-      })
-      .then(res => {
-        res.present();
-      });
+    });
+    txDetailModal.present();
+    const { data } = await txDetailModal.onWillDismiss();
+    if (data) {
+      this.showReplyMessageModal(tx);
+    }
   }
 
   public openBackupModal(): void {
@@ -888,7 +889,7 @@ export class WalletDetailsPage {
   }
 
   public close() {
-    this.viewCtrl.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   public goToReceivePage() {

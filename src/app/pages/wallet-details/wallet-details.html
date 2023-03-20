@@ -293,8 +293,7 @@
 
                 <span *ngIf="tx.message" class="memo">{{tx.message}}</span>
 
-                <span *ngIf="tx.messageOnchain" class="memo">{{tx.messageOnchain}}</span>
-                
+                <span *ngIf="tx.messageOnchain" class="memo" [ngStyle]="{'margin-top': tx.message ? '8px' : '0'}">{{tx.messageOnchain}}</span>
               </div>
 
               <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding" [ngClass]="{'note-onchain-message': !!tx.messageOnchain}">

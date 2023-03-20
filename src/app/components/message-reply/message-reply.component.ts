@@ -13,12 +13,13 @@ import { AppProvider } from 'src/app/providers/app/app';
   encapsulation: ViewEncapsulation.None
 })
 export class MessageReplyComponent extends ActionSheetParent{
-  message='';
+  message = '';
   Buffer = Buffer;
   messageReplyInfo: any;
   public currentTheme: string;
   public messageReplySend: FormGroup;
   messageOnChainValue;
+  validMessage: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private appProvider: AppProvider,
@@ -35,6 +36,14 @@ export class MessageReplyComponent extends ActionSheetParent{
 
   ngOnInit() {
     this.messageReplyInfo = this.params;
+  }
+
+  public changeMessage() {
+    if (this.message.trim().length > 0) {
+      this.validMessage = true;
+    } else {
+      this.validMessage = false;
+    }
   }
 
   send(){

@@ -11,12 +11,15 @@
 
   <form [formGroup]="messageReplySend">
     <mat-form-field appearance="outline">
-      <mat-label translate>{{'Encrypted passphrase' | translate}}</mat-label>
-      <textarea matInput formControlName="messageOnChain" [(ngModel)]="message" [placeholder]="'Input your message' | translate"></textarea>
+      <mat-label translate>{{'Private message' | translate}}</mat-label>
+      <textarea matInput formControlName="messageOnChain" [(ngModel)]="message" (keyup)="changeMessage()" [placeholder]="'Type your private message' | translate" maxlength="206"></textarea>
     </mat-form-field>
+    <mat-hint class="hint-reply-message">
+      {{Buffer.from(this.message).length}} / 206 bytes
+    </mat-hint>
   </form>
 
-  <ion-button fill="clear" type="submit" class="button-standard safe-area button-send-onchain" (click)="send()">
+  <ion-button fill="clear" type="submit" class="button-standard safe-area button-send-onchain" [disabled]="!validMessage" (click)="send()">
     {{ 'Send' | translate }}
   </ion-button>
 </action-sheet>

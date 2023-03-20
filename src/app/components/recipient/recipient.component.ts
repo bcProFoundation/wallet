@@ -239,19 +239,15 @@ export class RecipientComponent implements OnInit {
     this.updateUnitUI(!!isToken);
   }
 
-  changeMessage(){
-        if(Buffer.from(this.message).length > 206) {
-          if(this.validMessage){
-            this.validMessage = false;
-            this.checkRecipientValid();
-          }
-        } else{
-          this.recipient.message = this.message;
-          if(!this.validMessage){
-            this.validMessage = true;
-            this.checkRecipientValid();
-          }
-        }
+  public changeMessage() {
+    if (this.message.trim().length > 0) {
+      this.validMessage = true;
+      this.recipient.message = this.message;
+      this.checkRecipientValid();
+    } else {
+      this.validMessage = false;
+      this.checkRecipientValid();
+    }
   }
 
   private updateAddressHandler: any = data => {

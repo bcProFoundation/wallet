@@ -239,6 +239,9 @@ export class WalletDetailCardComponent {
 
   public setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    if (token?.tokenInfo?.name == 'MVP') {
+      return `assets/img/currencies/${token?.tokenInfo?.name}.svg`
+    }
     return isValid
       ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg`
       : 'assets/img/currencies/eToken.svg';

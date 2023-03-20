@@ -462,6 +462,10 @@ export class TxDetailsModal {
     }
   }
 
+  public handleClick(btx) {
+
+  }
+
   public openExternalLink(url: string): void {
     const optIn = true;
     const title = null;

@@ -5324,6 +5324,12 @@ msgstr "{{countInArray}} of your accounts already exist in {{nameCase}}"
 msgid "{{newWalletsCount}} wallets found"
 msgstr "{{newWalletsCount}} wallets found"
 
+msgid "Replying to "
+msgstr "Replying to "
+
+msgid "Reply"
+msgstr "Reply"
+
 msgid ""
 "{{params.countryCode === 'US' ? 'U.S.' : params.countryCode}} Phone Required"
 msgstr ""

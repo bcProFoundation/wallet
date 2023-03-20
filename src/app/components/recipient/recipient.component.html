@@ -37,12 +37,12 @@
     </ion-item>
     <ng-conatiner *ngIf="isShowMessage">
       <div class="amount-header">
-        <p class="title">{{'Message' | translate}}</p>
+        <p class="title">{{'Private message' | translate}}</p>
       </div>
       <ion-item lines="none" class="amount-wrapper">
         <ion-textarea [(ngModel)]="message" (ionChange)="changeMessage()" (ionBlur)="checkRecipientValid()"></ion-textarea>
       </ion-item>
-      <p class="unit-alt-text">{{Buffer.from(this.message).length}} / 206</p>
+      <p class="unit-alt-text">{{Buffer.from(this.message).length}} / 206 bytes</p>
     </ng-conatiner>
 
     <div class="selected-amount" lines="none" *ngIf="isShowSelectInput">

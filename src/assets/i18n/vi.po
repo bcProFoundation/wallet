@@ -2758,6 +2758,12 @@ msgstr "Không phải bây giờ"
 msgid "Not set"
 msgstr "Không được thiết lập"
 
+msgid "Replying to "
+msgstr "Trả lời cho "
+
+msgid "Reply"
+msgstr "Trả lời"
+
 msgid "Not valid bitcoin address"
 msgstr "Địa chỉ bitcoin không hợp lệ"
 

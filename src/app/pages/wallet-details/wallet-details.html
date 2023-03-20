@@ -233,10 +233,10 @@
 
           <div class="item-wrapper" *ngFor="let tx of group; trackBy: trackByFn; let i = index">
 
-            <ion-item button detail="false" (click)="itemTapped(tx, $event)"
+            <ion-item button detail="false"
               [ngClass]="{'warning-background': canSpeedUpTx(tx), 'danger-background': tx.hasUnconfirmedInputs || tx.isRBF}">
 
-              <div class="action">
+              <div class="action" (click)="itemTapped(tx, $event)">
                 <div class="amount">
                   <ng-container *ngIf="tx.action != 'invalid'">
                     <span *ngIf="tx.action == 'received'"
@@ -297,7 +297,7 @@
                 
               </div>
 
-              <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">
+              <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding" [ngClass]="{'note-onchain-message': !!tx.messageOnchain}">
                 <div class="tx-info">
                   <ng-container *ngIf="tx.confirmations <= 0">
                     <p class="status" *ngIf="tx.action == 'sent'">{{'Pending'| translate}}</p>
@@ -316,8 +316,9 @@
                     amTimeAgo}}</p>
                   <p class="date" *ngIf="tx.time && !createdWithinPastDay(tx.time * 1000)">{{tx.time * 1000 |
                     amDateFormat:'MM/DD/YYYY'}}</p>
-                  <ion-button name="button-handle-click" fill="clear" class="date" *ngIf="tx.messageOnchain && tx.action === 'received'" (click)="handleClick(tx)">
-                    Reply
+                  <ion-button name="button-handle-click" fill="clear" class="date btn-reply" *ngIf="tx.messageOnchain && tx.action === 'received'" (click)="handleClick(tx)">
+                    <ion-icon style="margin-right: 4px;" [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
+                    {{'Reply' | translate}}
                   </ion-button>
                 </div>
               </ion-note>

@@ -1,24 +1,22 @@
 <action-sheet>
-  <div class="add-address-book-container">
-    <div class="reply-to-container">
-      <div class="reply-to-title">
-        Replying to {{messageReplyInfo.addressTo}}
-      </div>
-      <div class="reply-to-message">
-        {{messageReplyInfo.messageOnChain}}
-      </div>
+  <div class="reply-to-container">
+    <div class="reply-to-title">
+      <ion-icon [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
+      {{'Replying to ' | translate }} {{ messageReplyInfo.addressTo }}
     </div>
-    <form [formGroup]="messageReplySend">
-      <mat-form-field MatInput class="form-field" appearance="outline">
-        <textarea matInput formControlName="messageOnChain"></textarea>
-      </mat-form-field>
-    </form>
-    
-
-    <div class="footer">
-      <ion-button type="submit" class="button-standard ion-no-margin-bottom" (click)="send()">
-        {{'Send' | translate}}
-      </ion-button>
+    <div class="reply-to-message">
+      {{messageReplyInfo.messageOnChain}}
     </div>
   </div>
+
+  <form [formGroup]="messageReplySend">
+    <mat-form-field appearance="outline">
+      <mat-label translate>{{'Encrypted passphrase' | translate}}</mat-label>
+      <textarea matInput formControlName="messageOnChain" [(ngModel)]="message" [placeholder]="'Input your message' | translate"></textarea>
+    </mat-form-field>
+  </form>
+
+  <ion-button fill="clear" type="submit" class="button-standard safe-area button-send-onchain" (click)="send()">
+    {{ 'Send' | translate }}
+  </ion-button>
 </action-sheet>

@@ -282,6 +282,23 @@ page-tx-details {
     align-items: center;
   }
 
+  .message-custom {
+    ion-note {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .message-onchain {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      box-orient: vertical;
+      -webkit-box-orient: vertical;
+    }
+  }
+
   .wallet,
   .multi-recip-title {
     span {

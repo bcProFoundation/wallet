@@ -376,6 +376,9 @@ page-confirm {
   .address-note-custom {
     display: flex;
     letter-spacing: 0.4px;
+    .onchain-message-txt {
+      color: #001E2E !important;
+    }
   }
 
   .input-contact-custom {

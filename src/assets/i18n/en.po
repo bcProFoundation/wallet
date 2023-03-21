@@ -24,6 +24,9 @@ msgstr "Password unmatched!"
 msgid "Important"
 msgstr "Important"
 
+msgid "Account Addresses"
+msgstr "Account Addresses"
+
 msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
 msgstr "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
 

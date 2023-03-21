@@ -68,7 +68,7 @@
               <ion-grid class="ion-no-padding">
                 <ion-row>
                   <ion-col>
-                    <h3 translate class="network-fee-title">Bitcoin network fee</h3>
+                    <h3 translate class="network-fee-title">{{'{coinName} network fee' | translate : {coinName: coinName} }}</h3>
                   </ion-col>
                   <ion-col class="ion-text-right">
                     <p class="info">~{{minFeePer}}</p>

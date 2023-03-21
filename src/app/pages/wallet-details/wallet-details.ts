@@ -14,6 +14,7 @@ import { ExternalLinkProvider } from '../../providers/external-link/external-lin
 import {
   ActionSheetProvider,
   AddressBookProvider,
+  AddressProvider,
   AnalyticsProvider,
   AppProvider,
   BwcErrorProvider,
@@ -125,7 +126,8 @@ export class WalletDetailsPage {
     private location: Location,
     public toastController: ToastController,
     private loadingCtrl: LoadingController,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private addressProvider: AddressProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -366,6 +368,19 @@ export class WalletDetailsPage {
     return new Date(number);
   }
 
+  private handleTxAddressEcash() {
+    this.history.forEach((tx) => {
+      if (this.wallet.coin == 'xec' && tx.action == 'received' && !tx?.tokenId) {
+        const addressToken = tx.inputAddresses[0] || null;
+        if (addressToken) {
+          const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
+          const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);
+          tx.inputAddresses[0] = eCashAddess;
+        }
+      }
+    })
+  }
+ 
   private async showHistory(loading?: boolean) {
     const loader = await this.loadingCtrl.create({
       message: this.translate.instant('Loading...'),
@@ -381,6 +396,7 @@ export class WalletDetailsPage {
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
     );
+    this.handleTxAddressEcash();
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });

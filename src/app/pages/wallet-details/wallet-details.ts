@@ -370,7 +370,7 @@ export class WalletDetailsPage {
 
   private handleTxAddressEcash() {
     this.history.forEach((tx) => {
-      if (this.wallet.coin == 'xec' && tx.action == 'received' && !tx?.tokenId) {
+      if (tx.action == 'received' && !tx?.tokenId) {
         const addressToken = tx.inputAddresses[0] || null;
         if (addressToken) {
           const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
@@ -396,7 +396,7 @@ export class WalletDetailsPage {
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
     );
-    this.handleTxAddressEcash();
+    if (this.wallet.coin == 'xec') this.handleTxAddressEcash();
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });

@@ -12,7 +12,7 @@
           'card-home': isHomeCard
           }">
           <div class="wallet-card-header">
-            <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+            <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || wallet?.needsBackup)}"
             class="wallet-icon" (click)="isHomeCard ? goToAccountDetail() : ''">
               <div class="icon">
                 <img src="assets/img/currencies/{{wallet.coin}}.svg" alt="">
@@ -25,7 +25,7 @@
                     *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()"
                     class="audit-table">Auditable</span>
                   <div (click)="goToMultisignInfo()"
-                    *ngIf="wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup)"
+                    *ngIf="wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || wallet?.needsBackup"
                     class="secondary-label">
                     <span class="secondary-label-multisign" *ngIf="wallet?.credentials?.n > 1">Multisig {{
                       wallet?.credentials?.m }}-{{ wallet?.credentials?.n }}</span>
@@ -35,7 +35,7 @@
                   </div>
                 </div>
               </div>
-              <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+              <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || wallet?.needsBackup)}"
                 class="edit-account-name">
                 <ion-button class="btn-edit-name" *ngIf="!isEditNameFlag && !isHomeCard" fill="clear" (click)="isEditNameFlag = !isEditNameFlag">
                   <ion-icon src="assets/img/key-edit-dark.svg"></ion-icon>
@@ -137,7 +137,7 @@
           }"
         >
           <div class="wallet-card-header">
-            <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup))}"
+            <div [ngClass]="{'wallet-info-is-show': (wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()) || (wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || wallet?.needsBackup)}"
             class="wallet-icon" (click)="isHomeCard ? goToAccountDetail() : ''">
               <div class="icon">
                 <img [src]="setIconToken(token)" alt="">
@@ -148,7 +148,7 @@
                   <span class="audit-table"
                     *ngIf="wallet?.cachedStatus && wallet?.cachedStatus.wallet && wallet?.cachedStatus.wallet?.singleAddress && isUtxoCoin()">Auditable</span>
                   <div (click)="goToMultisignInfo()"
-                    *ngIf="wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || !wallet?.isComplete() || (wallet?.isComplete() && wallet?.needsBackup)"
+                    *ngIf="wallet?.credentials?.n > 1 || (!wallet?.credentials?.n && wallet?.n > 1) || wallet?.needsBackup"
                     class="secondary-label">
                     <span class="secondary-label-multisign" *ngIf="wallet?.credentials?.n > 1">Multisig {{
                       wallet?.credentials?.m }}-{{ wallet?.credentials?.n }}</span>

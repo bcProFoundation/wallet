@@ -325,9 +325,7 @@ export class AccountsPage {
     );
     errorSheet.present();
     errorSheet.onDidDismiss(option => {
-      if (!option) {
-        this.router.navigate([''], { replaceUrl: true });
-      }
+      this.router.navigate([''], { replaceUrl: true });
     });
   }
 

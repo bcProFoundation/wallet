@@ -213,6 +213,57 @@ export class ProfileProvider {
     }
   }
 
+  public mapInfoWalletHome(wallet, token?) {
+    return {
+      id: wallet.id,
+      name: wallet.name,
+      cachedStatus: {
+        wallet : {
+          singleAddress: wallet?.cachedStatus.wallet?.singleAddress
+        },
+        totalBalanceAlternative: wallet?.cachedStatus?.totalBalanceAlternative,
+        alternativeIsoCode: wallet?.cachedStatus?.alternativeIsoCode,
+        availableBalanceStr: wallet?.cachedStatus?.availableBalanceStr,
+        totalBalanceStr: wallet?.cachedStatus?.totalBalanceStr,
+        availableBalanceSat: wallet?.cachedStatus?.availableBalanceSat
+      },
+      needsBackup: wallet.needsBackup,
+      balanceHidden: wallet.balanceHidden,
+      lastKnownBalance: wallet.lastKnownBalance,
+      coin: wallet.coin,
+      network: wallet.network,
+      etokenAddress: wallet.etokenAddress || null,
+      credentials: {
+        keyId: wallet.credentials.keyId,
+        walletId: wallet.credentials.walletId
+      },
+      isComplete: function() {
+        return wallet.isComplete();
+      },
+      tokens: token || null
+    }
+  }
+
+  public getWalletGroupsHomeTemp() {
+    let walletsGroupsHome = [];
+    let data = JSON.parse(localStorage.getItem('listHome'));
+    if (data) {
+      walletsGroupsHome = data.map(item => item.wallet);
+    }
+    if (walletsGroupsHome.includes(undefined)) {
+      let tempWalletsGroupsHome = [];
+      walletsGroupsHome = _.compact(walletsGroupsHome);
+      tempWalletsGroupsHome = walletsGroupsHome.map(item => {
+        return {
+          walletId: item?.id,
+          tokenId: item?.tokens?.tokenId
+        };
+      });
+      localStorage.setItem('listHome', JSON.stringify(tempWalletsGroupsHome));
+    }
+    return walletsGroupsHome;
+  }
+
   public async getWalletGroupsHome() {
     let walletsGroupsHome = [];
     let data = JSON.parse(localStorage.getItem('listHome'));

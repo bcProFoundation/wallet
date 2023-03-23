@@ -748,8 +748,7 @@ export class WalletsPage {
   public addToGroupsHome(wallet, token?) {
     let walletObj = {
       walletId: wallet?.id,
-      tokenId: token?.tokenId,
-      wallet: this.profileProvider.mapInfoWalletHome(wallet, token)
+      tokenId: token?.tokenId
     }
     let result = this.profileProvider.setWalletGroupsHome(walletObj);
     if (result && result.added.status) {

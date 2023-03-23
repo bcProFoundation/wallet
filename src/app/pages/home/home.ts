@@ -161,6 +161,7 @@ export class HomePage {
     }
     if (isFetchData) {
       this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
+      this.loading = false;
     }
   }
 
@@ -172,8 +173,13 @@ export class HomePage {
   }
 
   public getWalletGroupsHomeTemp() {
-  this.walletGroupsHome = this.profileProvider.getWalletGroupsHomeTemp();
-  if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
+    const walletGroupsHome = this.profileProvider.getWalletGroupsHomeTemp();
+    if (walletGroupsHome.includes(undefined)) {
+      this.loading = true;
+    } else {
+      this.walletGroupsHome = walletGroupsHome;
+    }
+    if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
   }
   
   private showNewFeatureSlides() {

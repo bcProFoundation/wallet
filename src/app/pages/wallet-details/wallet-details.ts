@@ -467,13 +467,6 @@ export class WalletDetailsPage {
         type: ''
       };
     }
-    // else if(this.addressbook && tx.inputAddresses[0] && this.getContactName(tx.inputAddresses[0])){
-    //   return {
-    //     name: this.getContactName(tx.inputAddresses[0]),
-    //     address: tx.inputAddresses[0].address,
-    //     type: 'contact'
-    //   }
-    // }
     else
       return {
         name: this.getContactName(tx.inputAddresses[0]),

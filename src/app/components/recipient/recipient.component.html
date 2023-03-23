@@ -35,6 +35,7 @@
       <span *ngIf="!token" (click)="changeUnit()" [ngClass]="{'disabled': isSelectedTotalAmout, 'bold-text': !isSelectedTotalAmout}">{{unit}} </span>
       <span *ngIf="token" (click)="changeUnit()" class="bold-text">{{unit}}</span>
     </ion-item>
+    <p class="unit-alt-text">{{recipient.altAmountStr}} {{alternativeUnit}}</p>
     <ng-conatiner *ngIf="isShowMessage">
       <div class="amount-header">
         <p class="title">{{'Private message' | translate}}</p>

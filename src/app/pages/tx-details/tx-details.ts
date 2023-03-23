@@ -66,7 +66,6 @@ export class TxDetailsModal {
   public isNegative: boolean;
   public currentTheme;
   public fiatRateStrToken;
-  public messageOnchain: string;
   public addressbook = [];
 
   constructor(

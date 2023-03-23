@@ -50,6 +50,7 @@ import { Contact } from 'src/app/providers/address-book/address-book';
 export class RecipientComponent implements OnInit {
   public search: string = '';
   public amount: string = '';
+  public amountResult: number = 0;
   navParamsData: any;
   public isCordova: boolean;
   public expression;
@@ -76,7 +77,7 @@ export class RecipientComponent implements OnInit {
   public searchValue: string;
   validAddress = false;
   validAmount = false;
-  validMessage = true;
+  validMessage = false;
   isSelectedTotalAmout: boolean = false;
   remaining: number;
   isShowReceiveLotus: boolean;
@@ -522,6 +523,7 @@ export class RecipientComponent implements OnInit {
       this.recipient.amount = parseInt(amount, 10);
     }
     this.validAmount = result > 0;
+    this.amountResult = result;
     this.checkRecipientValid();
     if (isSendMax) {
       this.sendMaxEvent.emit(true);
@@ -765,8 +767,9 @@ export class RecipientComponent implements OnInit {
 
   checkRecipientValid() {
     if (!this.isDonation) {
-      this.recipient.isValid = this.validAddress && this.validAmount && this.validMessage;
+      this.recipient.isValid = this.validAddress && (this.validAmount || this.validMessage);
     } else {
+     
       if (this.isShowReceiveLotus) {
         this.recipient.isValid = this.validAddress && this.validAmount;
       } else {

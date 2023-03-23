@@ -44,6 +44,7 @@ import { Router } from '@angular/router';
 import { ChooseFeeLevelModal } from '../../choose-fee-level/choose-fee-level';
 import { LoadingProvider } from 'src/app/providers/loading/loading';
 import { OnchainMessageProvider } from 'src/app/providers';
+import { DUST_AMOUNT } from 'src/app/constants';
 @Component({
   selector: 'page-confirm',
   templateUrl: 'confirm.html',
@@ -301,13 +302,18 @@ export class ConfirmPage {
       const result = await this.walletProvider.getMnemonicAndPassword(
         this.wallet
       );
-      messageEncrypted =
+      try{
+        messageEncrypted =
         await this.onchainMessageProvider.processEncryptMessageOnchain(
           this.navParamsData.messageOnChain,
           this.wallet,
           result.mnemonic,
           this.navParamsData.toAddress
         );
+      } catch(e){
+        this.showErrorInfoSheet(e);
+        this.location.back();
+      }
     }
     this.tx = {
       toAddress: this.navParamsData.toAddress,
@@ -942,8 +948,8 @@ export class ConfirmPage {
             if (!this.minAllowedGasLimit)
               this.minAllowedGasLimit = this.tx.txp[wallet.id].gasLimit;
           }
-
-          if (txp.feeTooHigh) {
+          txp.messageOnChain = tx.messageOnChain;
+          if (txp.feeTooHigh && ((!this.navParamsData.messageOnChain && !txp.messageOnChain) || (txp.messageOnChain && txp.amount !== DUST_AMOUNT))) {
             this.showHighFeeSheet();
           }
 

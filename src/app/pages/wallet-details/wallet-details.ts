@@ -387,38 +387,42 @@ export class WalletDetailsPage {
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
     );
-    if (this.history && this.history.length > 0) {
-      const result = await this.walletProvider.getMnemonicAndPassword(
-        this.wallet
-      );
-      for (let index = 0; index < this.history.length; index++) {
-       
-        const tx = this.history[index];
-        if(!(tx.messageOnchain && tx.messageOnchain.length > 0)){
-          const outputFound = _.find(
-            tx.outputs,
-            o =>
-              o.outputScript &&
-              o.outputScript.length > 0 &&
-              o.outputScript.includes('030303')
-          );
-          let addressRecepient = "";
-          if(tx.action === 'received'){
-            addressRecepient = tx.inputAddresses[0];
-          } else{
-            addressRecepient = _.find(
+    if (
+      this.wallet.coin === 'xpi' &&
+      this.wallet.cachedStatus.wallet.singleAddress
+    ) {
+      if (this.history && this.history.length > 0) {
+        const result = await this.walletProvider.getMnemonicAndPassword(
+          this.wallet
+        );
+        for (let index = 0; index < this.history.length; index++) {
+          const tx = this.history[index];
+          if (!(tx.messageOnchain && tx.messageOnchain.length > 0)) {
+            const outputFound = _.find(
               tx.outputs,
-              o => !o.outputScript
-            ).address;
-          }
-          if (outputFound) {
-            tx.messageOnchain = await
-              this.onchainMessageService.processDecryptMessageOnchain(
-                outputFound.outputScript,
-                this.wallet,
-                result.mnemonic,
-                addressRecepient
-              );
+              o =>
+                o.outputScript &&
+                o.outputScript.length > 0 &&
+                o.outputScript.includes('030303')
+            );
+            let addressRecepient = '';
+            if (tx.action === 'received') {
+              addressRecepient = tx.inputAddresses[0];
+            } else {
+              addressRecepient = _.find(
+                tx.outputs,
+                o => !o.outputScript
+              ).address;
+            }
+            if (outputFound) {
+              tx.messageOnchain =
+                await this.onchainMessageService.processDecryptMessageOnchain(
+                  outputFound.outputScript,
+                  this.wallet,
+                  result.mnemonic,
+                  addressRecepient
+                );
+            }
           }
         }
       }
@@ -793,11 +797,11 @@ export class WalletDetailsPage {
   public async goToTxDetails(tx) {
     const txDetailModal = await this.modalCtrl.create({
       component: TxDetailsModal,
-        componentProps: {
-          walletId: this.wallet.credentials.walletId,
-          txid: tx.txid,
-          messageOnchain: tx.messageOnchain
-        }
+      componentProps: {
+        walletId: this.wallet.credentials.walletId,
+        txid: tx.txid,
+        messageOnchain: tx.messageOnchain
+      }
     });
     txDetailModal.present();
     const { data } = await txDetailModal.onWillDismiss();

@@ -33,14 +33,17 @@ import {
   TransactionProposal,
   WalletProvider
 } from '../../../providers/wallet/wallet';
-import { IonRouterOutlet, ModalController, NavController, NavParams } from '@ionic/angular';
+import {
+  IonRouterOutlet,
+  ModalController,
+  NavController,
+  NavParams
+} from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { ChooseFeeLevelModal } from '../../choose-fee-level/choose-fee-level';
-import { FinishModalPage } from '../../finish/finish';
-import { PreviousRouteService } from 'src/app/providers/previous-route/previous-route';
 import { LoadingProvider } from 'src/app/providers/loading/loading';
-import { EventsService } from 'src/app/providers/events.service';
+import { OnchainMessageProvider } from 'src/app/providers';
 @Component({
   selector: 'page-confirm',
   templateUrl: 'confirm.html',
@@ -165,14 +168,21 @@ export class ConfirmPage {
     private location: Location,
     private routerOutlet: IonRouterOutlet,
     private loadingProvider: LoadingProvider,
-    private eventsService: EventsService
+    private onchainMessageProvider: OnchainMessageProvider
   ) {
     if (this.router.getCurrentNavigation()) {
-      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
+      this.navParamsData = this.router.getCurrentNavigation().extras.state
+        ? this.router.getCurrentNavigation().extras.state
+        : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
-    if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParams.data)) this.navParamsData = this.navParams.data;
+    if (
+      _.isEmpty(this.navParamsData) &&
+      this.navParams &&
+      !_.isEmpty(this.navParams.data)
+    )
+      this.navParamsData = this.navParams.data;
 
     this.wallet = this.profileProvider.getWallet(this.navParamsData.walletId);
     this.isDonation = this.navParamsData.isDonation;
@@ -232,7 +242,7 @@ export class ConfirmPage {
     this.routerOutlet.swipeGesture = true;
   }
 
-  loadInit() {
+  async loadInit() {
     this.logger.info('Loaded: ConfirmPage');
     this.routerOutlet.swipeGesture = false;
     this.isOpenSelector = false;
@@ -248,12 +258,10 @@ export class ConfirmPage {
       amount = this.navParamsData.amount
         ? this.navParamsData.amount
         : this.navParamsData.totalInputsAmount;
-    } 
-    else if (this.navParamsData.isSentXecToEtoken) {
+    } else if (this.navParamsData.isSentXecToEtoken) {
       networkName = this.navParamsData.network;
       amount = this.navParamsData.amount;
-    }
-    else {
+    } else {
       amount = this.navParamsData.amount;
       try {
         networkName = this.addressProvider.getCoinAndNetwork(
@@ -282,7 +290,25 @@ export class ConfirmPage {
         return;
       }
     }
-
+    let messageEncrypted = null;
+    if (
+      !!(
+        this.navParamsData &&
+        this.navParamsData.messageOnChain &&
+        this.navParamsData.messageOnChain.trim().length > 0
+      )
+    ) {
+      const result = await this.walletProvider.getMnemonicAndPassword(
+        this.wallet
+      );
+      messageEncrypted =
+        await this.onchainMessageProvider.processEncryptMessageOnchain(
+          this.navParamsData.messageOnChain,
+          this.wallet,
+          result.mnemonic,
+          this.navParamsData.toAddress
+        );
+    }
     this.tx = {
       toAddress: this.navParamsData.toAddress,
       description: this.navParamsData.description,
@@ -291,7 +317,7 @@ export class ConfirmPage {
       invoiceID: this.navParamsData.invoiceID, // xrp
       payProUrl: this.navParamsData.payProUrl,
       spendUnconfirmed: this.config.wallet.spendUnconfirmed,
-      messageOnChain: this.navParamsData.messageOnChain,
+      messageOnChain: !!messageEncrypted ? Array.from(messageEncrypted) : null,
       messageOnChainToShow: this.navParamsData.messageOnChain,
       // Vanity tx info (not in the real tx)
       recipientType: this.navParamsData.recipientType,
@@ -319,15 +345,15 @@ export class ConfirmPage {
         ? 0
         : this.tx.coin == 'eth' ||
           this.currencyProvider.isERCToken(this.tx.coin)
-          ? Number(amount)
-          : parseInt(amount, 10);
+        ? Number(amount)
+        : parseInt(amount, 10);
 
     this.tx.origToAddress = this.tx.toAddress;
 
     if (this.navParamsData.requiredFeeRate) {
       this.usingMerchantFee = true;
-      this.tx.feeRate = this.requiredFeeRate = +this.navParamsData
-        .requiredFeeRate;
+      this.tx.feeRate = this.requiredFeeRate =
+        +this.navParamsData.requiredFeeRate;
     } else if (this.isSpeedUpTx) {
       this.usingCustomFee = true;
       this.tx.feeLevel =
@@ -511,7 +537,8 @@ export class ConfirmPage {
       this.wallet.credentials.multisigEthInfo &&
       this.wallet.credentials.multisigEthInfo.multisigContractAddress
     ) {
-      this.tx.multisigContractAddress = this.wallet.credentials.multisigEthInfo.multisigContractAddress;
+      this.tx.multisigContractAddress =
+        this.wallet.credentials.multisigEthInfo.multisigContractAddress;
     }
 
     this.setButtonText(
@@ -572,7 +599,7 @@ export class ConfirmPage {
     return (
       this.wallet.cachedStatus &&
       this.wallet.cachedStatus.balance.totalAmount >=
-      this.tx.amount + this.tx.feeRate &&
+        this.tx.amount + this.tx.feeRate &&
       !this.tx.spendUnconfirmed
     );
   }
@@ -854,21 +881,20 @@ export class ConfirmPage {
   }
 
   showHighFeeSheet() {
-    const minerFeeWarning = this.actionSheetProvider.createMinerFeeWarningComponent();
+    const minerFeeWarning =
+      this.actionSheetProvider.createMinerFeeWarningComponent();
     minerFeeWarning.present({ maxHeight: '100%', minHeight: '100%' });
   }
 
   showTotalAmountSheet() {
-    const totalAmountFeeInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'total-amount'
-    );
+    const totalAmountFeeInfoSheet =
+      this.actionSheetProvider.createInfoSheet('total-amount');
     totalAmountFeeInfoSheet.present();
   }
 
   showSubtotalAmountSheet() {
-    const subtotalAmountFeeInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'subtotal-amount'
-    );
+    const subtotalAmountFeeInfoSheet =
+      this.actionSheetProvider.createInfoSheet('subtotal-amount');
     subtotalAmountFeeInfoSheet.present();
   }
 
@@ -938,9 +964,9 @@ export class ConfirmPage {
           this.tx = tx;
           this.logger.debug(
             'Confirm. TX Fully Updated for wallet:' +
-            wallet.id +
-            ' Txp:' +
-            txp.id
+              wallet.id +
+              ' Txp:' +
+              txp.id
           );
 
           this.getTotalAmountDetails(tx, wallet);
@@ -1274,8 +1300,7 @@ export class ConfirmPage {
               .Transactions.get({ chain: 'ETHMULTISIG' })
               .instantiateEncodeData({
                 addresses: this.navParamsData.multisigAddresses,
-                requiredConfirmations: this.navParamsData
-                  .requiredConfirmations,
+                requiredConfirmations: this.navParamsData.requiredConfirmations,
                 multisigGnosisContractAddress: tx.multisigContractAddress,
                 dailyLimit: 0
               });
@@ -1332,10 +1357,11 @@ export class ConfirmPage {
         sender: txp.from,
         txId: txp.txid
       };
-      multisigContractInstantiationInfo = await this.walletProvider.getMultisigContractInstantiationInfo(
-        this.wallet,
-        opts
-      );
+      multisigContractInstantiationInfo =
+        await this.walletProvider.getMultisigContractInstantiationInfo(
+          this.wallet,
+          opts
+        );
       if (multisigContractInstantiationInfo.length > 0) {
         const multisigContract = multisigContractInstantiationInfo.filter(
           multisigContract => {
@@ -1404,13 +1430,14 @@ export class ConfirmPage {
   }
 
   private showInsufficientFundsInfoSheet(): void {
-    const insufficientFundsInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'insufficient-funds'
-    );
+    const insufficientFundsInfoSheet =
+      this.actionSheetProvider.createInfoSheet('insufficient-funds');
     insufficientFundsInfoSheet.present();
     insufficientFundsInfoSheet.onDidDismiss(option => {
       if (option || typeof option === 'undefined') {
-        this.fromWalletDetails ? this.location.back() : this.router.navigate(['']);
+        this.fromWalletDetails
+          ? this.location.back()
+          : this.router.navigate(['']);
       } else {
         this.tx.sendMax = true;
         this.setWallet(this.wallet);
@@ -1454,7 +1481,9 @@ export class ConfirmPage {
         return;
       }
       if (exit) {
-        this.fromWalletDetails ? this.location.back() : this.router.navigate(['']);
+        this.fromWalletDetails
+          ? this.location.back()
+          : this.router.navigate(['']);
       }
     });
   }
@@ -1485,11 +1514,11 @@ export class ConfirmPage {
     if (error.toString().includes('500 - "{}"')) {
       msg = this.tx.paypro
         ? this.translate.instant(
-          'There is a temporary problem with the merchant requesting the payment. Please try later'
-        )
+            'There is a temporary problem with the merchant requesting the payment. Please try later'
+          )
         : this.translate.instant(
-          'Error 500 - There is a temporary problem, please try again later.'
-        );
+            'Error 500 - There is a temporary problem, please try again later.'
+          );
     }
 
     const infoSheetTitle = title ? title : this.translate.instant('Error');
@@ -1501,7 +1530,7 @@ export class ConfirmPage {
         if (exit) {
           this.fromWalletDetails
             ? // PopTo AmountPage case
-            this.location.back()
+              this.location.back()
             : this.router.navigate([''], { replaceUrl: true });
         }
       }
@@ -1517,7 +1546,7 @@ export class ConfirmPage {
     else this.setWallet(option);
   }
 
-  public approve(tx, wallet): Promise<void> {
+  public approve(tx, wallet): any {
     if (!tx || (!wallet && !this.coinbaseAccount)) return undefined;
     if (this.nameContact && this.nameContact.trim().length > 0) {
       this.ab
@@ -1712,7 +1741,7 @@ export class ConfirmPage {
           },
           replaceUrl: true
         });
-      })
+      });
       // TODO: Test handle key not update
       // .then(
       //   () => {
@@ -1850,9 +1879,8 @@ export class ConfirmPage {
       title: this.walletSelectorTitle,
       coinbaseData
     };
-    const walletSelector = this.actionSheetProvider.createWalletSelector(
-      params
-    );
+    const walletSelector =
+      this.actionSheetProvider.createWalletSelector(params);
     walletSelector.present();
     walletSelector.onDidDismiss(option => {
       this.onSelectWalletEvent(option);
@@ -1892,9 +1920,8 @@ export class ConfirmPage {
   }
 
   private showCustomFeeWarningSheet(data) {
-    const warningSheet = this.actionSheetProvider.createInfoSheet(
-      'custom-fee-warning'
-    );
+    const warningSheet =
+      this.actionSheetProvider.createInfoSheet('custom-fee-warning');
     warningSheet.present();
     warningSheet.onDidDismiss(option => {
       option ? this.chooseFeeLevel() : this.onFeeModalDismiss(data);
@@ -1917,9 +1944,8 @@ export class ConfirmPage {
 
   public setGasLimit(): void {
     this.editGasLimit = !this.editGasLimit;
-    this.tx.gasLimit = this.tx.txp[
-      this.wallet.id
-    ].gasLimit = this.customGasLimit;
+    this.tx.gasLimit = this.tx.txp[this.wallet.id].gasLimit =
+      this.customGasLimit;
 
     const data = {
       newFeeLevel: 'custom',

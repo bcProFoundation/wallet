@@ -1063,6 +1063,18 @@ export class WalletProvider {
         delete tx.note.encryptedBody;
       }
 
+      const outputFound = _.find(
+        tx.outputs,
+        o =>
+          o.outputScript &&
+          o.outputScript.length > 0 &&
+          o.outputScript.includes('030303')
+      );
+
+      if(outputFound){
+        tx.outputScript = outputFound.outputScript;
+      }
+
       if (!txHistoryUnique[tx.txid]) {
         ret.push(tx);
         txHistoryUnique[tx.txid] = true;

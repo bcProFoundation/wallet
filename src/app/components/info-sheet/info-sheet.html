@@ -94,6 +94,13 @@
       <span sheet-button-text translate>Try again</span>
     </info-sheet-template>
 
+    <info-sheet-template *ngSwitchCase="'invalid-token-id'" type="danger" class="custom-sheet">
+      <span sheet-title-text translate>Error</span>
+      <span sheet-text translate>Invalid eToken. Please check and select an appropriate eToken account to send a transaction.</span>
+      <span sheet-second-button-text translate>Cancel</span>
+      <span sheet-button-text translate>Try again</span>
+    </info-sheet-template>
+
     <info-sheet-template *ngSwitchCase="'backup-later-warning'" type="warning">
       <span sheet-title-text translate>Are you sure?</span>
       <span sheet-text translate>
@@ -282,6 +289,15 @@
       </span>
       <span sheet-button-text translate>Translate address</span>
       <span sheet-second-button-text translate>GOT IT</span>
+    </info-sheet-template>
+
+    <info-sheet-template *ngSwitchCase="'scan-eToken-error-message'" type="danger">
+      <span sheet-title-text translate>Error</span>
+      <span sheet-text translate>
+        The account you are using does not match the network and/or the currency of the address provided
+      </span>
+      <span sheet-button-text translate></span>
+      <span sheet-second-button-text translate>Ok</span>
     </info-sheet-template>
 
     <info-sheet-template *ngSwitchCase="'appreciate-review'" type="love">

@@ -150,19 +150,20 @@ export class WalletsPage {
 
   setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    if (token?.tokenInfo?.name == 'MVP') {
+      return `assets/img/currencies/${token?.tokenInfo?.name}.svg`
+    }
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  async ionViewWillEnter() {
-    this.walletsGroups = [];
+  ionViewWillEnter() {
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
-    const walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.walletsGroups = walletsGroups;
     this.initKeySelected();
     this.loadTokenWallet()
   }
@@ -747,7 +748,8 @@ export class WalletsPage {
   public addToGroupsHome(wallet, token?) {
     let walletObj = {
       walletId: wallet?.id,
-      tokenId: token?.tokenId
+      tokenId: token?.tokenId,
+      wallet: this.profileProvider.mapInfoWalletHome(wallet, token)
     }
     let result = this.profileProvider.setWalletGroupsHome(walletObj);
     if (result && result.added.status) {

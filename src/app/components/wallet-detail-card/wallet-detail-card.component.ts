@@ -128,9 +128,9 @@ export class WalletDetailCardComponent {
     if (changes?.flagAllItemRemove) {
       this.flagAllItemRemove = changes.flagAllItemRemove.currentValue;
       if (this.flagAllItemRemove) {
-        this.slidingItem.open('end');
+        if (this.slidingItem) this.slidingItem.open('end');
       } else {
-        this.slidingItem.close();
+        if (this.slidingItem) this.slidingItem.close();
       }
     }
     this.events.subscribe('Local/Update Amount Token', data => {
@@ -239,6 +239,9 @@ export class WalletDetailCardComponent {
 
   public setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    if (token?.tokenInfo?.name == 'MVP') {
+      return `assets/img/currencies/${token?.tokenInfo?.name}.svg`
+    }
     return isValid
       ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg`
       : 'assets/img/currencies/eToken.svg';
@@ -255,7 +258,6 @@ export class WalletDetailCardComponent {
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
     if (
       !this.wallet ||
-      !this.wallet.isComplete() ||
       (this.wallet.needsBackup && this.wallet.network == 'livenet')
     )
       return;
@@ -329,7 +331,7 @@ export class WalletDetailCardComponent {
   }
 
   public goToReceivePage() {
-    if (this.wallet && this.wallet.isComplete() && this.wallet.needsBackup) {
+    if (this.wallet && this.wallet.needsBackup) {
       const needsBackup = this.actionSheetProvider.createNeedsBackup();
       needsBackup.present();
       needsBackup.onDidDismiss(data => {

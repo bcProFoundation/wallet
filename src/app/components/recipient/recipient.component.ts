@@ -6,7 +6,8 @@ import {
   Output,
   SimpleChange,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Inject
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
@@ -40,6 +41,7 @@ import { Token } from 'src/app/models/tokens/tokens.model';
 import { TransferToModalPage } from 'src/app/pages/send/transfer-to-modal/transfer-to-modal';
 import { PageDto, PageModel } from 'src/app/providers/lixi-lotus/lixi-lotus';
 import { Contact } from 'src/app/providers/address-book/address-book';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'recipient-component',
@@ -873,8 +875,9 @@ export class RecipientComponent implements OnInit {
   }
 
   public openScanner(): void {
+    Keyboard.hide();
     this.router.navigate(['/scan'], {
-      state: { fromRecipientComponent: true, recipientId: this.recipient.id, isTokenScan: !!this.token}
+      state: { fromRecipientComponent: true, recipientId: this.recipient.id, isTokenScan: !!this.token, token: this.token || null}
     });
   }
 

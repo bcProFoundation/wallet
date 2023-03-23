@@ -30,6 +30,9 @@ msgstr "Private message"
 msgid "Type your private message"
 msgstr "Type your private message"
 
+msgid "Account Addresses"
+msgstr "Account Addresses"
+
 msgid "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
 msgstr "{appName} cannot recovery your fund for you if you lose your recovery key. The loss of it will lead to permanent asset loss."
 
@@ -5307,6 +5310,9 @@ msgstr "{{ status.statusTitle }}"
 msgid "{{ swapTx.status | titlecase }}"
 msgstr "{{ swapTx.status | titlecase }}"
 
+msgid "Select account"
+msgstr "Select account"
+
 msgid ""
 "{{appName}} depends on AbcPros Wallet Service (AWS) for blockchain "
 "information, networking and Copayer synchronization. The default "
@@ -5325,6 +5331,12 @@ msgstr ""
 
 msgid "{{countInArray}} of your accounts already exist in {{nameCase}}"
 msgstr "{{countInArray}} of your accounts already exist in {{nameCase}}"
+ 
+msgid "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
+msgstr "Invalid eToken. Please check and select an appropriate eToken account to send a transaction."
+
+msgid "The account you are using does not match the network and/or the currency of the address provided"
+msgstr "The account you are using does not match the network and/or the currency of the address provided"
 
 #| msgid "{walletsGroupLength} Wallets"
 msgid "{{newWalletsCount}} wallets found"
@@ -5371,6 +5383,9 @@ msgstr ""
 
 msgid "{symbolToken} Confirm Payment"
 msgstr "{symbolToken} Confirm Payment"
+
+msgid "Please use specific amount code for {tokenName} account."
+msgstr "Please use specific amount code for {tokenName} account."
 
 msgid ""
 "Hint: Please create an easy to remember password to encrypt your wallet on this device. This password will "

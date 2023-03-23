@@ -37,7 +37,7 @@
     "generate:android-bundle": "cd android && ./gradlew task && ./gradlew bundle",
     "sign:android": "bundletool build-apks --mode=universal --bundle=./android/app/build/outputs/bundle/release/app-release.aab --output=./apks/apcpay-release.apks --ks=release.jks --ks-pass=pass:123456 --ks-key-alias=release --key-pass=pass:123456",
     "final:android-release": "npm run build:android-release && rm -rf apks && npm run generate:android-bundle && npm run sign:android",
-    "final:android-apk": "cd android && ./gradlew assembleRelease && cd ..",
+    "final:android-apk": "rm -rf ./android/app/src/main/res/drawable-* && cd android && ./gradlew assembleRelease && cd ..",
     "final:android-debug": "npm run build:android && rm -rf apks && bundletool build-apks --bundle=./android/app/build/outputs/bundle/release/app-release.aab --output=./apks/apcpay-debug.apks",
     "final:ios": "ionic build --prod && npm run apply-config-pushnotification && npx cap sync ios",
     "final:android": "ionic build --prod && npx cap sync android",

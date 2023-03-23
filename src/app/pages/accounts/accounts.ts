@@ -21,6 +21,7 @@ import { LoadingController, ModalController, NavParams, Platform, ToastControlle
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
+import { ActionSheetProvider } from 'src/app/providers';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -55,9 +56,10 @@ export class AccountsPage {
   public isShowCreateNewWallet = false;
   public network: string ;
   public coin: string ;
-  public titlePage : string = 'Send from';
+  public titlePage : string = 'Select account';
   public isAddToHome : boolean = false;
   public isSpecificAmount: boolean = false;
+  public isShowNoToken = false;
   constructor(
     public http: HttpClient,
     private plt: Platform,
@@ -73,7 +75,8 @@ export class AccountsPage {
     private loadingCtr: LoadingController,
     private navParams: NavParams,
     private toastController: ToastController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private actionSheetProvider: ActionSheetProvider
   ) {
     this.collapsedGroups = {};
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -103,12 +106,9 @@ export class AccountsPage {
     else {
       if (this.navParamsData?.isToken) {
         this.walletsGroups = this.getTokensGroups(walletsGroups);
-        this.checkCaseExistOneToken(this.walletsGroups);
+        this.tokenID ? this.checkCaseExistOneToken(this.walletsGroups) : this.checkCaseExistToken(this.walletsGroups);
       } else {
         this.walletsGroups = this.filterValidWallet(walletsGroups);
-      }
-      if (this.isSpecificAmount && this.walletsGroups.length === 1 && this.walletsGroups[0].length === 1){
-        this.goToSendPage(this.walletsGroups[0][0]);
       }
     }
   }
@@ -124,6 +124,9 @@ export class AccountsPage {
 
   setIconToken(token) {
     const isValid = this.listEToken.includes(token?.tokenInfo?.symbol);
+    if (token?.tokenInfo?.name == 'MVP') {
+      return `assets/img/currencies/${token?.tokenInfo?.name}.svg`
+    }
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
@@ -143,7 +146,12 @@ export class AccountsPage {
       })
       walletsGroup.push(wallet);
     })
-    this.isShowCreateNewWallet = _.isEmpty(walletsGroup);
+    const checkIsOneAccount = walletsGroup.filter(key => key.length > 0);
+    if (checkIsOneAccount.length == 0) {
+      this.isShowCreateNewWallet = true;
+    } else if (checkIsOneAccount.length == 1 && checkIsOneAccount[0].length == 1 && !this.isToken) {
+      this.goToSendPage(checkIsOneAccount[0][0], true);
+    }
     return walletsGroup;
   }
 
@@ -158,8 +166,29 @@ export class AccountsPage {
           }
       })
     })
-    if (this.isSpecificAmount && tokensGroups.length === 1 && tokensGroups[0].length === 1) {
-      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0][0])
+    // Only 1 token account in list => go to send page
+    if (this.isSpecificAmount && tokensGroups.length === 0) {
+      this.isShowNoToken = true;
+      this.showETokenErrorMessage();
+    } else if (this.isSpecificAmount && tokensGroups.length === 1) {
+      this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0], true);
+    }
+  }
+
+  private checkCaseExistToken(walletsGroups) {
+    let tokensGroups = [];
+    walletsGroups.map((key) => {
+      return key.map((wallet) => {
+          let hasToken = wallet.tokens.find(token => token.tokenId);
+          if (hasToken) {
+            tokensGroups.push(hasToken);
+          }
+      })
+    })
+    // Check ExistToken
+    if (tokensGroups.length === 0) {
+      this.isShowNoToken = true;
+      this.showETokenErrorMessage();
     }
   }
 
@@ -289,6 +318,16 @@ export class AccountsPage {
     },
     3000
   );
+
+  private showETokenErrorMessage() {
+    const errorSheet = this.actionSheetProvider.createInfoSheet(
+      'scan-eToken-error-message',
+    );
+    errorSheet.present();
+    errorSheet.onDidDismiss(option => {
+      this.router.navigate([''], { replaceUrl: true });
+    });
+  }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
     if (!opts.walletId) {
@@ -448,7 +487,7 @@ export class AccountsPage {
     });
   }
 
-  public async goToSendPage(wallet) {
+  public async goToSendPage(wallet, isOneAccount?) {
     if (this.isDonation) {
       return this.handleDonation(wallet);
     }
@@ -457,7 +496,8 @@ export class AccountsPage {
         state: {
           walletId: wallet.credentials.walletId,
           toAddress: this.navParamsData.toAddress
-        }
+        },
+        replaceUrl: !!isOneAccount
       });
     } else {
       const copayerModal = await this.modalCtrl.create({
@@ -471,13 +511,14 @@ export class AccountsPage {
     }
   }
 
-  public async goToSendPageForToken(walletId, token) {
+  public async goToSendPageForToken(walletId, token, isOneToken?) {
     this.router.navigate(['/send-page'], {
       state: {
         walletId: walletId,
         toAddress: this.navParamsData.toAddress,
         token: token
-      }
+      },
+      replaceUrl: !!isOneToken
     });
   }
   

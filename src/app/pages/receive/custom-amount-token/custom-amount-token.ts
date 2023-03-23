@@ -53,6 +53,7 @@ export class CustomAmountTokenPage {
   public amountToShow;
   public token;
   public addressToken;
+  public isTokenFiatRate: boolean;
   navParamsData;
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
   constructor(
@@ -98,6 +99,7 @@ export class CustomAmountTokenPage {
 
   ngOnInit() {
     this.logger.info('Loaded: CustomAmountPage');
+    this.checkTokenFiatRate();
     this.setAvailableUnits();
     this.changeUnit();
     this.processAmount();
@@ -140,15 +142,22 @@ export class CustomAmountTokenPage {
   }
 
   public getAmountCustom() {
-    if (this.amountCustomForm.value.amountCustom > 0) {
-      this.qrAddress = this.addressToken +
-        '?amount1=' +
-        this.amountCustomForm.value.amountCustom +
-        '-' + this.token?.tokenId;
-    }
-    else {
-      this.qrAddress = this.addressToken;
-    }
+    if (this.amountCustomForm.value.amountCustom === '') return;
+    if (this.amountToShow > 0) {
+        this.qrAddress =
+          this.addressToken +
+          '?amount1=' +
+          this.amountToShow +
+          '-' + this.token?.tokenId;
+      }
+      else {
+        this.qrAddress = this.addressToken;
+      }
+  }
+
+  private checkTokenFiatRate() {
+    const isTokenFiatRate = this.rateProvider.isCoinAvailable(this.token.tokenInfo.symbol);
+    this.isTokenFiatRate = isTokenFiatRate;
   }
 
   private format(val: string): string {
@@ -245,11 +254,8 @@ export class CustomAmountTokenPage {
   }
 
   private fromFiatToken(val: number, tokenSymbol): number {
-    return parseFloat(
-      this.rateProvider
-        .fromFiatToken(val, this.fiatCode, tokenSymbol)
-        .toFixed(2)
-    );
+    const fiatToken = this.rateProvider.fromFiatToken(val, this.fiatCode, tokenSymbol) || 0;
+    return parseFloat(fiatToken.toFixed(2));
   }
 
   private toFiat(val: number, coin?: Coin): number {

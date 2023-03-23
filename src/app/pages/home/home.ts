@@ -153,20 +153,27 @@ export class HomePage {
     }
   }
 
-  public async loadToken(wallets) {
+  public async loadToken(isFetchData?: boolean) {
+    let wallets = this.profileProvider.wallet;
     for (const i in wallets) {
       const wallet = wallets[i];
       await this.tokenProvider.loadTokenWallet(wallet);
+    }
+    if (isFetchData) {
+      this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
     }
   }
 
   public async getWalletGroupsHome() {
     this.loading = true;
-    let wallets = this.profileProvider.wallet;
-    await this.loadToken(wallets);
     this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
     if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
     this.loading = false
+  }
+
+  public getWalletGroupsHomeTemp() {
+  this.walletGroupsHome = this.profileProvider.getWalletGroupsHomeTemp();
+  if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
   }
   
   private showNewFeatureSlides() {
@@ -261,7 +268,9 @@ export class HomePage {
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     });
-    this.getWalletGroupsHome();
+    //Get Primary account in LocalStorage & fetch to update data
+    this.getWalletGroupsHomeTemp();
+    this.loadToken(true);
     // Required delay to improve performance loading
     setTimeout(() => {
       this.checkEmailLawCompliance();

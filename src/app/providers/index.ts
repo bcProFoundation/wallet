@@ -75,4 +75,5 @@ export { CustomErrorHandler } from './custom-error-handler.service';
 export { RedirectGuard } from './redirect.service';
 export { PreviousRouteService } from './previous-route/previous-route';
 export { TokenProvider } from './token-sevice/token-sevice';
+export { OnchainMessageProvider } from './onchain-message/onchain-message';
 export { LoadingProvider } from './loading/loading';

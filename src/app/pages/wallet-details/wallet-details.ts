@@ -20,7 +20,8 @@ import {
   ConfigProvider,
   CurrencyProvider,
   EventManagerService,
-  LoadingProvider
+  LoadingProvider,
+  OnchainMessageProvider
 } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -32,7 +33,12 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
-import { LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  Platform,
+  ToastController
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
@@ -125,7 +131,8 @@ export class WalletDetailsPage {
     private location: Location,
     public toastController: ToastController,
     private loadingCtrl: LoadingController,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private onchainMessageService: OnchainMessageProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -381,6 +388,42 @@ export class WalletDetailsPage {
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
     );
+    if (this.history && this.history.length > 0) {
+      const result = await this.walletProvider.getMnemonicAndPassword(
+        this.wallet
+      );
+      for (let index = 0; index < this.history.length; index++) {
+       
+        const tx = this.history[index];
+        if(!(tx.messageOnchain && tx.messageOnchain.length > 0)){
+          const outputFound = _.find(
+            tx.outputs,
+            o =>
+              o.outputScript &&
+              o.outputScript.length > 0 &&
+              o.outputScript.includes('030303')
+          );
+          let addressRecepient = "";
+          if(tx.action === 'received'){
+            addressRecepient = tx.inputAddresses[0];
+          } else{
+            addressRecepient = _.find(
+              tx.outputs,
+              o => !o.outputScript
+            ).address;
+          }
+          if (outputFound) {
+            tx.messageOnchain = await
+              this.onchainMessageService.processDecryptMessageOnchain(
+                outputFound.outputScript,
+                this.wallet,
+                result.mnemonic,
+                addressRecepient
+              );
+          }
+        }
+      }
+    }
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });
@@ -389,18 +432,21 @@ export class WalletDetailsPage {
       loader.dismiss();
     }, 1000);
   }
-
-  handleClick(tx){
-    this.showReplyMessageModal(tx);  
+  handleClick(tx) {
+    this.showReplyMessageModal(tx);
   }
 
-  getAddressFrom(tx): any{
-    if((!this.addressbook || !tx.inputAddresses[0] || !this.getContactName(tx.inputAddresses[0]))){
+  getAddressFrom(tx): any {
+    if (
+      !this.addressbook ||
+      !tx.inputAddresses[0] ||
+      !this.getContactName(tx.inputAddresses[0])
+    ) {
       return {
         name: tx.inputAddresses[0].slice(-8),
-        address:  tx.inputAddresses[0],
+        address: tx.inputAddresses[0],
         type: ''
-      }
+      };
     }
     // else if(this.addressbook && tx.inputAddresses[0] && this.getContactName(tx.inputAddresses[0])){
     //   return {
@@ -409,50 +455,64 @@ export class WalletDetailsPage {
     //     type: 'contact'
     //   }
     // }
-    else return {
-      name: this.getContactName(tx.inputAddresses[0]),
-      address: tx.inputAddresses[0],
-      type: 'contact'
-    }
+    else
+      return {
+        name: this.getContactName(tx.inputAddresses[0]),
+        address: tx.inputAddresses[0],
+        type: 'contact'
+      };
   }
 
-  getAddressTo(tx): any{
-    if((!tx.note || (tx.note && !tx.note.body)) && (!this.addressbook || !tx.outputs[0] || !this.getContactName(tx.outputs[0].address)) && (!tx.customData || !tx.customData.toWalletName)){
+  getAddressTo(tx): any {
+    if (
+      (!tx.note || (tx.note && !tx.note.body)) &&
+      (!this.addressbook ||
+        !tx.outputs[0] ||
+        !this.getContactName(tx.outputs[0].address)) &&
+      (!tx.customData || !tx.customData.toWalletName)
+    ) {
       return {
         name: tx.addressTo.slice(-8),
         address: tx.addressTo,
         type: ''
-      }
-    }
-    else if((!tx.note || (tx.note && !tx.note.body)) && (!this.addressbook || !tx.outputs[0] || !this.getContactName(tx.outputs[0].address)) && (tx.customData && tx.customData.toWalletName)){
+      };
+    } else if (
+      (!tx.note || (tx.note && !tx.note.body)) &&
+      (!this.addressbook ||
+        !tx.outputs[0] ||
+        !this.getContactName(tx.outputs[0].address)) &&
+      tx.customData &&
+      tx.customData.toWalletName
+    ) {
       return {
         name: tx.customData.toWalletName,
         address: tx.outputs[0].address,
         type: 'wallet'
-      }
-    }
-    else return {
-      name: this.getContactName(tx.outputs[0].address),
-      address: tx.outputs[0].address,
-      type: 'contact'
-    }
+      };
+    } else
+      return {
+        name: this.getContactName(tx.outputs[0].address),
+        address: tx.outputs[0].address,
+        type: 'contact'
+      };
   }
 
   showReplyMessageModal(tx) {
     const txInfo = this.getAddressFrom(tx);
-    const addContactModal = this.actionSheetProvider.createMessageReplyComponent({
-      addressTo: this.getAddressFrom(tx).name,
-      messageOnChain: tx.messageOnchain
-    });
+    const addContactModal =
+      this.actionSheetProvider.createMessageReplyComponent({
+        addressTo: this.getAddressFrom(tx).name,
+        messageOnChain: tx.messageOnchain
+      });
     addContactModal.present({ maxHeight: '48%%', minHeight: '48%%' });
-    addContactModal.onDidDismiss((rs) => {
+    addContactModal.onDidDismiss(rs => {
       if (rs) {
         this.sendReplyMessage(rs, txInfo);
       }
     });
   }
 
-  sendReplyMessage(rs, txInfo){
+  sendReplyMessage(rs, txInfo) {
     this.router.navigate(['/confirm'], {
       state: {
         walletId: this.wallet.credentials.walletId,
@@ -675,8 +735,8 @@ export class WalletDetailsPage {
     }
   };
 
-  public itemTapped(tx, itemTapped){
-    if(itemTapped.target.innerText === 'Reply'){
+  public itemTapped(tx, itemTapped) {
+    if (itemTapped.target.innerText === 'Reply') {
       itemTapped.preventDefault();
       itemTapped.stopPropagation();
       return;
@@ -737,7 +797,8 @@ export class WalletDetailsPage {
         component: TxDetailsModal,
         componentProps: {
           walletId: this.wallet.credentials.walletId,
-          txid: tx.txid
+          txid: tx.txid,
+          messageOnchain: tx.messageOnchain
         }
       })
       .then(res => {

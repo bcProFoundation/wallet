@@ -205,12 +205,14 @@
         </ion-label>
         <ion-note slot="end">
           <p class="message-onchain summary-item-detail">
-            Live your life with smiles, not tears. Beat your age with friends and not years. Happy birthday!
-          </p>
-          <ion-button fill="clear" class="btn-reply" (click)="handleClick(btx)">
-            <ion-icon [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
-            {{'Reply' | translate}}
-          </ion-button>
+            {{messageOnchain}} </p>
+          <ng-container *ngIf="messageOnchain && messageOnchain.length > 0 && btx.action == 'received'">
+            <ion-button fill="clear" class="btn-reply" (click)="handleClick(btx)">
+              <ion-icon
+                [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
+              {{'Reply' | translate}}
+            </ion-button>
+          </ng-container>
         </ion-note>
       </ion-item>
 

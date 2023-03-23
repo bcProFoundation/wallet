@@ -325,7 +325,7 @@ export class AccountsPage {
     );
     errorSheet.present();
     errorSheet.onDidDismiss(option => {
-      this.router.navigate([''], { replaceUrl: true });
+      this.router.navigate(['/scan'], { replaceUrl: true });
     });
   }
 

@@ -213,8 +213,16 @@ export class KeySettingsPage {
     infoSheet.onDidDismiss(option => {
       if (!option) return;
       this.deleteWalletGroup();
-      this.events.publish('Local/GetListPrimary', true);
     });
+  }
+
+  private handleDeletePrimaryAccount(wallets: Array<any>) {
+    let listPrimaryAccount = JSON.parse(localStorage.getItem('listHome'));
+    wallets.forEach(item => {
+      const isExist = listPrimaryAccount.find(walletObj => walletObj.walletId == item.id);
+      if (isExist) this.profileProvider.removeWalletGroupsHome({walletId: item.id});
+    });
+    this.events.publish('Local/GetListPrimary', true);
   }
 
   private deleteWalletGroup(): void {
@@ -225,6 +233,7 @@ export class KeySettingsPage {
       showHidden: true
     };
     const wallets = this.profileProvider.getWalletsFromGroup(opts);
+    this.handleDeletePrimaryAccount(wallets);
     this.profileProvider
       .deleteWalletGroup(this.keyId, wallets)
       .then(async () => {

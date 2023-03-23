@@ -213,7 +213,7 @@ export class ProfileProvider {
     }
   }
 
-  public mapInfoWalletHome(wallet, token?) {
+  public mapInfoWalletHome(wallet) {
     return {
       id: wallet.id,
       name: wallet.name,
@@ -240,7 +240,7 @@ export class ProfileProvider {
       isComplete: function() {
         return wallet.isComplete();
       },
-      tokens: token || null
+      tokens: wallet.tokens || null
     }
   }
 
@@ -248,18 +248,7 @@ export class ProfileProvider {
     let walletsGroupsHome = [];
     let data = JSON.parse(localStorage.getItem('listHome'));
     if (data) {
-      walletsGroupsHome = data.map(item => item.wallet);
-    }
-    if (walletsGroupsHome.includes(undefined)) {
-      let tempWalletsGroupsHome = [];
-      walletsGroupsHome = _.compact(walletsGroupsHome);
-      tempWalletsGroupsHome = walletsGroupsHome.map(item => {
-        return {
-          walletId: item?.id,
-          tokenId: item?.tokens?.tokenId
-        };
-      });
-      localStorage.setItem('listHome', JSON.stringify(tempWalletsGroupsHome));
+      walletsGroupsHome = data.map(item => item?.wallet);
     }
     return walletsGroupsHome;
   }
@@ -268,21 +257,22 @@ export class ProfileProvider {
     let walletsGroupsHome = [];
     let data = JSON.parse(localStorage.getItem('listHome'));
     if (data) {
-      walletsGroupsHome = data.map(item => {
-        return this.getWalletPrimary(item.walletId, item.tokenId);
-      });
+      // Handle upgrade home card for old user
+      data.forEach((walletObj) => {
+        const wallet = this.wallet[walletObj?.walletId] || null;
+        if (wallet) {
+          const walletMapping = this.mapInfoWalletHome(wallet) || null;
+          walletObj.wallet = walletMapping;
+          if (walletObj?.tokenId && walletObj?.wallet?.tokens) {
+              walletObj.wallet.tokens = walletObj.wallet.tokens.find(token => token.tokenId == walletObj.tokenId);
+          }
+        }
+      })
+      localStorage.setItem('listHome', JSON.stringify(data));
+      walletsGroupsHome = data.map(item => item?.wallet);
     }
-    // Handle case delete Key
     if (walletsGroupsHome.includes(undefined)) {
-      let tempWalletsGroupsHome = [];
       walletsGroupsHome = _.compact(walletsGroupsHome);
-      tempWalletsGroupsHome = walletsGroupsHome.map(item => {
-        return {
-          walletId: item?.id,
-          tokenId: item?.tokens?.tokenId
-        };
-      });
-      localStorage.setItem('listHome', JSON.stringify(tempWalletsGroupsHome));
     }
     return walletsGroupsHome;
   }
@@ -292,8 +282,7 @@ export class ProfileProvider {
     let isExist = _.find(
       data,
       item =>
-        item.walletId === walletObj.walletId &&
-        item.tokenId === walletObj?.tokenId
+        item.walletId === walletObj.walletId
     );
     if (isExist) {
       data.splice(data.indexOf(isExist), 1);

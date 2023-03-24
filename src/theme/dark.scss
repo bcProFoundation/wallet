@@ -3724,4 +3724,10 @@
       }
     }
   }
+
+  accounts-page {
+    .error-scan-etoken {
+      background: var(--bg-color-dark-theme-8) !important;
+    }
+  }
 }

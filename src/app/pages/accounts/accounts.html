@@ -133,6 +133,16 @@
   </ion-content>
 </ng-container>
 <ng-template #showNoToken>
-  <ion-content [forceOverscroll]="true" scrollEvents="true" #scrollArea>
-  </ion-content>>
+  <ion-content>
+    <div class="error-scan-etoken">
+      <div class="error-title">
+        <img src="assets/img/icon-warning-circled.svg">
+        <h1 translate>Warning</h1>
+      </div>
+      <p class="error-text" translate>The account you are using does not match the network and/or the currency of the address provided</p>
+      <ion-button fill="clear" (click)="goToHome()">
+        Ok
+      </ion-button>
+    </div>
+  </ion-content>
 </ng-template>

@@ -183,10 +183,14 @@ export class ProfileProvider {
   public setWalletGroupsHome(walletObj) {
     let result = _.cloneDeep(this.resultPrimaryAccount);
     let walletsGroupsHome = JSON.parse(localStorage.getItem('listHome')) || [];
+    let originWalletsGroupsHome = walletsGroupsHome;
+    originWalletsGroupsHome.forEach(item => {
+      delete item['wallet']
+    });
     if (walletObj && walletObj.walletId) {
       if (walletsGroupsHome.length < 5) {
         if (
-          !JSON.stringify(walletsGroupsHome).includes(JSON.stringify(walletObj))
+          !JSON.stringify(originWalletsGroupsHome).includes(JSON.stringify(walletObj))
         ) {
           walletsGroupsHome.push(walletObj);
           localStorage.setItem('listHome', JSON.stringify(walletsGroupsHome));
@@ -215,11 +219,11 @@ export class ProfileProvider {
 
   public mapInfoWalletHome(wallet) {
     return {
-      id: wallet.id,
-      name: wallet.name,
+      id: wallet?.id,
+      name: wallet?.name,
       cachedStatus: {
         wallet : {
-          singleAddress: wallet?.cachedStatus.wallet?.singleAddress
+          singleAddress: wallet?.cachedStatus?.wallet?.singleAddress
         },
         totalBalanceAlternative: wallet?.cachedStatus?.totalBalanceAlternative,
         alternativeIsoCode: wallet?.cachedStatus?.alternativeIsoCode,
@@ -227,20 +231,20 @@ export class ProfileProvider {
         totalBalanceStr: wallet?.cachedStatus?.totalBalanceStr,
         availableBalanceSat: wallet?.cachedStatus?.availableBalanceSat
       },
-      needsBackup: wallet.needsBackup,
-      balanceHidden: wallet.balanceHidden,
-      lastKnownBalance: wallet.lastKnownBalance,
-      coin: wallet.coin,
-      network: wallet.network,
-      etokenAddress: wallet.etokenAddress || null,
+      needsBackup: wallet?.needsBackup,
+      balanceHidden: wallet?.balanceHidden,
+      lastKnownBalance: wallet?.lastKnownBalance,
+      coin: wallet?.coin,
+      network: wallet?.network,
+      etokenAddress: wallet?.etokenAddress || null,
       credentials: {
-        keyId: wallet.credentials.keyId,
-        walletId: wallet.credentials.walletId
+        keyId: wallet?.credentials?.keyId,
+        walletId: wallet?.credentials?.walletId
       },
       isComplete: function() {
-        return wallet.isComplete();
+        return wallet?.isComplete();
       },
-      tokens: wallet.tokens || null
+      tokens: wallet?.tokens || null
     }
   }
 

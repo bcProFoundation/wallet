@@ -381,4 +381,28 @@ accounts-page {
       }
     }
   }
+
+  .error-scan-etoken {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35vh;
+    padding: 2rem;
+    border-radius: 28px;
+    background: linear-gradient(0deg, rgba(0, 101, 141, 0.11), rgba(0, 101, 141, 0.11)), #FAFAFB;
+    .error-title {
+      display: flex;
+      gap: 1rem;
+      h1 {
+        margin: 0;
+      }
+    }
+    ion-button {
+      align-self: flex-end;
+      width: fit-content;
+    }
+    @media (max-height: 568px) {
+      margin: 1rem;
+      margin-top: 35vh;
+    }
+  }
 }

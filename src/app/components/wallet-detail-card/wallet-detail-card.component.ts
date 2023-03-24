@@ -107,6 +107,11 @@ export class WalletDetailCardComponent {
   }
 
   ngOnInit() {
+    if (this.isHomeCard) {
+      const walletId = this.wallet.id || null;
+      const tempWallet = this.wallet;
+      this.wallet = this.profileProvider.getWallet(walletId) || tempWallet;
+    }
     this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
       if (!addr) return;
       const address = this.walletProvider.getAddressView(

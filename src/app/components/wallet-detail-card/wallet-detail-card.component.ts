@@ -107,15 +107,7 @@ export class WalletDetailCardComponent {
   }
 
   ngOnInit() {
-    this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
-      if (!addr) return;
-      const address = this.walletProvider.getAddressView(
-        this.wallet.coin,
-        this.wallet.network,
-        addr
-      );
-      this.address = address;
-    });
+    this.getAddressWallet();
     this.hiddenBalance = this.wallet.balanceHidden;
     this.bchAddrFormat = 'cashAddress';
     this.checkCardExistListPrimary();
@@ -144,6 +136,37 @@ export class WalletDetailCardComponent {
     } else {
       this.slidingItem.close();
     }
+  }
+
+  getAddressWallet() {
+    this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
+      if (!addr) return;
+      const address = this.walletProvider.getAddressView(
+        this.wallet.coin,
+        this.wallet.network,
+        addr
+      );
+      this.address = address;
+    }).finally(() => {
+      if (this.isHomeCard && !this.address) {
+        this.retryGetAddressWallet();
+      }
+    })
+  }
+
+  retryGetAddressWallet() {
+    const walletId = this.wallet.id || null;
+    const wallet = this.profileProvider.getWallet(walletId);
+    if (wallet) this.wallet = wallet;
+    this.walletProvider.getAddress(this.wallet, undefined).then(addr => {
+      if (!addr) return;
+      const address = this.walletProvider.getAddressView(
+        this.wallet.coin,
+        this.wallet.network,
+        addr
+      );
+      this.address = address;
+    })
   }
 
   handleOnDrag() {

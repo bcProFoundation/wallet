@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EventsService {
-    private refreshKey = new Subject<any>();
+    private refreshKey = new BehaviorSubject<any>({keyId: ''});
 
     publishRefresh(data: any) {
         this.refreshKey.next(data);
     }
 
-    getRefreshKey(): Subject<any> {
+    getRefreshKey(): BehaviorSubject<any> {
         return this.refreshKey;
     }
 }

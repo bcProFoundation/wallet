@@ -157,15 +157,12 @@ export class WalletsPage {
   }
 
   ionViewWillEnter() {
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
-    this.initKeySelected();
-    this.loadTokenWallet()
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -448,6 +445,9 @@ export class WalletsPage {
 
   ngOnInit() {
     this.logger.info('Loaded: WalletsPage');
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    this.loadTokenWallet();
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
@@ -464,8 +464,8 @@ export class WalletsPage {
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
 
       this.eventsService.getRefreshKey().subscribe(data => {
-        this.setWallets(data.keyId);
-      })
+        if (data?.keyId) this.setWallets(data.keyId);
+      });
     };
 
     //Detect Change theme
@@ -547,8 +547,8 @@ export class WalletsPage {
   }
   private setWallets(keyId) {
     this.profileProvider.setOrderedWalletsByGroup(keyId);
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.initKeySelected();
+    this.loadTokenWallet();
     this.events.publish('Local/FetchWallets');
   }
 

@@ -214,7 +214,7 @@
       <span translate *ngIf="updatingTxHistoryProgress>4">{{updatingTxHistoryProgress}} transactions downloaded</span>
     </div>
 
-    <ng-container *ngIf="history && history[0]">
+    <ng-container *ngIf="(history && history[0]) && !updateTxHistoryError">
       <div class="header-transaction" translate>
         Transaction History
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>

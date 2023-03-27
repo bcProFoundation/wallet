@@ -360,12 +360,13 @@ export class HomePage {
     this.fetchingStatus = true;
     this.events.publish('Local/FetchWallets');
   }
-
+  
   public doRefresh(refresher) {
     this.preFetchWallets();
     setTimeout(() => {
       refresher.target.complete();
       this.updateTxps();
+      this.getWalletGroupsHome();
     }, 2000);
   }
 

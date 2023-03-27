@@ -121,7 +121,7 @@ export class ScanPage {
     this.logger.info('Loaded: ScanPage');
     this.routerOutlet.swipeGesture = false;
     this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
-
+    
   }
 
   ionViewWillLeave() {
@@ -217,11 +217,6 @@ export class ScanPage {
       'invalid-token-id'
     );
     errorInfoSheet.present();
-    errorInfoSheet.onDidDismiss(option => {
-      if (option) {
-        this.router.navigate(['/tabs/scan'])
-      }
-    });
   }
 
   private updateCapabilities(): void {

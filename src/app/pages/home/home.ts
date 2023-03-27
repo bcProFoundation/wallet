@@ -161,6 +161,7 @@ export class HomePage {
     }
     if (isFetchData) {
       this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
+      this.loading = false;
     }
   }
 
@@ -172,8 +173,13 @@ export class HomePage {
   }
 
   public getWalletGroupsHomeTemp() {
-  this.walletGroupsHome = this.profileProvider.getWalletGroupsHomeTemp();
-  if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
+    const walletGroupsHome = this.profileProvider.getWalletGroupsHomeTemp();
+    if (walletGroupsHome.includes(undefined)) {
+      this.loading = true;
+    } else {
+      this.walletGroupsHome = walletGroupsHome;
+    }
+    if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
   }
   
   private showNewFeatureSlides() {
@@ -263,7 +269,6 @@ export class HomePage {
 
   ngOnInit() {
     this.preFetchWallets();
-    
     //Detect Change theme
     this.themeProvider.themeChange.subscribe(() => {
       this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
@@ -275,35 +280,7 @@ export class HomePage {
     setTimeout(() => {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
-      this.doMigrateMessageOnchainProcess();
     }, 2000);
-  }
-
-  doMigrateMessageOnchainProcess(){
-    this.persistenceProvider.getMigrateMessageOnchainProcess().then(
-      processStatus => {
-        if(!processStatus){
-          this.persistenceProvider.setMigrateMessageOnchainProcess('start');
-          const wallets = _.filter(this.profileProvider.wallet, w => {
-            return !w.hidden;
-          });
-          _.each(wallets, wallet => {
-            this.persistenceProvider.removeTxHistory(wallet.id);
-          })
-          this.persistenceProvider.setMigrateMessageOnchainProcess('finish');
-        }
-        else if(processStatus === 'start'){
-          const wallets = _.filter(this.profileProvider.wallet, w => {
-            return !w.hidden;
-          });
-          _.each(wallets, wallet => {
-            this.persistenceProvider.removeTxHistory(wallet.id);
-          })
-          this.persistenceProvider.setMigrateMessageOnchainProcess('finish');
-        }
-      }
-      
-    )
   }
 
   getAdPageOrLink(link) {
@@ -378,19 +355,18 @@ export class HomePage {
   }
 
   private preFetchWallets() {
-
     // Avoid heavy tasks that can slow down the unlocking experience
     if (this.appProvider.isLockModalOpen) return;
     this.fetchingStatus = true;
     this.events.publish('Local/FetchWallets');
   }
-
+  
   public doRefresh(refresher) {
     this.preFetchWallets();
     setTimeout(() => {
       refresher.target.complete();
       this.updateTxps();
-      this.doMigrateMessageOnchainProcess();
+      this.getWalletGroupsHome();
     }, 2000);
   }
 

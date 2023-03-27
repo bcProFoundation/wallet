@@ -439,6 +439,7 @@ export class WalletDetailsPage {
                 );
             }
           }
+          this.history[index].outputs = tx.outputs.filter(output => output.address !== 'false');
         }
       }
     }

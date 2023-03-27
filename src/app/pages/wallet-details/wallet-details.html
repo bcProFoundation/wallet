@@ -279,8 +279,11 @@
                 </ng-container>
                 <ng-container *ngIf="tx.action == 'sent'">
                   <span class="tx-action"
-                    *ngIf="(!tx.note || (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !getContactName(tx.outputs[0].address)) && (!tx.customData || !tx.customData.toWalletName)">{{'To:
+                    *ngIf="(!tx.note || (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !getContactName(tx.outputs[0].address)) && (!tx.customData || !tx.customData.toWalletName) && tx.addressTo !== 'false'">{{'To:
                     {address}' | translate: {address: tx.addressTo.slice(-8)} }}</span>
+                    <span class="tx-action"
+                    *ngIf="(!tx.note || (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !getContactName(tx.outputs[0].address)) && (!tx.customData || !tx.customData.toWalletName) && tx.addressTo === 'false'">{{'To:
+                    {address}' | translate: {address: tx.outputs[0].address.slice(-8)} }}</span>
                   <span class="tx-action"
                     *ngIf="(!tx.note || (tx.note && !tx.note.body)) && (!addressbook || !tx.outputs[0] || !getContactName(tx.outputs[0].address)) && (tx.customData && tx.customData.toWalletName)">
                     {{ 'To: {walletName}' | translate: {walletName: tx.customData.toWalletName} | translate}}

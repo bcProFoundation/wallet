@@ -72,7 +72,7 @@ export class SendPage {
   walletId: string;
   isShowSendMax: boolean = true;
   isShowDelete: boolean = false;
-  isShowMessage: boolean = true;
+  isShowMessage: boolean = false;
   toAddress: string = '';
   formatRemaining: string;
   recipientNotInit: RecipientModel;
@@ -151,6 +151,9 @@ export class SendPage {
     this.onResumeSubscription = this.plt.resume.subscribe(() => {
       this.setDataFromClipboard();
     });
+    if(this.wallet.coin === 'xpi' && this.wallet.cachedStatus.wallet.singleAddress){
+      this.isShowMessage = true;
+    }
   }
 
   async handleScrolling(event) {

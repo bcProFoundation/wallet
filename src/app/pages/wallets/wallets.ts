@@ -157,18 +157,6 @@ export class WalletsPage {
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  async ionViewWillEnter() {
-    if (this.router.getCurrentNavigation()) {
-      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
-    } else {
-      this.navParamsData = history ? history.state : {};
-    }
-    if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.initKeySelected();
-    await this.loadTokenWallet();
-  }
-
   private updateTotalBalanceKey(keySelected) {
     let totalAlternativeBalanceToken = 0;
     _.forEach(keySelected, wallet => {
@@ -449,6 +437,9 @@ export class WalletsPage {
 
   ngOnInit() {
     this.logger.info('Loaded: WalletsPage');
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    this.loadTokenWallet();
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
@@ -538,7 +529,7 @@ export class WalletsPage {
           });
 
         });
-        await this.loadTokenWallet();
+        this.loadTokenWallet();
       },
       5000,
       {
@@ -546,10 +537,10 @@ export class WalletsPage {
       }
     );
   }
-  private async setWallets(keyId) {
+  private setWallets(keyId) {
     this.profileProvider.setOrderedWalletsByGroup(keyId);
     this.initKeySelected();
-    await this.loadTokenWallet();
+    this.loadTokenWallet();
     this.events.publish('Local/FetchWallets');
   }
 

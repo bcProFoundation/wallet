@@ -21,7 +21,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullMin="90" pullMax="160">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="wrapper" [ngClass]="{'grid-wrapper': shouldShowZeroState()}">
+  <div class="wrapper" [ngClass]="{'grid-wrapper': shouldShowZeroState(), 'grid-wrapper-w-error': updateTxHistoryError}">
     <expandable-header [scrollArea]="scrollArea" [fadeFactor]="1" [disableFade]="true" #expandableHeader>
       <expandable-header-primary class="balance-header">
         <!-- wallet card -->
@@ -46,6 +46,11 @@
         </div>
       </expandable-header-footer>
     </expandable-header>
+
+    <div class="middle-message tx-history-error" *ngIf="updateTxHistoryError" translate>
+      Could not update transaction history
+    </div>
+
     <div class="prompt-user activity-fix white-card" *ngIf="!(history && history[0]) && !updateTxHistoryError && !(updatingTxHistory && (!history[0] || updatingTxHistoryProgress>4)) && isShowZeroState && shouldShowZeroState()">
       <div class="title-icon larger-icon">
         <img *ngIf="wallet.coin !== 'doge' && wallet.coin !== 'xpi'" src="assets/img/wallet-details/ghost-{{currentTheme}}.svg">
@@ -63,10 +68,6 @@
           If you have funds stored on a website then you should move them into a secure wallet... like this one!
         </span>
       </div>
-    </div>
-
-    <div class="middle-message white-card" *ngIf="updateTxHistoryError" translate>
-      Could not update transaction history
     </div>
 
     <div class="middle-message" *ngIf="updatingTxHistory && (!history[0] || updatingTxHistoryProgress>4)">

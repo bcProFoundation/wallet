@@ -399,10 +399,12 @@ accounts-page {
     ion-button {
       align-self: flex-end;
       width: fit-content;
+      height: fit-content;
     }
-    @media (max-height: 568px) {
+    @media (max-width: 568px) {
       margin: 1rem;
       margin-top: 35vh;
+      padding: 1rem;
     }
   }
 }

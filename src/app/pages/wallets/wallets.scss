@@ -48,6 +48,9 @@ page-wallets {
         }
       }
     }
+    &:last-child {
+      margin-bottom: 1rem;
+    }
   }
 
   .token-container {

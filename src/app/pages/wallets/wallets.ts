@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
 import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
-import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, ThemeProvider } from 'src/app/providers';
+import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, OnGoingProcessProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -95,7 +95,8 @@ export class WalletsPage {
     private themeProvider: ThemeProvider,
     private toastController: ToastController,
     private loadingProvider: LoadingProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     let config = this.configProvider.get();
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -156,13 +157,16 @@ export class WalletsPage {
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    await this.loadTokenWallet();
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -177,18 +181,18 @@ export class WalletsPage {
 
   private async loadTokenWallet() {
     this.isLoading = false;
-    await this.loadingProvider.simpleLoader();
+    // await this.loadingProvider.simpleLoader();
+    this.onGoingProcessProvider.set('Loading ...');
     await this.loadTokenData(this.keySelected).then(data => {
       this.keySelected = data;
       this.totalBalanceKey = DecimalFormatBalance(this.updateTotalBalanceKey(data));
       this.changeDetectorRef.detectChanges();
     }).catch(err => {
       this.logger.error(err);
-    })
-    setTimeout(async () => {
+    }).finally(() => {
       this.isLoading = true;
-      await this.loadingProvider.dismissLoader();
-    }, 500);
+      this.onGoingProcessProvider.clear();
+    })
   }
 
   openMenu() {
@@ -445,9 +449,6 @@ export class WalletsPage {
 
   ngOnInit() {
     this.logger.info('Loaded: WalletsPage');
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.initKeySelected();
-    this.loadTokenWallet();
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
@@ -537,7 +538,7 @@ export class WalletsPage {
           });
 
         });
-        this.loadTokenWallet();
+        await this.loadTokenWallet();
       },
       5000,
       {
@@ -545,10 +546,10 @@ export class WalletsPage {
       }
     );
   }
-  private setWallets(keyId) {
+  private async setWallets(keyId) {
     this.profileProvider.setOrderedWalletsByGroup(keyId);
     this.initKeySelected();
-    this.loadTokenWallet();
+    await this.loadTokenWallet();
     this.events.publish('Local/FetchWallets');
   }
 

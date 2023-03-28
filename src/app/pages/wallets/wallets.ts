@@ -157,15 +157,6 @@ export class WalletsPage {
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  ionViewWillEnter() {
-    if (this.router.getCurrentNavigation()) {
-      this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
-    } else {
-      this.navParamsData = history ? history.state : {};
-    }
-    if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
-  }
-
   private updateTotalBalanceKey(keySelected) {
     let totalAlternativeBalanceToken = 0;
     _.forEach(keySelected, wallet => {
@@ -186,11 +177,10 @@ export class WalletsPage {
       this.changeDetectorRef.detectChanges();
     }).catch(err => {
       this.logger.error(err);
-    })
-    setTimeout(async () => {
+    }).finally(() => {
       this.isLoading = true;
       this.onGoingProcessProvider.clear();
-    }, 500);
+    })
   }
 
   openMenu() {

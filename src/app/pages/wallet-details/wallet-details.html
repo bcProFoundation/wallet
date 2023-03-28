@@ -20,7 +20,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" pullMin="90" pullMax="160">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="wrapper" [ngClass]="{'grid-wrapper': shouldShowZeroState()}">
+  <div class="wrapper" [ngClass]="{'grid-wrapper': shouldShowZeroState(), 'grid-wrapper-w-error': updateTxHistoryError}">
     <expandable-header class="balance-card" [scrollArea]="scrollArea" #expandableHeader>
       <expandable-header-primary class="balance-header">
 
@@ -152,8 +152,11 @@
       </ion-item>
     </ion-list>
 
-    <!-- Transactions -->
+    <div class="middle-message tx-history-error" *ngIf="updateTxHistoryError" translate>
+      Could not update transaction history
+    </div>
 
+    <!-- Transactions -->
 
     <div class="prompt-user activity-fix white-card" *ngIf="shouldShowZeroState()">
       <div class="title-icon larger-icon" *ngIf="!wallet?.credentials.multisigEthInfo">
@@ -204,17 +207,13 @@
       </div>
     </div>
 
-    <div class="middle-message white-card" *ngIf="updateTxHistoryError" translate>
-      Could not update transaction history
-    </div>
-
     <div class="middle-message" *ngIf="updatingTxHistory && (!history[0] || updatingTxHistoryProgress>4)">
       <span translate>Updating transaction history. Please stand by.</span>
-
+      <br>
       <span translate *ngIf="updatingTxHistoryProgress>4">{{updatingTxHistoryProgress}} transactions downloaded</span>
     </div>
 
-    <ng-container *ngIf="(history && history[0]) && !updateTxHistoryError">
+    <ng-container *ngIf="history && history[0]">
       <div class="header-transaction" translate>
         Transaction History
         <ion-icon (click)="openSearchModal()" name="search-sharp"></ion-icon>

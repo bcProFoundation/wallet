@@ -22,7 +22,7 @@ import {
   CurrencyProvider,
   EventManagerService,
   LoadingProvider,
-  OnchainMessageProvider
+  OnchainMessageProvider,
   OnGoingProcessProvider
 } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
@@ -134,7 +134,7 @@ export class WalletDetailsPage {
     private loadingCtrl: LoadingController,
     private eventsService: EventsService,
     private onchainMessageService: OnchainMessageProvider,
-    private addressProvider: AddressProvider
+    private addressProvider: AddressProvider,
     private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
@@ -390,12 +390,6 @@ export class WalletDetailsPage {
   }
  
   private async showHistory(loading?: boolean) {
-    // const loader = await this.loadingCtrl.create({
-    //   message: this.translate.instant('Loading...'),
-    //   backdropDismiss: true
-    // });
-
-    // loader.present();
     this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
       this.onGoingProcessProvider.clear();

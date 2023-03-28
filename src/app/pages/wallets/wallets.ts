@@ -157,13 +157,16 @@ export class WalletsPage {
     return isValid ? `assets/img/currencies/${token?.tokenInfo?.symbol}.svg` : 'assets/img/currencies/eToken.svg';
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state ? this.router.getCurrentNavigation().extras.state : {};
     } else {
       this.navParamsData = history ? history.state : {};
     }
     if (_.isEmpty(this.navParamsData) && this.navParams && !_.isEmpty(this.navParamsData)) this.navParamsData = this.navParamsData;
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    await this.loadTokenWallet();
   }
 
   private updateTotalBalanceKey(keySelected) {
@@ -186,11 +189,10 @@ export class WalletsPage {
       this.changeDetectorRef.detectChanges();
     }).catch(err => {
       this.logger.error(err);
-    })
-    setTimeout(async () => {
+    }).finally(() => {
       this.isLoading = true;
       this.onGoingProcessProvider.clear();
-    }, 500);
+    })
   }
 
   openMenu() {
@@ -447,9 +449,6 @@ export class WalletsPage {
 
   ngOnInit() {
     this.logger.info('Loaded: WalletsPage');
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.initKeySelected();
-    this.loadTokenWallet();
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
@@ -539,7 +538,7 @@ export class WalletsPage {
           });
 
         });
-        this.loadTokenWallet();
+        await this.loadTokenWallet();
       },
       5000,
       {
@@ -547,10 +546,10 @@ export class WalletsPage {
       }
     );
   }
-  private setWallets(keyId) {
+  private async setWallets(keyId) {
     this.profileProvider.setOrderedWalletsByGroup(keyId);
     this.initKeySelected();
-    this.loadTokenWallet();
+    await this.loadTokenWallet();
     this.events.publish('Local/FetchWallets');
   }
 

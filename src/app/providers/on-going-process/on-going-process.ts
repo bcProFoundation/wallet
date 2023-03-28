@@ -121,7 +121,7 @@ export class OnGoingProcessProvider {
     this.ongoingProcess.push(processName);
     let showName = this.getProcessNames()[processName] || processName;
     if (!this.loading) {
-      this.loading = this.loadingCtrl.create({keyboardClose: true, message:showName});
+      this.loading = this.loadingCtrl.create({keyboardClose: true, message:showName, backdropDismiss: true});
       this.loading.then(loadingEl=> loadingEl.present());
     }
   }

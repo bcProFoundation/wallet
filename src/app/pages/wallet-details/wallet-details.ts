@@ -23,6 +23,7 @@ import {
   EventManagerService,
   LoadingProvider,
   OnchainMessageProvider
+  OnGoingProcessProvider
 } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -134,6 +135,7 @@ export class WalletDetailsPage {
     private eventsService: EventsService,
     private onchainMessageService: OnchainMessageProvider,
     private addressProvider: AddressProvider
+    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -388,14 +390,15 @@ export class WalletDetailsPage {
   }
  
   private async showHistory(loading?: boolean) {
-    const loader = await this.loadingCtrl.create({
-      message: this.translate.instant('Loading...'),
-      backdropDismiss: true
-    });
+    // const loader = await this.loadingCtrl.create({
+    //   message: this.translate.instant('Loading...'),
+    //   backdropDismiss: true
+    // });
 
-    loader.present();
+    // loader.present();
+    this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
-      loader.dismiss();
+      this.onGoingProcessProvider.clear();
       return;
     }
     this.history = this.wallet.completeHistory.slice(
@@ -449,7 +452,7 @@ export class WalletDetailsPage {
     });
     if (loading) this.currentPage++;
     setTimeout(async () => {
-      loader.dismiss();
+      this.onGoingProcessProvider.clear();
     }, 1000);
   }
   handleClick(tx) {
@@ -612,7 +615,8 @@ export class WalletDetailsPage {
       opts = opts || {};
       this.events.publish('Local/WalletFocus', {
         walletId: this.wallet.credentials.walletId,
-        force: true
+        force: true,
+        alsoUpdateHistory: true
       });
     },
     MIN_UPDATE_TIME,

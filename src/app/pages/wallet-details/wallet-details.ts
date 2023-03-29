@@ -45,6 +45,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { EventsService } from 'src/app/providers/events.service';
+import { DUST_AMOUNT } from 'src/app/constants';
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -377,18 +378,24 @@ export class WalletDetailsPage {
   }
 
   private handleTxAddressEcash() {
-    this.history.forEach((tx) => {
+    this.history.forEach(tx => {
       if (tx.action == 'received' && !tx?.tokenId) {
         const addressToken = tx.inputAddresses[0] || null;
         if (addressToken) {
-          const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
-          const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);
+          const { prefix, type, hash } =
+            this.addressProvider.decodeAddress(addressToken);
+          const eCashAddess = this.addressProvider.encodeAddress(
+            'ecash',
+            type,
+            hash,
+            addressToken
+          );
           tx.inputAddresses[0] = eCashAddess;
         }
       }
-    })
+    });
   }
- 
+
   private async showHistory(loading?: boolean) {
     this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
@@ -404,39 +411,11 @@ export class WalletDetailsPage {
       this.wallet.cachedStatus.wallet.singleAddress
     ) {
       if (this.history && this.history.length > 0) {
-        const result = await this.walletProvider.getMnemonicAndPassword(
-          this.wallet
-        );
         for (let index = 0; index < this.history.length; index++) {
           const tx = this.history[index];
-          if (!(tx.messageOnchain && tx.messageOnchain.length > 0)) {
-            const outputFound = _.find(
-              tx.outputs,
-              o =>
-                o.outputScript &&
-                o.outputScript.length > 0 &&
-                o.outputScript.includes('030303')
-            );
-            let addressRecepient = '';
-            if (tx.action === 'received') {
-              addressRecepient = tx.inputAddresses[0];
-            } else {
-              addressRecepient = _.find(
-                tx.outputs,
-                o => !o.outputScript
-              ).address;
-            }
-            if (outputFound) {
-              tx.messageOnchain =
-                await this.onchainMessageService.processDecryptMessageOnchain(
-                  outputFound.outputScript,
-                  this.wallet,
-                  result.mnemonic,
-                  addressRecepient
-                );
-            }
-          }
-          this.history[index].outputs = tx.outputs.filter(output => output.address !== 'false');
+          this.history[index].outputs = tx.outputs.filter(
+            output => output.address !== 'false'
+          );
         }
       }
     }
@@ -464,8 +443,7 @@ export class WalletDetailsPage {
         address: tx.inputAddresses[0],
         type: ''
       };
-    }
-    else
+    } else
       return {
         name: this.getContactName(tx.inputAddresses[0]),
         address: tx.inputAddresses[0],
@@ -527,7 +505,7 @@ export class WalletDetailsPage {
       state: {
         walletId: this.wallet.credentials.walletId,
         recipientType: txInfo.type,
-        amount: 5000,
+        amount: DUST_AMOUNT,
         currency: this.wallet.coin,
         coin: this.wallet.coin,
         network: this.wallet.network,

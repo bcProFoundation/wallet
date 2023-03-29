@@ -18,6 +18,7 @@ import { LanguageProvider } from '../language/language';
 import { Logger } from '../logger/logger';
 import { LogsProvider } from '../logs/logs';
 import { OnGoingProcessProvider } from '../on-going-process/on-going-process';
+import { OnchainMessageProvider } from '../onchain-message/onchain-message';
 import { PersistenceProvider } from '../persistence/persistence';
 import { PlatformProvider } from '../platform/platform';
 import { PopupProvider } from '../popup/popup';
@@ -69,7 +70,7 @@ export interface TransactionProposal {
     data?: string;
     gasLimit?: number;
   }>;
-  isDonation?: boolean
+  isDonation?: boolean;
   receiveLotusAddress?: string;
   inputs: any;
   fee: any;
@@ -140,7 +141,8 @@ export class WalletProvider {
     private keyProvider: KeyProvider,
     private platformProvider: PlatformProvider,
     private logsProvider: LogsProvider,
-    private appProvider: AppProvider
+    private appProvider: AppProvider,
+    private onchainMessageService: OnchainMessageProvider
   ) {
     this.logger.debug('WalletProvider initialized');
     this.isPopupOpen = false;
@@ -405,10 +407,10 @@ export class WalletProvider {
                 ) {
                   this.logger.debug(
                     'Retrying update... ' +
-                    walletId +
-                    ' Try:' +
-                    tries +
-                    ' until:',
+                      walletId +
+                      ' Try:' +
+                      tries +
+                      ' until:',
                     opts.until
                   );
                   return setTimeout(() => {
@@ -447,7 +449,7 @@ export class WalletProvider {
       if (WalletProvider.statusUpdateOnProgress[wallet.id] && !opts.until) {
         this.logger.info(
           '!! Status update already on progress for: ' +
-          wallet.credentials.walletName
+            wallet.credentials.walletName
         );
         return reject('INPROGRESS');
       }
@@ -528,22 +530,26 @@ export class WalletProvider {
         this.calcTotalAmount(wallet, isoCode, lastDayRatesArray)
       );
       if (wallet.tokens) {
-        totalAlternativeBalanceToken += _.sumBy(wallet.tokens, 'alternativeBalance')
+        totalAlternativeBalanceToken += _.sumBy(
+          wallet.tokens,
+          'alternativeBalance'
+        );
       }
     });
 
-    const totalBalanceAlternative = (_.sumBy(
-      _.compact(totalAmountArray),
-      b => b.walletTotalBalanceAlternative
-    ) + totalAlternativeBalanceToken).toFixed(2);
+    const totalBalanceAlternative = (
+      _.sumBy(
+        _.compact(totalAmountArray),
+        b => b.walletTotalBalanceAlternative
+      ) + totalAlternativeBalanceToken
+    ).toFixed(2);
 
-
-    const totalBalanceAlternativeLastDay = (_.sumBy(
-      _.compact(totalAmountArray),
-      b => b.walletTotalBalanceAlternativeLastDay
-    ) + totalAlternativeBalanceToken).toFixed(2);
-
-
+    const totalBalanceAlternativeLastDay = (
+      _.sumBy(
+        _.compact(totalAmountArray),
+        b => b.walletTotalBalanceAlternativeLastDay
+      ) + totalAlternativeBalanceToken
+    ).toFixed(2);
 
     const difference =
       parseFloat(totalBalanceAlternative.replace(/,/g, '')) -
@@ -551,7 +557,7 @@ export class WalletProvider {
 
     const totalBalanceChange =
       (difference * 100) /
-      (parseFloat(totalBalanceAlternative.replace(/,/g, '')));
+      parseFloat(totalBalanceAlternative.replace(/,/g, ''));
 
     return {
       totalBalanceAlternativeIsoCode: isoCode,
@@ -577,13 +583,24 @@ export class WalletProvider {
     });
   }
 
-  public getAddressView(coin: Coin, network: string, address: string, isEtoken?: boolean): string {
+  public getAddressView(
+    coin: Coin,
+    network: string,
+    address: string,
+    isEtoken?: boolean
+  ): string {
     if (coin != 'bch' && coin != 'xec') return address;
     let protoAddr = this.getProtoAddress(coin, network, address);
     if (isEtoken && coin == 'xec') {
       try {
-        const { prefix, type, hash } = this.addressProvider.decodeAddress(protoAddr);
-        const etokenAddress = this.addressProvider.encodeAddress('etoken', type, hash, protoAddr);
+        const { prefix, type, hash } =
+          this.addressProvider.decodeAddress(protoAddr);
+        const etokenAddress = this.addressProvider.encodeAddress(
+          'etoken',
+          type,
+          hash,
+          protoAddr
+        );
         if (etokenAddress) protoAddr = etokenAddress;
       } catch (error) {
         protoAddr = 'false';
@@ -786,7 +803,7 @@ export class WalletProvider {
       const LIMIT = 100;
       let requestLimit = FIRST_LIMIT;
       const walletId = wallet.credentials.walletId;
-      WalletProvider.progressFn[walletId] = progressFn || (() => { });
+      WalletProvider.progressFn[walletId] = progressFn || (() => {});
       let foundLimitTx: any = [];
 
       const fixTxsUnit = (txs): void => {
@@ -868,11 +885,11 @@ export class WalletProvider {
                   skip = skip + requestLimit;
                   this.logger.debug(
                     'Syncing TXs for:' +
-                    walletId +
-                    '. Got:' +
-                    newTxs.length +
-                    ' Skip:' +
-                    skip,
+                      walletId +
+                      '. Got:' +
+                      newTxs.length +
+                      ' Skip:' +
+                      skip,
                     ' EndingTxid:',
                     endingTxid,
                     ' Continue:',
@@ -894,7 +911,7 @@ export class WalletProvider {
                   if (!shouldContinue) {
                     this.logger.debug(
                       'Finished Sync: New / soft confirmed Txs: ' +
-                      newTxs.length
+                        newTxs.length
                     );
                     return resolve(newTxs);
                   }
@@ -975,7 +992,7 @@ export class WalletProvider {
               }
 
               updateNotes()
-                .then(() => {
+                .then(async () => {
                   // <HACK>
                   if (!_.isEmpty(foundLimitTx)) {
                     this.logger.debug(
@@ -984,7 +1001,50 @@ export class WalletProvider {
                     return resolve(newHistory);
                   }
                   // </HACK>
-
+                  // encrypt message right here
+                  if(wallet.coin === 'xpi' && wallet.cachedStatus.wallet.singleAddress){
+                    const result =
+                    await this.getMnemonicAndPassword(wallet);
+                    for (let index = 0; index < newHistory.length; index++) {
+                      const tx = newHistory[index] as any;
+                      if (
+                        tx.outputScript &&
+                        tx.outputScript.length > 0 &&
+                        !(tx.messageOnchain && tx.messageOnchain.length > 0)
+                      ) {
+                        const outputFound = _.find(
+                          tx.outputs,
+                          o =>
+                            o.outputScript &&
+                            o.outputScript.length > 0 &&
+                            o.outputScript.includes('030303')
+                        );
+                        let addressRecepient = '';
+                        if (tx.action === 'received') {
+                          addressRecepient = tx.inputAddresses[0];
+                        } else {
+                          addressRecepient = _.find(
+                            tx.outputs,
+                            o => !o.outputScript
+                          ).address;
+                        }
+                        if (outputFound) {
+                          tx.messageOnchain =
+                            await this.onchainMessageService.processDecryptMessageOnchain(
+                              outputFound.outputScript,
+                              wallet,
+                              result.mnemonic,
+                              addressRecepient
+                            );
+                        }
+                      }
+                      // newHistory[index].outputs = tx.outputs.filter(
+                      //   output => output.address !== 'false'
+                      // );
+                    }
+                  }
+                  
+                  
                   const historyToSave = JSON.stringify(newHistory);
                   _.each(txs, tx => {
                     tx.recent = true;
@@ -999,9 +1059,9 @@ export class WalletProvider {
                     .then(() => {
                       this.logger.debug(
                         'History sync & saved for ' +
-                        wallet.id +
-                        ' Txs: ' +
-                        newHistory.length
+                          wallet.id +
+                          ' Txs: ' +
+                          newHistory.length
                       );
 
                       return resolve(undefined);
@@ -1048,7 +1108,8 @@ export class WalletProvider {
           return input.mintHeight < 0;
         });
       }
-      const isTxCoinbase = tx.coinbase || tx.action == 'immature' || tx.action == 'mined';
+      const isTxCoinbase =
+        tx.coinbase || tx.action == 'immature' || tx.action == 'mined';
       if (isTxCoinbase && tx.confirmations >= this.SAFE_CONFIRMATIONS_MINED) {
         tx.safeConfirmed = this.SAFE_CONFIRMATIONS_MINED + '+';
       } else if (!isTxCoinbase && tx.confirmations >= this.SAFE_CONFIRMATIONS) {
@@ -1071,7 +1132,7 @@ export class WalletProvider {
           o.outputScript.includes('030303')
       );
 
-      if(outputFound){
+      if (outputFound) {
         tx.outputScript = outputFound.outputScript;
       }
 
@@ -1153,7 +1214,8 @@ export class WalletProvider {
     const outputSize = 34;
     nbInputs = nbInputs ? nbInputs : 1; // Assume 1 input
     const outputReturn = !isAllFund ? 16 : 0;
-    const size = overhead + inputSize * nbInputs + outputSize * nbOutputs + outputReturn;
+    const size =
+      overhead + inputSize * nbInputs + outputSize * nbOutputs + outputReturn;
     return parseInt((size * (1 + safetyMargin)).toFixed(0), 10);
   }
 
@@ -1335,7 +1397,9 @@ export class WalletProvider {
           password
         );
       } catch (err) {
-        const title = this.translate.instant('Your account is in a corrupt state. Please contact support and share the logs provided.');
+        const title = this.translate.instant(
+          'Your account is in a corrupt state. Please contact support and share the logs provided.'
+        );
         let message;
         try {
           message = err instanceof Error ? err.toString() : JSON.stringify(err);
@@ -1747,8 +1811,8 @@ export class WalletProvider {
             err && err.message
               ? err.message
               : this.translate.instant(
-                'The payment was created but could not be completed. Please try again from home screen'
-              );
+                  'The payment was created but could not be completed. Please try again from home screen'
+                );
           this.logger.error('Sign error: ' + msg);
           this.events.publish('Local/TxAction', {
             walletId: wallet.id,
@@ -1835,16 +1899,16 @@ export class WalletProvider {
 
       return resolve(
         info.type +
-        '|' +
-        info.data +
-        '|' +
-        wallet.credentials.network.toLowerCase() +
-        '|' +
-        derivationPath +
-        '|' +
-        mnemonicHasPassphrase +
-        '|' +
-        wallet.coin
+          '|' +
+          info.data +
+          '|' +
+          wallet.credentials.network.toLowerCase() +
+          '|' +
+          derivationPath +
+          '|' +
+          mnemonicHasPassphrase +
+          '|' +
+          wallet.coin
       );
     });
   }
@@ -1980,10 +2044,14 @@ export class WalletProvider {
   }
 
   formatAmout(amount: number, coin: string) {
-    if (_.isEmpty(coin)) coin = 'xpi' // lotus
-    const precision = _.get(this.currencyProvider.getPrecision(coin as Coin), 'unitToSatoshi', 0);
+    if (_.isEmpty(coin)) coin = 'xpi'; // lotus
+    const precision = _.get(
+      this.currencyProvider.getPrecision(coin as Coin),
+      'unitToSatoshi',
+      0
+    );
     if (precision == 0) return 0;
-    return (amount / precision)
+    return amount / precision;
   }
 
   getDonationInfo() {
@@ -1993,14 +2061,23 @@ export class WalletProvider {
         if (errLivenet) {
           return reject(this.translate.instant('Could not get dynamic fee'));
         }
-        donation.donationSupportCoins = _.map(donation.donationToAddresses, item => {
-          return {
-            coin: item.coin,
-            network: item.network || 'livenet'
+        donation.donationSupportCoins = _.map(
+          donation.donationToAddresses,
+          item => {
+            return {
+              coin: item.coin,
+              network: item.network || 'livenet'
+            };
           }
-        });
-        donation.remaining = this.formatAmout(donation.remaining, donation.donationCoin);
-        donation.receiveAmountLotus = this.formatAmout(donation.receiveAmountLotus, donation.donationCoin);
+        );
+        donation.remaining = this.formatAmout(
+          donation.remaining,
+          donation.donationCoin
+        );
+        donation.receiveAmountLotus = this.formatAmout(
+          donation.receiveAmountLotus,
+          donation.donationCoin
+        );
         return resolve(donation);
       });
     });

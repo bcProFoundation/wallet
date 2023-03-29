@@ -6,7 +6,7 @@
 <div class="recipient-content-wrapper">
   <div class="recipient-content">
     <div *ngIf="!isDonation" class="transfer-to-header">
-      <p class="title">{{'Transfer to' | translate}}</p>
+      <p class="title"><span *ngIf="isShowMessage" class="sign-require">*</span>{{'Transfer to' | translate}}</p>
       <img *ngIf="!token && !recipient.isSpecificAmount && !recipient.isOfficialInfo" (click)="openTransferToModal()" src="assets/img/recipient-component/Union-{{darkThemeString}}.svg">
     </div>
     <ion-item *ngIf="!isDonation"  lines="none" class="search-address-wrapper">
@@ -37,13 +37,20 @@
     </ion-item>
     <p class="unit-alt-text">{{recipient.altAmountStr}} {{alternativeUnit}}</p>
     <ng-conatiner *ngIf="isShowMessage">
-      <div class="amount-header">
+      <div class="amount-header amount-header-onchain-message">
         <p class="title">{{'Private message' | translate}}</p>
       </div>
       <ion-item lines="none" class="amount-wrapper">
         <ion-textarea maxlength="206" [placeholder]="'Type your private message' | translate" [(ngModel)]="message" (ionChange)="changeMessage()"></ion-textarea>
       </ion-item>
-      <p class="unit-alt-text">{{Buffer.from(this.message).length}} / 206 bytes</p>
+      <p class="unit-alt-text unit-alt-text-onchain-message">
+        <span>
+          Fee: ~0.00055 XPI
+        </span>
+        <span [ngClass]="{'max-message-txt': message.trim().length >= 206}">
+          {{(this.message).length}} / 206 bytes
+        </span>
+      </p>
     </ng-conatiner>
 
     <div class="selected-amount" lines="none" *ngIf="isShowSelectInput">

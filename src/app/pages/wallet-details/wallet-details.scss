@@ -258,9 +258,17 @@ page-wallet-details {
           height: 100%;
           .tx-info {
             height: 100%;
+            justify-content: center;
+          }
+          .status-onchain-white {
+            background: transparent;
+          }
+        }
+        &.onchain-message-received {
+          .tx-info {
             justify-content: space-between;
             p {
-              flex-grow: 1;
+              margin: 0;
             }
           }
         }
@@ -281,6 +289,8 @@ page-wallet-details {
       margin-right: 2rem;
       .memo {
         font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.25px;
         color: rgba(0, 30, 46, 0.6);
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -555,6 +565,8 @@ page-wallet-details {
       font-size: 12px;
       &.btn-reply {
         --color: var(--color-light-on-background-theme);
+        --padding-start: 0;
+        --padding-end: 0;
       }
     }
   }

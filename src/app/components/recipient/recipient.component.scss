@@ -7,6 +7,10 @@ recipient-component {
         appearance: none;
         margin: 0;
     }
+
+    .sign-require {
+        color: var(--color-danger);
+    }
     
     .check {
         margin: 0 !important;
@@ -128,6 +132,14 @@ recipient-component {
                     margin: 0;
                 }
             }
+            
+            .amount-header-onchain-message {
+                padding-top: 1rem !important;
+            }
+
+            .max-message-txt {
+                color: var(--color-danger);
+            }
 
             .max-text {
                 cursor: pointer;
@@ -141,6 +153,11 @@ recipient-component {
                 margin-top: 5px;
                 margin-left: 18px;
                 margin-bottom: 0;
+                &.unit-alt-text-onchain-message {
+                    margin: 5px 18px;
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
         }
     }

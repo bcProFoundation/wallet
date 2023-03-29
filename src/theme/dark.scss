@@ -1797,6 +1797,9 @@
         .note-container {
           color: rgba(255, 184, 93, 1) !important;
         }
+        .onchain-message-txt {
+          color: #fff !important;
+        }
       }
       .send-to-content {
         .item-name {
@@ -2393,7 +2396,7 @@
           --highlight-color-focused: rgba(224, 228, 230, 0.6);
           --highlight-color-valid: rgba(224, 228, 230, 0.6);
           --highlight-color-invalid: rgba(224, 228, 230, 0.6);
-          ion-input {
+          ion-input, ion-textarea {
             --placeholder-color: rgba(237, 239, 240, 0.38);
             --color: #edeff0;
           }
@@ -2408,6 +2411,12 @@
     }
     .item-title {
       color: rgba(237, 239, 240, 0.6);
+    }
+    .sign-require {
+      color: #FFB4A9 !important;
+    }
+    .max-message-txt {
+      color: #FFB4A9 !important;
     }
   }
 
@@ -3728,6 +3737,22 @@
   accounts-page {
     .error-scan-etoken {
       background: var(--bg-color-dark-theme-8) !important;
+    }
+  }
+
+  message-reply-component {
+    .reply-to-container {
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.14), rgba(126, 208, 255, 0.14)), #001E2E;
+      border: 1px solid rgba(0, 101, 141, 0.08);
+      .reply-to-title {
+        color: #EDEFF0;
+      }
+      .reply-to-message {
+        color: #E0E4E6;
+      }
+    }
+    .max-message-txt {
+      color: #FFB4A9 !important;
     }
   }
 }

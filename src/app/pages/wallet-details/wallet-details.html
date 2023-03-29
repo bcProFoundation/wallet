@@ -298,7 +298,7 @@
                 <span *ngIf="tx.messageOnchain" class="memo" [ngStyle]="{'margin-top': tx.message ? '8px' : '0'}">{{tx.messageOnchain}}</span>
               </div>
 
-              <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding" [ngClass]="{'note-onchain-message': !!tx.messageOnchain}">
+              <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding" [ngClass]="{'note-onchain-message': !!tx.messageOnchain, 'onchain-message-received': !!tx.messageOnchain && tx.action == 'received'}">
                 <div class="tx-info">
                   <ng-container *ngIf="tx.confirmations <= 0">
                     <p class="status" *ngIf="tx.action == 'sent'">{{'Pending'| translate}}</p>
@@ -309,6 +309,7 @@
                     <p class="status" *ngIf="tx.action == 'invalid'">Invalid</p>
                     <p class="status" *ngIf="tx.action == 'moved'">Sent to self</p>
                   </ng-container>
+                  <p class="status status-onchain-white" *ngIf="!!tx.messageOnchain && tx.action == 'received' && tx.confirmations > 0"></p>
                   <p class="status" *ngIf="tx.isGenesis">Genesis</p>
                   <p class="status" *ngIf="tx.action == 'mined'">Mined</p>
                   <p class="status" *ngIf="tx.action == 'immature'">Immature</p>

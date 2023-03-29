@@ -15,7 +15,12 @@
       <textarea matInput formControlName="messageOnChain" [(ngModel)]="message" (keyup)="changeMessage()" [placeholder]="'Type your private message' | translate" maxlength="206"></textarea>
     </mat-form-field>
     <mat-hint class="hint-reply-message">
-      {{Buffer.from(this.message).length}} / 206 bytes
+      <span>
+        Fee: ~0.00055 XPI
+      </span>
+      <span [ngClass]="{'max-message-txt': message.trim().length >= 206}">
+        {{(this.message).length}} / 206 bytes
+      </span>
     </mat-hint>
   </form>
 

@@ -83,11 +83,23 @@ message-reply-component {
       color: #1C3745;
       letter-spacing: 0.25px;
       font-size: 14px;
+      line-height: 20px;
+      margin-top: 8px;
     }
   }
 
   .button-send-onchain {
     width: fit-content !important;
     margin: 5px 24px 25px auto !important;
+  }
+
+  .hint-reply-message {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.5rem !important;
+    margin-top: 4px;
+    .max-message-txt {
+      color: var(--color-danger);
+    }
   }
 }

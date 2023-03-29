@@ -480,7 +480,9 @@ export class TxDetailsModal {
     }
   }
 
-  public handleClick(btx) {}
+  public handleClick(btx) {
+    this.viewCtrl.dismiss(true);
+  }
 
   public openExternalLink(url: string): void {
     const optIn = true;

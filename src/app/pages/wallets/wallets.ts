@@ -435,11 +435,11 @@ export class WalletsPage {
     }
   };
 
-  ngOnInit() {
+  async ngOnInit() {
     this.logger.info('Loaded: WalletsPage');
     this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.initKeySelected();
-    this.loadTokenWallet();
+    await this.loadTokenWallet();
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
@@ -515,33 +515,32 @@ export class WalletsPage {
     this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
   };
 
-  private debounceSetWallets() {
-    _.debounce(
-      async () => {
-        this.profileProvider.setOrderedWalletsByGroup();
-        this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-        this.walletsGroups.forEach(walletArray => {
-          walletArray.forEach(wallet => {
-            this.events.publish('Local/WalletFocus', {
-              walletId: wallet.id,
-              force: true
-            });
+  private debounceSetWallets = _.debounce(
+    async () => {
+      this.profileProvider.setOrderedWalletsByGroup();
+      this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+      this.walletsGroups.forEach(walletArray => {
+        walletArray.forEach(wallet => {
+          this.events.publish('Local/WalletFocus', {
+            walletId: wallet.id,
+            force: true
           });
-
         });
-        this.loadTokenWallet();
-      },
-      5000,
-      {
-        leading: true
-      }
-    );
-  }
-  private setWallets(keyId) {
-    this.profileProvider.setOrderedWalletsByGroup(keyId);
-    this.initKeySelected();
-    this.loadTokenWallet();
-    this.events.publish('Local/FetchWallets');
+
+      });
+      await this.loadTokenWallet();
+    },
+    5000,
+    {
+      leading: true
+    }
+  );
+
+  private async setWallets(keyId) {
+      this.profileProvider.setOrderedWalletsByGroup(keyId);
+      this.initKeySelected();
+      await this.loadTokenWallet();
+      this.events.publish('Local/FetchWallets');
   }
 
   private fetchTxHistory(opts: UpdateWalletOptsI) {
@@ -639,12 +638,12 @@ export class WalletsPage {
         this.logger.warn('Update error:', err);
 
         // this.processWalletError(wallet, err);
-
-        this.events.publish('Local/WalletUpdate', {
-          walletId: opts.walletId,
-          finished: true,
-          error: wallet.error
-        });
+        
+          this.events.publish('Local/WalletUpdate', {
+            walletId: opts.walletId,
+            finished: true,
+            error: wallet.error
+          });
 
         if (opts.alsoUpdateHistory) {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });

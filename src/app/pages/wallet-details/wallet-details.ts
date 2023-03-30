@@ -171,10 +171,14 @@ export class WalletDetailsPage {
     if (this.navPramss.clearCache) {
       this.clearHistoryCache();
     } else {
-      this.fetchTxHistory({
-        walletId: this.wallet.credentials.walletId,
-        force: true
-      });
+      if (this.wallet.completeHistory) this.showHistory();
+      else {
+        this.events.publish('Local/WalletFocus', {
+          walletId: this.wallet.credentials.walletId,
+          force: true,
+          alsoUpdateHistory: true
+        });
+      }
     }
 
     this.requiresMultipleSignatures = this.wallet.credentials.m > 1;

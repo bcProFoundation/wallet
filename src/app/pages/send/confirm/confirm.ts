@@ -1701,7 +1701,7 @@ export class ConfirmPage {
 
   private navigateBack(_redir?: string, walletId?: string, params?) {
     if (this.wallet) {
-      this.router.navigate(['/tabs/wallets']).then(() => {
+      this.router.navigate(['/tabs/wallets'], { replaceUrl: true }).then(() => {
         this.router.navigate(['/wallet-details'], {
           state: {
             walletId: walletId ? walletId : this.wallet.credentials.walletId,

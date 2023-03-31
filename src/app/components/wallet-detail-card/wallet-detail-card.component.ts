@@ -493,14 +493,16 @@ export class WalletDetailCardComponent {
     if (!this.token) {
       this.router.navigate(['/wallet-details'], {
         state: {
-          walletId: this.wallet.credentials.walletId
+          walletId: this.wallet.credentials.walletId,
+          isHomeCard: this.isHomeCard
         }
       });
     } else {
       this.router.navigate(['/token-details'], {
         state: {
           walletId: this.wallet.credentials.walletId,
-          token: this.token
+          token: this.token,
+          isHomeCard: this.isHomeCard
         }
       });
     }

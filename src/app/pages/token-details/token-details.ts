@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  LoadingController,
   ModalController,
   ToastController
 } from '@ionic/angular';
@@ -16,14 +15,13 @@ import _ from 'lodash';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { Token } from 'src/app/models/tokens/tokens.model';
-import { AddressBookProvider, PlatformProvider } from 'src/app/providers';
+import { AddressBookProvider, PlatformProvider, OnGoingProcessProvider } from 'src/app/providers';
 import { ActionSheetProvider } from 'src/app/providers/action-sheet/action-sheet';
 import { AppProvider } from 'src/app/providers/app/app';
 import { BwcErrorProvider } from 'src/app/providers/bwc-error/bwc-error';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { ErrorsProvider } from 'src/app/providers/errors/errors';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
-import { EventsService } from 'src/app/providers/events.service';
 import { Logger } from 'src/app/providers/logger/logger';
 import { ProfileProvider } from 'src/app/providers/profile/profile';
 import { ThemeProvider } from 'src/app/providers/theme/theme';
@@ -73,6 +71,7 @@ export class TokenDetailsPage {
   private tokenId;
   public isSendFromHome: boolean = false;
   public isGenNewAddress: boolean = false;
+  private isFromHomeCard: boolean = false;
 
   constructor(
     public http: HttpClient,
@@ -94,8 +93,7 @@ export class TokenDetailsPage {
     private appProvider: AppProvider,
     private addressbookProvider: AddressBookProvider,
     public toastController: ToastController,
-    private loadingCtrl: LoadingController,
-    private eventsService: EventsService
+    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -106,6 +104,7 @@ export class TokenDetailsPage {
       this.navPramss = history ? history.state : {};
     }
     this.isSendFromHome = this.navPramss.isSendFromHome;
+    this.isFromHomeCard = this.navPramss.isHomeCard;
     this.wallet = this.profileProvider.getWallet(this.navPramss.walletId);
     this.token = this.navPramss.token;
     this.tokenId = this.navPramss.tokenId;
@@ -123,6 +122,21 @@ export class TokenDetailsPage {
       .catch(err => {
         this.logger.error(err);
       });
+
+    // Getting info from cache
+    if (this.navPramss.clearCache) {
+      this.clearHistoryCache();
+    } else {
+      if (this.wallet.completeHistory) {
+        this.showHistory();
+      } else {
+        this.events.publish('Local/WalletFocus', {
+          walletId: this.wallet.credentials.walletId,
+          force: true,
+          alsoUpdateHistory: true
+        });
+      }
+    }
   }
 
   async handleScrolling(event) {
@@ -135,20 +149,6 @@ export class TokenDetailsPage {
 
   handleGenNewAddress(event: boolean) {
     this.isGenNewAddress = event;
-  }
-
-  ionViewDidEnter() {
-    setTimeout(() => {
-      if (this.router.getCurrentNavigation()) {
-        this.navPramss = this.router.getCurrentNavigation().extras.state;
-      } else {
-        this.navPramss = history ? history.state : {};
-      }
-      if (this.navPramss && this.navPramss.finishParam) {
-        this.finishParam = this.navPramss.finishParam;
-        this.presentToast();
-      }
-    }, 100);
   }
 
   async presentToast() {
@@ -178,13 +178,6 @@ export class TokenDetailsPage {
   ionViewWillLeave() {
     this.events.unsubscribe('Local/WalletHistoryUpdate', this.updateHistory);
     this.onResumeSubscription.unsubscribe();
-  }
-
-  ionViewDidLeave() {
-    // this.events.publish('Local/GetData', true);
-    this.eventsService.publishRefresh({
-      keyId: this.wallet.keyId
-    });
   }
 
   caculateAmountToken(utxoToken, decimals) {
@@ -233,23 +226,22 @@ export class TokenDetailsPage {
   ionViewWillEnter() {
     this.amountToken = `${this.token.amountToken} ${this.token.tokenInfo.symbol}`;
     this.loadToken();
-    // Getting info from cache
-    if (this.navPramss.clearCache) {
-      this.clearHistoryCache();
-    } else {
-      this.wallet.completeHistory = _.filter(
-        this.wallet.completeHistory,
-        item => item.tokenId == this.token.tokenId
-      );
-      this.fetchTxHistory({
-        walletId: this.wallet.credentials.walletId,
-        force: true
-      });
-    }
     this.events.publish('Local/WalletFocus', {
-      walletId: this.wallet.credentials.walletId
+      walletId: this.wallet.credentials.walletId,
+      force: true
     });
     this.subscribeEvents();
+    setTimeout(() => {
+      if (this.router.getCurrentNavigation()) {
+        this.navPramss = this.router.getCurrentNavigation().extras.state;
+      } else {
+        this.navPramss = history ? history.state : {};
+      }
+      if (this.navPramss && this.navPramss.finishParam) {
+        this.finishParam = this.navPramss.finishParam;
+        this.presentToast();
+      }
+    }, 100);
   }
 
   public goToSendPage() {
@@ -273,11 +265,13 @@ export class TokenDetailsPage {
   }
 
   public requestSpecificAmount(): void {
-    this.router.navigate(['/custom-amount-token'], {state: {
-      token: this.token,
-      tokenAddress: this.wallet.etokenAddress,
-      id: this.wallet.credentials.walletId
-    }});
+    this.router.navigate(['/custom-amount-token'], {
+      state: {
+        token: this.token,
+        tokenAddress: this.wallet.etokenAddress,
+        id: this.wallet.credentials.walletId
+      }
+    });
   }
 
   public async openSearchModal(): Promise<void> {
@@ -436,50 +430,6 @@ export class TokenDetailsPage {
     this.currentPage = 0;
   }
 
-  private fetchTxHistory(opts: UpdateWalletOptsI) {
-    if (!opts.walletId) {
-      this.logger.error('Error no walletId in update History');
-      return;
-    }
-
-    const progressFn = ((_, newTxs) => {
-      let args = {
-        walletId: opts.walletId,
-        finished: false,
-        progress: newTxs
-      };
-      this.events.publish('Local/WalletHistoryUpdate', args);
-    }).bind(this);
-
-    // Fire a startup event, to allow UI to show the spinner
-    this.events.publish('Local/WalletHistoryUpdate', {
-      walletId: opts.walletId,
-      finished: false
-    });
-    this.walletProvider
-      .fetchTxHistory(this.wallet, progressFn, opts)
-      .then(txHistory => {
-        this.wallet.completeHistory = _.filter(
-          txHistory,
-          item => item.tokenId == this.token.tokenId
-        );
-        this.events.publish('Local/WalletHistoryUpdate', {
-          walletId: opts.walletId,
-          finished: true
-        });
-      })
-      .catch(err => {
-        if (err != 'HISTORY_IN_PROGRESS') {
-          this.logger.warn('WalletHistoryUpdate ERROR', err);
-          this.events.publish('Local/WalletHistoryUpdate', {
-            walletId: opts.walletId,
-            finished: false,
-            error: err
-          });
-        }
-      });
-  }
-
   getContactName(address: string) {
     const existsContact = _.find(this.addressbook, c => c.address === address);
     if (existsContact) return existsContact.name;
@@ -487,13 +437,9 @@ export class TokenDetailsPage {
   }
 
   private async showHistory(loading?: boolean) {
-    const loader = await this.loadingCtrl.create({
-      message: this.translate.instant('Loading...'),
-      backdropDismiss: true
-    });
-    loader.present();
+    this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
-      loader.dismiss();
+      this.onGoingProcessProvider.clear();
       return;
     }
     this.history = _.filter(
@@ -510,7 +456,7 @@ export class TokenDetailsPage {
     this.isShowZeroState = true;
     if (loading) this.currentPage++;
     setTimeout(async () => {
-      loader.dismiss();
+      this.onGoingProcessProvider.clear();
     }, 1000);
   }
 
@@ -619,7 +565,7 @@ export class TokenDetailsPage {
   }
 
   public handleNavigateBack() {
-    if (this.isSendFromHome) {
+    if (this.isSendFromHome || this.isFromHomeCard) {
       this.router.navigate(['/tabs/home']);
     } else if (this.isGenNewAddress) {
       this.isGenNewAddress = false;

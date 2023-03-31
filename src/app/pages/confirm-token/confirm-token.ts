@@ -161,6 +161,7 @@ export class ConfirmTokenPage {
         this.onGoingProcessProvider.clear();
         // Update balance in card home
         this.events.publish('Local/GetListPrimary', true);
+        this.profileProvider.setOrderedWalletsByGroup(wallet.keyId);
         this.annouceFinish();
       }).catch(err => {
         this.onGoingProcessProvider.clear();
@@ -198,7 +199,7 @@ export class ConfirmTokenPage {
             walletId: this.wallet.credentials.walletId,
             token: this.token,
             finishParam: params,
-            isSendFromHome: this.isSendFromHome
+            // isSendFromHome: this.isSendFromHome
           }
         });
       })

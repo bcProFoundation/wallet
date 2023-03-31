@@ -15,6 +15,12 @@ import { ThemeProvider } from '../providers/theme/theme';
 import { WalletProvider } from '../providers/wallet/wallet';
 import * as _ from 'lodash';
 import { TokenProvider } from '../providers/token-sevice/token-sevice';
+
+interface UpdateWalletOptsI {
+  walletId: string;
+  force?: boolean;
+  alsoUpdateHistory?: boolean;
+}
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
@@ -113,6 +119,21 @@ export class TabsPage {
     this.events.subscribe('Local/UpdateNavigationType', () => {
       this.navigationType = this.themeProvider.getSelectedNavigationType();
     });
+    // Reject, Remove, OnlyPublish and SignAndBroadcast -> Update Status per Wallet -> Update txps
+    this.events.subscribe('Local/TxAction', opts => {
+      this.logger.debug('RECV Local/TxAction @home', opts);
+      opts = opts || {};
+      opts.alsoUpdateHistory = true;
+      this.fetchWalletStatus(opts);
+    });
+    // Wallet is focused on some inner view, therefore, we refresh its status and txs
+    this.events.subscribe('Local/WalletFocus', opts => {
+      this.logger.debug('RECV Local/TxAction @home', opts);
+      opts = opts || {};
+      opts.alsoUpdateHistory = true;
+      this.fetchWalletStatus(opts);
+      this.updateTxps();
+    });
   }
 
   private unsubscribeEvents() {
@@ -151,6 +172,114 @@ export class TabsPage {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
     this.unsubscribeEvents();
+  }
+
+  // Names:
+  // .fetch => from BWS
+  // .update => to UI
+  /* This is the only .getStatus call in Copay */
+  private fetchWalletStatus = (opts: UpdateWalletOptsI): void => {
+    if (!opts.walletId) {
+      this.logger.error('Error no walletId in update Wallet');
+      return;
+    }
+    this.events.publish('Local/WalletUpdate', {
+      walletId: opts.walletId,
+      finished: false
+    });
+
+    this.logger.debug(
+      'fetching status for: ' +
+      opts.walletId +
+      ' alsohistory:' +
+      opts.alsoUpdateHistory
+    );
+    const wallet = this.profileProvider.getWallet(opts.walletId);
+    if (!wallet) return;
+
+    this.walletProvider
+      .fetchStatus(wallet, opts)
+      .then(status => {
+        wallet.cachedStatus = status;
+        wallet.error = wallet.errorObj = null;
+
+        const balance =
+          wallet.coin === 'xrp'
+            ? wallet.cachedStatus.availableBalanceStr
+            : wallet.cachedStatus.totalBalanceStr;
+
+        this.persistenceProvider.setLastKnownBalance(wallet.id, balance);
+
+        // Update txps
+        this.updateTxps();
+        this.events.publish('Local/WalletUpdate', {
+          walletId: opts.walletId,
+          finished: true
+        });
+
+        if (opts.alsoUpdateHistory) {
+          this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
+        }
+      })
+      .catch(err => {
+        if (err == 'INPROGRESS') return;
+
+        this.logger.warn('Update error:', err);
+
+        // this.processWalletError(wallet, err);
+        
+          this.events.publish('Local/WalletUpdate', {
+            walletId: opts.walletId,
+            finished: true,
+            error: wallet.error
+          });
+
+        if (opts.alsoUpdateHistory) {
+          this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
+        }
+      });
+  };
+
+  private fetchTxHistory(opts: UpdateWalletOptsI) {
+    if (!opts.walletId) {
+      this.logger.error('Error no walletId in update History');
+      return;
+    }
+    const wallet = this.profileProvider.getWallet(opts.walletId);
+
+    const progressFn = ((_, newTxs) => {
+      let args = {
+        walletId: opts.walletId,
+        finished: false,
+        progress: newTxs
+      };
+      this.events.publish('Local/WalletHistoryUpdate', args);
+    }).bind(this);
+
+    // Fire a startup event, to allow UI to show the spinner
+    this.events.publish('Local/WalletHistoryUpdate', {
+      walletId: opts.walletId,
+      finished: false
+    });
+    this.walletProvider
+      .fetchTxHistory(wallet, progressFn, opts)
+      .then(txHistory => {
+        wallet.completeHistory = txHistory;
+        this.events.publish('Local/WalletHistoryUpdate', {
+          walletId: opts.walletId,
+          finished: true
+        });
+      })
+      .catch(err => {
+        if (err != 'HISTORY_IN_PROGRESS') {
+          this.logger.warn('WalletHistoryUpdate ERROR', err);
+          this.events.publish('Local/WalletHistoryUpdate', {
+            walletId: opts.walletId,
+            finished: false,
+            error: err
+          });
+        }
+      });
   }
 
   private async checkCardEnabled() {

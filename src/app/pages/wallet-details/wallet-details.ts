@@ -96,6 +96,7 @@ export class WalletDetailsPage {
   public isScroll = false;
   public isSendFromHome: boolean = false;
   public isGenNewAddress: boolean = false;
+  private isFromHomeCard: boolean = false;
   toast?: HTMLIonToastElement;
 
   typeErrorQr = NgxQrcodeErrorCorrectionLevels;
@@ -138,6 +139,7 @@ export class WalletDetailsPage {
       this.navPramss = history ? history.state : {};
     }
     this.isSendFromHome = this.navPramss.isSendFromHome;
+    this.isFromHomeCard = this.navPramss.isHomeCard;
     this.selectedTheme = this.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.isCordova = this.platformProvider.isCordova;
@@ -171,8 +173,9 @@ export class WalletDetailsPage {
     if (this.navPramss.clearCache) {
       this.clearHistoryCache();
     } else {
-      if (this.wallet.completeHistory) this.showHistory();
-      else {
+      if (this.wallet.completeHistory) {
+        this.showHistory();
+      } else {
         this.events.publish('Local/WalletFocus', {
           walletId: this.wallet.credentials.walletId,
           force: true,
@@ -265,7 +268,9 @@ export class WalletDetailsPage {
     });
     this.profileProvider.setFastRefresh(this.wallet);
     this.events.publish('Local/WalletFocus', {
-      walletId: this.wallet.credentials.walletId
+      walletId: this.wallet.credentials.walletId,
+      force: true,
+      alsoUpdateHistory: true
     });
     this.subscribeEvents();
     setTimeout(() => {
@@ -288,12 +293,6 @@ export class WalletDetailsPage {
     this.onResumeSubscription.unsubscribe();
   }
 
-  ionViewDidLeave() {
-    // this.events.publish('Local/GetData', true);
-    this.eventsService.publishRefresh({
-      keyId: this.wallet.keyId
-    });
-  }
 
   shouldShowZeroState() {
     return this.showNoTransactionsYetMsg && !this.updateStatusError;
@@ -306,47 +305,6 @@ export class WalletDetailsPage {
       !this.updateStatusError &&
       !this.updateTxHistoryError
     );
-  }
-
-  private fetchTxHistory(opts: UpdateWalletOptsI) {
-    if (!opts.walletId) {
-      this.logger.error('Error no walletId in update History');
-      return;
-    }
-
-    const progressFn = ((_, newTxs) => {
-      let args = {
-        walletId: opts.walletId,
-        finished: false,
-        progress: newTxs
-      };
-      this.events.publish('Local/WalletHistoryUpdate', args);
-    }).bind(this);
-
-    // Fire a startup event, to allow UI to show the spinner
-    this.events.publish('Local/WalletHistoryUpdate', {
-      walletId: opts.walletId,
-      finished: false
-    });
-    this.walletProvider
-      .fetchTxHistory(this.wallet, progressFn, opts)
-      .then(txHistory => {
-        this.wallet.completeHistory = txHistory;
-        this.events.publish('Local/WalletHistoryUpdate', {
-          walletId: opts.walletId,
-          finished: true
-        });
-      })
-      .catch(err => {
-        if (err != 'HISTORY_IN_PROGRESS') {
-          this.logger.warn('WalletHistoryUpdate ERROR', err);
-          this.events.publish('Local/WalletHistoryUpdate', {
-            walletId: opts.walletId,
-            finished: false,
-            error: err
-          });
-        }
-      });
   }
 
   public isUtxoCoin(): boolean {
@@ -1083,7 +1041,7 @@ export class WalletDetailsPage {
   }
 
   public handleNavigateBack() {
-    if (this.isSendFromHome) {
+    if (this.isSendFromHome || this.isFromHomeCard) {
       this.router.navigate(['/tabs/home']);
     } else if (this.isGenNewAddress) {
       this.isGenNewAddress = false;

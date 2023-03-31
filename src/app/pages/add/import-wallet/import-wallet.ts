@@ -338,6 +338,7 @@ export class ImportWalletPage {
         //   keyId
         // });
         this.events.publish('Local/GetData', true);
+        this.events.publish('Local/FetchWallets');
       });
   }
 

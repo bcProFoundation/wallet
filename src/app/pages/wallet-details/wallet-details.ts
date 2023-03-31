@@ -22,7 +22,6 @@ import {
   CurrencyProvider,
   EventManagerService,
   LoadingProvider,
-  OnGoingProcessProvider
 } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -130,7 +129,6 @@ export class WalletDetailsPage {
     private loadingCtrl: LoadingController,
     private eventsService: EventsService,
     private addressProvider: AddressProvider,
-    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     if (this.router.getCurrentNavigation()) {
@@ -346,9 +344,7 @@ export class WalletDetailsPage {
   }
  
   private async showHistory(loading?: boolean) {
-    this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
-      this.onGoingProcessProvider.clear();
       return;
     }
     this.history = this.wallet.completeHistory.slice(
@@ -360,9 +356,6 @@ export class WalletDetailsPage {
       this.groupedHistory = this.groupHistory(this.history);
     });
     if (loading) this.currentPage++;
-    setTimeout(async () => {
-      this.onGoingProcessProvider.clear();
-    }, 1000);
   }
 
   updateAddressToShowToken(tx) {

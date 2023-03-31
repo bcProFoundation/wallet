@@ -541,5 +541,8 @@ page-wallet-details {
 
   ion-infinite-scroll {
     background: var(--bg-color-light-theme);
+    &.transparent-bg {
+      background: transparent;
+    }
   }
 }

@@ -412,20 +412,6 @@ export class WalletsPage {
     this.walletAudienceEvents();
   }
 
-  private walletFocusHandler = opts => {
-    this.logger.debug('RECV Local/WalletFocus @home', opts);
-    opts = opts || {};
-    opts.alsoUpdateHistory = true;
-    this.fetchWalletStatus(opts);
-  };
-
-  private walletActionHandler = opts => {
-    this.logger.debug('RECV Local/TxAction @home', opts);
-    opts = opts || {};
-    opts.alsoUpdateHistory = true;
-    this.fetchWalletStatus(opts);
-  };
-
   private walletGetDataHandler = opts => {
     this.logger.debug('RECV Local/GetData @home', opts);
     if (opts) {
@@ -435,29 +421,23 @@ export class WalletsPage {
     }
   };
 
-  async ngOnInit() {
-    this.logger.info('Loaded: WalletsPage');
+  ionViewWillEnter() {
+    this.walletsGroups = [];
     this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
     this.initKeySelected();
-    await this.loadTokenWallet();
+    this.loadTokenWallet();
+  }
+
+  ngOnInit() {
+    this.logger.info('Loaded: WalletsPage');
 
     const subscribeEvents = () => {
       // BWS Events: Update Status per Wallet -> Update txps
       // NewBlock, NewCopayer, NewAddress, NewTxProposal, TxProposalAcceptedBy, TxProposalRejectedBy, txProposalFinallyRejected,
       // txProposalFinallyAccepted, TxProposalRemoved, NewIncomingTx, NewOutgoingTx
       this.events.subscribe('bwsEvent', this.bwsEventHandler);
-
-      // Reject, Remove, OnlyPublish and SignAndBroadcast -> Update Status per Wallet -> Update txps
-      this.events.subscribe('Local/TxAction', this.walletActionHandler);
-
-      // Wallet is focused on some inner view, therefore, we refresh its status and txs
-      this.events.subscribe('Local/WalletFocus', this.walletFocusHandler);
-
+      // Update wallet after change
       this.events.subscribe('Local/GetData', this.walletGetDataHandler);
-
-      this.eventsService.getRefreshKey().subscribe(data => {
-        if (data?.keyId) this.setWallets(data.keyId);
-      });
     };
 
     //Detect Change theme
@@ -472,9 +452,6 @@ export class WalletsPage {
 
     this.onPauseSubscription = this.plt.pause.subscribe(() => {
       this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
-      this.events.unsubscribe('Local/TxAction', this.walletFocusHandler);
-      this.events.unsubscribe('Local/WalletFocus', this.walletFocusHandler);
-      this.eventsService.getRefreshKey().unsubscribe();
     });
   }
 
@@ -482,13 +459,6 @@ export class WalletsPage {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
   }
-
-  private debounceFetchWalletStatus = _.debounce(
-    async (walletId, alsoUpdateHistory) => {
-      this.fetchWalletStatus({ walletId, alsoUpdateHistory });
-    },
-    3000
-  );
 
   // BWS events can come many at time (publish,sign, broadcast...)
   private bwsEventHandler = (walletId, type, n) => {
@@ -512,7 +482,7 @@ export class WalletsPage {
         alsoUpdateHistory = true;
     }
     this.walletProvider.invalidateCache(wallet);
-    this.debounceFetchWalletStatus(walletId, alsoUpdateHistory);
+    this.events.publish('Local/WalletFocus', { walletId, alsoUpdateHistory });
   };
 
   private debounceSetWallets = _.debounce(
@@ -535,121 +505,6 @@ export class WalletsPage {
       leading: true
     }
   );
-
-  private async setWallets(keyId) {
-      this.profileProvider.setOrderedWalletsByGroup(keyId);
-      this.initKeySelected();
-      await this.loadTokenWallet();
-      this.events.publish('Local/FetchWallets');
-  }
-
-  private fetchTxHistory(opts: UpdateWalletOptsI) {
-    if (!opts.walletId) {
-      this.logger.error('Error no walletId in update History');
-      return;
-    }
-    const wallet = this.profileProvider.getWallet(opts.walletId);
-
-    const progressFn = ((_, newTxs) => {
-      let args = {
-        walletId: opts.walletId,
-        finished: false,
-        progress: newTxs
-      };
-      this.events.publish('Local/WalletHistoryUpdate', args);
-    }).bind(this);
-
-    // Fire a startup event, to allow UI to show the spinner
-    this.events.publish('Local/WalletHistoryUpdate', {
-      walletId: opts.walletId,
-      finished: false
-    });
-    this.walletProvider
-      .fetchTxHistory(wallet, progressFn, opts)
-      .then(txHistory => {
-        wallet.completeHistory = txHistory;
-        this.events.publish('Local/WalletHistoryUpdate', {
-          walletId: opts.walletId,
-          finished: true
-        });
-      })
-      .catch(err => {
-        if (err != 'HISTORY_IN_PROGRESS') {
-          this.logger.warn('WalletHistoryUpdate ERROR', err);
-          this.events.publish('Local/WalletHistoryUpdate', {
-            walletId: opts.walletId,
-            finished: false,
-            error: err
-          });
-        }
-      });
-  }
-
-  // Names:
-  // .fetch => from BWS
-  // .update => to UI
-  /* This is the only .getStatus call in Copay */
-  private fetchWalletStatus = (opts: UpdateWalletOptsI): void => {
-    if (!opts.walletId) {
-      this.logger.error('Error no walletId in update Wallet');
-      return;
-    }
-    this.events.publish('Local/WalletUpdate', {
-      walletId: opts.walletId,
-      finished: false
-    });
-
-    this.logger.debug(
-      'fetching status for: ' +
-      opts.walletId +
-      ' alsohistory:' +
-      opts.alsoUpdateHistory
-    );
-    const wallet = this.profileProvider.getWallet(opts.walletId);
-    if (!wallet) return;
-
-    this.walletProvider
-      .fetchStatus(wallet, opts)
-      .then(status => {
-        wallet.cachedStatus = status;
-        wallet.error = wallet.errorObj = null;
-
-        const balance =
-          wallet.coin === 'xrp'
-            ? wallet.cachedStatus.availableBalanceStr
-            : wallet.cachedStatus.totalBalanceStr;
-
-        this.persistenceProvider.setLastKnownBalance(wallet.id, balance);
-
-        // Update txps
-        this.updateTxps();
-        this.events.publish('Local/WalletUpdate', {
-          walletId: opts.walletId,
-          finished: true
-        });
-
-        if (opts.alsoUpdateHistory) {
-          this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
-        }
-      })
-      .catch(err => {
-        if (err == 'INPROGRESS') return;
-
-        this.logger.warn('Update error:', err);
-
-        // this.processWalletError(wallet, err);
-        
-          this.events.publish('Local/WalletUpdate', {
-            walletId: opts.walletId,
-            finished: true,
-            error: wallet.error
-          });
-
-        if (opts.alsoUpdateHistory) {
-          this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
-        }
-      });
-  };
 
   private updateTxps() {
     this.profileProvider

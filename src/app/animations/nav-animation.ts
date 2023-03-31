@@ -16,7 +16,6 @@ export const enterAnimation = (baseEl: HTMLElement, otps?: any): Animation => {
                 .addElement(otps.enteringEl)
                 .duration(DURATION)
                 .easing('ease-in')
-                .fromTo('transform', 'translateX(-100%)', 'translateX(0)')
                 .fromTo('opacity', 0.8, 1);
     
             const leavingAnimation = animationCtrl.create()

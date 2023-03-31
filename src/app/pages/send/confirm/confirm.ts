@@ -1580,7 +1580,7 @@ export class ConfirmPage {
         const name = wallet.name;
         const message = this.replaceParametersProvider.replace(
           this.translate.instant(
-            'Sending {{amount}} {{unit}} from your {{name}} wallet'
+            'Sending {{amount}} {{unit}} from your {{name}} account'
           ),
           { amount, unit, name }
         );

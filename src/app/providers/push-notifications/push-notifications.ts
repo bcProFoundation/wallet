@@ -396,7 +396,8 @@ export class PushNotificationsProvider {
     if (!data.body || data.notification_type === 'NewOutgoingTx') return;
 
     this.notifications.unshift(data);
-    this.runNotificationsQueue();
+    // TODO: Tempory disable notification in-app
+    // this.runNotificationsQueue();
   }
 
   private runNotificationsQueue() {

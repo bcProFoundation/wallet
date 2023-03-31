@@ -3591,8 +3591,8 @@ msgstr "Đang gửi đến"
 msgid "Sending transaction..."
 msgstr "Đang gửi giao dịch..."
 
-msgid "Sending {{amount}} {{unit}} from your {{name}} wallet"
-msgstr "Sending {{amount}} {{unit}} from your {{name}} wallet"
+msgid "Sending {{amount}} {{unit}} from your {{name}} account"
+msgstr "Đang gửi {{amount}} {{unit}} từ ví {{name}} của bạn"
 
 msgid "Sensitive Data"
 msgstr "Sensitive Data"

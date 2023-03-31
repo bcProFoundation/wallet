@@ -2099,6 +2099,9 @@
           rgba(126, 208, 255, 0.08)
         ),
         #001e2e;
+      &.transparent-bg {
+        background: transparent;
+      }
     }
   }
 

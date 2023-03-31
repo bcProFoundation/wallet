@@ -15,7 +15,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { Token } from 'src/app/models/tokens/tokens.model';
-import { AddressBookProvider, PlatformProvider, OnGoingProcessProvider } from 'src/app/providers';
+import { AddressBookProvider, PlatformProvider } from 'src/app/providers';
 import { ActionSheetProvider } from 'src/app/providers/action-sheet/action-sheet';
 import { AppProvider } from 'src/app/providers/app/app';
 import { BwcErrorProvider } from 'src/app/providers/bwc-error/bwc-error';
@@ -93,7 +93,6 @@ export class TokenDetailsPage {
     private appProvider: AppProvider,
     private addressbookProvider: AddressBookProvider,
     public toastController: ToastController,
-    private onGoingProcessProvider: OnGoingProcessProvider
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -187,6 +186,14 @@ export class TokenDetailsPage {
 
   shouldShowZeroState() {
     return this.showNoTransactionsYetMsg && !this.updateStatusError;
+  }
+
+  shouldShowSpinner() {
+    return (
+      (this.updatingTxHistory) &&
+      !this.updateStatusError &&
+      !this.updateTxHistoryError
+    );
   }
 
   public trackByFn(index) {
@@ -437,9 +444,7 @@ export class TokenDetailsPage {
   }
 
   private async showHistory(loading?: boolean) {
-    this.onGoingProcessProvider.set('Loading ...');
     if (!this.wallet.completeHistory) {
-      this.onGoingProcessProvider.clear();
       return;
     }
     this.history = _.filter(
@@ -455,9 +460,6 @@ export class TokenDetailsPage {
     });
     this.isShowZeroState = true;
     if (loading) this.currentPage++;
-    setTimeout(async () => {
-      this.onGoingProcessProvider.clear();
-    }, 1000);
   }
 
   private updateHistory = opts => {

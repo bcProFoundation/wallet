@@ -44,6 +44,7 @@
           </div>
 
         </div>
+        <ion-progress-bar class="ion-margin-bottom ion-margin-top" *ngIf="shouldShowSpinner()" type="indeterminate"></ion-progress-bar>
       </expandable-header-footer>
     </expandable-header>
 
@@ -154,7 +155,7 @@
       </ion-list>
     </ng-container>
 
-    <ion-infinite-scroll (ionInfinite)="loadHistory($event)" *ngIf="!shouldShowZeroState()">
+    <ion-infinite-scroll [ngClass]="{'transparent-bg': history.length <= 0}" (ionInfinite)="loadHistory($event)" *ngIf="!shouldShowZeroState()">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>

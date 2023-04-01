@@ -3592,7 +3592,7 @@ msgid "Sending transaction..."
 msgstr "Đang gửi giao dịch..."
 
 msgid "Sending {{amount}} {{unit}} from your {{name}} account"
-msgstr "Đang gửi {{amount}} {{unit}} từ ví {{name}} của bạn"
+msgstr "Đang gửi {{amount}} {{unit}} từ tài khoản {{name}} của bạn"
 
 msgid "Sensitive Data"
 msgstr "Sensitive Data"

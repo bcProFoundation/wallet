@@ -169,6 +169,10 @@ export class AccountsPage {
     // Only 1 token account in list => go to send page
     if (this.isSpecificAmount && tokensGroups.length === 0) {
       this.isShowNoToken = true;
+      this.router.navigate(['']).then(() => {
+        const warningSheet = this.actionSheetProvider.createInfoSheet('scan-eToken-error-message');
+        warningSheet.present();
+      });
     } else if (this.isSpecificAmount && tokensGroups.length === 1) {
       this.goToSendPageForToken(tokensGroups[0].walletId, tokensGroups[0], true);
     }
@@ -187,6 +191,10 @@ export class AccountsPage {
     // Check ExistToken
     if (tokensGroups.length === 0) {
       this.isShowNoToken = true;
+      this.router.navigate(['']).then(() => {
+        const warningSheet = this.actionSheetProvider.createInfoSheet('scan-eToken-error-message');
+        warningSheet.present();
+      });
     }
   }
 

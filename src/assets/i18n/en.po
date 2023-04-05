@@ -3547,8 +3547,8 @@ msgstr "Sending to"
 msgid "Sending transaction..."
 msgstr "Sending transaction..."
 
-msgid "Sending {{amount}} {{unit}} from your {{name}} wallet"
-msgstr "Sending {{amount}} {{unit}} from your {{name}} wallet"
+msgid "Sending {{amount}} {{unit}} from your {{name}} account"
+msgstr "Sending {{amount}} {{unit}} from your {{name}} account"
 
 msgid "Sensitive Data"
 msgstr "Sensitive Data"

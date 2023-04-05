@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { timer } from 'rxjs';
-import { FCM } from "@capacitor-community/fcm";
+import { FCM } from '@capacitor-community/fcm';
 
 // providers
 import { AppProvider } from '../app/app';
@@ -69,12 +69,12 @@ export class PushNotificationsProvider {
         this.appProvider.info.name != 'copay' &&
         config.offersAndPromotions.enabled
       )
-          await this.subscribeToTopic('offersandpromotions');
+        await this.subscribeToTopic('offersandpromotions');
       if (
         this.appProvider.info.name != 'copay' &&
         config.productsUpdates.enabled
       )
-          await this.subscribeToTopic('productsupdates');
+        await this.subscribeToTopic('productsupdates');
 
       this.fcmInterval = setInterval(() => {
         this.renewSubscription();
@@ -82,17 +82,20 @@ export class PushNotificationsProvider {
     });
 
     // Show us the notification payload if the app is open on our device
-    PushNotifications.addListener('pushNotificationReceived',
+    PushNotifications.addListener(
+      'pushNotificationReceived',
       (notification: PushNotificationSchema) => {
         return this.handlePushNotifications(notification);
       }
     );
 
     // Method called when tapping on a notification
-    PushNotifications.addListener('pushNotificationActionPerformed',
+    PushNotifications.addListener(
+      'pushNotificationActionPerformed',
       async (notification: ActionPerformed) => {
         return await this.handlePushNotificationsWasTapped(notification);
-      });
+      }
+    );
   }
 
   private async getToken() {
@@ -104,23 +107,26 @@ export class PushNotificationsProvider {
           }, 5000);
           return;
         }
-          this.logger.debug('Get token for push notifications android: ' + value);
-          this._token = value;
-      })
+        this.logger.debug('Get token for push notifications android: ' + value);
+        this._token = value;
+      });
     } else {
       FCM.getToken()
-      .then(async token => {
-        if (!token) {
-          setTimeout(() => {
-            this.init();
-          }, 5000);
-          return;
-        }
-          this.logger.debug('Get token for push notifications ios: ' + token.token);
+        .then(async token => {
+          if (!token) {
+            setTimeout(() => {
+              this.init();
+            }, 5000);
+            return;
+          }
+          this.logger.debug(
+            'Get token for push notifications ios: ' + token.token
+          );
           this._token = token.token;
-      }).catch(error=>{
-        this.logger.error(error);
-      });
+        })
+        .catch(error => {
+          this.logger.error(error);
+        });
     }
   }
 
@@ -154,36 +160,36 @@ export class PushNotificationsProvider {
   // Notification was received on device tray and tapped by the user.
   public handlePushNotificationsWasTapped(notification: ActionPerformed): void {
     if (this.usePushNotifications) {
-        if (!this._token) return;
+      if (!this._token) return;
       const data = _.get(notification, 'notification.data', undefined);
       if (!data) return;
-          if (data.redir) {
-            this.events.publish('IncomingDataRedir', { name: data.redir });
-          } else if (
-            data.takeover_url &&
-            data.takeover_image &&
-            data.takeover_sig
-          ) {
-            if (!this.verifySignature(data)) return;
-            this.events.publish('ShowAdvertising', data);
-          } else {
-            this._openWallet(data);
-          }
+      if (data.redir) {
+        this.events.publish('IncomingDataRedir', { name: data.redir });
+      } else if (
+        data.takeover_url &&
+        data.takeover_image &&
+        data.takeover_sig
+      ) {
+        if (!this.verifySignature(data)) return;
+        this.events.publish('ShowAdvertising', data);
+      } else {
+        this._openWallet(data);
+      }
     }
   }
 
   public handlePushNotifications(notification: PushNotificationSchema): void {
     if (this.usePushNotifications) {
       if (!this._token) return;
-      const data = notification.data
+      const data = notification.data;
       this.logger.debug(
         'New Event Push onNotification: ' + JSON.stringify(data)
       );
-          const wallet = this.findWallet(data.walletId, data.tokenAddress);
-          if (!wallet) return;
-          this.newBwsEvent(data, wallet.credentials.walletId);
-          this.showInappNotification(data);
-        }
+      const wallet = this.findWallet(data.walletId, data.tokenAddress);
+      if (!wallet) return;
+      this.newBwsEvent(data, wallet.credentials.walletId);
+      this.showInappNotification(data);
+    }
   }
 
   public newBwsEvent(notification, walletId): void {
@@ -421,12 +427,12 @@ export class PushNotificationsProvider {
           cssClass: 'in-app-notification-modal'
         });
         this.currentNotif.onDidDismiss().then(({ data }) => {
-          if (data && data.action && data.action === 'openWallet')  {
+          if (data && data.action && data.action === 'openWallet') {
             this._openWallet(data);
           }
           this.currentNotif = null;
           this.runNotificationsQueue();
-        })
+        });
 
         await this.currentNotif.present();
         data.showDone = true;

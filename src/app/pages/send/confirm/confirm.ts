@@ -1616,7 +1616,7 @@ export class ConfirmPage {
         const name = wallet.name;
         const message = this.replaceParametersProvider.replace(
           this.translate.instant(
-            'Sending {{amount}} {{unit}} from your {{name}} wallet'
+            'Sending {{amount}} {{unit}} from your {{name}} account'
           ),
           { amount, unit, name }
         );
@@ -1655,6 +1655,7 @@ export class ConfirmPage {
         }
         // Update balance in card home
         this.events.publish('Local/GetListPrimary', true);
+        this.profileProvider.setOrderedWalletsByGroup(wallet.keyId);
         if (this.navParamsData.isEthMultisigInstantiation) {
           this.onGoingProcessProvider.set('creatingEthMultisigWallet');
           return this.instantiateMultisigContract(txp);
@@ -1737,25 +1738,15 @@ export class ConfirmPage {
 
   private navigateBack(_redir?: string, walletId?: string, params?) {
     if (this.wallet) {
-      this.router.navigate(['/tabs/wallets']).then(() => {
-        this.router.navigate(['/wallet-details'], {
-          state: {
-            walletId: walletId ? walletId : this.wallet.credentials.walletId,
-            donationSupportCoins: this.donationSupportCoins,
-            finishParam: params,
-            isSendFromHome: this.isSendFromHome
-          },
-          replaceUrl: true
-        });
+      this.router.navigate(['/wallet-details'], {
+        state: {
+          walletId: walletId ? walletId : this.wallet.credentials.walletId,
+          donationSupportCoins: this.donationSupportCoins,
+          finishParam: params,
+          // isSendFromHome: this.isSendFromHome
+        },
+        replaceUrl: true
       });
-      // TODO: Test handle key not update
-      // .then(
-      //   () => {
-      //      this.eventsService.publishRefresh({
-      //      keyId: this.wallet.keyId
-      //      });
-      //   }
-      // );
     }
   }
 

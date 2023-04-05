@@ -77,21 +77,6 @@ export class AboutPage {
     );
   }
 
-  public async countReleaseHeaderTaps() {
-    this.releaseInfoTaps++;
-    if (this.releaseInfoTaps !== 12) return;
-    this.releaseInfoTaps = 0;
-    if (this.easterEggStatus === 'enabled') {
-      this.easterEggStatus = undefined;
-      this.persistenceProvider.removeTestingAdvertisments();
-      this.events.publish('Local/TestAdsToggle', false);
-    } else {
-      this.easterEggStatus = 'enabled';
-      this.persistenceProvider.setTestingAdvertisements('enabled');
-      this.events.publish('Local/TestAdsToggle', true);
-    }
-  }
-
   public openSessionLog(): void {
     this.router.navigate(['/session-log']);
   }

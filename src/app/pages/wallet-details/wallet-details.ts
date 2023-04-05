@@ -826,22 +826,6 @@ export class WalletDetailsPage {
     }
   }
 
-  public showMoreOptions(): void {
-    const showRequest =
-      this.wallet && this.wallet.isComplete() && !this.wallet.needsBackup;
-    const showShare = showRequest && this.isCordova;
-    const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'wallet-options',
-      { showShare, showRequest }
-    );
-    optionsSheet.present();
-
-    optionsSheet.onDidDismiss(option => {
-      if (option == 'request-amount') this.requestSpecificAmount();
-      if (option == 'share-address') this.shareAddress();
-    });
-  }
-
   public handleDonation() {
     this.walletProvider
       .getDonationInfo()

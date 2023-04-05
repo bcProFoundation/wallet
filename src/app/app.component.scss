@@ -1242,88 +1242,6 @@ ion-item.with-label.item {
     }
 }
 
-page-bitpay-card {
-
-    .bar-button-default-ios,
-    .bar-button-default.bar-button-ios-default,
-    .bar-button-clear-ios-default {
-        color: var(--button-color) !important;
-    }
-
-    .bar-button-default-md,
-    .bar-button-default.bar-button-md-default,
-    .bar-button-clear-md-default {
-        color: var(--button-color) !important;
-    }
-
-    .bar-button-default-wp,
-    .bar-button-default.bar-button-wp-default,
-    .bar-button-clear-wp-default {
-        color: var(--button-color) !important;
-    }
-
-    ion-title .toolbar-title {
-        color: var(--color-light);
-        font-weight: 75;
-    }
-
-    ion-title {
-        &.title-ios {
-            padding: 0 70px 1px;
-        }
-
-        .toolbar-title {
-            opacity: 0.7;
-            font-weight: 600;
-        }
-    }
-
-    &:not(.no-subtitle) {
-        ion-title .toolbar-title {
-            font-weight: 100;
-            font-size: 16px;
-        }
-    }
-
-    ion-toolbar {
-        min-height: 0;
-        margin-top: -6px;
-
-        &.toolbar-md {
-            padding-top: 0;
-        }
-    }
-
-    &__balance,
-    &__balance-hidden,
-    &__subtitle {
-        text-align: left;
-        color: white;
-        padding-bottom: 10px;
-        font-size: 18px;
-        font-weight: 500;
-        margin-left: 4.5rem;
-
-        ion-icon {
-            font-size: 16px;
-            font-weight: 100;
-            margin-left: 5px;
-        }
-    }
-}
-
-.icon-plus {
-    -webkit-mask-box-image: url(../assets/img/icon-plus.svg);
-    height: 18px;
-    width: 18px;
-    background-color: #cdd1d8;
-    mask-repeat: no-repeat;
-    mask-position: 50% 50%;
-    mask-size: 2rem;
-    margin: auto;
-    transform: translate(0, -10%);
-}
-
 .tabbar {
     height: 10vh;
 
@@ -1352,13 +1270,6 @@ page-bitpay-card {
 }
 
 ion-tabs {
-    &:after {
-        // Workaround to prevent tabs from disappearing when activated
-        position: absolute;
-        display: none;
-        content: url('../assets/img/tab-icons/tab-home-active.svg') url('../assets/img/tab-icons/tab-wallets-active.svg') url('../assets/img/tab-icons/tab-transact.svg') url('../assets/img/tab-icons/tab-scan.svg') url('../assets/img/tab-icons/tab-copay-scan.svg') url('../assets/img/tab-icons/tab-cards-active.svg') url('../assets/img/tab-icons/tab-settings-active.svg');
-    }
-
     .tab-badge {
         font-family: 'Roboto';
     }
@@ -1402,118 +1313,10 @@ ion-tabs {
     }
 }
 
-ion-icon {
-    &[class*='tab-'] {
-        margin: 0 5px 0 0;
-        vertical-align: middle;
-        width: --sz;
-        height: --sz;
-    }
-
-    &[class*='tab-home'] {
-        background: --home-inactive;
-        background-size: contain;
-
-        .tab-button[aria-selected='true'] & {
-            background: --home-active;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-wallets'] {
-        background: --wallets-inactive;
-        background-size: contain;
-
-        .tab-button[aria-selected='true'] & {
-            background: --wallets-active;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-transact'] {
-        background: --transact;
-        background-size: contain;
-        width: 36px;
-        height: 36px !important;
-
-        .tab-button[aria-selected='true'] & {
-            background: --transact;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-scan'] {
-        background: --scan-inactive;
-        background-size: contain;
-        width: 36px;
-        height: 36px !important;
-
-        .tab-button[aria-selected='true'] & {
-            background: --scan-active;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-copay-scan'] {
-        background: --copay-scan-inactive;
-        background-size: contain;
-        margin-top: 0px;
-        opacity: 0.2;
-
-        .tab-button[aria-selected='true'] & {
-            background: --copay-scan-active;
-            background-size: contain;
-            opacity: 1;
-        }
-    }
-
-    &[class*='tab-cards'] {
-        background: --cards-inactive;
-        background-size: contain;
-
-        .tab-button[aria-selected='true'] & {
-            background: --cards-active;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-settings'] {
-        background: --settings-inactive;
-        background-size: contain;
-
-        .tab-button[aria-selected='true'] & {
-            background: --settings-active;
-            background-size: contain;
-        }
-    }
-
-    &[class*='tab-address-book'] {
-        background: --address-book-inactive;
-        background-size: contain;
-
-        .tab-button[aria-selected='true'] & {
-            background: --address-book-active;
-            background-size: contain;
-        }
-    }
-}
-
 .line-divider {
     box-sizing: border-box;
     border: 1px solid rgba(155, 163, 174, 0.1);
     margin: 0px 25px;
-}
-
-.buy-crypto-currency-2 .alert-radio-group {
-    button:nth-child(2) {
-        border-bottom: 1px solid #dedede;
-    }
-}
-
-.buy-crypto-currency-3 .alert-radio-group {
-    button:nth-child(3) {
-        border-bottom: 1px solid #dedede;
-    }
 }
 
 .toast-bg {

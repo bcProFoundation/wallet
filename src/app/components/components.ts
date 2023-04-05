@@ -2,7 +2,6 @@ import { ActionCardV4Component } from './action-card-v4/action-card-v4';
 import { ActionCardComponent } from './action-card/action-card';
 import { ACTION_SHEET_COMPONENTS } from './action-sheets';
 import { AddButtonComponent } from './add-button/add-button';
-import { AmountPickerComponent } from './amount-picker/amount-picker';
 import { BalanceToShowComponent } from './balance-to-show/balance-to-show';
 import { ChartComponent } from './chart-component/chart-component';
 import { CoinIconComponent } from './coin-icon/coin-icon';
@@ -23,7 +22,6 @@ export const COMPONENTS = [
   ActionCardV4Component,
   ACTION_SHEET_COMPONENTS,
   AddButtonComponent,
-  AmountPickerComponent,
   EXPANDABLE_HEADER_COMPONENTS,
   LabelTip,
   WalletItemContent,

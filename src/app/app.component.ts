@@ -439,7 +439,7 @@ export class CopayApp {
   }
 
   private onProfileLoad(profile) {
-    this.emailNotificationsProvider.init(); // Update email subscription if necessary
+    // this.emailNotificationsProvider.init(); // Update email subscription if necessary
     this.initPushNotifications();
 
     if (this.platform.is('cordova')) {
@@ -548,7 +548,6 @@ export class CopayApp {
   private onLockDidDismiss(): void {
     this.appProvider.isLockModalOpen = false;
     this.events.publish('Local/FetchWallets');
-    this.events.publish('Local/showNewFeaturesSlides');
   }
 
   private onLockWillDismiss(): void {

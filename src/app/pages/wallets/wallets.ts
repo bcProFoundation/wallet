@@ -38,9 +38,6 @@ interface UpdateWalletOptsI {
   encapsulation: ViewEncapsulation.None
 })
 export class WalletsPage {
-  @ViewChild('priceCard')
-  priceCard;
-
   @ViewChild('slidingItem') slidingItem: IonItemSliding;
   public wallets;
   public walletsGroups = [];
@@ -81,10 +78,8 @@ export class WalletsPage {
     private analyticsProvider: AnalyticsProvider,
     private logger: Logger,
     private events: EventManagerService,
-    private eventsService: EventsService,
     private persistenceProvider: PersistenceProvider,
     private modalCtrl: ModalController,
-    private navParams: NavParams,
     private tokenProvider: TokenProvider,
     private changeDetectorRef: ChangeDetectorRef,
     private addressProvider: AddressProvider,
@@ -94,7 +89,6 @@ export class WalletsPage {
     private configProvider: ConfigProvider,
     private themeProvider: ThemeProvider,
     private toastController: ToastController,
-    private loadingProvider: LoadingProvider,
     private translate: TranslateService,
     private onGoingProcessProvider: OnGoingProcessProvider
   ) {
@@ -123,6 +117,49 @@ export class WalletsPage {
     this.collapsedToken = {};
   }
 
+  ionViewWillEnter() {
+    this.walletsGroups = [];
+    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
+    this.initKeySelected();
+    this.loadTokenWallet();
+  }
+
+  ionViewDidEnter() {
+    this._didEnter();
+  }
+
+  ngOnInit() {
+    this.logger.info('Loaded: WalletsPage');
+
+    const subscribeEvents = () => {
+      // BWS Events: Update Status per Wallet -> Update txps
+      // NewBlock, NewCopayer, NewAddress, NewTxProposal, TxProposalAcceptedBy, TxProposalRejectedBy, txProposalFinallyRejected,
+      // txProposalFinallyAccepted, TxProposalRemoved, NewIncomingTx, NewOutgoingTx
+      this.events.subscribe('bwsEvent', this.bwsEventHandler);
+      // Update wallet after change
+      this.events.subscribe('Local/GetData', this.walletGetDataHandler);
+    };
+
+    //Detect Change theme
+    this.themeProvider.themeChange.subscribe(() => {
+      this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
+    });
+
+    subscribeEvents();
+    this.onResumeSubscription = this.plt.resume.subscribe(() => {
+      subscribeEvents();
+    });
+
+    this.onPauseSubscription = this.plt.pause.subscribe(() => {
+      this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
+    });
+  }
+
+  ngOnDestroy() {
+    this.onResumeSubscription.unsubscribe();
+    this.onPauseSubscription.unsubscribe();
+  }
+
   async handleScrolling(event) {
     if (event.detail.currentY > 0) {
       this.isScroll = true;
@@ -134,10 +171,6 @@ export class WalletsPage {
 
   getWalletGroup(name: string) {
     return this.profileProvider.getWalletGroup(name)
-  }
-
-  ionViewDidEnter() {
-    this._didEnter();
   }
 
   goToTokenDetails(wallet, token: Token) {
@@ -169,7 +202,6 @@ export class WalletsPage {
 
   private async loadTokenWallet() {
     this.isLoading = false;
-    // await this.loadingProvider.simpleLoader();
     this.onGoingProcessProvider.set('Loading ...');
     await this.loadTokenData(this.keySelected).then(data => {
       this.keySelected = data;
@@ -420,45 +452,6 @@ export class WalletsPage {
       this.initKeySelected();
     }
   };
-
-  ionViewWillEnter() {
-    this.walletsGroups = [];
-    this.walletsGroups = this.profileProvider.orderedWalletsByGroup;
-    this.initKeySelected();
-    this.loadTokenWallet();
-  }
-
-  ngOnInit() {
-    this.logger.info('Loaded: WalletsPage');
-
-    const subscribeEvents = () => {
-      // BWS Events: Update Status per Wallet -> Update txps
-      // NewBlock, NewCopayer, NewAddress, NewTxProposal, TxProposalAcceptedBy, TxProposalRejectedBy, txProposalFinallyRejected,
-      // txProposalFinallyAccepted, TxProposalRemoved, NewIncomingTx, NewOutgoingTx
-      this.events.subscribe('bwsEvent', this.bwsEventHandler);
-      // Update wallet after change
-      this.events.subscribe('Local/GetData', this.walletGetDataHandler);
-    };
-
-    //Detect Change theme
-    this.themeProvider.themeChange.subscribe(() => {
-      this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
-    });
-
-    subscribeEvents();
-    this.onResumeSubscription = this.plt.resume.subscribe(() => {
-      subscribeEvents();
-    });
-
-    this.onPauseSubscription = this.plt.pause.subscribe(() => {
-      this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
-    });
-  }
-
-  ngOnDestroy() {
-    this.onResumeSubscription.unsubscribe();
-    this.onPauseSubscription.unsubscribe();
-  }
 
   // BWS events can come many at time (publish,sign, broadcast...)
   private bwsEventHandler = (walletId, type, n) => {

@@ -289,28 +289,6 @@
       opacity: 1;
       border-color: var(--color-primary-abcpay-dark);
     }
-
-    ion-tab-button[aria-selected='false'] {
-      ion-icon {
-        &[name='home'],
-        &[name='wallet'],
-        &[name='cards'],
-        &[name='book-outline'],
-        &[name='settings'] {
-          opacity: 0.4;
-        }
-
-        &[class*='tab-scan'] {
-          background: url('../assets/img/tab-icons/tab-scan-dm.svg') no-repeat
-            50% 50%;
-        }
-
-        &[class*='tab-copay-scan'] {
-          filter: invert(0.4);
-          opacity: 1;
-        }
-      }
-    }
   }
 
   // Material input custom
@@ -940,29 +918,6 @@
     }
   }
 
-  page-bitpay-card {
-    .toolbar {
-      &.toolbar-md,
-      &.toolbar-ios {
-        .back-button {
-          background-color: rgba(155, 163, 174, 0.12);
-        }
-      }
-    }
-
-    ion-spinner {
-      * {
-        stroke: var(--text-color-dark-theme) !important;
-      }
-    }
-  }
-
-  page-bitpay-card-intro {
-    ion-toolbar {
-      background-color: var(--bg-color-dark-theme-2);
-    }
-  }
-
   // 4 - Components
   action-sheet {
     .action-sheet {
@@ -984,22 +939,6 @@
         &.ios,
         &.md {
           --background: var(--bg-color-dark-theme-2) !important;
-        }
-      }
-    }
-  }
-
-  amount-picker {
-    .amount-picker {
-      &__amount {
-        color: var(--color-primary);
-      }
-
-      &__button {
-        border-color: var(--color-primary);
-
-        img {
-          filter: brightness(1.7) hue-rotate(8deg);
         }
       }
     }
@@ -1768,7 +1707,6 @@
   page-txp-details,
   page-tx-details,
   token-info,
-  page-bitpay-card-topup,
   page-create-eth-multisig {
     .payment-proposal-to {
       background-color: var(--bg-color-dark-theme-2);
@@ -1858,18 +1796,8 @@
     }
   }
 
-  page-bitpay-card-topup {
-    ion-content {
-      ion-item {
-        background-color: var(--bg-color-dark-theme);
-        color: var(--text-color-dark-theme) !important;
-      }
-    }
-  }
   token-details,
-  page-wallet-details,
-  page-coinbase-account,
-  page-bitpay-card {
+  page-wallet-details {
     ion-content {
       background: var(--bg-color-dark-theme);
     }
@@ -2888,7 +2816,6 @@
     }
   }
 
-  email-component,
   phone-sheet,
   phone-page {
     .title {

@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'page-paper-wallet',
   templateUrl: 'paper-wallet.html',
-  styleUrls: ['/paper-wallet.scss'],
+  styleUrls: ['paper-wallet.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class PaperWalletPage {

@@ -1,8 +1,6 @@
 import { ComponentRef, Injectable } from '@angular/core';
 import { ActionSheetParent } from 'src/app/components/action-sheet/action-sheet-parent';
-import { EmailComponent } from 'src/app/components/email-component/email-component';
 import { EncryptPasswordComponent } from 'src/app/components/encrypt-password/encrypt-password';
-import { FooterMenuComponent } from 'src/app/components/footer-menu/footer-menu';
 import { IncomingDataMenuComponent } from 'src/app/components/incoming-data-menu/incoming-data-menu';
 import { InfoSheetComponent } from 'src/app/components/info-sheet/info-sheet';
 import { MemoComponent } from 'src/app/components/memo-component/memo-component';
@@ -10,7 +8,6 @@ import { MinerFeeWarningComponent } from 'src/app/components/miner-fee-warning/m
 import { MultisignInfoComponent } from 'src/app/components/multisign-info/multisign-info.component';
 import { NeedsBackupComponent } from 'src/app/components/needs-backup/needs-backup';
 import { OptionsSheetComponent } from 'src/app/components/options-sheet/options-sheet';
-import { PhoneSheet } from 'src/app/components/phone-sheet/phone-sheet';
 import { WalletReceiveComponent } from 'src/app/components/wallet-receive/wallet-receive';
 import { WalletSelectorComponent } from 'src/app/components/wallet-selector/wallet-selector';
 import { WalletTabOptionsComponent } from 'src/app/components/wallet-tab-options/wallet-tab-options';
@@ -120,10 +117,6 @@ export interface WalletTabOptionsParams {
   walletsGroups: any;
 }
 
-export interface FooterMenuParams {
-  clipboardData: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -156,14 +149,6 @@ export class ActionSheetProvider {
   public createMemoComponent(memo): MemoComponent {
     return this.setupSheet<MemoComponent>(MemoComponent, null, { memo })
       .instance;
-  }
-
-  public createEmailComponent(): EmailComponent {
-    return this.setupSheet<EmailComponent>(EmailComponent).instance;
-  }
-
-  public createPhoneSheet(params): PhoneSheet {
-    return this.setupSheet<PhoneSheet>(PhoneSheet, null, params).instance;
   }
 
   public createWalletSelector(
@@ -227,14 +212,6 @@ export class ActionSheetProvider {
   public createMinerFeeWarningComponent(): MinerFeeWarningComponent {
     return this.setupSheet<MinerFeeWarningComponent>(MinerFeeWarningComponent)
       .instance;
-  }
-
-  public createFooterMenu(params?: FooterMenuParams): FooterMenuComponent {
-    return this.setupSheet<FooterMenuComponent>(
-      FooterMenuComponent,
-      null,
-      params
-    ).instance;
   }
 
   private setupSheet<T extends ActionSheetParent>(

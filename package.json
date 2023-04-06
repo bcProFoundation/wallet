@@ -61,6 +61,7 @@
     "@angular/service-worker": "^13.1.1",
     "@bcpros/cordova-plugin-qrscanner": "^3.0.1",
     "@capacitor-community/fcm": "^2.0.2",
+    "@capacitor-community/firebase-crashlytics": "^2.0.0",
     "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "4.7.0",
     "@capacitor/core": "^4.0.0",

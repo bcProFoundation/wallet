@@ -133,7 +133,6 @@ export class WalletDetailsPage {
     public toastController: ToastController,
     private loadingCtrl: LoadingController,
     private eventsService: EventsService,
-    private onchainMessageService: OnchainMessageProvider,
     private addressProvider: AddressProvider,
   ) {
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;

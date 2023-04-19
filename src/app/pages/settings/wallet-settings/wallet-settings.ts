@@ -201,6 +201,12 @@ export class WalletSettingsPage {
     this.events.publish('Local/GetData', true);
   }
 
+  public hiddenETokenWalletChange(walletId: string): void {
+    if (!walletId) return;
+    this.profileProvider.toggleHideETokenWalletFlag(walletId);
+    this.events.publish('Local/GetData', true);
+  }
+
   public openWalletGroupDelete(): void {
     this.router.navigate(['/wallet-delete'], {
       state: {

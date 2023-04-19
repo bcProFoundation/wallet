@@ -17,6 +17,10 @@
         <ion-label>{{'Hide Account' | translate }}</ion-label>
         <ion-toggle checked="{{wallet?.hidden}}" (ionChange)="hiddenWalletChange(wallet.id)"></ion-toggle>
       </ion-item>
+      <ion-item *ngIf="wallet?.credentials?.isSlpToken && wallet.coin === 'xec'" class="item-end" detail="false">
+        <ion-label>{{'Hide eToken Account' | translate }}</ion-label>
+        <ion-toggle checked="{{!wallet?.isSlpToken}}" (ionChange)="hiddenETokenWalletChange(wallet.id)"></ion-toggle>
+      </ion-item>
       <label-tip class="info" type="info" header="no-header">
         <div label-tip-body translate>
           The account won't be removed from this device. You can hide it whenever you need it.

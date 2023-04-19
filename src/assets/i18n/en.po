@@ -1284,8 +1284,8 @@ msgstr "Derivation Path"
 
 msgid "Derivation path"
 msgstr "Derivation path"
-msgid "eToken Path"
-msgstr "eToken Path"
+msgid "eToken Account"
+msgstr "eToken Account"
 
 msgid "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"
 msgstr "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"

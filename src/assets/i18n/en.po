@@ -3555,6 +3555,9 @@ msgstr "From : unknown sender"
 msgid "Sent to self"
 msgstr "Sent to self"
 
+msgid "Burn"
+msgstr "Burn"
+
 msgid "Sent to {walletName}"
 msgstr "Sent to {walletName}"
 

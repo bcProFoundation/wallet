@@ -3606,8 +3606,11 @@ msgstr "Gửi từ : chưa xác định"
 msgid "Sent to self"
 msgstr "Đã gửi cho tôi"
 
-msgid "Burn"
-msgstr "Đốt"
+msgid "Burnt"
+msgstr "Đã đốt"
+
+msgid "Burning"
+msgstr "Đang đốt"
 
 msgid "Sent to {walletName}"
 msgstr "Đã gửi đến {walletName}"

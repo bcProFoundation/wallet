@@ -9,6 +9,7 @@ import {
   Logger,
   OnGoingProcessProvider,
   PersistenceProvider,
+  PlatformProvider,
   ProfileProvider,
   PushNotificationsProvider,
   WalletProvider
@@ -40,7 +41,8 @@ export class SelectFlowPage {
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
     private errorsProvider: ErrorsProvider,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private platformProvider: PlatformProvider
   ) {
     // this.checkFingerprint();
     // Get Theme
@@ -117,6 +119,7 @@ export class SelectFlowPage {
     });
     this.router.navigate(['']).then(() => {
       this.events.publish('Local/FetchWallets');
+      if (this.platformProvider.isCordova) this.events.publish('Local/ClaimAppreciation', true);
     });
   }
 }

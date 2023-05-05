@@ -74,6 +74,7 @@ import {
   RedirectGuard,
   PreviousRouteService
 } from './index';
+import { DeviceProvider } from './device/device';
 
 @NgModule({
   providers: [
@@ -121,6 +122,7 @@ import {
     QRScanner,
     PushNotificationsProvider,
     RateProvider,
+    DeviceProvider,
     LixiLotusProvider,
     TokenProvider,
     ReplaceParametersProvider,

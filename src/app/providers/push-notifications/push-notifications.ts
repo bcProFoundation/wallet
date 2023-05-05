@@ -23,6 +23,7 @@ import {
   PushNotificationSchema,
   PushNotifications
 } from '@capacitor/push-notifications';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class PushNotificationsProvider {
   private isIOS: boolean;
   private isAndroid: boolean;
   private usePushNotifications: boolean;
-  private _token = null;
+  public _token = null;
   private fcmInterval;
   private notifications = [];
   private currentNotif: HTMLIonModalElement;
@@ -47,7 +48,8 @@ export class PushNotificationsProvider {
     private events: EventManagerService,
     private modalCtrl: ModalController,
     private translate: TranslateService,
-    public animationCtrl: AnimationController
+    public animationCtrl: AnimationController,
+    private router: Router
   ) {
     this.logger.debug('PushNotificationsProvider initialized');
     this.isIOS = this.platformProvider.isIOS;
@@ -172,10 +174,21 @@ export class PushNotificationsProvider {
       ) {
         if (!this.verifySignature(data)) return;
         this.events.publish('ShowAdvertising', data);
+      } else if (data.title && data.body && data.claimCode) {
+        this.notificationAppreciation(data);
       } else {
         this._openWallet(data);
       }
     }
+  }
+
+  private notificationAppreciation(data) {
+    let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+    if (!lcsAppreciation.includes(data)) {
+      lcsAppreciation.push(data);
+      localStorage.setItem('appreciation', lcsAppreciation);
+    }
+    this.router.navigate(['/proposal-notification']);
   }
 
   public handlePushNotifications(notification: PushNotificationSchema): void {

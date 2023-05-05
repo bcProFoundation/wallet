@@ -18,6 +18,9 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { ThemeProvider } from '../../providers/theme/theme';
 import { TouchIdProvider } from '../../providers/touchid/touchid';
+import { Geolocation } from '@capacitor/geolocation';
+import { DeviceProvider } from 'src/app/providers/device/device';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 
 // pages
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -76,6 +79,7 @@ export class SettingsPage {
   public navigation: string;
   public featureList: any;
   public isScroll = false;
+  public isEnableLocation: boolean = false;
   useLegacyQrCode;
   constructor(
     private app: AppProvider,
@@ -95,12 +99,49 @@ export class SettingsPage {
     private themeProvider: ThemeProvider,
     private events: EventManagerService,
     private newFeatureData: NewFeatureData,
-    private router: Router
+    private router: Router,
+    private deviceProvider: DeviceProvider,
   ) {
     this.appName = this.app.info.nameCase;
     this.appVersion = this.app.info.version;
     this.isCordova = this.platformProvider.isCordova;
     this.isCopay = this.app.info.name === 'copay';
+    if (this.isCordova) {
+      Geolocation.checkPermissions()
+      .then(rs => {
+        if (rs.location !== 'denied') {
+          this.isEnableLocation = true;
+          const currentPosition = Geolocation.getCurrentPosition();
+            currentPosition
+              .then(coordinates => {
+                if (coordinates) {
+                  const locationGps =
+                    coordinates.coords.latitude +
+                    ',' +
+                    coordinates.coords.longitude;
+                  this.deviceProvider
+                    .updateLogDevice({
+                      deviceId: this.platformProvider.uid,
+                      location: locationGps,
+                    })
+                    .subscribe(
+                      rs => {
+                        this.logger.info('Update success', rs);
+                      },
+                      err => {
+                        this.logger.error('Error update:', err);
+                      }
+                    );
+                }
+              })
+              .catch(err => {
+                this.logger.error('CURRENT POSITION NOT ALLOW', err);
+              });
+        } else {
+          this.isEnableLocation = false;
+        }
+      });
+    }
   }
 
   async handleScrolling(event) {
@@ -397,6 +438,13 @@ export class SettingsPage {
     };
     this.configProvider.set(opts);
     if (this.showTotalBalance) this.events.publish('Local/FetchWallets');
+  }
+
+  public async toggleEnableLocationFlag() {
+    NativeSettings.open({
+      optionAndroid: AndroidSettings.ApplicationDetails, 
+      optionIOS: IOSSettings.App
+    });
   }
 
   public reorder(): void {

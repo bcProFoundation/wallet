@@ -29,7 +29,10 @@ import { ModalController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { NewFeaturePage } from '../new-feature/new-feature';
-import { ActionSheetProvider } from 'src/app/providers';
+import { ActionSheetProvider, PushNotificationsProvider } from 'src/app/providers';
+import {
+  PushNotifications
+} from '@capacitor/push-notifications';
 
 @Component({
   selector: 'page-settings',
@@ -79,7 +82,8 @@ export class SettingsPage {
   public navigation: string;
   public featureList: any;
   public isScroll = false;
-  public isEnableLocation: boolean = false;
+  public isEnableLocation: boolean;
+  public isEnableNotification: boolean;
   useLegacyQrCode;
   constructor(
     private app: AppProvider,
@@ -101,47 +105,12 @@ export class SettingsPage {
     private newFeatureData: NewFeatureData,
     private router: Router,
     private deviceProvider: DeviceProvider,
+    private pushNotificationProvider: PushNotificationsProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.appVersion = this.app.info.version;
     this.isCordova = this.platformProvider.isCordova;
     this.isCopay = this.app.info.name === 'copay';
-    if (this.isCordova) {
-      Geolocation.checkPermissions()
-      .then(rs => {
-        if (rs.location !== 'denied') {
-          this.isEnableLocation = true;
-          const currentPosition = Geolocation.getCurrentPosition();
-            currentPosition
-              .then(coordinates => {
-                if (coordinates) {
-                  const locationGps =
-                    coordinates.coords.latitude +
-                    ',' +
-                    coordinates.coords.longitude;
-                  this.deviceProvider
-                    .updateLogDevice({
-                      deviceId: this.platformProvider.uid,
-                      location: locationGps,
-                    })
-                    .subscribe(
-                      rs => {
-                        this.logger.info('Update success', rs);
-                      },
-                      err => {
-                        this.logger.error('Error update:', err);
-                      }
-                    );
-                }
-              })
-              .catch(err => {
-                this.logger.error('CURRENT POSITION NOT ALLOW', err);
-              });
-        } else {
-          this.isEnableLocation = false;
-        }
-      });
-    }
   }
 
   async handleScrolling(event) {
@@ -156,6 +125,7 @@ export class SettingsPage {
   ngOnInit() {
     this.logger.info('Loaded: SettingsPage');
     if (this.isCordova) {
+      this.checkPermissionNotification();
       this.events.subscribe('BitPayId/Disconnected', () => this.updateUser());
       this.events.subscribe('BitPayId/Connected', user =>
         this.updateUser(user)
@@ -221,6 +191,8 @@ export class SettingsPage {
     this.showTotalBalance = this.config.totalBalance.show;
 
     this.featureList = await this.newFeatureData.get();
+
+    if (this.platformProvider.isCordova) this.checkPermissionLocation();
   }
 
   ionViewDidEnter() {
@@ -494,5 +466,27 @@ export class SettingsPage {
       okText,
       cancelText
     );
+  }
+
+  private checkPermissionLocation() {
+    Geolocation.checkPermissions()
+    .then(rs => {
+      if (rs.location !== 'denied') {
+        this.isEnableLocation = true;
+      } else {
+        this.isEnableLocation = false;
+      }
+    });
+  }
+
+  private checkPermissionNotification() {
+    PushNotifications.checkPermissions()
+    .then(rs => {
+      if (rs.receive !== 'denied') {
+        this.isEnableNotification = true;
+      } else {
+        this.isEnableNotification = false;
+      }
+    });
   }
 }

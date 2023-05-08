@@ -19,11 +19,16 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { ReplaceParametersProvider } from '../../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 import { Location } from '@angular/common';
+import {
+  PushNotifications
+} from '@capacitor/push-notifications';
 // pages
 import { Router } from '@angular/router';
 import { ActionSheetProvider, AppProvider, LixiLotusProvider, LoadingProvider } from 'src/app/providers';
 import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
 import { DeviceProvider } from 'src/app/providers/device/device';
+
+const DAILY_REMIND = ['friday', 'saturday'];
 
 
 @Component({
@@ -52,6 +57,7 @@ export class ProposalsNotificationsPage {
   private isElectron: boolean;
   private walletId: string;
   private multisigContractAddress: string;
+  public isRemindEnableNotification: boolean = false;
 
   public currentTheme: string;
   navParamsData;
@@ -116,6 +122,7 @@ export class ProposalsNotificationsPage {
   ionViewWillEnter() {
     this.routerOutlet.swipeGesture = false;
     this.getAppreciation();
+    this.remindEnableNotification();
     this.updateAddressBook();
     this.updatePendingProposals();
     this.subscribeEvents();
@@ -160,7 +167,7 @@ export class ProposalsNotificationsPage {
   }
 
   public openSetting() {
-    this.router.navigate(['/settings']);
+    this.router.navigate(['/setting']);
   }
 
   public formatDate(timestamp) {
@@ -550,5 +557,17 @@ export class ProposalsNotificationsPage {
         txpsByWallet.txps[i].checked = true;
       }
     })
+  }
+
+  private remindEnableNotification() {
+    const day = moment().format('dddd').toLowerCase();
+    if (DAILY_REMIND.includes(day)) {
+      PushNotifications.checkPermissions()
+      .then(permission => {
+        permission?.receive === 'denied'
+        ? this.isRemindEnableNotification = true
+        : this.isRemindEnableNotification = false;
+      })
+    }
   }
 }

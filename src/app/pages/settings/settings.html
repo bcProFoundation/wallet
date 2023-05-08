@@ -99,11 +99,17 @@
       </ion-item>
       
       <ng-container *ngIf="isCordova">
+        <ion-item>
+          <ion-label>
+            {{ 'Notification' | translate }}
+          </ion-label>
+          <ion-toggle slot="end" [(ngModel)]="isEnableNotification" (click)="toggleEnableLocationFlag()"></ion-toggle>
+        </ion-item>
         <ion-item class="item-end">
           <ion-label>
-            {{ 'Location' | translate }}
+            {{ 'Location Services' | translate }}
           </ion-label>
-          <ion-toggle slot="end" [(ngModel)]="isEnableLocation" (ionBlur)="toggleEnableLocationFlag()"></ion-toggle>
+          <ion-toggle slot="end" [(ngModel)]="isEnableLocation" (click)="toggleEnableLocationFlag()"></ion-toggle>
         </ion-item>
         <p class="sub-location" translate>
           Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.

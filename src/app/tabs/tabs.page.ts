@@ -32,7 +32,7 @@ interface UpdateWalletOptsI {
   alsoUpdateHistory?: boolean;
 }
 
-interface AttendanceDays {
+export interface AttendanceDays {
   monday: boolean;
   tuesday: boolean;
   wednesday: boolean;

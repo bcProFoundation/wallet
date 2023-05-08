@@ -52,8 +52,6 @@ export class DeviceProvider {
     const deviceInfo: DeviceInfo = {
       deviceId: opts?.deviceId,
       location: opts?.location,
-      countNumber: opts?.countNumber,
-      platform: opts?.platform,
       attendance: opts?.attendance,
       token: opts?.token,
     }

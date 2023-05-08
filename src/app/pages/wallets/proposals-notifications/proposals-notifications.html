@@ -53,13 +53,30 @@
     </ion-list>
     <ion-list class="ion-margin-bottom" *ngIf="isShowNotifyLocation">
       <div class="notification-item">
-        <ion-item style="border: 0;">
+        <ion-item [ngStyle]="{'border': '0' ? isRemindEnableNotification : ''}">
           <ion-icon src="assets/img/notify-icon.svg" slot="start">
           </ion-icon>
           <ion-label>
             <div class="main-label" translate>#Pay4Attention</div>
             <div class="secondary-label" translate>
               Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.
+            </div>
+            <div class="action">
+              <p class="btn-open-settings" (click)="openSetting()" translate>
+                Open settings
+              </p>
+            </div>
+          </ion-label>
+        </ion-item>
+      </div>
+      <div *ngIf="isRemindEnableNotification" class="notification-item">
+        <ion-item style="border: 0;">
+          <ion-icon src="assets/img/notify-icon.svg" slot="start">
+          </ion-icon>
+          <ion-label>
+            <div class="main-label" translate>#Remind</div>
+            <div class="secondary-label" translate>
+              Enable notification to get your prize from businesses who want to appreciate you for your attention.
             </div>
             <div class="action">
               <p class="btn-open-settings" (click)="openSetting()" translate>

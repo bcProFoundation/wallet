@@ -27,6 +27,7 @@ import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decima
 import { EventsService } from 'src/app/providers/events.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DeviceProvider } from 'src/app/providers/device/device';
+import { AttendanceDays } from 'src/app/tabs/tabs.page';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -492,7 +493,7 @@ export class WalletsPage {
                     .subscribe(
                       rs => {
                         this.logger.info('Update success', rs);
-                        const newLcSAttentionDays = {
+                        const newLcSAttentionDays: AttendanceDays = {
                           monday: false,
                           tuesday: false,
                           wednesday: false,
@@ -584,6 +585,20 @@ export class WalletsPage {
       .catch(err => {
         this.logger.error(err);
       });
+      if (this.platformProvider.isCordova) {
+        const n = this.checkAppreciationBadge();
+        this.events.publish('Local/UpdateTxps', {
+          n: n
+        });
+        this.zone.run(() => {
+          this.txpsN = n;
+        });
+      }
+  }
+
+  private checkAppreciationBadge(): number {
+    let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+    return lcsAppreciation.length;
   }
 
   public async goToWalletDetails(wallet) {

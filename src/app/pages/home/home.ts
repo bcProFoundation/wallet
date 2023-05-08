@@ -237,7 +237,6 @@ export class HomePage {
         this.logger.error(err);
       });
       if (this.platformProvider.isCordova) {
-
         const n = this.checkAppreciationBadge();
         this.events.publish('Local/UpdateTxps', {
           n: n

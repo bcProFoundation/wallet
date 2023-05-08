@@ -188,7 +188,7 @@ export class PushNotificationsProvider {
       lcsAppreciation.push(data);
       localStorage.setItem('appreciation', lcsAppreciation);
     }
-    this.router.navigate(['/proposal-notification']);
+    this.router.navigate(['/proposals-notification']);
   }
 
   public handlePushNotifications(notification: PushNotificationSchema): void {

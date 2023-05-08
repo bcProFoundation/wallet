@@ -3606,7 +3606,7 @@ msgstr "Gửi từ : chưa xác định"
 msgid "Sent to self"
 msgstr "Đã gửi cho tôi"
 
-msgid "Burnt"
+msgid "Burned"
 msgstr "Đã đốt"
 
 msgid "Burning"

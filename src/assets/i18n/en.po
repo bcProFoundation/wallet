@@ -3555,8 +3555,8 @@ msgstr "From : unknown sender"
 msgid "Sent to self"
 msgstr "Sent to self"
 
-msgid "Burnt"
-msgstr "Burnt"
+msgid "Burned"
+msgstr "Burned"
 
 msgid "Burning"
 msgstr "Burning"

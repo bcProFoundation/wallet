@@ -141,7 +141,7 @@
                   </ng-container>
                   <ng-container *ngIf="tx.confirmations > 0">
                     <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType !== 'BURN'">{{'Sent to self'| translate}}</p>
-                    <p class="status burn-type" *ngIf="tx.txType === 'BURN'">{{'Burnt'| translate}}</p>
+                    <p class="status burn-type" *ngIf="tx.txType === 'BURN'">{{'Burned'| translate}}</p>
                   </ng-container>
                   <p class="status" *ngIf="tx.isGenesis">{{'Genesis' | translate}}</p>
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |

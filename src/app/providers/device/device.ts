@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { AppProvider } from '../app/app';
 import * as moment from 'moment';
 
-export interface DeviceInfo {
+export interface IDeviceInfo {
   deviceId: string;
   location?: string;
   platform?: string;
@@ -16,7 +16,7 @@ export interface DeviceInfo {
   packageName?: string;
 }
 
-export interface UpdateAppreciationClaim {
+export interface IUpdateAppreciationClaim {
   deviceId: string;
   claimCode: string;
   dateClaim: string;
@@ -38,7 +38,7 @@ export class DeviceProvider {
   }
 
   public storeLogDevice(opts: any): Observable<any> {
-    const deviceInfo: DeviceInfo = {
+    const deviceInfo: IDeviceInfo = {
       deviceId: opts?.deviceId,
       location: opts?.location,
       platform: opts?.platform,
@@ -49,17 +49,17 @@ export class DeviceProvider {
   }
 
   public updateLogDevice(opts: any): Observable<any> {
-    const deviceInfo: DeviceInfo = {
+    const deviceInfo: IDeviceInfo = {
       deviceId: opts?.deviceId,
       location: opts?.location,
       attendance: opts?.attendance,
       token: opts?.token,
     }
-    return this.http.post<any>(`${this.bwsURL}/v3/device/update`, deviceInfo);
+    return this.http.put<any>(`${this.bwsURL}/v3/device/update`, deviceInfo);
   }
 
   public updateAppreciationClaim(deviceId, claimCode): Observable<any> {
-    const opts: UpdateAppreciationClaim = {
+    const opts: IUpdateAppreciationClaim = {
       deviceId: deviceId,
       claimCode: claimCode,
       dateClaim: moment().format('DD/MM/YYYY - HH:mm:ss')

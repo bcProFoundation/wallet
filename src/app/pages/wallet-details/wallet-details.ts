@@ -406,11 +406,11 @@ export class WalletDetailsPage {
     });
   }
 
-  calculateAmountTokenBurn(amount) {
+  calculateAmountTokenBurn(amount, tokenId) {
     let totalAmount = 0;
     const tokens = this.wallet?.tokens;
     const decimals = tokens.reduce((decimals, token) => {
-      if (token.tokenId == "036b46fcca75948dec00bdcc95533677fdccb861497c0d9d33fb7da5d21986b5") {
+      if (token.tokenId == tokenId) {
         decimals += token?.tokenInfo?.decimals;
       }
       return decimals;

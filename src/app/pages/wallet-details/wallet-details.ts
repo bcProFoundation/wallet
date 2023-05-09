@@ -406,6 +406,22 @@ export class WalletDetailsPage {
     });
   }
 
+  calculateAmountTokenBurn(amount) {
+    let totalAmount = 0;
+    const tokens = this.wallet?.tokens;
+    const decimals = tokens.reduce((decimals, token) => {
+      if (token.tokenId == "036b46fcca75948dec00bdcc95533677fdccb861497c0d9d33fb7da5d21986b5") {
+        decimals += token?.tokenInfo?.decimals;
+      }
+      return decimals;
+    }, 0);
+  
+    if (amount) {
+      totalAmount = amount / Math.pow(10, decimals);
+    }
+    return totalAmount;
+  }
+
   public openProposalsNotificationsPage(): void {
     if (this.wallet.credentials.multisigEthInfo) {
       this.router.navigate(['/proposals-notifications'], {

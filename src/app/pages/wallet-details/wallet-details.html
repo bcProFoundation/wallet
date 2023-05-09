@@ -250,7 +250,7 @@
 
                     <span *ngIf="tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
-                      {{formatTxAmount(tx.amountToken) + ' ' + tx.symbolToken}}</span>
+                      {{(tx.txType === 'BURN' ? calculateAmountTokenBurn(tx?.burnAmountToken) : formatTxAmount(tx.amountToken)) + ' ' + tx.symbolToken}}</span>
                   </ng-container>
                   <ng-container *ngIf="tx.action == 'invalid'">
                     <span class="double-spend" translate>(possible double spend)</span>

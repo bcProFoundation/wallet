@@ -184,6 +184,15 @@ export class TokenDetailsPage {
     return totalAmount / Math.pow(10, decimals);
   }
 
+  calculateAmountTokenBurn(amount) {
+    const decimals = this.token?.tokenInfo?.decimals;
+    let totalAmount = 0;
+    if (amount) {
+      totalAmount = amount / Math.pow(10, decimals);
+    }
+    return totalAmount;
+  }
+
   shouldShowZeroState() {
     return this.showNoTransactionsYetMsg && !this.updateStatusError;
   }

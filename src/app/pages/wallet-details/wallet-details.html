@@ -250,7 +250,7 @@
 
                     <span *ngIf="tx.isSlpToken"
                       [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
-                      {{formatTxAmount(tx.amountToken) + ' ' + tx.symbolToken}}</span>
+                      {{(tx.txType === 'BURN' ? calculateAmountTokenBurn(tx?.burnAmountToken, tx?.tokenId) : formatTxAmount(tx.amountToken)) + ' ' + tx.symbolToken}}</span>
                   </ng-container>
                   <ng-container *ngIf="tx.action == 'invalid'">
                     <span class="double-spend" translate>(possible double spend)</span>
@@ -300,10 +300,12 @@
                     <p class="status" *ngIf="tx.action == 'sent'">{{'Pending'| translate}}</p>
                     <p class="status" *ngIf="tx.action == 'moved'">{{'Moving'| translate}}</p>
                     <p class="status" *ngIf="tx.action == 'received'">{{'Pending' | translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType === 'BURN'">{{'Burning'| translate}}</p>
                   </ng-container>
                   <ng-container *ngIf="tx.confirmations > 0">
                     <p class="status" *ngIf="tx.action == 'invalid'">Invalid</p>
                     <p class="status" *ngIf="tx.action == 'moved'">Sent to self</p>
+                    <p class="status burn-type" *ngIf="tx.txType === 'BURN'">{{'Burned'| translate}}</p>
                   </ng-container>
                   <p class="status" *ngIf="tx.isGenesis">Genesis</p>
                   <p class="status" *ngIf="tx.action == 'mined'">Mined</p>

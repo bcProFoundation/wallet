@@ -104,7 +104,7 @@
                     [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature' , 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">-</span>
                   <span
                     [ngClass]="{'received': tx.action == 'received' || tx.action == 'mined' || tx.action == 'immature', 'sent' : tx.action == 'sent','pending' : tx.confirmations <= 0}">
-                    {{formatTxAmount(tx.amountToken)}} {{tx.symbolToken}}</span>
+                    {{tx.txType === 'BURN' ? calculateAmountTokenBurn(tx?.burnAmountToken) : formatTxAmount(tx.amountToken)}} {{tx.symbolToken}}</span>
                 </div>
                 <ng-container *ngIf="tx.action == 'received'">
                   <ng-container *ngIf="tx.inputAddresses && tx.inputAddresses[0]">
@@ -135,11 +135,13 @@
               <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">
                 <div class="tx-info">
                   <ng-container *ngIf="tx.confirmations <= 0 && (tx.action == 'sent' || tx.action == 'received')">
-                    <p class="status" *ngIf="tx.outputs[0].address !== 'false' && !tx.isGenesis">{{'Pending'| translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address !== 'false' && !tx.isGenesis && tx.txType !== 'BURN'">{{'Pending'| translate}}</p>
                     <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis">{{'Moving'| translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType === 'BURN'">{{'Burning'| translate}}</p>
                   </ng-container>
                   <ng-container *ngIf="tx.confirmations > 0">
-                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis">{{'Sent to self'| translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType !== 'BURN'">{{'Sent to self'| translate}}</p>
+                    <p class="status burn-type" *ngIf="tx.txType === 'BURN'">{{'Burned'| translate}}</p>
                   </ng-container>
                   <p class="status" *ngIf="tx.isGenesis">{{'Genesis' | translate}}</p>
                   <p class="date" *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)">{{converDate(tx.time * 1000) |

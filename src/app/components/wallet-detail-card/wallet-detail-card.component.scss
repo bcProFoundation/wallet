@@ -3,6 +3,15 @@ wallet-detail-card {
   .wallet-detail-card-container {
     border-radius: 18px;
     background: none;
+    .key-name {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 0 0 24px 0;
+      color: rgba(28, 55, 69, 0.6);
+    }
   }
   .wallet-card {
     width: 100%;

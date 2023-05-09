@@ -1,4 +1,14 @@
 page-home {
+  .key-name {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0 0 24px 16px;
+    color: rgba(28, 55, 69, 0.6);
+  }
+
   .toolbar-home {
     background: #fafafb;
     --background: #fafafb;

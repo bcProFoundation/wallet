@@ -1,5 +1,4 @@
 <div class="wallet-detail-card-container" #itemWallet>
-  <h5 class="key-name">{{wallet?.keyName}}</h5>
   <ng-container *ngIf="!isToken;else tokenCard">
     <ion-item-sliding (ionDrag)="handleOnDrag()" [disabled]="flagAllItemRemove" [ngClass]="{'slide-item-mobile' : platformProvider.isCordova}" #slidingItem>
       <ion-item lines="none">

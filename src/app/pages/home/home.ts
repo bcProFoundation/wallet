@@ -161,6 +161,7 @@ export class HomePage {
     }
     if (isFetchData) {
       this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
+      this.groupByKeyNameListHome();
       this.loading = false;
     }
   }
@@ -169,6 +170,7 @@ export class HomePage {
     this.loading = true;
     this.walletGroupsHome = await this.profileProvider.getWalletGroupsHome();
     if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
+    this.groupByKeyNameListHome();
     this.loading = false
   }
 
@@ -180,6 +182,7 @@ export class HomePage {
       this.walletGroupsHome = walletGroupsHome;
     }
     if (this.walletGroupsHome.length <= 1) this.removeAllItem = false;
+    this.groupByKeyNameListHome();
   }
   
   private showNewFeatureSlides() {
@@ -281,6 +284,13 @@ export class HomePage {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
     }, 2000);
+  }
+
+  groupByKeyNameListHome() {
+    let cloneWalletGroupsHome = _.clone(this.walletGroupsHome);
+    let newWalletGroupsHome;
+    newWalletGroupsHome = _.values(_.groupBy(cloneWalletGroupsHome, 'keyName'));
+    this.walletGroupsHome = newWalletGroupsHome;
   }
 
   getAdPageOrLink(link) {

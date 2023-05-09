@@ -1430,6 +1430,9 @@
       }
       }
     }
+    .key-name {
+      color: rgba(224, 228, 230, 0.6) !important;
+    }
   }
 
   // 5.15 Price Page
@@ -3696,9 +3699,6 @@
   wallet-detail-card {
     .input-edit-account-name {
       border-color: var(--color-primary-abcpay-dark) !important;
-    }
-    .key-name {
-      color: rgba(224, 228, 230, 0.6) !important;
     }
   }
 

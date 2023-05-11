@@ -297,8 +297,8 @@
               <ion-note slot="end" class="ion-text-end ion-no-margin ion-no-padding">
                 <div class="tx-info">
                   <ng-container *ngIf="tx.confirmations <= 0">
-                    <p class="status" *ngIf="tx.action == 'sent'">{{'Pending'| translate}}</p>
-                    <p class="status" *ngIf="tx.action == 'moved'">{{'Moving'| translate}}</p>
+                    <p class="status" *ngIf="tx.action == 'sent' && tx.txType !== 'BURN'">{{'Pending'| translate}}</p>
+                    <p class="status" *ngIf="tx.action == 'moved' && tx.txType !== 'BURN'">{{'Moving'| translate}}</p>
                     <p class="status" *ngIf="tx.action == 'received'">{{'Pending' | translate}}</p>
                     <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType === 'BURN'">{{'Burning'| translate}}</p>
                   </ng-container>

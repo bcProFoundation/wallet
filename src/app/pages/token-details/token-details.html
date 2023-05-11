@@ -136,7 +136,7 @@
                 <div class="tx-info">
                   <ng-container *ngIf="tx.confirmations <= 0 && (tx.action == 'sent' || tx.action == 'received')">
                     <p class="status" *ngIf="tx.outputs[0].address !== 'false' && !tx.isGenesis && tx.txType !== 'BURN'">{{'Pending'| translate}}</p>
-                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis">{{'Moving'| translate}}</p>
+                    <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType !== 'BURN'">{{'Moving'| translate}}</p>
                     <p class="status" *ngIf="tx.outputs[0].address === 'false' && !tx.isGenesis && tx.txType === 'BURN'">{{'Burning'| translate}}</p>
                   </ng-container>
                   <ng-container *ngIf="tx.confirmations > 0">

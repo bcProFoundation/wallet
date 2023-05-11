@@ -50,7 +50,7 @@ export class AccountsPage {
   isDonation;
   donationSupportCoins = [];
   navParamsData;
-  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX', 'BTCinu'];
   public isToken: boolean;
   public tokenID: string;
   public isShowCreateNewWallet = false;

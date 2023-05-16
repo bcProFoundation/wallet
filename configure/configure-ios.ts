@@ -19,9 +19,9 @@ const updateIos = async() => {
     await project.ios?.updateInfoPlist(appTarget.name, null, {
       NSCameraUsageDescription: 'This app needs Camera Permission to scan QR code.',
       NSFaceIDUsageDescription: 'This allows you to securely sign into "AbcPay Wallet".',
-      NSUserNotificationsUsageDescription: 'Notification may include alerts, sounds and icon badges. These can be configured in Settings.',
-      NSLocationAlwaysUsageDescription: 'Privacy - Location Always Usage Description',
-      NSLocationWhenInUseUsageDescription: 'Privacy - Location When In Use Usage Description'
+      NSUserNotificationsUsageDescription: 'Enable notification, location service and regularly check-in AbcPay wallet so businesses can pay your for your attention. Your identity is completely private.',
+      NSLocationAlwaysUsageDescription: 'Enabling your service location, notification and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.',
+      NSLocationWhenInUseUsageDescription: 'Enabling your service location, notification and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.'
     });
     // project.ios.setDisplayName(appTarget.name, 'Release', '')
     project.commit();

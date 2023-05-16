@@ -1,6 +1,6 @@
-<wide-header-page [hideToolbar]="true" [hasSlideButton]="txpsToSign[0]">
+<wide-header-page title="{{'Notification Board' | translate}}" [hasSlideButton]="txpsToSign[0]">
   <div page-content>
-    <ion-list class="content-list" *ngIf="txpsPending[0] || txpsAccepted[0] || txpsRejected[0]; else noNotification">
+    <ion-list class="content-list" *ngIf="txpsPending[0] || txpsAccepted[0] || txpsRejected[0];">
       <div class="wallet-card-container" *ngFor="let txpsByStatus of allTxps">
         <ion-item-divider *ngIf="txpsByStatus.data && txpsByStatus.data[0]" class="item-divider-header">
           <span class="ellipsis">{{txpsByStatus.title | uppercase}}</span>
@@ -51,12 +51,72 @@
         </ng-container>
       </div>
     </ion-list>
-    <ng-template #noNotification>
+    <ion-list class="ion-margin-bottom" *ngIf="isShowNotifyLocation">
+      <div class="notification-item">
+        <ion-item [ngStyle]="{'border': '0' ? isRemindEnableNotification : ''}">
+          <ion-icon src="assets/img/notify-icon.svg" slot="start">
+          </ion-icon>
+          <ion-label>
+            <div class="main-label" translate>#Pay4Attention</div>
+            <div class="secondary-label" translate>
+              Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.
+            </div>
+            <div class="action">
+              <p class="btn-open-settings" (click)="openSetting()" translate>
+                Open settings
+              </p>
+            </div>
+          </ion-label>
+        </ion-item>
+      </div>
+      <div *ngIf="isRemindEnableNotification" class="notification-item">
+        <ion-item style="border: 0;">
+          <ion-icon src="assets/img/notify-icon.svg" slot="start">
+          </ion-icon>
+          <ion-label>
+            <div class="main-label" translate>#Remind</div>
+            <div class="secondary-label" translate>
+              Enable notification to get your prize from businesses who want to appreciate you for your attention.
+            </div>
+            <div class="action">
+              <p class="btn-open-settings" (click)="openSetting()" translate>
+                Open settings
+              </p>
+            </div>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-list>
+
+    <ion-list *ngIf="notificationClaim[0]">
+      <div class="notification-item" *ngFor="let notification of notificationClaim">
+        <ion-item>
+          <ion-icon src="assets/img/appreciation-icon.svg" slot="start">
+          </ion-icon>
+          <ion-label>
+            <div class="main-label">{{ notification.title }}</div>
+            <div class="secondary-label">
+              {{notification.body}}
+            </div>
+            <div class="status-label">
+              <p class="expired-date">{{notification.type == 'Monthly' ? 'On Month' : 'On Week'}}</p>
+              <p class="date-label">{{ formatDate(notification.createdOn) }}</p>
+            </div>
+          </ion-label>
+          <ion-note slot="end">
+            <p class="btn-claim" (click)="handleClaimAppreciation(notification)">
+              Claim
+            </p>
+          </ion-note>
+        </ion-item>
+      </div>
+    </ion-list>
+    <ng-container *ngIf="(txpsPending.length == 0 || txpsAccepted.length == 0 || txpsRejected.length == 0) && notificationClaim.length == 0 && !isShowNotifyLocation">
       <div class="no-info-container">
         <img src="assets/img/EmptyNotification-{{currentTheme}}.svg">
         <div class="content">{{'No notifications' | translate}}</div>
       </div>
-    </ng-template>
+    </ng-container>
   </div>
 </wide-header-page>
 <ion-footer>

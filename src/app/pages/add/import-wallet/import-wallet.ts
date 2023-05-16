@@ -330,6 +330,9 @@ export class ImportWalletPage {
   private goToWalletsPage(keyId) {
     this.router
       .navigate(['/tabs/wallets'], {
+        state: {
+          isFirstInstall: true
+        },
         replaceUrl: true
       })
       .then(() => {
@@ -339,6 +342,7 @@ export class ImportWalletPage {
         // });
         this.events.publish('Local/GetData', true);
         this.events.publish('Local/FetchWallets');
+        if (this.platformProvider.isCordova) this.events.publish('Local/ClaimAppreciation', true);
       });
   }
 
@@ -353,6 +357,7 @@ export class ImportWalletPage {
         })
         .then(() => {
           this.events.publish('Local/FetchWallets');
+          if (this.platformProvider.isCordova) this.events.publish('Local/ClaimAppreciation', true);
         });
     });
   }

@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { Geolocation } from '@capacitor/geolocation';
 
 // Pages
 import { CopayersPage } from '../add/copayers/copayers';
@@ -20,10 +22,12 @@ import { Router } from '@angular/router';
 import { TokenProvider } from 'src/app/providers/token-sevice/token-sevice';
 import { AddressProvider } from 'src/app/providers/address/address';
 import { Token } from 'src/app/providers/currency/token';
-import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, OnGoingProcessProvider, ThemeProvider } from 'src/app/providers';
+import { AppProvider, ConfigProvider, CurrencyProvider, LoadingProvider, OnGoingProcessProvider, PushNotificationsProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { EventsService } from 'src/app/providers/events.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DeviceProvider } from 'src/app/providers/device/device';
+import { AttendanceDays } from 'src/app/tabs/tabs.page';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -96,7 +100,9 @@ export class WalletsPage {
     private toastController: ToastController,
     private loadingProvider: LoadingProvider,
     private translate: TranslateService,
-    private onGoingProcessProvider: OnGoingProcessProvider
+    private onGoingProcessProvider: OnGoingProcessProvider,
+    private deviceProvider: DeviceProvider,
+    private pushNotificationProvider: PushNotificationsProvider
   ) {
     let config = this.configProvider.get();
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -453,6 +459,65 @@ export class WalletsPage {
     this.onPauseSubscription = this.plt.pause.subscribe(() => {
       this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
     });
+    if (!this.navParamsData.isFirstInstall) {
+      this.attendanceHandle();
+    }
+  }
+
+  attendanceHandle() {
+    // Condition check in: Enable Location + Active on Account Tabs
+    if (this.platformProvider.isCordova) {
+      const lcSAttendance = JSON.parse(localStorage.getItem('attendance'));
+      const token = this.pushNotificationProvider?._token;
+      if (lcSAttendance) {
+        let allDay = Object.keys(lcSAttendance);
+        let realTimeDay = moment().format('dddd').toLowerCase();
+        const attendance = allDay.includes(realTimeDay) && lcSAttendance[realTimeDay] === false;
+          if (attendance) {
+            // Call api update attendance
+            const currentPosition = Geolocation.getCurrentPosition();
+            currentPosition
+              .then(coordinates => {
+                if (coordinates) {
+                  const locationGps =
+                    coordinates.coords.latitude +
+                    ',' +
+                    coordinates.coords.longitude;
+                  this.deviceProvider
+                    .updateLogDevice({
+                      deviceId: this.platformProvider.uid,
+                      location: locationGps,
+                      attendance: attendance,
+                      token: token,
+                    })
+                    .subscribe(
+                      rs => {
+                        this.logger.info('Update success', rs);
+                        const newLcSAttentionDays: AttendanceDays = {
+                          monday: false,
+                          tuesday: false,
+                          wednesday: false,
+                          thursday: false,
+                          friday: false,
+                          saturday: false,
+                          sunday: false
+                        };
+                        newLcSAttentionDays[realTimeDay] = true;
+                        localStorage.setItem('attendance', JSON.stringify(newLcSAttentionDays));
+                        this.presentToast('Daily checked');
+                      },
+                      err => {
+                        this.logger.error('Error update:', err);
+                      }
+                    );
+                }
+              })
+              .catch(err => {
+                this.logger.error('CURRENT POSITION NOT ALLOW', err);
+              });
+          }
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -520,6 +585,20 @@ export class WalletsPage {
       .catch(err => {
         this.logger.error(err);
       });
+      if (this.platformProvider.isCordova) {
+        const n = this.checkAppreciationBadge();
+        this.events.publish('Local/UpdateTxps', {
+          n: n
+        });
+        this.zone.run(() => {
+          this.txpsN = n;
+        });
+      }
+  }
+
+  private checkAppreciationBadge(): number {
+    let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+    return lcsAppreciation.length;
   }
 
   public async goToWalletDetails(wallet) {

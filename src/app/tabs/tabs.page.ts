@@ -1,5 +1,6 @@
 import { Component, NgZone } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AppProvider } from '../providers/app/app';
@@ -7,7 +8,10 @@ import { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../providers/clipboard/clipboard';
 import { EventManagerService } from '../providers/event-manager.service';
 import { Logger } from '../providers/logger/logger';
-import { Network, PersistenceProvider } from '../providers/persistence/persistence';
+import {
+  Network,
+  PersistenceProvider
+} from '../providers/persistence/persistence';
 import { PlatformProvider } from '../providers/platform/platform';
 import { ProfileProvider } from '../providers/profile/profile';
 import { RateProvider } from '../providers/rate/rate';
@@ -15,12 +19,29 @@ import { ThemeProvider } from '../providers/theme/theme';
 import { WalletProvider } from '../providers/wallet/wallet';
 import * as _ from 'lodash';
 import { TokenProvider } from '../providers/token-sevice/token-sevice';
+import { DeviceProvider } from '../providers/device/device';
+import { NotificationComponent } from '../components/notification-component/notification-component';
+import { Geolocation } from '@capacitor/geolocation';
+import { PushNotificationsProvider } from '../providers';
+
+const EXIST_DEVICE = 'Exist device record';
 
 interface UpdateWalletOptsI {
   walletId: string;
   force?: boolean;
   alsoUpdateHistory?: boolean;
 }
+
+export interface AttendanceDays {
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
+}
+
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
@@ -58,7 +79,11 @@ export class TabsPage {
     private platformProvider: PlatformProvider,
     private themeProvider: ThemeProvider,
     private clipboardProvider: ClipboardProvider,
-    private tokenProvider: TokenProvider
+    private tokenProvider: TokenProvider,
+    private deviceProvider: DeviceProvider,
+    private modalCtrl: ModalController,
+    private router: Router,
+    private pushNotificationProvider: PushNotificationsProvider,
   ) {
     this.persistenceProvider.getNetwork().then((network: string) => {
       if (network) {
@@ -89,7 +114,6 @@ export class TabsPage {
           });
       }
     });
-
   }
 
   setCurrentTab(event) {
@@ -97,15 +121,18 @@ export class TabsPage {
   }
 
   setIconHomeTab(selectedTab) {
-    return selectedTab === 'home' ? `assets/img/tab-home-selected-${this.currentTheme}.svg` : `assets/img/tab-home-${this.currentTheme}.svg`;
+    return selectedTab === 'home'
+      ? `assets/img/tab-home-selected-${this.currentTheme}.svg`
+      : `assets/img/tab-home-${this.currentTheme}.svg`;
   }
 
   setIconWalletsTab(selectedTab) {
-    return selectedTab === 'wallets' ? `assets/img/tab-wallet-selected-${this.currentTheme}.svg` : `assets/img/tab-wallet-${this.currentTheme}.svg`;
+    return selectedTab === 'wallets'
+      ? `assets/img/tab-wallet-selected-${this.currentTheme}.svg`
+      : `assets/img/tab-wallet-${this.currentTheme}.svg`;
   }
 
   private subscribeEvents() {
-
     this.events.subscribe('experimentUpdateStart', () => {
       this.tabs.select(2);
     });
@@ -134,6 +161,12 @@ export class TabsPage {
       this.fetchWalletStatus(opts);
       this.updateTxps();
     });
+    // Claim gift
+    this.events.subscribe('Local/ClaimAppreciation', otps => {
+      if (!!otps) {
+        this.storeLogDevice();
+      }
+    });
   }
 
   private unsubscribeEvents() {
@@ -142,6 +175,7 @@ export class TabsPage {
     this.events.unsubscribe('Local/FetchWallets');
     this.events.unsubscribe('Local/UpdateNavigationType');
     this.events.unsubscribe('experimentUpdateStart');
+    this.events.unsubscribe('Local/ClaimAppreciation');
   }
 
   ngOnInit() {
@@ -166,12 +200,30 @@ export class TabsPage {
 
     this.checkCardEnabled();
     this.checkClipboardData();
+    this.initializeAttendanceDays();
   }
 
   ngOnDestroy() {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
     this.unsubscribeEvents();
+  }
+
+  initializeAttendanceDays() {
+    // Initialize Attendance Days
+    const lcS = JSON.parse(localStorage.getItem('attendance'));
+    if (!lcS) {
+      const attentionDays: AttendanceDays = {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false
+      };
+      localStorage.setItem('attendance', JSON.stringify(attentionDays));
+    }
   }
 
   // Names:
@@ -190,9 +242,9 @@ export class TabsPage {
 
     this.logger.debug(
       'fetching status for: ' +
-      opts.walletId +
-      ' alsohistory:' +
-      opts.alsoUpdateHistory
+        opts.walletId +
+        ' alsohistory:' +
+        opts.alsoUpdateHistory
     );
     const wallet = this.profileProvider.getWallet(opts.walletId);
     if (!wallet) return;
@@ -227,12 +279,12 @@ export class TabsPage {
         this.logger.warn('Update error:', err);
 
         // this.processWalletError(wallet, err);
-        
-          this.events.publish('Local/WalletUpdate', {
-            walletId: opts.walletId,
-            finished: true,
-            error: wallet.error
-          });
+
+        this.events.publish('Local/WalletUpdate', {
+          walletId: opts.walletId,
+          finished: true,
+          error: wallet.error
+        });
 
         if (opts.alsoUpdateHistory) {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
@@ -424,7 +476,6 @@ export class TabsPage {
     }
   );
 
-
   private async loadToken(wallets) {
     for (const i in wallets) {
       const wallet = wallets[i];
@@ -498,5 +549,54 @@ export class TabsPage {
       }
       this.updateTxps();
     });
+  }
+
+  private storeLogDevice() {
+    // Get location
+    const tokenDevice = this.pushNotificationProvider?._token;
+    const currentPosition = Geolocation.getCurrentPosition();
+    currentPosition
+      .then(coordinates => {
+        if (coordinates) {
+          const locationGps =
+            coordinates?.coords?.latitude + ',' + coordinates?.coords?.longitude;
+          // Get deviceId => store
+          if (this.platformProvider.uid) {
+            this.deviceProvider
+              .storeLogDevice({
+                deviceId: this.platformProvider.uid,
+                platform: this.platformProvider.isIOS ? 'ios' : 'android',
+                location: locationGps,
+                token: tokenDevice,
+              })
+              .subscribe(
+                rs => {
+                },
+                err => {
+                  this.logger.error('Error save device:', err);
+                }
+              );
+          }
+        }
+      })
+      .catch(err => {
+        this.logger.error('Location not alow');
+        // Get deviceId => store
+        if (this.platformProvider.uid) {
+          this.deviceProvider
+            .storeLogDevice({
+              deviceId: this.platformProvider.uid,
+              platform: this.platformProvider.isIOS ? 'ios' : 'android',
+              token: tokenDevice
+            })
+            .subscribe(
+              rs => {
+              },
+              err => {
+                this.logger.error('Error save device:', err);
+              }
+            );
+        }
+      });
   }
 }

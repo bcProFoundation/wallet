@@ -3,10 +3,11 @@ import { IonRouterOutlet, ModalController, NavController, NavParams, Platform, T
 import { TranslateService } from '@ngx-translate/core';
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { AddressBookProvider, Contact } from 'src/app/providers/address-book/address-book';
-
+import { Geolocation } from '@capacitor/geolocation';
 // providers
 
 import { BwcErrorProvider } from '../../../providers/bwc-error/bwc-error';
@@ -18,9 +19,17 @@ import { ProfileProvider } from '../../../providers/profile/profile';
 import { ReplaceParametersProvider } from '../../../providers/replace-parameters/replace-parameters';
 import { WalletProvider } from '../../../providers/wallet/wallet';
 import { Location } from '@angular/common';
+import {
+  PushNotifications
+} from '@capacitor/push-notifications';
 // pages
 import { Router } from '@angular/router';
-import { AppProvider } from 'src/app/providers';
+import { ActionSheetProvider, AppProvider, LixiLotusProvider, LoadingProvider } from 'src/app/providers';
+import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
+import { DeviceProvider } from 'src/app/providers/device/device';
+
+const DAILY_REMIND = ['friday', 'saturday'];
+
 
 @Component({
   selector: 'page-proposals-notifications',
@@ -40,13 +49,15 @@ export class ProposalsNotificationsPage {
   public walletIdSelectedToSign: string;
   public isCordova: boolean;
   public buttonText: string;
-
+  public notificationClaim: any[] = []
+  public isShowNotifyLocation: boolean = false;
   private zone;
   private onResumeSubscription: Subscription;
   private onPauseSubscription: Subscription;
   private isElectron: boolean;
   private walletId: string;
   private multisigContractAddress: string;
+  public isRemindEnableNotification: boolean = false;
 
   public currentTheme: string;
   navParamsData;
@@ -71,7 +82,11 @@ export class ProposalsNotificationsPage {
     private routerOutlet: IonRouterOutlet,
     private router: Router,
     public toastController: ToastController,
-    public appProvider: AppProvider
+    public appProvider: AppProvider,
+    private deviceProvider: DeviceProvider,
+    private actionSheetProvider: ActionSheetProvider,
+    private lixiLotusProvider: LixiLotusProvider,
+    private loadingProvider: LoadingProvider
   ) {
     if (this.router.getCurrentNavigation()) {
       this.navParamsData = this.router.getCurrentNavigation().extras.state;
@@ -93,11 +108,21 @@ export class ProposalsNotificationsPage {
     this.txpsPending = [];
     this.txpsAccepted = [];
     this.txpsRejected = [];
+    Geolocation.checkPermissions()
+      .then(rs => {
+        if (rs.location !== 'denied') {
+          this.isShowNotifyLocation = false;
+        } else {
+          this.isShowNotifyLocation = true;
+        }
+      });
     // this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
   }
 
   ionViewWillEnter() {
     this.routerOutlet.swipeGesture = false;
+    this.getAppreciation();
+    this.remindEnableNotification();
     this.updateAddressBook();
     this.updatePendingProposals();
     this.subscribeEvents();
@@ -130,6 +155,121 @@ export class ProposalsNotificationsPage {
   ngOnDestroy() {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
+  }
+
+  private getAppreciation() {
+    if (this.platformProvider.isCordova) {
+      let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+      if (lcsAppreciation.length > 0) {
+        this.notificationClaim = lcsAppreciation;
+      }
+    }
+  }
+
+  public openSetting() {
+    this.router.navigate(['/setting']);
+  }
+
+  public formatDate(timestamp) {
+    let date = moment.unix(timestamp)
+    return moment(date).endOf('day').fromNow();
+  }
+
+  public async handleClaimAppreciation(notification) {
+    // Get first wallet lotus in home list
+    let wallet = this.profileProvider.getFirstLotusWalletHome();
+    if (!_.isEmpty(wallet)) {
+      let message = 'Loading...';
+      let claimWalletAddress = '';
+      let codeClaimSplit = notification.claimCode ? notification.claimCode.replace('lixi_','') : '';
+      this.loadingProvider.simpleLoader(message);
+      await this.walletProvider
+      .getAddress(wallet, false)
+      .then(addr => {
+        return addr ? claimWalletAddress = addr : claimWalletAddress = '';
+      })
+      if (notification.claimCode) notification.claimCode.replace('lixi_','');
+      const bodyClaim = {
+        captchaToken: 'isAbcpay',
+        claimAddress: claimWalletAddress,
+        claimCode: codeClaimSplit
+      }
+      this.logger.info('Body claim', bodyClaim);
+      // Call provider to claim xpi from lixilotus/api
+      await this.lixiLotusProvider.claimVoucher(bodyClaim)
+      .then(async (data) => {
+        this.logger.info('Response claim', data);
+        const copayerModal = await this.modalCtrl.create({
+          component: ClaimVoucherModalComponent,
+          componentProps: {
+            result: {...data, ...wallet}
+          },
+          cssClass: 'recevied-voucher-success',
+          initialBreakpoint: 0.4,
+        });
+        // Update balance card home
+        this.events.publish('Local/FetchWallets');
+        await copayerModal.present();
+        this.events.publish('Local/GetListPrimary', true);
+        this.loadingProvider.dismissLoader();
+        copayerModal.onDidDismiss().then(({ data }) => {
+          const notificationClaim = _.clone(this.notificationClaim);
+          this.notificationClaim = notificationClaim.filter(notif => notif.title != notification.title);
+          this.deviceProvider.updateAppreciationClaim(this.platformProvider.uid, notification.claimCode)
+          .subscribe(rs => {
+            this.logger.info(rs);
+            const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
+            localStorage.setItem('appreciation', JSON.stringify(newNotificationClaim));
+          });
+        });
+      })
+      .catch(err => {
+        this.logger.error('Response claim err', err);
+        const infoSheet = this.actionSheetProvider.createInfoSheet(
+          'process-fail-voucher'
+        );
+        infoSheet.present();
+        this.loadingProvider.dismissLoader();
+        infoSheet.onDidDismiss(async option => {
+          if (option) {
+            this.router.navigate(['/proposals-notifications']);
+          }
+        });
+      });
+      // this.bypass(notification);
+    } else {
+      const infoSheet = this.actionSheetProvider.createInfoSheet(
+        'process-select-wallet'
+      );
+      infoSheet.present();
+      infoSheet.onDidDismiss(async option => {
+        if (option) {
+          this.addToHome('xpi', 'livenet');
+        }
+      });
+    }
+  }
+
+  public addToHome(coin?: string, network?: string) {
+    this.router.navigate(['/accounts-page'], {
+      state: {
+        isAddToHome: true,
+        coin: coin,
+        network: network
+      },
+      replaceUrl: true
+    });
+  }
+
+  bypass(notification) {
+    const notificationClaim = _.clone(this.notificationClaim);
+    this.notificationClaim = notificationClaim.filter(notif => notif.title != notification.title);
+    this.deviceProvider.updateAppreciationClaim(this.platformProvider.uid, notification.claimCode)
+    .subscribe(rs => {
+      this.logger.info(rs);
+      const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
+      localStorage.setItem('appreciation', JSON.stringify(newNotificationClaim));
+    });
   }
 
   private updateDesktopOnFocus() {
@@ -417,5 +557,17 @@ export class ProposalsNotificationsPage {
         txpsByWallet.txps[i].checked = true;
       }
     })
+  }
+
+  private remindEnableNotification() {
+    const day = moment().format('dddd').toLowerCase();
+    if (DAILY_REMIND.includes(day)) {
+      PushNotifications.checkPermissions()
+      .then(permission => {
+        permission?.receive === 'denied'
+        ? this.isRemindEnableNotification = true
+        : this.isRemindEnableNotification = false;
+      })
+    }
   }
 }

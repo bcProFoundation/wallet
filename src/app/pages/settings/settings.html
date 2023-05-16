@@ -91,13 +91,30 @@
           {{ 'Biometric' | translate }}
         </ion-note>
       </ion-item>
-      <ion-item class="item-end">
+      <ion-item [ngClass]="{'item-end': !isCordova}">
         <ion-label>
           {{ 'Show Portfolio Value' | translate }}
         </ion-label>
         <ion-toggle slot="end" [(ngModel)]="showTotalBalance" (ionChange)="toggleShowBalanceFlag()"></ion-toggle>
       </ion-item>
       
+      <ng-container *ngIf="isCordova">
+        <ion-item>
+          <ion-label>
+            {{ 'Notification' | translate }}
+          </ion-label>
+          <ion-toggle slot="end" [(ngModel)]="isEnableNotification" (click)="toggleEnableLocationFlag()"></ion-toggle>
+        </ion-item>
+        <ion-item class="item-end">
+          <ion-label>
+            {{ 'Location Services' | translate }}
+          </ion-label>
+          <ion-toggle slot="end" [(ngModel)]="isEnableLocation" (click)="toggleEnableLocationFlag()"></ion-toggle>
+        </ion-item>
+        <p class="sub-location" translate>
+          Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private.
+        </p>
+      </ng-container>
       <ion-item-divider class="item-end" *ngIf="walletsGroups && walletsGroups[0]">
         <ion-label>
           {{ 'Your Keys' | translate }}

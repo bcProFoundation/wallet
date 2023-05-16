@@ -239,6 +239,15 @@ export class HomePage {
       .catch(err => {
         this.logger.error(err);
       });
+      if (this.platformProvider.isCordova) {
+        const n = this.checkAppreciationBadge();
+        this.events.publish('Local/UpdateTxps', {
+          n: n
+        });
+        this.zone.run(() => {
+          this.txpsN = n;
+        });
+      }
   }
 
   ionViewWillEnter() {
@@ -389,6 +398,11 @@ export class HomePage {
     this.logger.debug(`Server message id: ${serverMessage.id} dismissed`);
     this.persistenceProvider.setServerMessageDismissed(serverMessage.id);
     this.removeServerMessage(serverMessage.id);
+  }
+
+  private checkAppreciationBadge(): number {
+    let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+    return lcsAppreciation.length;
   }
 
   public dismissNewReleaseMessage(): void {

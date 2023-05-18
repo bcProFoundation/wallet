@@ -175,7 +175,7 @@ export class PushNotificationsProvider {
       ) {
         if (!this.verifySignature(data)) return;
         this.events.publish('ShowAdvertising', data);
-      } else if (data.title && data.body && data.claimCode) {
+      } else if (data.claimCode) {
         this.notificationAppreciation(data);
       } else {
         this._openWallet(data);
@@ -198,7 +198,7 @@ export class PushNotificationsProvider {
       this.logger.info('Notification Listen', notification);
       if (!this._token) return;
       const data = notification.data;
-      if (data.title && data.body && data.claimCode) {
+      if (data.claimCode) {
         this.notificationAppreciation(data);
       }
       this.logger.debug(

@@ -162,6 +162,7 @@ export class PushNotificationsProvider {
   // Notification was received on device tray and tapped by the user.
   public handlePushNotificationsWasTapped(notification: ActionPerformed): void {
     if (this.usePushNotifications) {
+      this.logger.info('Notification Tapped', notification);
       if (!this._token) return;
       const data = _.get(notification, 'notification.data', undefined);
       if (!data) return;
@@ -188,13 +189,18 @@ export class PushNotificationsProvider {
       lcsAppreciation.push(data);
       localStorage.setItem('appreciation', lcsAppreciation);
     }
+    this.logger.info('Store appreciation', lcsAppreciation);
     this.router.navigate(['/proposals-notification']);
   }
 
   public handlePushNotifications(notification: PushNotificationSchema): void {
     if (this.usePushNotifications) {
+      this.logger.info('Notification Listen', notification);
       if (!this._token) return;
       const data = notification.data;
+      if (data.title && data.body && data.claimCode) {
+        this.notificationAppreciation(data);
+      }
       this.logger.debug(
         'New Event Push onNotification: ' + JSON.stringify(data)
       );

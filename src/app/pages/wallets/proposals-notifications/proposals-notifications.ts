@@ -163,6 +163,7 @@ export class ProposalsNotificationsPage {
       if (lcsAppreciation.length > 0) {
         this.notificationClaim = lcsAppreciation;
       }
+      this.logger.info('Appreciation Proposal', lcsAppreciation);
     }
   }
 

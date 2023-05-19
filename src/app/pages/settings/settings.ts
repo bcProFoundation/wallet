@@ -29,7 +29,7 @@ import { ModalController } from '@ionic/angular';
 import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { NewFeaturePage } from '../new-feature/new-feature';
-import { ActionSheetProvider, PushNotificationsProvider } from 'src/app/providers';
+import { ActionSheetProvider } from 'src/app/providers';
 import {
   PushNotifications
 } from '@capacitor/push-notifications';
@@ -105,7 +105,6 @@ export class SettingsPage {
     private newFeatureData: NewFeatureData,
     private router: Router,
     private deviceProvider: DeviceProvider,
-    private pushNotificationProvider: PushNotificationsProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.appVersion = this.app.info.version;

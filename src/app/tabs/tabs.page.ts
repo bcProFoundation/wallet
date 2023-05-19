@@ -20,7 +20,6 @@ import { WalletProvider } from '../providers/wallet/wallet';
 import * as _ from 'lodash';
 import { TokenProvider } from '../providers/token-sevice/token-sevice';
 import { DeviceProvider } from '../providers/device/device';
-import { NotificationComponent } from '../components/notification-component/notification-component';
 import { Geolocation } from '@capacitor/geolocation';
 import { PushNotificationsProvider } from '../providers';
 

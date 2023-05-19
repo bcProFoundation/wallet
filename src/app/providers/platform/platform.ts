@@ -176,7 +176,7 @@ export class PlatformProvider {
   public getUniqueDeviceID() {
     this.uniqueDeviceID.get()
       .then((uuid: any) => {
-        this.logger.info('UNIQUE UUID', uuid);
+        this.logger.info('DEVICE', uuid);
         this.uid = uuid;
       })
       .catch((error: any) => {

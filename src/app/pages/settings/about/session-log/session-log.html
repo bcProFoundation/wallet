@@ -11,7 +11,7 @@
     <ion-list *ngIf="filteredLogs && filteredLogs.length > 0" lines="none" class="settings-list bp-list">
       <ion-item class="log-entry">
         <div *ngIf="filteredLogs && filteredLogs.length > 0">
-          <div *ngFor="let l of filteredLogs">
+          <div copy-to-clipboard="{{l.msg}}" *ngFor="let l of filteredLogs">
             <span [ngClass]="{'energized': l.level=='warn', 'royal': l.level=='debug', 'info-color': l.level=='info', 'assertive': l.level=='error'}">
               <span class="log-timestamp">[{{l.timestamp}}]</span>
               <span class="log-level">[{{l.level}}]</span> {{l.msg}}

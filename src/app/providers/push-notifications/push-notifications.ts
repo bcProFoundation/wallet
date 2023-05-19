@@ -63,8 +63,6 @@ export class PushNotificationsProvider {
       const config = this.configProvider.get();
       if (!config.pushNotifications.enabled) return;
       await this.registerNotifications();
-      // On success, we should be able to receive notifications
-      await this.getToken();
       this.enable();
       // enabling topics
       if (
@@ -133,17 +131,15 @@ export class PushNotificationsProvider {
   }
 
   private async registerNotifications() {
-    let permStatus = await PushNotifications.checkPermissions();
+    let permStatus = await PushNotifications.requestPermissions();
 
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
+    if (permStatus.receive === 'granted') {
+      // Register with Apple / Google to receive push via APNS/FCM
+      await PushNotifications.register();
+      await this.getToken();
+    } else {
+      this.logger.error('User denied permissions!');
     }
-
-    if (permStatus.receive !== 'granted') {
-      throw new Error('User denied permissions!');
-    }
-
-    await PushNotifications.register();
   }
 
   private renewSubscription(): void {
@@ -161,22 +157,15 @@ export class PushNotificationsProvider {
 
   // Notification was received on device tray and tapped by the user.
   public handlePushNotificationsWasTapped(notification: ActionPerformed): void {
-    if (this.usePushNotifications) {
-      this.logger.info('Notification Tapped', notification);
-      if (!this._token) return;
-      const data = _.get(notification, 'notification.data', undefined);
-      if (!data) return;
-      if (data.redir) {
-        this.events.publish('IncomingDataRedir', { name: data.redir });
-      } else if (
-        data.takeover_url &&
-        data.takeover_image &&
-        data.takeover_sig
-      ) {
-        if (!this.verifySignature(data)) return;
-        this.events.publish('ShowAdvertising', data);
-      } else if (data.claimCode) {
+    const data = _.get(notification, 'notification.data', undefined);
+    if (this.usePushNotifications && data) {
+      if (data?.claimCode) {
         this.notificationAppreciation(data);
+        this.openProposalsNotificationsPage();
+      } else if (data?.redir) {
+        this.events.publish('IncomingDataRedir', { name: data.redir });
+      } else if (data?.takeover_url && data?.takeover_image && data?.takeover_sig) {
+        !this.verifySignature(data) ? null : this.events.publish('ShowAdvertising', data);
       } else {
         this._openWallet(data);
       }
@@ -185,29 +174,31 @@ export class PushNotificationsProvider {
 
   private notificationAppreciation(data) {
     let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
-    if (!lcsAppreciation.includes(data)) {
+    if (!lcsAppreciation.some(appreciation => appreciation.claimCode === data.claimCode)) {
       lcsAppreciation.push(data);
-      localStorage.setItem('appreciation', lcsAppreciation);
+      localStorage.setItem('appreciation', JSON.stringify(lcsAppreciation));
     }
-    this.logger.info('Store appreciation', lcsAppreciation);
-    this.router.navigate(['/proposals-notification']);
+  }
+
+  private openProposalsNotificationsPage() {
+    this.router.navigate(['/proposals-notifications']);
   }
 
   public handlePushNotifications(notification: PushNotificationSchema): void {
-    if (this.usePushNotifications) {
-      this.logger.info('Notification Listen', notification);
-      if (!this._token) return;
-      const data = notification.data;
-      if (data.claimCode) {
-        this.notificationAppreciation(data);
-      }
+    const data = notification.data;
+    if (this.usePushNotifications && data) {
       this.logger.debug(
         'New Event Push onNotification: ' + JSON.stringify(data)
       );
+      if (data.claimCode) { 
+        this.notificationAppreciation(data);
+      }
       const wallet = this.findWallet(data.walletId, data.tokenAddress);
-      if (!wallet) return;
-      this.newBwsEvent(data, wallet.credentials.walletId);
-      this.showInappNotification(data);
+      if (wallet) {
+        this.newBwsEvent(data, wallet.credentials.walletId);
+        // Turn off notification In app
+        // this.showInappNotification(data);
+      }
     }
   }
 

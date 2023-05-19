@@ -163,7 +163,6 @@ export class ProposalsNotificationsPage {
       if (lcsAppreciation.length > 0) {
         this.notificationClaim = lcsAppreciation;
       }
-      this.logger.info('Appreciation Proposal', lcsAppreciation);
     }
   }
 
@@ -218,7 +217,6 @@ export class ProposalsNotificationsPage {
           this.notificationClaim = notificationClaim.filter(notif => notif.title != notification.title);
           this.deviceProvider.updateAppreciationClaim(this.platformProvider.uid, notification.claimCode)
           .subscribe(rs => {
-            this.logger.info(rs);
             const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
             localStorage.setItem('appreciation', JSON.stringify(newNotificationClaim));
           });

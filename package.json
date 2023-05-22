@@ -33,7 +33,7 @@
     "apply:android": "npx tsc configure/configure-android.ts && node configure/configure-android.js",
     "apply:ios": "npx tsc configure/configure-ios.ts && node configure/configure-ios.js",
     "env:custom": "npm run config -- --environment=development --awsUrl=https://aws.abcpay.cash/bws/api \n\n# Environment set to: dev\n\n",
-    "resources": "cordova-res android --copy && cp resources/android/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml && cp resources/android/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml && capacitor-resources -p ios",
+    "resources": "cordova-res android --copy && cp resources/android/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml && cp resources/android/ic_launcher_round.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml && cp resources/android/build.gradle android/app/build.gradle && cp resources/android/variables.gradle android/variables.gradle  && capacitor-resources -p ios",
     "generate:android-bundle": "cd android && ./gradlew task && ./gradlew bundle",
     "sign:android": "bundletool build-apks --mode=universal --bundle=./android/app/build/outputs/bundle/release/app-release.aab --output=./apks/apcpay-release.apks --ks=release.jks --ks-pass=pass:123456 --ks-key-alias=release --key-pass=pass:123456",
     "final:android-release": "npm run build:android-release && rm -rf apks && npm run generate:android-bundle && npm run sign:android",

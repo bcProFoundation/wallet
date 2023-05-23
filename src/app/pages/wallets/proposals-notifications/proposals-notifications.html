@@ -1,6 +1,6 @@
 <wide-header-page title="{{'Notification Board' | translate}}" [hasSlideButton]="txpsToSign[0]">
   <div page-content>
-    <ion-list class="content-list" *ngIf="txpsPending[0] || txpsAccepted[0] || txpsRejected[0];">
+    <ion-list class="content-list ion-margin-bottom" *ngIf="txpsPending[0] || txpsAccepted[0] || txpsRejected[0];">
       <div class="wallet-card-container" *ngFor="let txpsByStatus of allTxps">
         <ion-item-divider *ngIf="txpsByStatus.data && txpsByStatus.data[0]" class="item-divider-header">
           <span class="ellipsis">{{txpsByStatus.title | uppercase}}</span>
@@ -90,25 +90,33 @@
 
     <ion-list *ngIf="notificationClaim[0]">
       <div class="notification-item" *ngFor="let notification of notificationClaim">
-        <ion-item>
-          <ion-icon src="assets/img/appreciation-icon.svg" slot="start">
-          </ion-icon>
-          <ion-label>
-            <div class="main-label">{{ notification.title }}</div>
-            <div class="secondary-label">
-              {{notification.body}}
-            </div>
-            <div class="status-label">
-              <p class="expired-date">{{notification.type == 'Monthly' ? 'On Month' : 'On Week'}}</p>
-              <p class="date-label">{{ formatDate(notification.createdOn) }}</p>
-            </div>
-          </ion-label>
-          <ion-note slot="end">
-            <p class="btn-claim" (click)="handleClaimAppreciation(notification)">
-              Claim
-            </p>
-          </ion-note>
-        </ion-item>
+        <ion-item-sliding>
+          <ion-item>
+            <ion-icon src="assets/img/appreciation-icon.svg" slot="start">
+            </ion-icon>
+            <ion-label>
+              <div class="main-label" translate>{{ notification.title }}</div>
+              <div class="secondary-label" translate>
+                {{notification.body}}
+              </div>
+              <div class="status-label">
+                <p class="expired-date">{{'Expire on: ' | translate }} {{expireOn(notification.createdOn, notification.type)}}</p>
+                <p class="date-label">{{ formatDate(notification.timeReceive) }}</p>
+              </div>
+            </ion-label>
+            <ion-note slot="end">
+              <p class="btn-claim" (click)="handleClaimAppreciation(notification)" translate>
+                Claim
+              </p>
+            </ion-note>
+          </ion-item>
+
+          <ion-item-options side="end">
+            <ion-item-option (click)="clearNotification(notification)" class="btn-add-to-home">
+              <img src="assets/img/remove-out-home-dark.svg" alt="">
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
       </div>
     </ion-list>
     <ng-container *ngIf="(txpsPending.length == 0 || txpsAccepted.length == 0 || txpsRejected.length == 0) && notificationClaim.length == 0 && !isShowNotifyLocation">

@@ -3590,6 +3590,36 @@ msgstr "Rename Key"
 msgid "Rename Account"
 msgstr "Rename Account"
 
+msgid "Claim"
+msgstr "Claim"
+
+msgid "Expire on: "
+msgstr "Expire on: "
+
+msgid "Location Services"
+msgstr "Localtion Services"
+
+msgid "Notification Services"
+msgstr "Notification Services"
+
+msgid "Thanks for checking in !"
+msgstr "Thanks for checking in !"
+
+msgid "Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
+msgstr "Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
+
+msgid "Welcome to AbcPay wallet !"
+msgstr "Welcome to AbcPay wallet !"
+
+msgid "Here a small gift for checking around! Give it to someone who is in need."
+msgstr "Here a small gift for checking around! Give it to someone who is in need."
+
+msgid "Enable notification to get your prize from businesses who want to appreciate you for your attention."
+msgstr "Enable notification to get your prize from businesses who want to appreciate you for your attention."
+
+msgid "Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private."
+msgstr "Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private."
+
 msgid "Contained Accounts"
 msgstr "Contained Accounts"
 

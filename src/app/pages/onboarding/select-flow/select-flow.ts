@@ -119,7 +119,6 @@ export class SelectFlowPage {
     });
     this.router.navigate(['']).then(() => {
       this.events.publish('Local/FetchWallets');
-      if (this.platformProvider.isCordova) this.events.publish('Local/ClaimAppreciation', true);
     });
   }
 }

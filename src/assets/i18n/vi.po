@@ -2865,10 +2865,10 @@ msgid "Expire on: "
 msgstr "Hết hạn vào ngày: "
 
 msgid "Location Services"
-msgstr "Dịch vụ vị trí"
+msgstr "Dịch vụ định vị"
 
-msgid "Notification Services"
-msgstr "Dịch vụ thông báo"
+msgid "Notifications"
+msgstr "Thông báo"
 
 msgid "Thanks for checking in !"
 msgstr "Cảm ơn bạn đã đăng nhập !"
@@ -2883,7 +2883,7 @@ msgid "Thanks for using our app. Here our small appreciation to you to start usi
 msgstr "Cảm ơn bạn đã sử dụng ứng dụng của chúng tôi. Đây là một món quà nhỏ gửi tặng bạn để bắt đầu sử dụng ứng dụng. Nhận nó ngay bây giờ!"
 
 msgid "Enable notification to get your prize from businesses who want to appreciate you for your attention."
-msgstr "Kích hoạt thông báo của bạn để doanh nghiệp có thể gửi quà tặng và ưu đãi cho sự quan tâm của bạn."
+msgstr "Kích hoạt định vị, thông báo của bạn và đăng nhập thường xuyên vào ví AbcPay để doanh nghiệp có thể gửi quà tặng và ưu đãi cho sự quan tâm của bạn. Thông tin cá nhân của bạn hoàn toàn được bảo mật."
 
 msgid "Enabling your service location and regularly check-in AbcPay wallet so businesses can pay you for your attention. Your identity is completely private."
 msgstr "Kích hoạt vị trí, thông báo của bạn và đăng nhập thường xuyên vào ví AbcPay để doanh nghiệp có thể gửi quà tặng và ưu đãi cho sự quan tâm của bạn. Thông tin cá nhân của bạn hoàn toàn được bảo mật."

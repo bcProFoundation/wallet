@@ -585,20 +585,16 @@ export class WalletsPage {
       .catch(err => {
         this.logger.error(err);
       });
-      if (this.platformProvider.isCordova) {
-        const n = this.checkAppreciationBadge();
-        this.events.publish('Local/UpdateTxps', {
-          n: n
-        });
-        this.zone.run(() => {
-          this.txpsN = n;
-        });
-      }
+      if (this.platformProvider.isCordova) this.checkAppreciationBadge();
   }
 
-  private checkAppreciationBadge(): number {
+  private checkAppreciationBadge() {
     let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
-    return lcsAppreciation.length;
+    setTimeout(() => {
+      this.zone.run(() => {
+        this.txpsN = lcsAppreciation.length;
+      });
+    }, 500);
   }
 
   public async goToWalletDetails(wallet) {

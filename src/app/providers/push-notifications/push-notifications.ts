@@ -175,6 +175,7 @@ export class PushNotificationsProvider {
   private notificationAppreciation(data) {
     let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
     if (!lcsAppreciation.some(appreciation => appreciation.claimCode === data.claimCode)) {
+      data['timeReceive'] = new Date();
       lcsAppreciation.push(data);
       localStorage.setItem('appreciation', JSON.stringify(lcsAppreciation));
     }

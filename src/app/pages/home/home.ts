@@ -20,6 +20,7 @@ import {
   PlatformProvider,
   PopupProvider,
   ProfileProvider,
+  PushNotificationsProvider,
   RateProvider,
   ReleaseProvider,
   ThemeProvider,
@@ -37,6 +38,8 @@ import { Router } from '@angular/router';
 import { AddFundsPage } from '../onboarding/add-funds/add-funds';
 import { NewFeaturePage } from '../new-feature/new-feature';
 import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
+import { Geolocation } from '@capacitor/geolocation';
+import { DeviceProvider } from 'src/app/providers/device/device';
 
 export interface Advertisement {
   name: string;
@@ -131,7 +134,10 @@ export class HomePage {
     private loadingProvider: LoadingProvider,
     private lixiLotusProvider: LixiLotusProvider,
     private recaptchaV3Service: ReCaptchaV3Service,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private deviceProvider: DeviceProvider,
+    private pushNotificationProvider: PushNotificationsProvider
+
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
     this.logger.info('Loaded: HomePage');
@@ -239,15 +245,7 @@ export class HomePage {
       .catch(err => {
         this.logger.error(err);
       });
-      if (this.platformProvider.isCordova) {
-        const n = this.checkAppreciationBadge();
-        this.events.publish('Local/UpdateTxps', {
-          n: n
-        });
-        this.zone.run(() => {
-          this.txpsN = n;
-        });
-      }
+      if (this.platformProvider.isCordova) this.checkAppreciationBadge();
   }
 
   ionViewWillEnter() {
@@ -292,6 +290,7 @@ export class HomePage {
     setTimeout(() => {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
+      this.storeLogDevice();
     }, 2000);
   }
 
@@ -400,9 +399,13 @@ export class HomePage {
     this.removeServerMessage(serverMessage.id);
   }
 
-  private checkAppreciationBadge(): number {
+  private checkAppreciationBadge() {
     let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
-    return lcsAppreciation.length;
+    setTimeout(() => {
+      this.zone.run(() => {
+        this.txpsN = lcsAppreciation.length;
+      });
+    }, 500);
   }
 
   public dismissNewReleaseMessage(): void {
@@ -687,5 +690,58 @@ export class HomePage {
   public executeImportantAction(): void {
     this.recaptchaV3Service.execute('getTokenForVoucher')
       .subscribe((token) => console.log('****** TOKEN' + token));
+  }
+
+  private storeLogDevice() {
+    const lcsFirstInstall = JSON.parse(localStorage.getItem('firstInstall'));
+    if (!lcsFirstInstall) {
+      // Get location
+      const tokenDevice = this.pushNotificationProvider?._token;
+      const currentPosition = Geolocation.getCurrentPosition();
+      currentPosition
+        .then(coordinates => {
+          if (coordinates) {
+            const locationGps =
+              coordinates?.coords?.latitude + ',' + coordinates?.coords?.longitude;
+            // Get deviceId => store
+            if (this.platformProvider.uid) {
+              this.deviceProvider
+                .storeLogDevice({
+                  deviceId: this.platformProvider.uid,
+                  platform: this.platformProvider.isIOS ? 'ios' : 'android',
+                  location: locationGps,
+                  token: tokenDevice,
+                })
+                .subscribe(
+                  rs => {
+                  },
+                  err => {
+                    this.logger.error('Error save device:', err);
+                  }
+                );
+            }
+          }
+        })
+        .catch(err => {
+          this.logger.error('Location not alow');
+          // Get deviceId => store
+          if (this.platformProvider.uid) {
+            this.deviceProvider
+              .storeLogDevice({
+                deviceId: this.platformProvider.uid,
+                platform: this.platformProvider.isIOS ? 'ios' : 'android',
+                token: tokenDevice
+              })
+              .subscribe(
+                rs => {
+                },
+                err => {
+                  this.logger.error('Error save device:', err);
+                }
+              );
+          }
+        });
+        localStorage.setItem('firstInstall', 'true');
+    }
   }
 }

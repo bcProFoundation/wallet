@@ -85,6 +85,9 @@ export class OnGoingProcessProvider {
       ),
       generalAwaiting: this.translate.instant(
         "Just a second, we're setting a few things up."
+      ),
+      loading: this.translate.instant(
+        "Loading..."
       )
     };
     return processNames;

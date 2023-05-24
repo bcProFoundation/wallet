@@ -28,7 +28,7 @@ import { ActionSheetProvider, AppProvider, LixiLotusProvider, LoadingProvider } 
 import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
 import { DeviceProvider } from 'src/app/providers/device/device';
 
-const DAILY_REMIND = ['friday', 'saturday'];
+const DAILY_REMIND = [5,6];
 
 
 @Component({
@@ -170,19 +170,22 @@ export class ProposalsNotificationsPage {
     this.router.navigate(['/setting']);
   }
 
-  public formatDate(timestamp) {
-    let date = moment.unix(timestamp)
-    return moment(date).endOf('day').fromNow();
+  public formatDate(timeReceive) {
+    return moment(timeReceive).fromNow();
+  }
+
+  public expireOn(timestamp, type) {
+    let date = moment.unix(timestamp);
+    return type === 'Monthly' ? moment(date).endOf('month').format('DD/MM/YYYY') : moment(date).endOf('week').format('DD/MM/YYYY');
   }
 
   public async handleClaimAppreciation(notification) {
     // Get first wallet lotus in home list
     let wallet = this.profileProvider.getFirstLotusWalletHome();
     if (!_.isEmpty(wallet)) {
-      let message = 'Loading...';
       let claimWalletAddress = '';
       let codeClaimSplit = notification.claimCode ? notification.claimCode.replace('lixi_','') : '';
-      this.loadingProvider.simpleLoader(message);
+      this.onGoingProcessProvider.set('loading');
       await this.walletProvider
       .getAddress(wallet, false)
       .then(addr => {
@@ -211,10 +214,10 @@ export class ProposalsNotificationsPage {
         this.events.publish('Local/FetchWallets');
         await copayerModal.present();
         this.events.publish('Local/GetListPrimary', true);
-        this.loadingProvider.dismissLoader();
+        this.onGoingProcessProvider.clear();
         copayerModal.onDidDismiss().then(({ data }) => {
           const notificationClaim = _.clone(this.notificationClaim);
-          this.notificationClaim = notificationClaim.filter(notif => notif.title != notification.title);
+          this.notificationClaim = notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
           this.deviceProvider.updateAppreciationClaim(this.platformProvider.uid, notification.claimCode)
           .subscribe(rs => {
             const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
@@ -228,14 +231,16 @@ export class ProposalsNotificationsPage {
           'process-fail-voucher'
         );
         infoSheet.present();
-        this.loadingProvider.dismissLoader();
+        this.onGoingProcessProvider.clear();
         infoSheet.onDidDismiss(async option => {
           if (option) {
             this.router.navigate(['/proposals-notifications']);
           }
         });
-      });
-      // this.bypass(notification);
+      })
+      .finally(() => {
+        this.onGoingProcessProvider.clear();
+      })
     } else {
       const infoSheet = this.actionSheetProvider.createInfoSheet(
         'process-select-wallet'
@@ -260,15 +265,10 @@ export class ProposalsNotificationsPage {
     });
   }
 
-  bypass(notification) {
-    const notificationClaim = _.clone(this.notificationClaim);
-    this.notificationClaim = notificationClaim.filter(notif => notif.title != notification.title);
-    this.deviceProvider.updateAppreciationClaim(this.platformProvider.uid, notification.claimCode)
-    .subscribe(rs => {
-      this.logger.info(rs);
-      const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
-      localStorage.setItem('appreciation', JSON.stringify(newNotificationClaim));
-    });
+  public clearNotification(notification) {
+    const newNotificationClaim = this.notificationClaim.filter(notify => notify.claimCode !== notification.claimCode);
+    localStorage.setItem('appreciation', JSON.stringify(newNotificationClaim));
+    this.notificationClaim = newNotificationClaim;
   }
 
   private updateDesktopOnFocus() {
@@ -559,8 +559,8 @@ export class ProposalsNotificationsPage {
   }
 
   private remindEnableNotification() {
-    const day = moment().format('dddd').toLowerCase();
-    if (DAILY_REMIND.includes(day)) {
+    const isoDay = moment().isoWeekday();
+    if (DAILY_REMIND.includes(isoDay)) {
       PushNotifications.checkPermissions()
       .then(permission => {
         permission?.receive === 'denied'

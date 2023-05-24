@@ -28,7 +28,7 @@ import { ActionSheetProvider, AppProvider, LixiLotusProvider, LoadingProvider } 
 import { ClaimVoucherModalComponent } from 'src/app/components/page-claim-modal/claim-voucher-modal.component';
 import { DeviceProvider } from 'src/app/providers/device/device';
 
-const DAILY_REMIND = ['friday', 'saturday', 'thứ bảy', 'thứ sáu'];
+const DAILY_REMIND = [5,6];
 
 
 @Component({
@@ -559,8 +559,8 @@ export class ProposalsNotificationsPage {
   }
 
   private remindEnableNotification() {
-    const day = moment().format('dddd').toLowerCase();
-    if (DAILY_REMIND.includes(day)) {
+    const isoDay = moment().isoWeekday();
+    if (DAILY_REMIND.includes(isoDay)) {
       PushNotifications.checkPermissions()
       .then(permission => {
         permission?.receive === 'denied'

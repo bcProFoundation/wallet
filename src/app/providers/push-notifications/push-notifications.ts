@@ -100,7 +100,7 @@ export class PushNotificationsProvider {
 
   private async getToken() {
     if (this.platformProvider.isAndroid) {
-      PushNotifications.addListener('registration', async ({ value }) => {
+      await PushNotifications.addListener('registration', ({ value }) => {
         if (!value) {
           setTimeout(() => {
             this.init();
@@ -109,6 +109,9 @@ export class PushNotificationsProvider {
         }
         this.logger.debug('Get token for push notifications android: ' + value);
         this._token = value;
+      });
+      await PushNotifications.addListener('registrationError', err => {
+        this.logger.error('Registration error: ', err.error);
       });
     } else {
       FCM.getToken()

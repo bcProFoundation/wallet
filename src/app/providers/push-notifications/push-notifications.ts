@@ -63,6 +63,7 @@ export class PushNotificationsProvider {
       const config = this.configProvider.get();
       if (!config.pushNotifications.enabled) return;
       await this.registerNotifications();
+      await this.getToken();
       this.enable();
       // enabling topics
       if (
@@ -139,7 +140,6 @@ export class PushNotificationsProvider {
     if (permStatus.receive === 'granted') {
       // Register with Apple / Google to receive push via APNS/FCM
       await PushNotifications.register();
-      await this.getToken();
     } else {
       this.logger.error('User denied permissions!');
     }

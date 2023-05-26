@@ -135,14 +135,17 @@ export class PushNotificationsProvider {
   }
 
   private async registerNotifications() {
-    let permStatus = await PushNotifications.requestPermissions();
+    let permStatus = await PushNotifications.checkPermissions();
 
-    if (permStatus.receive === 'granted') {
-      // Register with Apple / Google to receive push via APNS/FCM
-      await PushNotifications.register();
-    } else {
-      this.logger.error('User denied permissions!');
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
     }
+
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+
+    await PushNotifications.register();
   }
 
   private renewSubscription(): void {

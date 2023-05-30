@@ -41,7 +41,8 @@
     "final:android-debug": "npm run build:android && rm -rf apks && bundletool build-apks --bundle=./android/app/build/outputs/bundle/release/app-release.aab --output=./apks/apcpay-debug.apks",
     "final:ios": "ionic build --prod && npm run apply-config-pushnotification && npx cap sync ios",
     "final:android": "ionic build --prod && npx cap sync android",
-    "apply-config-pushnotification": "cp resources/ios/Podfile ios/App/Podfile && cp resources/ios/AppDelegate.swift ios/App/App/AppDelegate.swift"
+    "apply-config-pushnotification": "cp resources/ios/Podfile ios/App/Podfile && cp resources/ios/AppDelegate.swift ios/App/App/AppDelegate.swift",
+    "add-android": "npm i @capacitor/android@4.8.0 && npx cap add android"
   },
   "private": true,
   "dependencies": {

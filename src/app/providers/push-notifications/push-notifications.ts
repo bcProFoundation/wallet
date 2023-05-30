@@ -145,9 +145,7 @@ export class PushNotificationsProvider {
       throw new Error('User denied permissions!');
     }
 
-    if (!this.platformProvider.isAndroid) {
-      await PushNotifications.register();
-    }
+    await PushNotifications.register();
   }
 
   private renewSubscription(): void {

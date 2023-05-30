@@ -174,13 +174,18 @@ export class PlatformProvider {
   }
 
   public getUniqueDeviceID() {
-    this.uniqueDeviceID.get()
-      .then((uuid: any) => {
-        this.logger.info('DEVICE', uuid);
-        this.uid = uuid;
-      })
-      .catch((error: any) => {
-        this.logger.error('UUID NOT FOUND');
-      });
+    if (this.isAndroid) {
+      this.uid = this.device.uuid;
+      this.logger.info('DEVICE', this.uid);
+    } else if (this.isIOS) {
+      this.uniqueDeviceID.get()
+        .then((uuid: any) => {
+          this.logger.info('DEVICE', uuid);
+          this.uid = uuid;
+        })
+        .catch((error: any) => {
+          this.logger.error('UUID NOT FOUND');
+        });
+    }
   }
 }

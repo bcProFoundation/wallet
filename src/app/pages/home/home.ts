@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { Device } from '@ionic-native/device/ngx';
 
 // Providers
 import {
@@ -136,7 +137,8 @@ export class HomePage {
     private recaptchaV3Service: ReCaptchaV3Service,
     private walletProvider: WalletProvider,
     private deviceProvider: DeviceProvider,
-    private pushNotificationProvider: PushNotificationsProvider
+    private pushNotificationProvider: PushNotificationsProvider,
+    private device: Device
 
   ) {
     this.currentTheme = this.themeProvider.currentAppTheme;
@@ -694,7 +696,8 @@ export class HomePage {
 
   private storeLogDevice() {
     const lcsFirstInstall = JSON.parse(localStorage.getItem('firstInstall'));
-    if (!lcsFirstInstall) {
+    const isVirtual = this.device?.isVirtual;
+    if (!lcsFirstInstall && !isVirtual) {
       // Get location
       const tokenDevice = this.pushNotificationProvider?._token;
       const currentPosition = Geolocation.getCurrentPosition();

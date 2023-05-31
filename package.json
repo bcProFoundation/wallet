@@ -42,7 +42,7 @@
     "final:ios": "ionic build --prod && npm run apply-config-pushnotification && npx cap sync ios",
     "final:android": "ionic build --prod && npx cap sync android",
     "apply-config-pushnotification": "cp resources/ios/Podfile ios/App/Podfile && cp resources/ios/AppDelegate.swift ios/App/App/AppDelegate.swift",
-    "add-android": "npm i @capacitor/android@4.8.0 && npx cap add android"
+    "add-android": "npm i @capacitor/android@4.8.0 --force && npx cap add android"
   },
   "private": true,
   "dependencies": {

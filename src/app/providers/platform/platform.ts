@@ -184,7 +184,7 @@ export class PlatformProvider {
           this.uid = uuid;
         })
         .catch((error: any) => {
-          this.logger.error('UUID NOT FOUND');
+          this.logger.error('UUID NOT FOUND', error);
         });
     }
   }

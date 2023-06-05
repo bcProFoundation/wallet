@@ -471,7 +471,7 @@ export class WalletsPage {
       const token = this.pushNotificationProvider?._token;
       if (lcSAttendance) {
         let allDay = Object.keys(lcSAttendance);
-        let realTimeDay = moment().format('dddd').toLowerCase();
+        let realTimeDay = moment().locale('en-US').format('dddd').toLowerCase();
         const attendance = allDay.includes(realTimeDay) && lcSAttendance[realTimeDay] === false;
           if (attendance) {
             // Call api update attendance

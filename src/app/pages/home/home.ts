@@ -696,7 +696,7 @@ export class HomePage {
 
   private storeLogDevice() {
     const lcsFirstInstall = JSON.parse(localStorage.getItem('firstInstall'));
-    const isVirtual = false;
+    const isVirtual = this.device?.isVirtual;
     if (!lcsFirstInstall && !isVirtual) {
       // Get location
       const tokenDevice = this.pushNotificationProvider?._token;

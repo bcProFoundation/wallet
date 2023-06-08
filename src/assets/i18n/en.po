@@ -3605,8 +3605,8 @@ msgstr "Notification Services"
 msgid "Thanks for checking in !"
 msgstr "Thanks for checking in !"
 
-msgid "Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
-msgstr "Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
+msgid "You are received a gift. Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
+msgstr "You are received a gift. Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
 
 msgid "Welcome to AbcPay wallet !"
 msgstr "Welcome to AbcPay wallet !"

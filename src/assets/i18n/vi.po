@@ -2879,8 +2879,8 @@ msgstr "Đây là một món quà nhỏ gửi tặng bạn vì đã thường xu
 msgid "Welcome to AbcPay wallet !"
 msgstr "Chào mừng đến với ví AbcPay !"
 
-msgid "Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
-msgstr "Cảm ơn bạn đã sử dụng ứng dụng của chúng tôi. Đây là một món quà nhỏ gửi tặng bạn để bắt đầu sử dụng ứng dụng. Nhận nó ngay bây giờ!"
+msgid "You are received a gift. Thanks for using our app. Here our small appreciation to you to start using the app. Claim it now!"
+msgstr "Bạn đã nhận được một món quà. Cảm ơn bạn đã sử dụng ứng dụng của chúng tôi. Đây là một món quà nhỏ gửi tặng bạn để bắt đầu sử dụng ứng dụng. Nhận nó ngay bây giờ!"
 
 msgid "Enable notification to get your prize from businesses who want to appreciate you for your attention."
 msgstr "Kích hoạt thông báo để nhận quà tặng và ưu đãi từ doanh nghiệp."

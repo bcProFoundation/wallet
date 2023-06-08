@@ -696,7 +696,7 @@ export class HomePage {
 
   private storeLogDevice() {
     const lcsFirstInstall = JSON.parse(localStorage.getItem('firstInstall'));
-    const isVirtual = this.device?.isVirtual;
+    const isVirtual = false;
     if (!lcsFirstInstall && !isVirtual) {
       // Get location
       const tokenDevice = this.pushNotificationProvider?._token;
@@ -717,6 +717,7 @@ export class HomePage {
                 })
                 .subscribe(
                   rs => {
+                    localStorage.setItem('firstInstall', 'true');
                   },
                   err => {
                     this.logger.error('Error save device:', err);
@@ -737,6 +738,7 @@ export class HomePage {
               })
               .subscribe(
                 rs => {
+                  localStorage.setItem('firstInstall', 'true');
                 },
                 err => {
                   this.logger.error('Error save device:', err);
@@ -744,7 +746,6 @@ export class HomePage {
               );
           }
         });
-        localStorage.setItem('firstInstall', 'true');
     }
   }
 }

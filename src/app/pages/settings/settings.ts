@@ -18,6 +18,9 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { ThemeProvider } from '../../providers/theme/theme';
 import { TouchIdProvider } from '../../providers/touchid/touchid';
+import { Geolocation } from '@capacitor/geolocation';
+import { DeviceProvider } from 'src/app/providers/device/device';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 
 // pages
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -27,6 +30,9 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { Router } from '@angular/router';
 import { NewFeaturePage } from '../new-feature/new-feature';
 import { ActionSheetProvider } from 'src/app/providers';
+import {
+  PushNotifications
+} from '@capacitor/push-notifications';
 
 @Component({
   selector: 'page-settings',
@@ -76,6 +82,8 @@ export class SettingsPage {
   public navigation: string;
   public featureList: any;
   public isScroll = false;
+  public isEnableLocation: boolean;
+  public isEnableNotification: boolean;
   useLegacyQrCode;
   constructor(
     private app: AppProvider,
@@ -95,7 +103,8 @@ export class SettingsPage {
     private themeProvider: ThemeProvider,
     private events: EventManagerService,
     private newFeatureData: NewFeatureData,
-    private router: Router
+    private router: Router,
+    private deviceProvider: DeviceProvider,
   ) {
     this.appName = this.app.info.nameCase;
     this.appVersion = this.app.info.version;
@@ -115,6 +124,7 @@ export class SettingsPage {
   ngOnInit() {
     this.logger.info('Loaded: SettingsPage');
     if (this.isCordova) {
+      this.checkPermissionNotification();
       this.events.subscribe('BitPayId/Disconnected', () => this.updateUser());
       this.events.subscribe('BitPayId/Connected', user =>
         this.updateUser(user)
@@ -180,6 +190,8 @@ export class SettingsPage {
     this.showTotalBalance = this.config.totalBalance.show;
 
     this.featureList = await this.newFeatureData.get();
+
+    if (this.platformProvider.isCordova) this.checkPermissionLocation();
   }
 
   ionViewDidEnter() {
@@ -399,6 +411,13 @@ export class SettingsPage {
     if (this.showTotalBalance) this.events.publish('Local/FetchWallets');
   }
 
+  public async toggleEnableLocationFlag() {
+    NativeSettings.open({
+      optionAndroid: AndroidSettings.ApplicationDetails, 
+      optionIOS: IOSSettings.App
+    });
+  }
+
   public reorder(): void {
     this.showReorder = !this.showReorder;
   }
@@ -446,5 +465,27 @@ export class SettingsPage {
       okText,
       cancelText
     );
+  }
+
+  private checkPermissionLocation() {
+    Geolocation.checkPermissions()
+    .then(rs => {
+      if (rs.location !== 'denied') {
+        this.isEnableLocation = true;
+      } else {
+        this.isEnableLocation = false;
+      }
+    });
+  }
+
+  private checkPermissionNotification() {
+    PushNotifications.checkPermissions()
+    .then(rs => {
+      if (rs.receive !== 'denied') {
+        this.isEnableNotification = true;
+      } else {
+        this.isEnableNotification = false;
+      }
+    });
   }
 }

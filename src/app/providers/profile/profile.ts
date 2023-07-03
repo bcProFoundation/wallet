@@ -221,6 +221,7 @@ export class ProfileProvider {
     return {
       id: wallet?.id,
       name: wallet?.name,
+      keyName: wallet?.walletGroupName,
       cachedStatus: {
         wallet : {
           singleAddress: wallet?.cachedStatus?.wallet?.singleAddress

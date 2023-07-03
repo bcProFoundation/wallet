@@ -50,7 +50,7 @@ export class AccountsPage {
   isDonation;
   donationSupportCoins = [];
   navParamsData;
-  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX'];
+  listEToken = ['EAT', 'DoC', 'bcPro', 'LPSe', 'eHNL', 'eLPS', 'USDR', '🎖MVP', 'BUX', 'BTCinu'];
   public isToken: boolean;
   public tokenID: string;
   public isShowCreateNewWallet = false;
@@ -149,7 +149,7 @@ export class AccountsPage {
     const checkIsOneAccount = walletsGroup.filter(key => key.length > 0);
     if (checkIsOneAccount.length == 0) {
       this.isShowCreateNewWallet = true;
-    } else if (checkIsOneAccount.length == 1 && checkIsOneAccount[0].length == 1 && !this.isToken) {
+    } else if (checkIsOneAccount.length == 1 && checkIsOneAccount[0].length == 1 && !this.isToken && !this.isAddToHome) {
       this.goToSendPage(checkIsOneAccount[0][0], true);
     }
     return walletsGroup;

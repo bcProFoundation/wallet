@@ -330,6 +330,9 @@ export class ImportWalletPage {
   private goToWalletsPage(keyId) {
     this.router
       .navigate(['/tabs/wallets'], {
+        state: {
+          isFirstInstall: true
+        },
         replaceUrl: true
       })
       .then(() => {

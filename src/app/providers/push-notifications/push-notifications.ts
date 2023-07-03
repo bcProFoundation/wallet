@@ -23,6 +23,7 @@ import {
   PushNotificationSchema,
   PushNotifications
 } from '@capacitor/push-notifications';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class PushNotificationsProvider {
   private isIOS: boolean;
   private isAndroid: boolean;
   private usePushNotifications: boolean;
-  private _token = null;
+  public _token = null;
   private fcmInterval;
   private notifications = [];
   private currentNotif: HTMLIonModalElement;
@@ -47,7 +48,8 @@ export class PushNotificationsProvider {
     private events: EventManagerService,
     private modalCtrl: ModalController,
     private translate: TranslateService,
-    public animationCtrl: AnimationController
+    public animationCtrl: AnimationController,
+    private router: Router
   ) {
     this.logger.debug('PushNotificationsProvider initialized');
     this.isIOS = this.platformProvider.isIOS;
@@ -61,7 +63,6 @@ export class PushNotificationsProvider {
       const config = this.configProvider.get();
       if (!config.pushNotifications.enabled) return;
       await this.registerNotifications();
-      // On success, we should be able to receive notifications
       await this.getToken();
       this.enable();
       // enabling topics
@@ -100,7 +101,7 @@ export class PushNotificationsProvider {
 
   private async getToken() {
     if (this.platformProvider.isAndroid) {
-      PushNotifications.addListener('registration', async ({ value }) => {
+      await PushNotifications.addListener('registration', ({ value }) => {
         if (!value) {
           setTimeout(() => {
             this.init();
@@ -109,6 +110,9 @@ export class PushNotificationsProvider {
         }
         this.logger.debug('Get token for push notifications android: ' + value);
         this._token = value;
+      });
+      await PushNotifications.addListener('registrationError', err => {
+        this.logger.error('Registration error: ', err.error);
       });
     } else {
       FCM.getToken()
@@ -159,36 +163,49 @@ export class PushNotificationsProvider {
 
   // Notification was received on device tray and tapped by the user.
   public handlePushNotificationsWasTapped(notification: ActionPerformed): void {
-    if (this.usePushNotifications) {
-      if (!this._token) return;
-      const data = _.get(notification, 'notification.data', undefined);
-      if (!data) return;
-      if (data.redir) {
+    const data = _.get(notification, 'notification.data', undefined);
+    if (this.usePushNotifications && data) {
+      if (data?.claimCode) {
+        this.notificationAppreciation(data);
+        this.openProposalsNotificationsPage();
+      } else if (data?.redir) {
         this.events.publish('IncomingDataRedir', { name: data.redir });
-      } else if (
-        data.takeover_url &&
-        data.takeover_image &&
-        data.takeover_sig
-      ) {
-        if (!this.verifySignature(data)) return;
-        this.events.publish('ShowAdvertising', data);
+      } else if (data?.takeover_url && data?.takeover_image && data?.takeover_sig) {
+        !this.verifySignature(data) ? null : this.events.publish('ShowAdvertising', data);
       } else {
         this._openWallet(data);
       }
     }
   }
 
+  private notificationAppreciation(data) {
+    let lcsAppreciation = JSON.parse(localStorage.getItem('appreciation')) || [];
+    if (!lcsAppreciation.some(appreciation => appreciation.claimCode === data.claimCode)) {
+      data['timeReceive'] = new Date();
+      lcsAppreciation.push(data);
+      localStorage.setItem('appreciation', JSON.stringify(lcsAppreciation));
+    }
+  }
+
+  private openProposalsNotificationsPage() {
+    this.router.navigate(['/proposals-notifications']);
+  }
+
   public handlePushNotifications(notification: PushNotificationSchema): void {
-    if (this.usePushNotifications) {
-      if (!this._token) return;
-      const data = notification.data;
+    const data = notification.data;
+    if (this.usePushNotifications && data) {
       this.logger.debug(
         'New Event Push onNotification: ' + JSON.stringify(data)
       );
+      if (data.claimCode) { 
+        this.notificationAppreciation(data);
+      }
       const wallet = this.findWallet(data.walletId, data.tokenAddress);
-      if (!wallet) return;
-      this.newBwsEvent(data, wallet.credentials.walletId);
-      this.showInappNotification(data);
+      if (wallet) {
+        this.newBwsEvent(data, wallet.credentials.walletId);
+        // Turn off notification In app
+        // this.showInappNotification(data);
+      }
     }
   }
 

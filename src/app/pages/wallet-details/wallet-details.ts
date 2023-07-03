@@ -520,6 +520,22 @@ export class WalletDetailsPage {
     });
   }
 
+  calculateAmountTokenBurn(amount, tokenId) {
+    let totalAmount = 0;
+    const tokens = this.wallet?.tokens;
+    const decimals = tokens.reduce((decimals, token) => {
+      if (token.tokenId == tokenId) {
+        decimals += token?.tokenInfo?.decimals;
+      }
+      return decimals;
+    }, 0);
+  
+    if (amount) {
+      totalAmount = amount / Math.pow(10, decimals);
+    }
+    return totalAmount;
+  }
+
   public openProposalsNotificationsPage(): void {
     if (this.wallet.credentials.multisigEthInfo) {
       this.router.navigate(['/proposals-notifications'], {

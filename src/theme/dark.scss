@@ -1430,6 +1430,9 @@
       }
       }
     }
+    .key-name {
+      color: rgba(224, 228, 230, 0.6) !important;
+    }
   }
 
   // 5.15 Price Page
@@ -2377,6 +2380,47 @@
           rgba(126, 208, 255, 0.11)
         ),
         #001e2e;
+    }
+
+    .notification-item {
+      border-color: #314d5c !important;
+      background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), #001E2E !important;
+      ion-item {
+        background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), #001E2E;
+        --background: linear-gradient(0deg, rgba(126, 208, 255, 0.05), rgba(126, 208, 255, 0.05)), #001E2E;
+        color: var(--text-color-dark-theme) !important;
+        border-color: #314d5c;
+        .main-label {
+          color: #EDEFF0 !important;
+        }
+        .secondary-label {
+          color: #EDEFF0 !important;
+        }
+        .status-label {
+          .expired-date {
+            color: #FFB4A9 !important;
+          }
+          .date-label {
+            color: rgba(237, 239, 240, 0.6) !important;
+          }
+        }
+        .action {
+          .btn-open-settings {
+            color: var(--color-primary-abcpay-dark) !important;
+          }
+        }
+        ion-note {
+          .btn-claim {
+            color: var(--color-primary-abcpay-dark) !important;
+          }
+        }
+      }
+    }
+  }
+
+  page-settings {
+    .sub-location {
+      color: rgba(237, 239, 240, 0.6) !important;
     }
   }
 

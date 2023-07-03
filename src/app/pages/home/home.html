@@ -234,14 +234,17 @@
   </ng-container>
   <ng-template #showHomeCard>
     <ng-container *ngIf="walletGroupsHome.length != 0;else noWallet">
-      <ion-list lines="none" class="list-item-card">
-        <div class="wallet-item" *ngFor="let wallet of walletGroupsHome; let j = index">
-          <wallet-detail-card *ngIf="!wallet.tokens?.tokenId" [wallet]="wallet" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
-          </wallet-detail-card>
-          <wallet-detail-card *ngIf="wallet.tokens?.tokenId" [wallet]="wallet" [token]="wallet.tokens" [isToken]="true" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
-          </wallet-detail-card>
-        </div>
-      </ion-list>
+      <ng-container *ngFor="let walletGroups of walletGroupsHome">
+        <h5 class="key-name">{{walletGroups[0].keyName}}</h5>
+        <ion-list lines="none" class="list-item-card">
+          <div class="wallet-item" *ngFor="let wallet of walletGroups; let j = index">
+            <wallet-detail-card *ngIf="!wallet.tokens?.tokenId" [wallet]="wallet" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+            </wallet-detail-card>
+            <wallet-detail-card *ngIf="wallet.tokens?.tokenId" [wallet]="wallet" [token]="wallet.tokens" [isToken]="true" [isHomeCard]="true" [flagAllItemRemove]="removeAllItem">
+            </wallet-detail-card>
+          </div>
+        </ion-list>
+      </ng-container>
     </ng-container>
     
     <ng-template #noWallet>

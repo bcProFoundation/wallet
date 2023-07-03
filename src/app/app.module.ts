@@ -49,6 +49,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CountdownModule } from 'ngx-countdown';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from "ng-recaptcha";
+import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -144,6 +145,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         FormatCurrencyPipe,
         NavParams,
         FormBuilder,
+        UniqueDeviceID,
         WebView,
         { provide: RECAPTCHA_V3_SITE_KEY, useValue: "6Lc1rGwdAAAAABrD2AxMVIj4p_7ZlFKdE5xCFOrb" }
     ],

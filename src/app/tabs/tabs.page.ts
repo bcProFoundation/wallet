@@ -7,7 +7,10 @@ import { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../providers/clipboard/clipboard';
 import { EventManagerService } from '../providers/event-manager.service';
 import { Logger } from '../providers/logger/logger';
-import { Network, PersistenceProvider } from '../providers/persistence/persistence';
+import {
+  Network,
+  PersistenceProvider
+} from '../providers/persistence/persistence';
 import { PlatformProvider } from '../providers/platform/platform';
 import { ProfileProvider } from '../providers/profile/profile';
 import { RateProvider } from '../providers/rate/rate';
@@ -16,11 +19,23 @@ import { WalletProvider } from '../providers/wallet/wallet';
 import * as _ from 'lodash';
 import { TokenProvider } from '../providers/token-sevice/token-sevice';
 
+
 interface UpdateWalletOptsI {
   walletId: string;
   force?: boolean;
   alsoUpdateHistory?: boolean;
 }
+
+export interface AttendanceDays {
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
+}
+
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
@@ -58,7 +73,7 @@ export class TabsPage {
     private platformProvider: PlatformProvider,
     private themeProvider: ThemeProvider,
     private clipboardProvider: ClipboardProvider,
-    private tokenProvider: TokenProvider
+    private tokenProvider: TokenProvider,
   ) {
     this.persistenceProvider.getNetwork().then((network: string) => {
       if (network) {
@@ -89,7 +104,6 @@ export class TabsPage {
           });
       }
     });
-
   }
 
   setCurrentTab(event) {
@@ -97,15 +111,18 @@ export class TabsPage {
   }
 
   setIconHomeTab(selectedTab) {
-    return selectedTab === 'home' ? `assets/img/tab-home-selected-${this.currentTheme}.svg` : `assets/img/tab-home-${this.currentTheme}.svg`;
+    return selectedTab === 'home'
+      ? `assets/img/tab-home-selected-${this.currentTheme}.svg`
+      : `assets/img/tab-home-${this.currentTheme}.svg`;
   }
 
   setIconWalletsTab(selectedTab) {
-    return selectedTab === 'wallets' ? `assets/img/tab-wallet-selected-${this.currentTheme}.svg` : `assets/img/tab-wallet-${this.currentTheme}.svg`;
+    return selectedTab === 'wallets'
+      ? `assets/img/tab-wallet-selected-${this.currentTheme}.svg`
+      : `assets/img/tab-wallet-${this.currentTheme}.svg`;
   }
 
   private subscribeEvents() {
-
     this.events.subscribe('experimentUpdateStart', () => {
       this.tabs.select(2);
     });
@@ -166,12 +183,30 @@ export class TabsPage {
 
     this.checkCardEnabled();
     this.checkClipboardData();
+    this.initializeAttendanceDays();
   }
 
   ngOnDestroy() {
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
     this.unsubscribeEvents();
+  }
+
+  initializeAttendanceDays() {
+    // Initialize Attendance Days
+    const lcS = JSON.parse(localStorage.getItem('attendance'));
+    if (!lcS) {
+      const attentionDays: AttendanceDays = {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false
+      };
+      localStorage.setItem('attendance', JSON.stringify(attentionDays));
+    }
   }
 
   // Names:
@@ -190,9 +225,9 @@ export class TabsPage {
 
     this.logger.debug(
       'fetching status for: ' +
-      opts.walletId +
-      ' alsohistory:' +
-      opts.alsoUpdateHistory
+        opts.walletId +
+        ' alsohistory:' +
+        opts.alsoUpdateHistory
     );
     const wallet = this.profileProvider.getWallet(opts.walletId);
     if (!wallet) return;
@@ -227,12 +262,12 @@ export class TabsPage {
         this.logger.warn('Update error:', err);
 
         // this.processWalletError(wallet, err);
-        
-          this.events.publish('Local/WalletUpdate', {
-            walletId: opts.walletId,
-            finished: true,
-            error: wallet.error
-          });
+
+        this.events.publish('Local/WalletUpdate', {
+          walletId: opts.walletId,
+          finished: true,
+          error: wallet.error
+        });
 
         if (opts.alsoUpdateHistory) {
           this.fetchTxHistory({ walletId: opts.walletId, force: opts.force });
@@ -424,7 +459,6 @@ export class TabsPage {
     }
   );
 
-
   private async loadToken(wallets) {
     for (const i in wallets) {
       const wallet = wallets[i];
@@ -499,4 +533,5 @@ export class TabsPage {
       this.updateTxps();
     });
   }
+  
 }

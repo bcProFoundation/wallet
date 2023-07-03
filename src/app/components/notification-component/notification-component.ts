@@ -1,10 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides, ModalController, NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'notification-component',
   templateUrl: 'notification-component.html',
   styleUrls: ['notification-component.scss'],
+  encapsulation: ViewEncapsulation.None
+
 })
 export class NotificationComponent {
   customButton: any;

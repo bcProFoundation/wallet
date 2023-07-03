@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 import { Platform } from '@ionic/angular';
 import { Logger } from '../logger/logger';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 
 
 @Injectable({
@@ -19,11 +20,13 @@ export class PlatformProvider {
   public ua: string;
   public isMobile: boolean;
   public isDevel: boolean;
+  public uid: string;
 
   constructor(
     private platform: Platform,
     private logger: Logger,
-    private device: Device
+    private device: Device,
+    private uniqueDeviceID: UniqueDeviceID
   ) {
     let ua = navigator ? navigator.userAgent : null;
 
@@ -45,6 +48,7 @@ export class PlatformProvider {
     this.isMac = this.isMacApp();
     this.isWindows = this.isWindowsApp();
     this.isLinux = this.isLinuxApp();
+    this.getUniqueDeviceID();
 
     this.logger.debug('PlatformProvider initialized');
   }
@@ -167,5 +171,21 @@ export class PlatformProvider {
 
   public getDeviceUUID() {
     return this.device.uuid;
+  }
+
+  public getUniqueDeviceID() {
+    if (this.isAndroid) {
+      this.uid = this.device.uuid;
+      this.logger.info('DEVICE', this.uid);
+    } else if (this.isIOS) {
+      this.uniqueDeviceID.get()
+        .then((uuid: any) => {
+          this.logger.info('DEVICE', uuid);
+          this.uid = uuid;
+        })
+        .catch((error: any) => {
+          this.logger.error('UUID NOT FOUND', error);
+        });
+    }
   }
 }

@@ -183,7 +183,8 @@ export class TabsPage {
 
     this.checkCardEnabled();
     this.checkClipboardData();
-    this.initializeAttendanceDays();
+    // TODO: Feature Marketing Board
+    // this.initializeAttendanceDays();
   }
 
   ngOnDestroy() {

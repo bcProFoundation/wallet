@@ -460,7 +460,8 @@ export class WalletsPage {
       this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
     });
     if (!this.navParamsData.isFirstInstall) {
-      this.attendanceHandle();
+      // TODO: Feature Marketing Board
+      // this.attendanceHandle();
     }
   }
 
@@ -585,7 +586,8 @@ export class WalletsPage {
       .catch(err => {
         this.logger.error(err);
       });
-      if (this.platformProvider.isCordova) this.checkAppreciationBadge();
+      // TODO: Feature Marketing Board
+      // if (this.platformProvider.isCordova) this.checkAppreciationBadge();
   }
 
   private checkAppreciationBadge() {

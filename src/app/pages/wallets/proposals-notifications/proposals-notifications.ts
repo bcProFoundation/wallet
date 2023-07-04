@@ -108,20 +108,22 @@ export class ProposalsNotificationsPage {
     this.txpsPending = [];
     this.txpsAccepted = [];
     this.txpsRejected = [];
-    Geolocation.checkPermissions()
-      .then(rs => {
-        if (rs.location !== 'denied') {
-          this.isShowNotifyLocation = false;
-        } else {
-          this.isShowNotifyLocation = true;
-        }
-      });
+    // TODO: Feature Marketing Board
+    // Geolocation.checkPermissions()
+    //   .then(rs => {
+    //     if (rs.location !== 'denied') {
+    //       this.isShowNotifyLocation = false;
+    //     } else {
+    //       this.isShowNotifyLocation = true;
+    //     }
+    //   });
     // this.canGoBack = this.routerOutlet && this.routerOutlet.canGoBack();
   }
 
   ionViewWillEnter() {
     this.routerOutlet.swipeGesture = false;
-    this.getAppreciation();
+    // TODO: Feature Marketing Board
+    // this.getAppreciation();
     this.remindEnableNotification();
     this.updateAddressBook();
     this.updatePendingProposals();

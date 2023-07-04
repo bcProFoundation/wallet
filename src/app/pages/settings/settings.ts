@@ -124,7 +124,8 @@ export class SettingsPage {
   ngOnInit() {
     this.logger.info('Loaded: SettingsPage');
     if (this.isCordova) {
-      this.checkPermissionNotification();
+      // TODO: Feature Marketing Board
+      // this.checkPermissionNotification();
       this.events.subscribe('BitPayId/Disconnected', () => this.updateUser());
       this.events.subscribe('BitPayId/Connected', user =>
         this.updateUser(user)
@@ -191,7 +192,8 @@ export class SettingsPage {
 
     this.featureList = await this.newFeatureData.get();
 
-    if (this.platformProvider.isCordova) this.checkPermissionLocation();
+    // TODO: Feature Marketing Board
+    // if (this.platformProvider.isCordova) this.checkPermissionLocation();
   }
 
   ionViewDidEnter() {

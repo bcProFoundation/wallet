@@ -333,7 +333,7 @@ export class WalletDetailsPage {
   private handleTxAddressEcash() {
     this.history.forEach((tx) => {
       if (tx.action == 'received' && !tx?.tokenId) {
-        const addressToken = tx.inputAddresses[0] || null;
+        const addressToken = tx?.inputAddresses && tx?.inputAddresses[0] || null;
         if (addressToken) {
           const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
           const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);

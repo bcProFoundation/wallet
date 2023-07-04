@@ -247,7 +247,8 @@ export class HomePage {
       .catch(err => {
         this.logger.error(err);
       });
-      if (this.platformProvider.isCordova) this.checkAppreciationBadge();
+      // TODO: Feature Marketing Board
+      // if (this.platformProvider.isCordova) this.checkAppreciationBadge();
   }
 
   ionViewWillEnter() {
@@ -292,7 +293,8 @@ export class HomePage {
     setTimeout(() => {
       this.checkEmailLawCompliance();
       this.checkAltCurrency(); // Check if the alternative currency setted is no longer supported
-      this.storeLogDevice();
+      // TODO: Feature Marketing Board
+      // this.storeLogDevice();
     }, 2000);
   }
 

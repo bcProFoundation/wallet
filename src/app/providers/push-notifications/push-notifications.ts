@@ -165,10 +165,12 @@ export class PushNotificationsProvider {
   public handlePushNotificationsWasTapped(notification: ActionPerformed): void {
     const data = _.get(notification, 'notification.data', undefined);
     if (this.usePushNotifications && data) {
-      if (data?.claimCode) {
-        this.notificationAppreciation(data);
-        this.openProposalsNotificationsPage();
-      } else if (data?.redir) {
+      // TODO: Feature Marketing Board
+      // if (data?.claimCode) {
+      //   this.notificationAppreciation(data);
+      //   this.openProposalsNotificationsPage();
+      // }
+      if (data?.redir) {
         this.events.publish('IncomingDataRedir', { name: data.redir });
       } else if (data?.takeover_url && data?.takeover_image && data?.takeover_sig) {
         !this.verifySignature(data) ? null : this.events.publish('ShowAdvertising', data);
@@ -197,9 +199,10 @@ export class PushNotificationsProvider {
       this.logger.debug(
         'New Event Push onNotification: ' + JSON.stringify(data)
       );
-      if (data.claimCode) { 
-        this.notificationAppreciation(data);
-      }
+      // TODO: Feature Marketing Board
+      // if (data.claimCode) { 
+      //   this.notificationAppreciation(data);
+      // }
       const wallet = this.findWallet(data.walletId, data.tokenAddress);
       if (wallet) {
         this.newBwsEvent(data, wallet.credentials.walletId);

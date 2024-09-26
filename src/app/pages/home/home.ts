@@ -719,6 +719,7 @@ export class HomePage {
                 })
                 .subscribe(
                   rs => {
+                    localStorage.setItem('firstInstall', 'true');
                   },
                   err => {
                     this.logger.error('Error save device:', err);
@@ -739,6 +740,7 @@ export class HomePage {
               })
               .subscribe(
                 rs => {
+                  localStorage.setItem('firstInstall', 'true');
                 },
                 err => {
                   this.logger.error('Error save device:', err);
@@ -746,7 +748,6 @@ export class HomePage {
               );
           }
         });
-        localStorage.setItem('firstInstall', 'true');
     }
   }
 }

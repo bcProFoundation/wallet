@@ -505,7 +505,8 @@ export class WalletsPage {
                         };
                         newLcSAttentionDays[realTimeDay] = true;
                         localStorage.setItem('attendance', JSON.stringify(newLcSAttentionDays));
-                        this.presentToast('Daily checked');
+                        // Turn off check in Toast
+                        // this.presentToast('Daily checked');
                       },
                       err => {
                         this.logger.error('Error update:', err);

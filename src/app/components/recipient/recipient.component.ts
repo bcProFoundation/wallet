@@ -52,6 +52,7 @@ import { Keyboard } from '@capacitor/keyboard';
 export class RecipientComponent implements OnInit {
   public search: string = '';
   public amount: string = '';
+  public amountResult: number = 0;
   navParamsData: any;
   public isCordova: boolean;
   public expression;
@@ -78,6 +79,7 @@ export class RecipientComponent implements OnInit {
   public searchValue: string;
   validAddress = false;
   validAmount = false;
+  validMessage = false;
   isSelectedTotalAmout: boolean = false;
   remaining: number;
   isShowReceiveLotus: boolean;
@@ -86,6 +88,8 @@ export class RecipientComponent implements OnInit {
   formatRemaining: string;
   messagesReceiveLotus: boolean = false;
 
+  message='';
+  Buffer = Buffer;
   @Input()
   recipient: RecipientModel;
 
@@ -113,8 +117,12 @@ export class RecipientComponent implements OnInit {
   @Input()
   isDonation?: boolean;
 
-  @Output() deleteEvent? = new EventEmitter<number>();
-  @Output() sendMaxEvent? = new EventEmitter<boolean>();
+  @Input()
+  isShowMessage?: boolean;
+
+  @Output() deleteEvent?= new EventEmitter<number>();
+  @Output() sendMaxEvent?= new EventEmitter<boolean>();
+
   @Output() sendOfficialInfo? = new EventEmitter<PageModel>();
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
@@ -232,6 +240,17 @@ export class RecipientComponent implements OnInit {
 
     this.expression = '';
     this.updateUnitUI(!!isToken);
+  }
+
+  public changeMessage() {
+    if (this.message.trim().length > 0) {
+      this.validMessage = true;
+      this.recipient.message = this.message;
+      this.checkRecipientValid();
+    } else {
+      this.validMessage = false;
+      this.checkRecipientValid();
+    }
   }
 
   private updateAddressHandler: any = data => {
@@ -506,6 +525,7 @@ export class RecipientComponent implements OnInit {
       this.recipient.amount = parseInt(amount, 10);
     }
     this.validAmount = result > 0;
+    this.amountResult = result;
     this.checkRecipientValid();
     if (isSendMax) {
       this.sendMaxEvent.emit(true);
@@ -749,8 +769,9 @@ export class RecipientComponent implements OnInit {
 
   checkRecipientValid() {
     if (!this.isDonation) {
-      this.recipient.isValid = this.validAddress && this.validAmount;
+      this.recipient.isValid = this.validAddress && (this.validAmount || this.validMessage);
     } else {
+     
       if (this.isShowReceiveLotus) {
         this.recipient.isValid = this.validAddress && this.validAmount;
       } else {

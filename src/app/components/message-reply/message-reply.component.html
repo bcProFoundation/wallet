@@ -1,0 +1,30 @@
+<action-sheet>
+  <div class="reply-to-container">
+    <div class="reply-to-title">
+      <ion-icon [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
+      {{'Replying to ' | translate }} {{ messageReplyInfo.addressTo }}
+    </div>
+    <div class="reply-to-message">
+      {{messageReplyInfo.messageOnChain}}
+    </div>
+  </div>
+
+  <form [formGroup]="messageReplySend">
+    <mat-form-field appearance="outline">
+      <mat-label translate>{{'Private message' | translate}}</mat-label>
+      <textarea matInput formControlName="messageOnChain" [(ngModel)]="message" (keyup)="changeMessage()" [placeholder]="'Type your private message' | translate" maxlength="206"></textarea>
+    </mat-form-field>
+    <mat-hint class="hint-reply-message">
+      <span>
+        Fee: ~0.00055 XPI
+      </span>
+      <span [ngClass]="{'max-message-txt': message.trim().length >= 206}">
+        {{(this.message).length}} / 206 bytes
+      </span>
+    </mat-hint>
+  </form>
+
+  <ion-button fill="clear" type="submit" class="button-standard safe-area button-send-onchain" [disabled]="!validMessage" (click)="send()">
+    {{ 'Send' | translate }}
+  </ion-button>
+</action-sheet>

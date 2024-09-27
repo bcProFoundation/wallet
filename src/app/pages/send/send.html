@@ -75,7 +75,7 @@
       <ng-container *ngFor="let recipient of listRecipient; let i = index">
         <recipient-component [index]="i" [wallet]="wallet" [recipient]="recipient"
           (deleteEvent)="deleteRecipient($event)" [isShowSendMax]="isShowSendMax && !isDonation"
-          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)" (sendOfficialInfo)="handleOfficialInfo($event)">
+          [isShowDelete]="isShowDelete" [token]="token" (sendMaxEvent)="sendMax($event)" [isShowMessage]="isShowMessage && wallet.coin === 'xpi'" (sendOfficialInfo)="handleOfficialInfo($event)">
         </recipient-component>
       </ng-container>
     </div>

@@ -24,6 +24,12 @@ msgstr "Password unmatched!"
 msgid "Important"
 msgstr "Important"
 
+msgid "Private message"
+msgstr "Private message"
+
+msgid "Type your private message"
+msgstr "Type your private message"
+
 msgid "Account Addresses"
 msgstr "Account Addresses"
 
@@ -5371,6 +5377,12 @@ msgstr "The account you are using does not match the network and/or the currency
 #| msgid "{walletsGroupLength} Wallets"
 msgid "{{newWalletsCount}} wallets found"
 msgstr "{{newWalletsCount}} wallets found"
+
+msgid "Replying to "
+msgstr "Replying to "
+
+msgid "Reply"
+msgstr "Reply"
 
 msgid ""
 "{{params.countryCode === 'US' ? 'U.S.' : params.countryCode}} Phone Required"

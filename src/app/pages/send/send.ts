@@ -32,6 +32,7 @@ import { PageDto, PageModel } from 'src/app/providers/lixi-lotus/lixi-lotus';
 import { EventsService } from 'src/app/providers/events.service';
 
 import { Location } from '@angular/common';
+import { DUST_AMOUNT } from 'src/app/constants';
 
 
 @Component({
@@ -71,6 +72,7 @@ export class SendPage {
   walletId: string;
   isShowSendMax: boolean = true;
   isShowDelete: boolean = false;
+  isShowMessage: boolean = false;
   toAddress: string = '';
   formatRemaining: string;
   recipientNotInit: RecipientModel;
@@ -149,6 +151,9 @@ export class SendPage {
     this.onResumeSubscription = this.plt.resume.subscribe(() => {
       this.setDataFromClipboard();
     });
+    if(this.wallet.coin === 'xpi' && this.wallet.cachedStatus.wallet.singleAddress){
+      this.isShowMessage = true;
+    }
   }
 
   async handleScrolling(event) {
@@ -319,6 +324,9 @@ export class SendPage {
     }))
     this.isShowSendMax = this.listRecipient.length === 1;
     this.isShowDelete = this.listRecipient.length > 1;
+    if(this.wallet.coin === 'xpi' && this.wallet.cachedStatus.wallet.singleAddress){
+      this.isShowMessage = this.listRecipient.length === 1;
+    }
     this.content.scrollToBottom(1000);
   }
 
@@ -326,6 +334,7 @@ export class SendPage {
     this.listRecipient = this.listRecipient.filter(s => s.id !== id);
     this.isShowSendMax = this.listRecipient.length === 1;
     this.isShowDelete = this.listRecipient.length > 1;
+    this.isShowMessage = this.listRecipient.length === 1;
   }
 
   private goToConfirmToken(isSendMax?: boolean) {
@@ -370,6 +379,10 @@ export class SendPage {
     if (this.isDonation) return this.goToConfirmDonation();
     if (this.listRecipient.length === 1) {
       const recipient = this.listRecipient[0];
+      if(!recipient.amount || recipient.amount === 0){
+        recipient.amount = DUST_AMOUNT;
+      }
+
       this.router.navigate(['/confirm'], {
         state: {
           walletId: this.wallet.credentials.walletId,
@@ -383,7 +396,8 @@ export class SendPage {
           name: recipient.name,
           fromWalletDetails: true,
           isSentXecToEtoken: recipient.isSentXecToEtoken,
-          isSendFromHome: this.isSendFromHome
+          isSendFromHome: this.isSendFromHome,
+          messageOnChain: recipient.message
         }
       });
     } else {

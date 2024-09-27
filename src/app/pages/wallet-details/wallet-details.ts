@@ -33,11 +33,17 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 import { TxDetailsModal } from '../../pages/tx-details/tx-details';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalanceModal } from './wallet-balance/wallet-balance';
-import { LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
+import {
+  LoadingController,
+  ModalController,
+  Platform,
+  ToastController
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { EventsService } from 'src/app/providers/events.service';
+import { DUST_AMOUNT } from 'src/app/constants';
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -115,7 +121,6 @@ export class WalletDetailsPage {
     private actionSheetProvider: ActionSheetProvider,
     private platform: Platform,
     private profileProvider: ProfileProvider,
-    private viewCtrl: ModalController,
     public platformProvider: PlatformProvider,
     private socialSharing: SocialSharing,
     private bwcErrorProvider: BwcErrorProvider,
@@ -331,18 +336,24 @@ export class WalletDetailsPage {
   }
 
   private handleTxAddressEcash() {
-    this.history.forEach((tx) => {
+    this.history.forEach(tx => {
       if (tx.action == 'received' && !tx?.tokenId) {
         const addressToken = tx?.inputAddresses && tx?.inputAddresses[0] || null;
         if (addressToken) {
-          const { prefix, type, hash } = this.addressProvider.decodeAddress(addressToken);
-          const eCashAddess = this.addressProvider.encodeAddress('ecash', type, hash, addressToken);
+          const { prefix, type, hash } =
+            this.addressProvider.decodeAddress(addressToken);
+          const eCashAddess = this.addressProvider.encodeAddress(
+            'ecash',
+            type,
+            hash,
+            addressToken
+          );
           tx.inputAddresses[0] = eCashAddess;
         }
       }
-    })
+    });
   }
- 
+
   private async showHistory(loading?: boolean) {
     if (!this.wallet.completeHistory) {
       return;
@@ -351,11 +362,114 @@ export class WalletDetailsPage {
       0,
       (this.currentPage + 1) * HISTORY_SHOW_LIMIT
     );
+    if (
+      this.wallet.coin === 'xpi' &&
+      this.wallet.cachedStatus.wallet.singleAddress
+    ) {
+      if (this.history && this.history.length > 0) {
+        for (let index = 0; index < this.history.length; index++) {
+          const tx = this.history[index];
+          this.history[index].outputs = tx.outputs.filter(
+            output => output.address !== 'false'
+          );
+        }
+      }
+    }
     if (this.wallet.coin == 'xec') this.handleTxAddressEcash();
     this.zone.run(() => {
       this.groupedHistory = this.groupHistory(this.history);
     });
     if (loading) this.currentPage++;
+  }
+  handleClick(tx) {
+    this.showReplyMessageModal(tx);
+  }
+
+  getAddressFrom(tx): any {
+    if (
+      !this.addressbook ||
+      !tx.inputAddresses[0] ||
+      !this.getContactName(tx.inputAddresses[0])
+    ) {
+      return {
+        name: tx.inputAddresses[0].slice(-8),
+        address: tx.inputAddresses[0],
+        type: ''
+      };
+    } else
+      return {
+        name: this.getContactName(tx.inputAddresses[0]),
+        address: tx.inputAddresses[0],
+        type: 'contact'
+      };
+  }
+
+  getAddressTo(tx): any {
+    if (
+      (!tx.note || (tx.note && !tx.note.body)) &&
+      (!this.addressbook ||
+        !tx.outputs[0] ||
+        !this.getContactName(tx.outputs[0].address)) &&
+      (!tx.customData || !tx.customData.toWalletName)
+    ) {
+      return {
+        name: tx.addressTo.slice(-8),
+        address: tx.addressTo,
+        type: ''
+      };
+    } else if (
+      (!tx.note || (tx.note && !tx.note.body)) &&
+      (!this.addressbook ||
+        !tx.outputs[0] ||
+        !this.getContactName(tx.outputs[0].address)) &&
+      tx.customData &&
+      tx.customData.toWalletName
+    ) {
+      return {
+        name: tx.customData.toWalletName,
+        address: tx.outputs[0].address,
+        type: 'wallet'
+      };
+    } else
+      return {
+        name: this.getContactName(tx.outputs[0].address),
+        address: tx.outputs[0].address,
+        type: 'contact'
+      };
+  }
+
+  showReplyMessageModal(tx) {
+    const txInfo = this.getAddressFrom(tx);
+    const addContactModal =
+      this.actionSheetProvider.createMessageReplyComponent({
+        addressTo: this.getAddressFrom(tx).name,
+        messageOnChain: tx.messageOnchain
+      });
+    addContactModal.present({ maxHeight: '48%%', minHeight: '48%%' });
+    addContactModal.onDidDismiss(rs => {
+      if (rs) {
+        this.sendReplyMessage(rs, txInfo);
+      }
+    });
+  }
+
+  sendReplyMessage(rs, txInfo) {
+    this.router.navigate(['/confirm'], {
+      state: {
+        walletId: this.wallet.credentials.walletId,
+        recipientType: txInfo.type,
+        amount: DUST_AMOUNT,
+        currency: this.wallet.coin,
+        coin: this.wallet.coin,
+        network: this.wallet.network,
+        useSendMax: false,
+        toAddress: txInfo.address,
+        name: txInfo.type === 'contact' ? txInfo.name : null,
+        fromWalletDetails: true,
+        isSentXecToEtoken: false,
+        messageOnChain: rs
+      }
+    });
   }
 
   updateAddressToShowToken(tx) {
@@ -579,7 +693,12 @@ export class WalletDetailsPage {
     }
   };
 
-  public itemTapped(tx) {
+  public itemTapped(tx, itemTapped) {
+    if (itemTapped.target.innerText === 'Reply') {
+      itemTapped.preventDefault();
+      itemTapped.stopPropagation();
+      return;
+    }
     if (tx.hasUnconfirmedInputs) {
       const infoSheet =
         this.actionSheetProvider.createInfoSheet('unconfirmed-inputs');
@@ -630,18 +749,20 @@ export class WalletDetailsPage {
     });
   }
 
-  public goToTxDetails(tx) {
-    const txDetailModal = this.modalCtrl
-      .create({
-        component: TxDetailsModal,
-        componentProps: {
-          walletId: this.wallet.credentials.walletId,
-          txid: tx.txid
-        }
-      })
-      .then(res => {
-        res.present();
-      });
+  public async goToTxDetails(tx) {
+    const txDetailModal = await this.modalCtrl.create({
+      component: TxDetailsModal,
+      componentProps: {
+        walletId: this.wallet.credentials.walletId,
+        txid: tx.txid,
+        messageOnchain: tx.messageOnchain
+      }
+    });
+    txDetailModal.present();
+    const { data } = await txDetailModal.onWillDismiss();
+    if (data) {
+      this.showReplyMessageModal(tx);
+    }
   }
 
   public openBackupModal(): void {
@@ -787,7 +908,7 @@ export class WalletDetailsPage {
   }
 
   public close() {
-    this.viewCtrl.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   public goToReceivePage() {

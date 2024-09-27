@@ -282,6 +282,21 @@ page-tx-details {
     align-items: center;
   }
 
+  .message-custom {
+    ion-label {
+      align-self: flex-start !important;
+    }
+
+    ion-note {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .message-onchain {
+      margin: 0;
+    }
+  }
+
   .wallet,
   .multi-recip-title {
     span {
@@ -480,5 +495,10 @@ page-tx-details {
     font-size: 14px;
     font-weight: 600;
     height: 2.5rem;
+  }
+  
+  .btn-reply {
+    --padding-start: 0;
+    --padding-end: 0;
   }
 }

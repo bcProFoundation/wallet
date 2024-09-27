@@ -20,17 +20,21 @@ import { EventManagerService } from 'src/app/providers/event-manager.service';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { PersistenceProvider } from 'src/app/providers/persistence/persistence';
-import { AddressBookProvider, AppProvider, TokenProvider } from 'src/app/providers';
+import {
+  AddressBookProvider,
+  AppProvider,
+  TokenProvider
+} from 'src/app/providers';
 import { Router } from '@angular/router';
 import { DecimalFormatBalance } from 'src/app/providers/decimal-format.ts/decimal-format';
 import { Token } from 'src/app/models/tokens/tokens.model';
 
 export interface TokenData {
-  amountToken: string,
-  tokenId: string,
-  symbolToken: string,
-  name: string,
-  addressToShow: string
+  amountToken: string;
+  tokenId: string;
+  symbolToken: string;
+  name: string;
+  addressToShow: string;
 }
 
 @Component({
@@ -39,9 +43,9 @@ export interface TokenData {
   styleUrls: ['tx-details.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class TxDetailsModal {
   private txId: string;
+  public messageOnchain: string = '';
   private config;
   private blockexplorerUrl: string;
   private blockexplorerUrlTestnet: string;
@@ -62,7 +66,6 @@ export class TxDetailsModal {
   public isNegative: boolean;
   public currentTheme;
   public fiatRateStrToken;
-
   public addressbook = [];
 
   constructor(
@@ -88,14 +91,17 @@ export class TxDetailsModal {
     private appProvider: AppProvider,
     private router: Router,
     private tokenProvider: TokenProvider,
-    private addressbookProvider: AddressBookProvider,
-  ) { }
-  
+    private addressbookProvider: AddressBookProvider
+  ) {}
+
   ngOnInit() {
     this.events.subscribe('bwsEvent', this.bwsEventHandler);
     this.config = this.configProvider.get();
     this.currentTheme = this.appProvider.themeProvider.currentAppTheme;
     this.txId = this.navParams.data.txid;
+    if (this.navParams.data && this.navParams.data.messageOnchain) {
+      this.messageOnchain = this.navParams.data.messageOnchain;
+    }
     this.title = this.translate.instant('Transaction');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
     this.tokenData = this.navParams.data.tokenData;
@@ -186,6 +192,10 @@ export class TxDetailsModal {
       });
   }
 
+  public showReplyMessageModal() {
+    this.viewCtrl.dismiss(true);
+  }
+
   private initActionList(): void {
     this.actionList = [];
     if (
@@ -238,7 +248,7 @@ export class TxDetailsModal {
       leading: true
     }
   );
-  
+
   async updateInputAddress(txId: string) {
     let inputAddresses = [];
     try {
@@ -254,14 +264,17 @@ export class TxDetailsModal {
     try {
       const walletId = this.navParams.data.walletId;
       const history = await this.walletProvider.getSavedTxs(walletId);
-      if (!history) return ;
+      if (!history) return;
       const historyByTxId = _.find(history, item => item.txid == txid);
       if (historyByTxId) {
         historyByTxId.inputAddresses = inputAddresses;
         const historyToSave = JSON.stringify(history);
-        return await this.persistenceProvider.setTxHistory(walletId, historyToSave);
+        return await this.persistenceProvider.setTxHistory(
+          walletId,
+          historyToSave
+        );
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   private updateTx(opts?): void {
@@ -272,7 +285,6 @@ export class TxDetailsModal {
       .then(async tx => {
         this.retryGetTx = 0;
         if (!opts.hideLoading) this.onGoingProcess.clear();
-
         this.btx = this.txFormatProvider.processTx(this.wallet.coin, tx);
         this.btx.network = this.wallet.credentials.network;
         this.btx.coin = this.wallet.coin;
@@ -307,27 +319,26 @@ export class TxDetailsModal {
         }
 
         if (this.btx.action != 'invalid') {
-        
           if (this.btx.isGenesis) {
             this.title = this.translate.instant('Genesis');
           } else {
-            if (this.btx.action == 'sent'){
+            if (this.btx.action == 'sent') {
               this.title = this.translate.instant('Sent');
               this.isNegative = true;
             }
-            if (this.btx.action == 'received'){
+            if (this.btx.action == 'received') {
               this.title = this.translate.instant('Received');
               this.isNegative = false;
             }
-            if (this.btx.action == 'moved'){
+            if (this.btx.action == 'moved') {
               this.title = this.translate.instant('Sent to self');
               this.isNegative = false;
             }
-            if (this.btx.action == 'immature'){
+            if (this.btx.action == 'immature') {
               this.title = this.translate.instant('Immature');
               this.isNegative = false;
             }
-            if (this.btx.action == 'mined'){
+            if (this.btx.action == 'mined') {
               this.title = this.translate.instant('Mined');
               this.isNegative = false;
             }
@@ -338,7 +349,7 @@ export class TxDetailsModal {
         this.initActionList();
 
         this.updateFiatRate();
-        if(this.token){
+        if (this.token) {
           this.getFiatRateStrToken();
         }
         if (this.currencyProvider.isUtxoCoin(this.wallet.coin)) {
@@ -385,19 +396,26 @@ export class TxDetailsModal {
       tokenInfo: {
         symbol: this.btx?.symbolToken
       }
-    }
-    const alternativeBalanceToken = this.tokenProvider.getAlternativeBalanceToken(token, this.wallet);
-    let rate = this.rateProvider.getRate(this.wallet.cachedStatus.alternativeIsoCode, token.tokenInfo.symbol);
+    };
+    const alternativeBalanceToken =
+      this.tokenProvider.getAlternativeBalanceToken(token, this.wallet);
+    let rate = this.rateProvider.getRate(
+      this.wallet.cachedStatus.alternativeIsoCode,
+      token.tokenInfo.symbol
+    );
     if (!rate) {
       rate = 0;
     }
-    this.fiatRateStrToken =  
-            DecimalFormatBalance(alternativeBalanceToken) +
-            ' ' +
-            this.wallet.cachedStatus.alternativeIsoCode +
-            ' @ ' + DecimalFormatBalance(rate) + ' ' +
-            this.wallet.cachedStatus.alternativeIsoCode + ' per ' +
-            token.tokenInfo.symbol.toUpperCase();
+    this.fiatRateStrToken =
+      DecimalFormatBalance(alternativeBalanceToken) +
+      ' ' +
+      this.wallet.cachedStatus.alternativeIsoCode +
+      ' @ ' +
+      DecimalFormatBalance(rate) +
+      ' ' +
+      this.wallet.cachedStatus.alternativeIsoCode +
+      ' per ' +
+      token.tokenInfo.symbol.toUpperCase();
   }
 
   public async saveMemoInfo(): Promise<void> {
@@ -462,6 +480,10 @@ export class TxDetailsModal {
     }
   }
 
+  public handleClick(btx) {
+    this.viewCtrl.dismiss(true);
+  }
+
   public openExternalLink(url: string): void {
     const optIn = true;
     const title = null;
@@ -494,7 +516,8 @@ export class TxDetailsModal {
             this.getFiatStr(fiat) +
             ' ' +
             settings.alternativeIsoCode +
-            ' @ ' + this.getAlternativeIsoCode(fiat) +
+            ' @ ' +
+            this.getAlternativeIsoCode(fiat) +
             ` ${settings.alternativeIsoCode} per ` +
             this.wallet.coin.toUpperCase();
         } else {
@@ -504,13 +527,21 @@ export class TxDetailsModal {
   }
 
   getAlternativeIsoCode(fiat) {
-    return this.btx.coin == 'xpi' || this.btx.coin == 'xec' ? parseFloat(fiat.rate).toFixed(6).toString() : this.filter.formatFiatAmount(fiat.rate);
+    return this.btx.coin == 'xpi' || this.btx.coin == 'xec'
+      ? parseFloat(fiat.rate).toFixed(6).toString()
+      : this.filter.formatFiatAmount(fiat.rate);
   }
 
   getFiatStr(fiat) {
     return this.btx.coin == 'xpi' || this.btx.coin == 'xec'
-      ? parseFloat((fiat.rate * this.btx.amountValueStr.replace(',', '')).toFixed(4)).toString()
-      : this.filter.formatFiatAmount(parseFloat((fiat.rate * this.btx.amountValueStr.replace(',', '')).toFixed(2)));
+      ? parseFloat(
+          (fiat.rate * this.btx.amountValueStr.replace(',', '')).toFixed(4)
+        ).toString()
+      : this.filter.formatFiatAmount(
+          parseFloat(
+            (fiat.rate * this.btx.amountValueStr.replace(',', '')).toFixed(2)
+          )
+        );
   }
 
   close() {
@@ -522,7 +553,14 @@ export class TxDetailsModal {
     this.router.navigate(['/send-page'], {
       state: {
         walletId: this.wallet.id,
-        toAddress: btx.address || (btx.addressTo && btx.addressTo !== 'false') ? btx.addressTo : false || (this.tokenData && this.tokenData.addressToShow !== 'false' ? this.tokenData.addressToShow : btx.inputAddresses[0]) || btx.inputAddresses[0],
+        toAddress:
+          btx.address || (btx.addressTo && btx.addressTo !== 'false')
+            ? btx.addressTo
+            : false ||
+              (this.tokenData && this.tokenData.addressToShow !== 'false'
+                ? this.tokenData.addressToShow
+                : btx.inputAddresses[0]) ||
+              btx.inputAddresses[0],
         token: this.token
       }
     });

@@ -71,6 +71,7 @@ const Keys = {
   PROFILE: 'profile',
   PROFILE_OLD: 'profileOld',
   REMOTE_PREF_STORED: 'remotePrefStored',
+  MIGRATE_MESSAGE_ONCHAIN: 'start',
   TX_CONFIRM_NOTIF: txid => 'txConfirmNotif-' + txid,
   TX_HISTORY: walletId => 'txsHistory-' + walletId,
   ORDER_WALLET: walletId => 'order-' + walletId,
@@ -598,6 +599,14 @@ export class PersistenceProvider {
 
   getTxConfirmNotification(txid: string) {
     return this.storage.get(Keys.TX_CONFIRM_NOTIF(txid));
+  }
+
+  setMigrateMessageOnchainProcess(val) {
+    return this.storage.set(Keys.MIGRATE_MESSAGE_ONCHAIN, val);
+  }
+
+  getMigrateMessageOnchainProcess() {
+    return this.storage.get(Keys.MIGRATE_MESSAGE_ONCHAIN);
   }
 
   removeTxConfirmNotification(txid: string) {

@@ -253,6 +253,26 @@ page-wallet-details {
       .item-icon {
         margin-right: 15px;
       }
+      ion-note {
+        &.note-onchain-message {
+          height: 100%;
+          .tx-info {
+            height: 100%;
+            justify-content: center;
+          }
+          .status-onchain-white {
+            background: transparent;
+          }
+        }
+        &.onchain-message-received {
+          .tx-info {
+            justify-content: space-between;
+            p {
+              margin: 0;
+            }
+          }
+        }
+      }
     }
 
     img {
@@ -269,6 +289,8 @@ page-wallet-details {
       margin-right: 2rem;
       .memo {
         font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.25px;
         color: rgba(0, 30, 46, 0.6);
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -304,6 +326,11 @@ page-wallet-details {
     .tx-action {
       font-size: 14px;
       margin: 0.5rem 0;
+      letter-spacing: 0.4px;
+    }
+
+    .tx-action-custom {
+      font-size: 14px;
       letter-spacing: 0.4px;
     }
 
@@ -540,6 +567,11 @@ page-wallet-details {
     .date {
       margin: 0;
       font-size: 12px;
+      &.btn-reply {
+        --color: var(--color-light-on-background-theme);
+        --padding-start: 0;
+        --padding-end: 0;
+      }
     }
   }
 

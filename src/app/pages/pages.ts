@@ -111,8 +111,10 @@ import { TokenInforPage } from './token-info/token-info';
 import { AccountsPage } from './accounts/accounts';
 import { SearchContactPage } from './search/search-contact/search-contact.component';
 import { SelectFlowPage } from './onboarding/select-flow/select-flow';
+import { MessageReplyComponent } from '../components/message-reply/message-reply.component';
 
 export const PAGES = [
+  MessageReplyComponent,
   AddPage,
   AddWalletPage,
   AmountPage,

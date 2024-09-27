@@ -70,7 +70,7 @@
                 <span *ngIf="tx.txp[wallet.id].feeRatePerStr">
                   &middot;
                   <span>
-                    <ion-icon *ngIf="tx.txp[wallet.id].feeTooHigh" name="warning"></ion-icon>
+                    <ion-icon class="warning-ico" *ngIf="tx.txp[wallet.id].feeTooHigh" name="warning"></ion-icon>
                     {{tx.txp[wallet.id].feeRatePerStr}}
                     <span translate> of total amount</span>
                   </span>
@@ -199,6 +199,21 @@
           </div>
         </div>
       </ion-item>
+
+      <ion-item *ngIf="tx && tx.messageOnChainToShow" lines="none">
+        <ion-label class="label-message-onchain" slot="start">
+          <div class="summary-item">
+            <span translate>Message</span>
+          </div>
+        </ion-label>
+
+        <ion-note slot="end" class="address-note-custom">
+          <div class="note-container onchain-message-txt">
+            {{tx.messageOnChainToShow}}
+          </div>
+        </ion-note>
+      </ion-item>
+
 
       <div class="line-divider"></div>
 

@@ -1,0 +1,105 @@
+message-reply-component {
+  .scanner-icon {
+    z-index: 99;
+    font-size: 28px;
+    color: var(--ion-color-primary);
+  }
+  .check {
+    font-size: 22px;
+    padding-top: 1rem;
+    &.success {
+      color: var(--ion-color-success);
+    }
+    &.fail {
+      color: var(--ion-color-danger);
+    }
+  }
+
+  label-tip {
+    margin-top: 1.8rem;
+  }
+
+  .slide-title {
+    h3 {
+      margin: 0;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 32px;
+      color: #001e2e;
+      margin-bottom: 2rem;
+    }
+  }
+  form {
+    margin: 0 8px 24px 8px;
+    ion-item {
+      margin: 2rem 0;
+      border: 2px solid rgba(0, 30, 46, 0.38);
+      --inner-padding-start: 1rem;
+      --inner-padding-end: 1rem;
+      --inner-padding-end: 0;
+      --padding-start: 0;
+      --padding-end: 0;
+      --color: #001e2e;
+      --background: #fafafb;
+      border-radius: 4px;
+      ion-input {
+        font-weight: 400;
+        font-size: 16px !important;
+        line-height: 24px;
+        letter-spacing: 0.5px;
+      }
+      ion-icon {
+        padding: 0;
+      }
+    }
+    .form-field {
+      margin-bottom: 3rem !important;
+      padding: 0 !important;
+    }
+    .mat-form-field-subscript-wrapper {
+      margin-top: 2rem !important;
+      padding: 0 !important;
+    }
+
+    .mobile-view {
+      .mat-form-field-infix {
+        max-width: 85%;
+      }
+    }
+  }
+  .reply-to-container {
+    background: linear-gradient(0deg, rgba(0, 101, 141, 0.14), rgba(0, 101, 141, 0.14)), #FAFAFB;
+    border: 1px solid rgba(126, 208, 255, 0.08);
+    border-radius: 8px;
+    padding: 8px;
+    margin: 24px;
+    .reply-to-title {
+      color: #1C3745;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+    }
+    .reply-to-message {
+      color: #1C3745;
+      letter-spacing: 0.25px;
+      font-size: 14px;
+      line-height: 20px;
+      margin-top: 8px;
+    }
+  }
+
+  .button-send-onchain {
+    width: fit-content !important;
+    margin: 5px 24px 25px auto !important;
+  }
+
+  .hint-reply-message {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.5rem !important;
+    margin-top: 4px;
+    .max-message-txt {
+      color: var(--color-danger);
+    }
+  }
+}

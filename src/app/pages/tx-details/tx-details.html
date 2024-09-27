@@ -199,6 +199,25 @@
 
       <div class="line-divider"></div>
 
+      <ion-item class="message-custom">
+        <ion-label slot="start" class="summary-item">
+          {{'Message' | translate}}
+        </ion-label>
+        <ion-note slot="end">
+          <p class="message-onchain summary-item-detail">
+            {{messageOnchain}} </p>
+          <ng-container *ngIf="messageOnchain && messageOnchain.length > 0 && btx.action == 'received'">
+            <ion-button fill="clear" class="btn-reply" (click)="handleClick(btx)">
+              <ion-icon
+                [src]="currentTheme == 'dark' ? 'assets/img/ico-reply-dark.svg' : 'assets/img/ico-reply-light.svg'"></ion-icon>
+              {{'Reply' | translate}}
+            </ion-button>
+          </ng-container>
+        </ion-note>
+      </ion-item>
+
+      <div class="line-divider"></div>
+
       <ion-item class="memo-custom">
         <ion-label slot="start" class="summary-item">
           {{'Memo' | translate}}

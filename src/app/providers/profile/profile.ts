@@ -475,6 +475,24 @@ export class ProfileProvider {
     });
   }
 
+  private isETokenWalletHidden(wallet): Promise<boolean> {
+    return new Promise(resolve => {
+      this.persistenceProvider
+        .getHideETokenWalletFlag(wallet.credentials.walletId)
+        .then(shouldHideETokenWallet => {
+          let isHidden =
+          shouldHideETokenWallet && shouldHideETokenWallet.toString() == 'false'
+              ? false
+              : true;
+          if (!wallet?.credentials?.isSlpToken) isHidden = false;
+          return resolve(isHidden);
+        })
+        .catch(err => {
+          this.logger.error(err);
+        });
+    });
+  }
+
   private coinSupported(coin): boolean {
     const availableCoin = this.currencyProvider
       .getAvailableCoins()
@@ -515,7 +533,7 @@ export class ProfileProvider {
     wallet.balanceHidden = await this.isBalanceHidden(wallet);
     wallet.order = await this.getWalletOrder(wallet.id);
     wallet.hidden = await this.isWalletHidden(wallet);
-    wallet.isSlpToken = wallet.credentials.isSlpToken;
+    wallet.isSlpToken = await this.isETokenWalletHidden(wallet);
     wallet.lastAddress = await this.persistenceProvider.getLastAddress(
       walletId
     );
@@ -1713,6 +1731,7 @@ export class ProfileProvider {
               addressType: opts.addressType,
               isSlpToken: opts.isSlpToken,
               isFromRaipay: opts.isFromRaipay,
+              isPath899: opts.isPath899,              
               n: opts.n || 1
             })
           );
@@ -1738,7 +1757,8 @@ export class ProfileProvider {
               network,
               account: opts.account || 0,
               n: opts.n || 1,
-              isSlpToken: opts.isSlpToken
+              isSlpToken: opts.isSlpToken,
+              isPath899: opts.isPath899
             })
           );
           if (opts.duplicateKeyId) {
@@ -1779,7 +1799,8 @@ export class ProfileProvider {
               account: opts.account || 0,
               n: opts.n || 1,
               isSlpToken: opts.isSlpToken,
-              isFromRaipay: opts.isFromRaipay
+              isFromRaipay: opts.isFromRaipay,
+              isPath899: opts.isPath899
             })
           );
         } catch (e) {
@@ -1793,7 +1814,8 @@ export class ProfileProvider {
                 network,
                 account: opts.account || 0,
                 n: opts.n || 1,
-                isSlpToken: opts.isSlpToken
+                isSlpToken: opts.isSlpToken,
+                isPath899: opts.isPath899
               })
             );
           } else {
@@ -1841,7 +1863,8 @@ export class ProfileProvider {
                 coin: opts.coin,
                 useNativeSegwit: opts.useNativeSegwit,
                 isSlpToken: opts.isSlpToken,
-                isFromRaipay: opts.isFromRaipay
+                isFromRaipay: opts.isFromRaipay,
+                isPath899: opts.isPath899
               },
               err => {
                 const copayerRegistered =
@@ -1854,20 +1877,6 @@ export class ProfileProvider {
                     this.translate.instant('Error creating account')
                   );
                   return reject(msg);
-                } else if (copayerRegistered && opts.isSlpToken) {
-                  if (!opts.isFromRaipay) {
-                    return reject(
-                      this.translate.instant(
-                        'Only one slp Token wallet can be created'
-                      )
-                    );
-                  } else {
-                    return reject(
-                      this.translate.instant(
-                        'Only one wallet path 145 can be created'
-                      )
-                    );
-                  }
                 } else if (copayerRegistered) {
                   // try with account + 1
                   opts.account = opts.account ? opts.account + 1 : 1;
@@ -2630,6 +2639,20 @@ export class ProfileProvider {
     this.persistenceProvider.setHideWalletFlag(
       walletId,
       this.wallet[walletId].hidden
+    );
+    this.setOrderedWalletsByGroup(); // Update Ordered Wallet List
+    this.keyChange = {
+      isStatus: true,
+      isDelete: false,
+      keyId: this.wallet[walletId].keyId
+    };
+  }
+
+  public toggleHideETokenWalletFlag(walletId: string): void {
+    this.wallet[walletId].isSlpToken = !this.wallet[walletId].isSlpToken;
+    this.persistenceProvider.setHideETokenWalletFlag(
+      walletId,
+      this.wallet[walletId].isSlpToken
     );
     this.setOrderedWalletsByGroup(); // Update Ordered Wallet List
     this.keyChange = {

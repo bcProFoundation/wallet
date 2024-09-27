@@ -1308,7 +1308,7 @@ msgstr "Do nhu cầu cao, phí thợ đào tăng. Phí này được trả cho t
 msgid "Derivation path"
 msgstr "Đường dẫn xuất"
 
-msgid "eToken Path"
+msgid "eToken Account"
 msgstr "Đường dẫn xuất eToken"
 
 msgid "Only select path m'/44'/1899'/0 for #Saving4Lotus or #Hold2Earn programs"

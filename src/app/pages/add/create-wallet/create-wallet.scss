@@ -194,4 +194,36 @@ page-create-wallet {
   .wide-header__title {
     --min-height: 72px;
   }
+
+  .choose-path-section {
+    --inner-padding-end: 0;
+    --inner-padding-bottom: 0 !important;
+    .choose-path-list {
+      width: 100%;
+      background: transparent;
+      ion-radio-group {
+        ion-item {
+          margin: 0 1rem !important;
+          box-shadow: none !important;
+          ion-label {
+            font-size: 14px !important;
+          }
+          &:last-child {
+            --inner-border-width: 0 !important;
+          }
+        }
+      }
+      .option-line-info {
+        padding: 0 0 1rem 1rem;
+        font-size: 13px;
+        font-weight: 400;
+        color: rgba(0, 30, 46, 0.6);
+        a {
+          padding-top: 13px;
+          font-size: 14px;
+          color: #00658d;
+        }
+      }
+    }
+  }
 }

@@ -61,6 +61,7 @@ const Keys = {
   HIDE_BALANCE: walletId => 'hideBalance-' + walletId,
   TOTAL_BALANCE: 'totalBalance',
   HIDE_WALLET: walletId => 'hideWallet-' + walletId,
+  HIDE_ETOKEN_WALLET: walletId => 'hideETokenWallet-' + walletId,
   KEY_ONBOARDING: 'keyOnboarding',
   KEYS: 'keys',
   LAST_ADDRESS: walletId => 'lastAddress-' + walletId,
@@ -353,8 +354,16 @@ export class PersistenceProvider {
     return this.storage.set(Keys.HIDE_WALLET(walletId), val);
   }
 
+  setHideETokenWalletFlag(walletId: string, val) {
+    return this.storage.set(Keys.HIDE_ETOKEN_WALLET(walletId), val);
+  }
+
   getHideWalletFlag(walletId: string) {
     return this.storage.get(Keys.HIDE_WALLET(walletId));
+  }
+
+  getHideETokenWalletFlag(walletId: string) {
+    return this.storage.get(Keys.HIDE_ETOKEN_WALLET(walletId));
   }
 
   setDisclaimerAccepted() {

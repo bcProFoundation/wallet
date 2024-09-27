@@ -76,6 +76,16 @@ export class CreateWalletPage implements OnInit {
   public cancelText: string;
   public createForm: FormGroup;
   public currentTheme: string;
+  public eTokenPathOpts = [
+    {
+      id: '1899',
+      label: this.translate.instant(`m'/44'/1899'`),
+    },
+    {
+      id: '899',
+      label: this.translate.instant(`m'/44'/899'`),
+    }
+  ];
 
   public multisigAddresses: string[];
   public invalidAddress: boolean;
@@ -146,11 +156,12 @@ export class CreateWalletPage implements OnInit {
       derivationPath: [this.derivationPathByDefault],
       testnetEnabled: [false],
       useNativeSegwit: [false],
-      singleAddress: [false],
+      singleAddress: [this.coin === 'xec' ? true : false],
+      eTokenPath: [this.coin === 'xec' ? this.eTokenPathOpts[0].id : null],
       coin: [null, Validators.required]
     });
     this.createForm.controls['coin'].setValue(this.coin);
-
+    this.isSlpToken = true ? this.coin === 'xec' : false;
     if (this.coin === 'btc' || this.coin === 'ltc')
       this.createForm.controls['useNativeSegwit'].setValue(true);
 
@@ -231,6 +242,11 @@ export class CreateWalletPage implements OnInit {
     this.createForm.controls['recoveryPhrase'].setValue(null);
   }
 
+  public eTokenPathOptionsChange(eTokenId): void {
+    this.createForm.controls['eTokenPath'].setValue(eTokenId);
+    this.changeSlpPath(null, true);
+  }
+
   public setDerivationPath(): void {
     const path: string = this.createForm.value.testnet
       ? this.derivationPathForTestnet
@@ -258,7 +274,10 @@ export class CreateWalletPage implements OnInit {
         : this.createForm.value.singleAddress,
       coin: this.createForm.value.coin
     };
-
+    
+    // Support eToken for path 899
+    const isPath899 = this.createForm.value.eTokenPath === '899';
+    if (isPath899 && this.isSlpToken) opts['isPath899'] = isPath899;
     const setSeed = this.createForm.value.selectedSeed == 'set';
     opts['setSeed'] = setSeed;
     if (setSeed) {
@@ -561,11 +580,13 @@ export class CreateWalletPage implements OnInit {
     }
   }
 
-  changeSlpPath(event) {
-    this.isSlpToken = event.detail.checked;
-    if (event.detail.checked) {
+  changeSlpPath(event, isChange?: boolean) {
+    const isPath899 = this.createForm.controls['eTokenPath'].value === '899';
+    this.isSlpToken = event?.detail?.checked || isChange;
+    if (event?.detail?.checked || isChange) {
       this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 145", ""));
-      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value + " - 1899");
+      this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value.replace(" - 1899", ""));
+      if (!isPath899 || this.coin === 'xpi') this.createForm.controls['walletName'].setValue(this.createForm.controls['walletName'].value + " - 1899");
       this.createForm.controls['singleAddress'].setValue(true);
       this.isFromRaipay = false;
     }

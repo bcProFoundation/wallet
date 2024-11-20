@@ -16,7 +16,7 @@ import { NavParams } from '@ionic/angular';
 import { Router } from '@angular/router';
 import _ from 'lodash';
 import { NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FilterProvider, RateProvider, ThemeProvider } from 'src/app/providers';
 import { DecimalFormatBalance } from 'src/providers/decimal-format.ts/decimal-format';
 @Component({
@@ -34,7 +34,7 @@ export class CustomAmountPage {
   public amountUnitStr: string;
   public amountCoin: string;
   public altAmountStr: string;
-  public amountCustomForm: FormGroup;
+  public amountCustomForm: UntypedFormGroup;
   public isCordova: boolean;
   public currentTheme: string;
 
@@ -67,7 +67,7 @@ export class CustomAmountPage {
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private themeProvider: ThemeProvider,
     private rateProvider: RateProvider,
     private filterProvider: FilterProvider

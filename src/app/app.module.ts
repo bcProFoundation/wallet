@@ -6,7 +6,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { IonicModule, IonicRouteStrategy, NavParams } from '@ionic/angular';
 import { MissingTranslationHandler, MissingTranslationHandlerParams, TranslateDefaultParser, TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { env } from 'src/environments';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -144,7 +144,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         },
         FormatCurrencyPipe,
         NavParams,
-        FormBuilder,
+        UntypedFormBuilder,
         UniqueDeviceID,
         WebView,
         { provide: RECAPTCHA_V3_SITE_KEY, useValue: "6Lc1rGwdAAAAABrD2AxMVIj4p_7ZlFKdE5xCFOrb" }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BwcProvider } from '../../../../../providers/bwc/bwc';
@@ -17,13 +17,13 @@ export class WalletMnemonicRecoverPage {
   public mnemonicPhrase: string;
   public mnemonicEncrypted: boolean;
   public title: string;
-  public passwordForm: FormGroup;
+  public passwordForm: UntypedFormGroup;
   navParamsData;
 
   constructor(
     private logger: Logger,
     private router: Router,
-    private form: FormBuilder,
+    private form: UntypedFormBuilder,
     private popupProvider: PopupProvider,
     private translate: TranslateService,
     private bwcProvider: BwcProvider,

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { timer } from 'rxjs';
@@ -39,7 +39,7 @@ export class SendFeedbackPage {
   public reaction: string;
   public comment: string;
   public appName: string;
-  public feedbackForm: FormGroup;
+  public feedbackForm: UntypedFormGroup;
   public leavingFeedback: boolean;
   public isCordova: boolean;
   public fromCard: boolean;
@@ -57,7 +57,7 @@ export class SendFeedbackPage {
     private appProvider: AppProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private feedbackProvider: FeedbackProvider,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private popupProvider: PopupProvider,
     private translate: TranslateService,
     private device: Device

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 // native
 import { Device } from '@ionic-native/device/ngx';
@@ -18,12 +18,12 @@ import { PlatformProvider } from 'src/app/providers/platform/platform';
 export class CollectEmailPage {
   public showConfirmForm: boolean;
 
-  emailForm: FormGroup;
+  emailForm: UntypedFormGroup;
   private URL: string;
 
   constructor(
     private logger: Logger,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private appProvider: AppProvider,
     private http: HttpClient,
     private emailProvider: EmailNotificationsProvider,

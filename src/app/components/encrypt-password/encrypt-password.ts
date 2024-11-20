@@ -1,5 +1,5 @@
 import { Component, ComponentRef, NgZone, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AnimationController, Platform } from '@ionic/angular';
 import { InfoSheetType } from 'src/app/providers/action-sheet/action-sheet';
 import { AppProvider } from 'src/app/providers/app/app';
@@ -14,7 +14,7 @@ import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
   encapsulation: ViewEncapsulation.None
 })
 export class EncryptPasswordComponent extends ActionSheetParent {
-  public encryptPasswordForm: FormGroup;
+  public encryptPasswordForm: UntypedFormGroup;
   public isCopay: boolean;
   public passwordInputType: string = 'password';
   public confirmPasswordInputType: string = 'password';
@@ -22,7 +22,7 @@ export class EncryptPasswordComponent extends ActionSheetParent {
   public currentTheme: string;
   constructor(
     private domProvider: DomProvider,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private appProvider: AppProvider,
     public animationCtrl: AnimationController,
     public platform: Platform
@@ -41,7 +41,7 @@ export class EncryptPasswordComponent extends ActionSheetParent {
   }
 
   private matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
-    return (group: FormGroup) => {
+    return (group: UntypedFormGroup) => {
       const password = group.controls[passwordKey];
       const confirmPassword = group.controls[confirmPasswordKey];
       if (password.value !== confirmPassword.value) {

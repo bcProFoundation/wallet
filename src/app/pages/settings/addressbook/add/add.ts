@@ -2,8 +2,8 @@ import { Location } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   ValidationErrors,
   Validators
 } from '@angular/forms';
@@ -31,7 +31,7 @@ import { LixiLotusProvider } from 'src/app/providers/lixi-lotus/lixi-lotus';
   encapsulation: ViewEncapsulation.None
 })
 export class AddressbookAddPage extends ActionSheetParent {
-  public addressBookAdd: FormGroup;
+  public addressBookAdd: UntypedFormGroup;
   public isCordova: boolean;
   public appName: string;
   public isXRP: boolean;
@@ -52,7 +52,7 @@ export class AddressbookAddPage extends ActionSheetParent {
     private currencyProvider: CurrencyProvider,
     private addressProvider: AddressProvider,
     private appProvider: AppProvider,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private logger: Logger,
     private platformProvider: PlatformProvider,
     private lixiLotusProvider: LixiLotusProvider

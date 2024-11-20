@@ -5,7 +5,7 @@ import {
   NgZone,
   ViewChild
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import * as _ from 'lodash';
@@ -79,7 +79,7 @@ export class AmountPage {
   public fromBuyCrypto: boolean;
   public fromExchangeCrypto: boolean;
   public isCardTopUp: boolean;
-  public quoteForm: FormGroup;
+  public quoteForm: UntypedFormGroup;
   public supportedFiatAltCurrencies: string[];
   public altCurrenciesToShow: string[];
   public altCurrenciesToShow2: string[];

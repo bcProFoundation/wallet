@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 // Pages
@@ -48,7 +48,7 @@ export class ImportWalletPage {
   private processedInfo;
   private keyId: string;
   public availableCoins: string[];
-  public importForm: FormGroup;
+  public importForm: UntypedFormGroup;
   public prettyFileName: string;
   public formFile;
   public selectedTab: string;
@@ -76,7 +76,7 @@ export class ImportWalletPage {
   constructor(
     private navCtrl: NavController,
     private navParams: NavParams,
-    private form: FormBuilder,
+    private form: UntypedFormBuilder,
     private bwcProvider: BwcProvider,
     private walletProvider: WalletProvider,
     private configProvider: ConfigProvider,

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../../../../../providers/logger/logger';
 
@@ -30,7 +30,7 @@ import { Location } from '@angular/common';
 export class WalletExportPage {
   public wallet;
   public password: string;
-  public exportWalletForm: FormGroup;
+  public exportWalletForm: UntypedFormGroup;
   public showAdv: boolean;
   public isEncrypted: boolean;
   public showAdvanced: boolean;
@@ -46,7 +46,7 @@ export class WalletExportPage {
     private router: Router,
     private location: Location,
     private walletProvider: WalletProvider,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private logger: Logger,
     private persistenceProvider: PersistenceProvider,
     private backupProvider: BackupProvider,
@@ -92,7 +92,7 @@ export class WalletExportPage {
   }
 
   private matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
-    return (group: FormGroup) => {
+    return (group: UntypedFormGroup) => {
       const password = group.controls[passwordKey];
       const confirmPassword = group.controls[confirmPasswordKey];
       if (password.value !== confirmPassword.value) {

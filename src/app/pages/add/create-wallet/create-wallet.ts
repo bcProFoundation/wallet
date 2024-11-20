@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import env from '../../../../environments';
@@ -74,7 +74,7 @@ export class CreateWalletPage implements OnInit {
   public coinName: string;
   public okText: string;
   public cancelText: string;
-  public createForm: FormGroup;
+  public createForm: UntypedFormGroup;
   public currentTheme: string;
 
   public multisigAddresses: string[];
@@ -89,7 +89,7 @@ export class CreateWalletPage implements OnInit {
     private actionSheetProvider: ActionSheetProvider,
     private currencyProvider: CurrencyProvider,
     private navParams: NavParams,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private profileProvider: ProfileProvider,
     private configProvider: ConfigProvider,
     private derivationPathHelperProvider: DerivationPathHelperProvider,

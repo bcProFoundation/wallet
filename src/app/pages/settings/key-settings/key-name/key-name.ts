@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { EventManagerService } from 'src/app/providers';
@@ -16,7 +16,7 @@ import { ProfileProvider } from '../../../../providers/profile/profile';
 })
 export class KeyNamePage {
   public walletGroup;
-  public walletGroupNameForm: FormGroup;
+  public walletGroupNameForm: UntypedFormGroup;
   public description: string;
   navParamsData;
 
@@ -25,7 +25,7 @@ export class KeyNamePage {
     private events: EventManagerService,
     private location: Location,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private logger: Logger,
     private translate: TranslateService
   ) {
@@ -56,7 +56,7 @@ export class KeyNamePage {
     );
   }
   
-  public noWhitespaceValidator(control: FormControl) {
+  public noWhitespaceValidator(control: UntypedFormControl) {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
     return isValid ? null : { 'whitespace': true };

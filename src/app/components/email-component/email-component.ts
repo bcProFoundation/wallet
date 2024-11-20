@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ExternalLinkProvider } from 'src/app/providers/external-link/external-link';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 
@@ -10,12 +10,12 @@ import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
   encapsulation: ViewEncapsulation.None
 })
 export class EmailComponent extends ActionSheetParent {
-  public emailForm: FormGroup;
+  public emailForm: UntypedFormGroup;
 
   constructor(private externalLinkProvider: ExternalLinkProvider) {
     super();
-    this.emailForm = new FormGroup({
-      email: new FormControl(
+    this.emailForm = new UntypedFormGroup({
+      email: new UntypedFormControl(
         '',
         Validators.compose([
           Validators.required,
@@ -24,7 +24,7 @@ export class EmailComponent extends ActionSheetParent {
           )
         ])
       ),
-      agreement: new FormControl(false, Validators.requiredTrue)
+      agreement: new UntypedFormControl(false, Validators.requiredTrue)
     });
   }
 

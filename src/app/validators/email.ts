@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ConfigProvider } from '../providers/config/config';
 import { EmailNotificationsProvider } from '../providers/email-notifications/email-notifications';
 
@@ -11,7 +11,7 @@ export class EmailValidator {
     EmailValidator.eml = eml;
   }
 
-  isValid(control: FormControl) {
+  isValid(control: UntypedFormControl) {
     let config = EmailValidator.cnf.get();
     let latestEmail = EmailValidator.eml.getEmailIfEnabled(config);
 

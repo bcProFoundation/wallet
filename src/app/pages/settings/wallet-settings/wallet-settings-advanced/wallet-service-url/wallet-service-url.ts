@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../../../../../providers/logger/logger';
 
@@ -27,7 +27,7 @@ export class WalletServiceUrlPage {
   public success: boolean = false;
   public wallet;
   public comment: string;
-  public walletServiceForm: FormGroup;
+  public walletServiceForm: UntypedFormGroup;
   private config;
   private defaults;
   navParamsData;
@@ -39,7 +39,7 @@ export class WalletServiceUrlPage {
     private app: AppProvider,
     private logger: Logger,
     private persistenceProvider: PersistenceProvider,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private events: EventManagerService,
     private splashScreen: SplashScreen,
     private platformProvider: PlatformProvider,

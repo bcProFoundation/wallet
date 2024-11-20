@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../../../../providers/logger/logger';
 
@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 export class WalletNamePage {
   public wallet;
   public walletName: string;
-  public walletNameForm: FormGroup;
+  public walletNameForm: UntypedFormGroup;
   public description: string;
   navParamsData;
   private config;
@@ -27,7 +27,7 @@ export class WalletNamePage {
     private profileProvider: ProfileProvider,
     private router: Router,
     private configProvider: ConfigProvider,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private events: EventManagerService,
     private logger: Logger,
     private replaceParametersProvider: ReplaceParametersProvider,

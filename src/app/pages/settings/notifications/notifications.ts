@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Logger } from '../../../providers/logger/logger';
 
@@ -22,7 +22,7 @@ import { Location } from '@angular/common';
   styleUrls: ['notifications.scss']
 })
 export class NotificationsPage {
-  public emailForm: FormGroup;
+  public emailForm: UntypedFormGroup;
   public isCopay: boolean;
 
   public appName: string;
@@ -40,7 +40,7 @@ export class NotificationsPage {
 
   constructor(
     private location: Location,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private configProvider: ConfigProvider,
     private appProvider: AppProvider,
     private platformProvider: PlatformProvider,

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 
 @Component({
@@ -9,9 +9,9 @@ import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
   encapsulation: ViewEncapsulation.None
 })
 export class MemoComponent extends ActionSheetParent {
-  public memoForm: FormGroup;
+  public memoForm: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     super();
     this.memoForm = this.formBuilder.group({
       memo: ['']

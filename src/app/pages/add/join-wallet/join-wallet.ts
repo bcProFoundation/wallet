@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as _ from 'lodash';
@@ -42,7 +42,7 @@ export class JoinWalletPage {
   public seedOptions;
   public okText: string;
   public cancelText: string;
-  public joinForm: FormGroup;
+  public joinForm: UntypedFormGroup;
   public keyId: string;
   public coin: Coin;
   public isOpenSelector: boolean;
@@ -57,7 +57,7 @@ export class JoinWalletPage {
     private bwcErrorProvider: BwcErrorProvider,
     private bwcProvider: BwcProvider,
     private configProvider: ConfigProvider,
-    private form: FormBuilder,
+    private form: UntypedFormBuilder,
     private navCtrl: NavController,
     private navParams: NavParams,
     private derivationPathHelperProvider: DerivationPathHelperProvider,

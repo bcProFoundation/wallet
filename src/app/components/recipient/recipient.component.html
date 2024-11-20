@@ -13,7 +13,7 @@
       <ion-input class="transfer-to-input" 
         [readonly]="recipient.name.length > 0 || recipient.isSpecificAmount"
         [placeholder]="'Paste address here' | translate"
-        [(ngModel)]="recipient.name || searchValue"
+        [ngModel]="recipient.name || searchValue" (ngModelChange)="recipient.name || (searchValue = $event)"
         [value]="recipient.name"
         (ionChange)="processInput()">
       </ion-input>

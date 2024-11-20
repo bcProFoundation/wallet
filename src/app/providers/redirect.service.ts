@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import _ from 'lodash';
 import { PreviousRouteService } from './previous-route/previous-route';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RedirectGuard implements CanActivate {
+export class RedirectGuard  {
 
   constructor(
     private router: Router,
